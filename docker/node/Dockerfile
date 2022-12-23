@@ -1,9 +1,10 @@
 FROM 	node:current-bullseye-slim
 
+WORKDIR /usr/src/app
+COPY package*.json main.js ./
 
-# COPY	config/nginx.conf /etc/nginx/sites-available/default
-# COPY	config/dhparam.pem /etc/ssl/certs/dhparam.pem 
-# COPY	config/nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
-# COPY	config/nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
+RUN npm install
 
-# CMD	["bash"]
+EXPOSE 5000
+
+CMD ["node", "main.js"]

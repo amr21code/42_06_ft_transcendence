@@ -6,7 +6,9 @@ services:
     build: ./docker/db
     restart: unless-stopped
     networks:
-    - internal
+    - external
+    ports:
+    - 5432:5432
     volumes:
     - db:/var/lib/postgresql/data
     env_file:
@@ -17,9 +19,8 @@ services:
     build: ./docker/node
     networks:
     - external
-    - internal
     ports:
-    - 80:80
+    - 5000:5000
     restart: unless-stopped
     volumes:
     - web:/var/www/html
@@ -29,7 +30,6 @@ services:
 networks:
   external:
     driver: bridge
-  internal:
 
 volumes:
   db:

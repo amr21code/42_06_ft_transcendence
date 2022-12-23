@@ -24,7 +24,10 @@ eval:
 
 .PHONY: stop contrm imagerm volrm netrm clean test eval
 
-clean: stop contrm imagerm volrm netrm
+clean: stop contrm
+	-docker system prune -f
+
+fclean: stop contrm imagerm volrm netrm
 	-docker system prune -f
 
 stop:
