@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  db:
+    container_name: db
+    build: ./docker/db
+    restart: unless-stopped
+    networks:
+    - internal
+    volumes:
+    - db:/var/lib/mysql
+    env_file:
+    - .env
+
+  nginx:
+    container_name: nginx
+    build: ./docker/nginx
+    networks:
+    - external
+    - internal
+    ports:
+    - 443:443
+    restart: unless-stopped
+    volumes:
+    - web:/var/www/html
+    depends_on:
+      - db
+  
+networks:
+  external:
+    driver: bridge
+  internal:
+
+volumes:
+  db:
+    driver: local
+    driver_opts: 
+      type: none
+      o: bind
+      device: ${VOL_DIR}db
+  web:
+    driver: local
+    driver_opts: 
+      type: none
+      o: bind
+      device: ${VOL_DIR}web
