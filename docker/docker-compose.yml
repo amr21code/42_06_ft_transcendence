@@ -8,18 +8,18 @@ services:
     networks:
     - internal
     volumes:
-    - db:/var/lib/mysql
+    - db:/var/lib/postgresql/data
     env_file:
     - .env
 
-  nginx:
-    container_name: nginx
-    build: ./docker/nginx
+  node:
+    container_name: node
+    build: ./docker/node
     networks:
     - external
     - internal
     ports:
-    - 443:443
+    - 80:80
     restart: unless-stopped
     volumes:
     - web:/var/www/html
