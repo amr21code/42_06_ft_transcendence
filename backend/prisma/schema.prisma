@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model achievements {
+  achievementid          Int                 @id(map: "pk_achievements")
+  achievementname        String?             @db.VarChar(100)
+  achievementdescription String?             @db.VarChar
+  users_achievements     users_achievements?
+}
+
+model chat {
+  chatid    Int        @id(map: "pk_chatchannel")
+  type      Int        @default(0)
+  password  String?    @db.VarChar(100)
+  chat_type chat_type  @relation(fields: [type], references: [typeid], onDelete: Cascade, map: "fk_chat_chat_type")
+  user_chat user_chat?
+}
+
+model chat_type {
+  typeid   Int     @id(map: "pk_chat_type")
+  typename String? @db.VarChar(100)
+  chat     chat[]
+}
+
+model friends {
+  requesterid                      String            @unique(map: "unq_friends_requesterid") @db.VarChar(8)
+  addresseeid                      String            @unique(map: "unq_friends_addresseeid") @db.VarChar(8)
+  statuscode                       String?           @unique(map: "unq_friends_statuscode") @db.Char(1)
+  friendship_codes                 friendship_codes? @relation(fields: [statuscode], references: [statuscode], onDelete: Cascade, map: "fk_friends_friendship_codes")
+  users_friends_requesteridTousers users             @relation("friends_requesteridTousers", fields: [requesterid], references: [userid], onDelete: Cascade, map: "fk_friends_users")
+  users_friends_addresseeidTousers users             @relation("friends_addresseeidTousers", fields: [addresseeid], references: [userid], onDelete: Cascade, map: "fk_friends_users_0")
+}
+
+model friendship_codes {
+  statuscode String   @id(map: "pk_friendship_codes") @db.Char(1)
+  statusname String?  @db.VarChar(100)
+  friends    friends?
+}
+
+model match_history {
+  matchid    Int         @id(map: "pk_match_history")
+  match_type Int
+  user_match user_match?
+}
+
+model online_status {
+  statuscode String  @id(map: "pk_online_codes") @db.Char(1)
+  statusname String? @db.VarChar(100)
+  users      users[]
+}
+
+model user_chat {
+  userid           String?          @db.VarChar(8)
+  chatid           Int              @id(map: "pk_user_chat")
+  status           Int
+  time             Int              @default(0)
+  chat             chat             @relation(fields: [chatid], references: [chatid], onDelete: Cascade, map: "fk_user_chat_chat")
+  user_status_chat user_status_chat @relation(fields: [status], references: [statusid], onDelete: Cascade, map: "fk_user_chat_user_status_chat")
+  users            users?           @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_user_chat_users")
+}
+
+model user_match {
+  userid        String        @db.VarChar(8)
+  matchid       Int           @unique(map: "unq_user_match_matchid")
+  user_score    Int
+  challenge     Int           @default(0)
+  timeout       DateTime      @db.Timestamp(6)
+  match_history match_history @relation(fields: [matchid], references: [matchid], onDelete: Cascade, map: "fk_user_match_match_history")
+  users         users         @relation(fields: [userid], references: [userid], onDelete: NoAction, map: "fk_user_match_users")
+}
+
+model user_status_chat {
+  statusid   Int         @id(map: "pk_user_status_chat")
+  statusname String?     @db.VarChar(100)
+  user_chat  user_chat[]
+}
+
+model users {
+  userid                             String              @id(map: "pk_users") @db.VarChar(8)
+  username                           String?             @db.VarChar(100)
+  avatar                             String?             @db.VarChar(100)
+  twofa                              Int                 @default(0)
+  status                             String              @default(dbgenerated("0")) @db.Char(1)
+  created                            DateTime            @default(now()) @db.Timestamp(6)
+  friends_friends_requesteridTousers friends?            @relation("friends_requesteridTousers")
+  friends_friends_addresseeidTousers friends?            @relation("friends_addresseeidTousers")
+  user_chat                          user_chat[]
+  user_match                         user_match[]
+  online_status                      online_status       @relation(fields: [status], references: [statuscode], onDelete: Cascade, map: "fk_users_online_codes")
+  users_achievements                 users_achievements?
+  userstats                          userstats?
+
+  @@index([status], map: "unq_users_status")
+}
+
+model users_achievements {
+  userid        String?       @unique(map: "unq_users_achievements_userid") @db.VarChar(8)
+  achievementid Int?          @unique(map: "unq_users_achievements_achievementid")
+  id            Int           @id(map: "pk_users_achievements")
+  achievements  achievements? @relation(fields: [achievementid], references: [achievementid], onDelete: Cascade, map: "fk_users_achievements_achievements")
+  users         users?        @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_users_achievements_users")
+}
+
+model userstats {
+  userid String @id(map: "pk_userstats") @db.VarChar(8)
+  wins   Int?
+  losses Int?
+  users  users  @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_userstats_users")
+}
