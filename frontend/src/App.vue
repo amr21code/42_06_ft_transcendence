@@ -1,48 +1,36 @@
 <template>
   <div class="app">
-	<header>
-		<div class="title">
-			<h1>The Pong Game</h1>
-		</div>
-		<div class="top-nav">
-			<a>Play</a>
-			<a>Watch</a>
-			<a @click="handleClick('chat')">Chat</a>
-			<a @click="handleClick('leaderboard')">Leaderboard</a>
-			<div class="logged-photo">
-				<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+	<div class="content-wrap">
+
+		<header>
+			<div class="title">
+				<h1>The Pong Game</h1>
 			</div>
-		</div>
+			<div class="top-nav">
+				<a>Play</a>
+				<a>Watch</a>
+				<a @click="handleClick('chat')">Chat</a>
+				<a @click="handleClick('leaderboard')">Leaderboard</a>
+				<div class="logged-photo">
+					<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+				</div>
+			</div>
 		<!-- <div class="order">
 			<button @click="handleClick('title')">order by title</button>
 			<button @click="handleClick('salary')">order by salary</button>
 			<button @click="handleClick('location')">order by location</button>
 		</div> -->
 	</header>
-	
-	<!-- <JobList :jobs="jobs" :order="order" /> -->
-
 	<div class="grid-container">
 		<MatchCourt />
 		<SideWindow :selected="selected"/>
-		<!-- <div class="side-window" v-if="selected === 'leaderboard'">
-			Leaderboard Window
-			<ul>
-				<li>this</li>
-				<li>is</li>
-				<li>leaderboard</li>
-			</ul>
-		</div>		
-		<div class="side-window" v-if="selected === 'chat'">
-			Chat Window
-			<p>hello world, this is our chat</p>
-		</div>		 -->
 	</div>
-
- 
- </div>
+	<footer>
+		Made with ❤️ by anruland, djedasch, jtomala and raweber
+	</footer>
+</div>
+</div>
 </template>
-
 
 
 <script lang="ts">
@@ -81,18 +69,21 @@ export default defineComponent({
 
 
 <style>
+	/* .app {
+		position: relative;
+	}
+
+	.content-wrap {
+  		padding-bottom: 2.5rem; 
+	} */
+
 	header {
 		text-align: center;
 	}
 
-	header .order {
-		margin-top: 20px;
-	}
-
 	.top-nav {
 		overflow: hidden;
-		background-color: rgb(68, 64, 64);
-		width: 100% !important;
+		background-color: var(--second-bg-color);
 		margin: 0 0 1em 0;
 		padding: 0px;
 		left:0px;
@@ -102,7 +93,7 @@ export default defineComponent({
 	.top-nav a {
 		float: left;
 		display: block;
-		color: white;
+		color: var(--main-font-color);
 		text-align: center;
 		padding: 14px 18px;
 		text-decoration: none;
@@ -111,7 +102,7 @@ export default defineComponent({
 	}
 
 	.top-nav a:hover {
-		background-color: rgb(172, 64, 24);
+		background-color: var(--first-highlight-color);
 		color: black;
 	}
 
@@ -134,35 +125,23 @@ export default defineComponent({
 		opacity: 50%;
 	}
 
-/* Later in components */
-
 	.grid-container {
 		display: grid;
-		/* grid-template-columns: none; */
 		grid-template-columns: 2fr 1fr;
 		margin: 20px;
 		gap: 20px;
-		height: 400px;
-		
 	}
-	
-	.side-window {
-		background-color: white;
-		color: red;
-		border-radius: 4px;
-		padding: 30px;
-	}
-/* END in components */
-  
-	button {
-		margin: 0 10px;
-		color: #17bf66;
-		/* border: 3px solid white; */
-		border: 3px solid;
-		background: #444040;
-		padding: 8px 16px;
-		border-radius: 4px;
-		cursor: pointer;
-		font-weight: bold;
+
+	footer {
+		text-align: center;
+		/* background-color: var(--second-bg-color); */
+		/* padding: 10px; */
+		padding-top: 4px;
+		padding-bottom: 4px;
+
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		/* height: 2.5rem; */
 	}
 </style>
