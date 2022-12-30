@@ -1,39 +1,50 @@
 <template>
   <div class="app">
-	<header>
-		<div class="title">
-			<h1>The Pong Game</h1>
-		</div>
-		<div class="top-nav">
-			<a>Leaderboard</a>
-			<a>Chat</a>
-			<div class="logged-photo">
-				<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+	<div class="content-wrap">
+
+		<header>
+			<div class="title">
+				<h1>The Pong Game</h1>
 			</div>
-		</div>
-		<div class="order">
+			<div class="top-nav">
+				<a>Play</a>
+				<a>Watch</a>
+				<a @click="handleClick('chat')">Chat</a>
+				<a @click="handleClick('leaderboard')">Leaderboard</a>
+				<div class="logged-photo">
+					<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+				</div>
+			</div>
+		<!-- <div class="order">
 			<button @click="handleClick('title')">order by title</button>
 			<button @click="handleClick('salary')">order by salary</button>
 			<button @click="handleClick('location')">order by location</button>
-		</div>
+		</div> -->
 	</header>
-	
-	<JobList :jobs="jobs" :order="order" />
-  </div>
+	<div class="grid-container">
+		<MatchCourt />
+		<SideWindow :selected="selected"/>
+	</div>
+	<footer>
+		Made with ❤️ by anruland, djedasch, jtomala and raweber
+	</footer>
+</div>
+</div>
 </template>
-
 
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import type { Job } from './types/Job'
-import type { OrderTerm } from './types/OrderTerm'
+import type { SelectedSideWindow } from './types/SelectedSideWindow'
 import JobList from './components/JobList.vue'
+import MatchCourt from './components/MatchCourt.vue'
+import SideWindow from './components/SideWindow.vue'
 
 export default defineComponent({
 	
 	name: 'App',
-	components: { JobList },
+	components: { JobList, MatchCourt, SideWindow },
 	setup() {
 		const jobs = ref<Job[]>([
 			{title: 'farm worker', location: 'lon lon ranch', salary: 30000, id: '1'},
@@ -42,12 +53,12 @@ export default defineComponent({
 			{title: 'fisherman', location: 'loch ness', salary: 10000, id: '4'}
 		])
 
-		const order = ref<OrderTerm>('title')
-		const handleClick = (term: OrderTerm) => {
-			order.value = term
+		const selected = ref<SelectedSideWindow>('chat')
+		const handleClick = (term: SelectedSideWindow) => {
+			selected.value = term
 		}
 
-		return { jobs, handleClick, order}
+		return { jobs, handleClick, selected }
 	},
 	methods: {
 
@@ -58,68 +69,79 @@ export default defineComponent({
 
 
 <style>
-  header {
-    text-align: center;
-  }
-  header .order {
-    margin-top: 20px;
-  }
+	/* .app {
+		position: relative;
+	}
 
-  .top-nav {
-	overflow: hidden;
-	background-color: rgb(68, 64, 64);
-  }
+	.content-wrap {
+  		padding-bottom: 2.5rem; 
+	} */
 
-  .top-nav a {
-	float: left;
-	display: block;
-	color: white;
-	text-align: center;
-	padding: 14px 18px;
-	text-decoration: none;
-	font-size: 18px;
-  }
+	header {
+		text-align: center;
+	}
 
-  .top-nav a:hover {
-	background-color: rgb(172, 64, 24);
-	color: black;
-  }
+	.top-nav {
+		overflow: hidden;
+		background-color: var(--second-bg-color);
+		margin: 0 0 1em 0;
+		padding: 0px;
+		left:0px;
+		right:0px;
+	}
 
-  .logged-photo {
-	float: right;
-	padding: 3px;
-	border-radius: 50%;
-	cursor: pointer;
-	width: 40px;
-	height: 40px;
-	margin: 3px;
-	/* object-position: center; */
-	/* object-fit: cover; */
-	/* background: white;
-    transform: translate(-50%, 0);
-	position: absolute;
-    left: 50%;
-	*/
-  }
-  .logged-photo img {
-	background: white;
-	border-radius: 50%;
-	
-  }
+	.top-nav a {
+		float: left;
+		display: block;
+		color: var(--main-font-color);
+		text-align: center;
+		padding: 14px 18px;
+		text-decoration: none;
+		font-size: 18px;
+		cursor: pointer;
+	}
 
-  .logged-photo img:hover {
-	opacity: 50%;
-}
-  
-  button {
-    margin: 0 10px;
-    color: #17bf66;
-    /* border: 3px solid white; */
-	border: 3px solid;
-    background: rgb(68, 64, 64);
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
+	.top-nav a:hover {
+		background-color: var(--first-highlight-color);
+		color: black;
+	}
+
+	.logged-photo {
+		float: right;
+		padding: 3px;
+		border-radius: 50%;
+		cursor: pointer;
+		width: 40px;
+		height: 40px;
+		margin: 3px;
+	}
+
+	.logged-photo img {
+		background: white;
+		border-radius: 50%;
+	}
+
+	.logged-photo img:hover {
+		opacity: 50%;
+	}
+
+	.grid-container {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		margin: 20px;
+		gap: 20px;
+	}
+
+	footer {
+		text-align: center;
+		/* background-color: var(--second-bg-color); */
+		/* padding: 10px; */
+		padding-top: 4px;
+		padding-bottom: 4px;
+
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		/* height: 2.5rem; */
+	}
 </style>
