@@ -2,6 +2,22 @@
 		<div class="popup" @keyup.esc="togglePopup" tabindex="0">
 			<div class="popup-inner">
 				<slot />
+				<h2>raweber's user data</h2>
+				<div class="user-data-wrapper">
+					<div>intra name: </div>
+					<input disabled type="text" value="raweber" />
+				</div>
+				<div class="user-data-wrapper">
+					<div>user alias: </div>
+					<input type="text" value="Ralf" />
+				</div>
+				<div class="user-data-wrapper">
+					<div>Profile picture:</div>
+					<img id="user-photo" src="../assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+				</div>
+				<div class="user-data-wrapper">
+					<div>2-factor-authentication:</div>
+				</div>
 				<button class="popup-close" @click="togglePopup"> 
 					Close
 				</button>
@@ -22,7 +38,7 @@ export default defineComponent({
 
 <style scoped>
 .popup {
-	text-align: center;
+	text-align: left;
 	background-color: rgba(0,0,0,0.8);
 	position: fixed;
 	top: 0;
@@ -37,8 +53,28 @@ export default defineComponent({
 
 .popup-inner {
 	background-color: var(--second-bg-color);
-	padding: 32px;
+	padding: 10px 26px;
 	border-radius: 10%;
+}
+
+.user-data-wrapper {
+	margin-bottom: 10px;
+}
+
+
+
+#user-photo {
+	cursor: pointer;
+	width: 30%;
+	height: 30%;
+	margin: 3%;
+	background: white;
+	border-radius: 50%;
+}
+
+
+#user-photo:hover {
+	opacity: 50%;
 }
 
 button {

@@ -21,12 +21,7 @@
 			<button @click="handleClick('location')">order by location</button>
 		</div> -->
 	</header>
-	<UserDataPopup
-		id="UserDataPopup"
-		v-if="popupTrigger === true" 
-		:togglePopup="() => togglePopup()">
-		<h2>My user popup</h2>
-	</UserDataPopup>
+	<UserDataPopup id="UserDataPopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
 	<div class="grid-container">
 		<MatchCourt />
 		<SideWindow :selected="selected"/>
