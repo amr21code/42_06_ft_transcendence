@@ -1,11 +1,10 @@
 import { Body, Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { FtAuthGuard } from './guards/guards';
 
 @Controller('auth')
 export class AuthController {
-	constructor(private authService: AuthService) {}
+	constructor() {}
 
 	@Get('return')
 	@UseGuards(FtAuthGuard)
@@ -20,7 +19,7 @@ export class AuthController {
 		console.log({
 			dto: dto,
 		});
-		return this.authService.login(dto);
+		// return this.authService.login(dto);
 	}
 
 	// @Get('logout')
