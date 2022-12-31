@@ -16,7 +16,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 	.match-court {
 		background-color: var(--second-bg-color);
 		border: white solid;

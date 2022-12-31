@@ -32,7 +32,7 @@ export default defineComponent({
 </script>
 
 
-<style>
+<style scoped>
 	.side-window {
 		background-color: white;
 		color: red;
