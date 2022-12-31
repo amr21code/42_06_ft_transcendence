@@ -11,7 +11,7 @@
 				<a>Watch</a>
 				<a @click="handleClick('chat')">Chat</a>
 				<a @click="handleClick('leaderboard')">Leaderboard</a>
-				<div class="logged-photo">
+				<div class="logged-photo" @click="togglePopup()">
 					<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
 				</div>
 			</div>
@@ -21,6 +21,12 @@
 			<button @click="handleClick('location')">order by location</button>
 		</div> -->
 	</header>
+	<UserDataPopup
+		id="UserDataPopup"
+		v-if="popupTrigger === true" 
+		:togglePopup="() => togglePopup()">
+		<h2>My user popup</h2>
+	</UserDataPopup>
 	<div class="grid-container">
 		<MatchCourt />
 		<SideWindow :selected="selected"/>
@@ -35,47 +41,37 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from 'vue'
-import type { Job } from './types/Job'
 import type { SelectedSideWindow } from './types/SelectedSideWindow'
 import JobList from './components/JobList.vue'
 import MatchCourt from './components/MatchCourt.vue'
 import SideWindow from './components/SideWindow.vue'
+import UserDataPopup from './components/UserDataPopup.vue'
 
 export default defineComponent({
 	
 	name: 'App',
-	components: { JobList, MatchCourt, SideWindow },
+	components: { UserDataPopup, MatchCourt, SideWindow },
 	setup() {
-		const jobs = ref<Job[]>([
-			{title: 'farm worker', location: 'lon lon ranch', salary: 30000, id: '1'},
-			{title: 'accountant', location: 'bureau', salary: 50000, id: '2'},
-			{title: 'engineer', location: 'factory', salary: 35000, id: '3'},
-			{title: 'fisherman', location: 'loch ness', salary: 10000, id: '4'}
-		])
+
+		const popupTrigger = ref(false);
+		const togglePopup = () => {
+			popupTrigger.value = !popupTrigger.value;
+		}
 
 		const selected = ref<SelectedSideWindow>('chat')
 		const handleClick = (term: SelectedSideWindow) => {
 			selected.value = term
 		}
 
-		return { jobs, handleClick, selected }
+		return { popupTrigger, togglePopup, handleClick, selected }
 	},
-	methods: {
-
-	}
+	methods: {}
 });
 </script>
 
 
 
-<style>
-	/* .app {
-		position: relative;
-	}
-
-	.content-wrap {
-  		padding-bottom: 2.5rem; 
-	} */
+<style scoped>
 
 	header {
 		text-align: center;
