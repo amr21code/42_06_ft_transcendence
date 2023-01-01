@@ -1,11 +1,11 @@
 import { Body, Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { FtAuthGuard } from './guards/guards';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
-	constructor(private authService: AuthService) {}
+	constructor() {}
 
 	@Get('return')
 	@UseGuards(FtAuthGuard)
@@ -20,9 +20,17 @@ export class AuthController {
 		console.log({
 			dto: dto,
 		});
-		return this.authService.login(dto);
+		// return this.authService.login(dto);
 	}
 
+	@Get('status')
+	user(@Req() request: Request) {
+		console.log(request.user);
+		if (request.user)
+			return { msg: "authenticated" };
+		else 
+			return { msg: "not" };
+	}
 	// @Get('logout')
 	// logOut(@Req() req: Request) {
 	//   req.logOut();

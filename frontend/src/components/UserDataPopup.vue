@@ -57,8 +57,13 @@ export default defineComponent({
 	border-radius: 10%;
 }
 
+.popup-inner h2 {
+	text-align: center;
+}
+
 .user-data-wrapper {
 	margin-bottom: 10px;
+	margin-left: 0%;
 }
 
 
