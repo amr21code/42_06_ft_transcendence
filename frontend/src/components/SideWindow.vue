@@ -1,5 +1,6 @@
 <template>
 	<div class="TEMP_WRAPPER">
+		<!-- LEADERBOARD WINDOW STARTS HERE -->
 		<div class="side-window" id="leaderboard" v-if="selected === 'leaderboard'">
 			<h2>Leaderboard</h2>
 			<table id="leaderboard-table">
@@ -43,28 +44,31 @@
 					<td>1</td>
 				</tr>
 			</table>
-			<!-- <ol>
-				<li>
-					<div class="leaderboard-image">
-						<img src="../assets/bitcoin-black-white.png" alt="user-photo" width="20" height="20"/>
-					</div>
-					anruland
-					<small>5 wins</small>
-				</li>
-				<li>
-					djedasch
-				</li>
-				<li>
-					jtomala
-				</li>
-				<li>
-					raweber
-				</li>
-			</ol> -->
-		</div>		
+		</div>
+
+
+		<!-- CHAT WINDOW STARTS HERE -->
 		<div class="side-window" id="chat-window" v-if="selected === 'chat'">
-			Chat Window
-			<p>hello world, this is our chat</p>
+			<h2>Chat</h2>
+			<div class="chat-top-bar">
+				<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+				Ralf Weber
+			</div>
+			<div class="chat-message-view">
+				<p class="message-recv">Hey Jorit!</p>
+				<p class="message-sent">Hey Ralf, what's up?</p>
+				<p class="message-recv">I am still doing transcendence and you?</p>
+				<p class="message-sent">Haha, same here...</p>
+			</div>
+			<div class="chat-write-and-send">
+				<input placeholder="Write message here">
+				<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
+			</div>
+			<div class="chat-menu">
+				<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
+				<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
+				<img src="../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
+			</div>
 		</div>	
 	</div>
 </template>
@@ -103,14 +107,70 @@ export default defineComponent({
 		text-align: center;
 	}
 
+	/* hover effect on all but the first line */
 	#leaderboard-table tr:not(:first-child):hover {
 		background-color: var(--first-highlight-color);
 		color: white;
 		cursor: pointer;
 	}
 
-	#top-row:hover {
-		background-color: none;
+	#leaderboard-table img {
+		border-radius: 10%;
+	}
+
+	.chat-top-bar {
+		background-color: var(--second-bg-color);
+		color: white;
+	}
+	
+	.chat-message-view {
+		border: black solid 3px;
+		min-height: 300px; 
+		/* find good way for min-height */
+	}
+
+	.message-recv {
+		background-color: rgb(155, 155, 160);
+		color: black;
+		border-radius: 15px;
+		padding: 3px;
+		margin-right: 35px;
+	}
+	
+	.message-sent {
+		text-align: right;
+		background-color: rgb(106, 106, 109);
+		color: black;
+		border-radius: 15px;
+		padding: 3px;
+		margin-left: 35px;
+	}
+	
+	.chat-write-and-send {
+		border: black solid 3px;
+		padding: 3px;
+	}
+
+	.chat-write-and-send img {
+		margin: 2px;
+		float: right;
+		padding: 3px;
+		cursor: pointer;
+	}
+	
+	.chat-menu {
+		background-color: var(--second-bg-color);
+		color: white;
+		text-align: center;
+	}
+
+	.chat-menu img {
+		margin: 5px 20px;
+		cursor: pointer;
+	}
+
+	.chat-menu img:hover {
+		background-color: rgb(0,0,0,0.3)
 	}
 	
 
