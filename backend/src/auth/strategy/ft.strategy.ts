@@ -10,7 +10,7 @@ export class FtStrategy extends PassportStrategy( Strategy, '42' ) {
 		super({
 			clientID: config.get('UID_42'),
 			clientSecret: config.get('SECRET_42'),
-			callbackURL: "http://192.168.56.2:3000/auth/return",
+			callbackURL: config.get('CALLBACK_URL'),
 			passReqToCallback: true,
 		});
 	}

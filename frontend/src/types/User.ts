@@ -7,10 +7,10 @@
 // export type { User }
 
 interface User {
-	userId: number,
-	id: number,
-	title: string,
-	completed: boolean
+	userid: string,
+	username: string,
+	// title: string,
+	// completed: boolean
 }
 
 export type { User }

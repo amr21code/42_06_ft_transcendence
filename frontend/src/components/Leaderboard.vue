@@ -13,16 +13,16 @@
 			<tbody>
 					<tr class="leaderboard-item" v-for="(user, index) in users" :key="index">
 						<td>
-							{{ user.id }}
+							{{ user.userid }}
 						</td>
 						<td>
-							{{ user.title }}
+							{{ user.username }}
 						</td>
 						<td>
-							{{ user.completed }}
+							{{ user.userid }}
 						</td>
 						<td>
-							{{ user.userId }}
+							{{ user.userid }}
 						</td>
 					</tr>
 			</tbody>
