@@ -16,20 +16,20 @@ export class FtStrategy extends PassportStrategy( Strategy, '42' ) {
 	}
 
 	async validate (
-		// request: { session: { accessToken: string } },
-		request: string,
+		request: { session: { accessToken: string } },
+		// request: string,
 		accessToken: string,
 		refreshToken: string,
 		profile: Profile,
 		cb: VerifyCallback,
 		): Promise<any> {
-			// request.session.accessToken = accessToken;
+			request.session.accessToken = accessToken;
 			console.log('accessToken', accessToken, 'refreshToken', refreshToken);
 			// console.log('profile', profile.username);
 			// console.log('profile', profile.name.givenName);
-			// return cb(null, profile);
 			const user = await this.authService.validateUser(profile);
 			console.log('Validate ', user);
-			return user;
+			return cb(null, user);
+			// return user;
 		}
 }

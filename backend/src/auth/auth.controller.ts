@@ -11,16 +11,14 @@ export class AuthController {
 	@UseGuards(FtAuthGuard)
 	ftAuthCallback() {
 		console.log("callback")
-		return {msg: "OK"} ;
+		return "Callback";
 	}
 	
 	@Get('login')
 	@UseGuards(FtAuthGuard)
-	login(@Body() dto: AuthDto) {
-		console.log({
-			dto: dto,
-		});
-		// return this.authService.login(dto);
+	login() {
+		console.log('Login function called');
+
 	}
 
 	@Get('status')
@@ -29,24 +27,6 @@ export class AuthController {
 		if (request.user)
 			return { msg: "authenticated" };
 		else 
-			return { msg: "not" };
+			return { msg: "not authenticated" };
 	}
-	// @Get('logout')
-	// logOut(@Req() req: Request) {
-	//   req.logOut();
-	// }
-
-	// @Post('signup')
-	// signup(@Body() dto: AuthDto) {
-	// 	return this.authService.signup(dto);
-	// }
-
-	// @Post('login')
-	// login(@Body() dto: AuthDto) {
-	// 	console.log({
-	// 		dto: dto,
-	// 	});
-	// 	return this.authService.login(dto);
-	// }
-	
 }
