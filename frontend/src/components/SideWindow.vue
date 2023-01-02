@@ -5,17 +5,19 @@
 			<h2>Leaderboard</h2>
 			<table id="leaderboard-table">
 				<!-- PUT FOR LOOP HERE AND MAKE LIST SCROLLABLE -->
-				<table>
+				<!-- <thead> -->
+				<div id="top-row">
 
-					<tr id="top-row">
-						<th>position</th>
+					<tr>
+						<th>#</th>
 						<th>picture</th>
 						<th>name</th>
 						<th>wins</th>
 					</tr>
-				</table>
+				</div>
+				<!-- </thead> -->
 				<div class="content-rows">
-					<table>
+					<!-- <tbody> -->
 						<tr>
 							<td>1</td>
 							<td>
@@ -104,7 +106,7 @@
 							<td>raweber</td>
 							<td>1</td>
 						</tr>
-					</table>
+					<!-- </tbody> -->
 			</div>
 		</table>
 	</div>
@@ -164,19 +166,29 @@ export default defineComponent({
 	#leaderboard-table {
 		border-collapse: collapse;
 	}
+
+	th {
+		position: sticky;
+		top: 0;
+		background-color: var(--second-bg-color);
+		color: white;
+	}
 	
-	.content-rows {
+	table {
 		overflow: auto;
-		max-height: 200px;
-		display: inline-block;
+		max-height: 500px;
+		table-layout: fixed;
+		display: block;
 		scrollbar-gutter: stable both-edges;
 	}
+	
+	
 
-	/* table  { margin-top:  20px; display: inline-block; overflow: auto; } */
-/* th div { margin-top: -20px; position: absolute; } */
+	table  { margin-top:  20px; display: inline-block; overflow: auto; }
+	th div { margin-top: -20px; position: absolute; }
 
 	#leaderboard-table th, td {
-		padding: 10px;
+		padding: 20px 40px;
 		text-align: center;
 	}
 
