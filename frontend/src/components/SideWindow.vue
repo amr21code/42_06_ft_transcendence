@@ -17,8 +17,25 @@
 				</div>
 				<!-- </thead> -->
 				<div class="content-rows">
-					<!-- <tbody> -->
-						<tr>
+					<tr
+						class="leaderboard-item"
+						v-for="(user, index) in users"
+						:key="index"
+						>
+						<td>
+							{{ user.id }}
+						</td>
+						<td>
+							{{ user.title }}
+						</td>
+						<td>
+							{{ user.completed }}
+						</td>
+						<td>
+							{{ user.userId }}
+						</td>
+					</tr>
+					<!-- <tr>
 							<td>1</td>
 							<td>
 								<img src="../assets/andi_profile.png" alt="user-photo" width="40" height="40">
@@ -105,8 +122,7 @@
 							</td>
 							<td>raweber</td>
 							<td>1</td>
-						</tr>
-					<!-- </tbody> -->
+						</tr> -->
 			</div>
 		</table>
 	</div>
@@ -141,15 +157,41 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
-import type { SelectedSideWindow } from '../types/SelectedSideWindow'
+import DataService from '../services/DataService'
+import type { ResponseData } from '../types/ResponseData'
+import type { User } from '../types/User'
 
 export default defineComponent({
+	name: 'side-window',
 	props: {
 		selected: {
 			required: true,
 			type: String
 		}
 	},
+	data () {
+		return {
+			users: [] as User[]
+		}
+	},
+
+	methods: {
+		retrieveUsers() {
+			DataService.getAll()
+			.then((response: ResponseData) => {
+				this.users = response.data;
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		}
+	},
+
+	mounted () {
+		this.retrieveUsers();
+	},
+		
 	components: {}
 })
 </script>
@@ -182,10 +224,6 @@ export default defineComponent({
 		scrollbar-gutter: stable both-edges;
 	}
 	
-	
-
-	table  { margin-top:  20px; display: inline-block; overflow: auto; }
-	th div { margin-top: -20px; position: absolute; }
 
 	#leaderboard-table th, td {
 		padding: 20px 40px;
@@ -257,8 +295,5 @@ export default defineComponent({
 	.chat-menu img:hover {
 		background-color: rgb(0,0,0,0.3)
 	}
-	
-
-	
 
 </style>
