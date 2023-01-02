@@ -5,58 +5,121 @@
 			<h2>Leaderboard</h2>
 			<table id="leaderboard-table">
 				<!-- PUT FOR LOOP HERE AND MAKE LIST SCROLLABLE -->
-				<tr id="top-row">
-					<th>position</th>
-					<th>picture</th>
-					<th>name</th>
-					<th>wins</th>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td>
-						<img src="../assets/andi_profile.png" alt="user-photo" width="40" height="40">
-					</td>
-					<td>anruland</td>
-					<td>5</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td>
-						<img src="../assets/desiree_profile.png" alt="user-photo" width="40" height="40">
-					</td>
-					<td>djedasch</td>
-					<td>3</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td>
-						<img src="../assets/jorit_profile.png" alt="user-photo" width="40" height="40">
-					</td>
-					<td>jtomala</td>
-					<td>2</td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td>
-						<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
-					</td>
-					<td>raweber</td>
-					<td>1</td>
-				</tr>
-			</table>
-		</div>
+				<table>
 
-
-		<!-- CHAT WINDOW STARTS HERE -->
-		<div class="side-window" id="chat-window" v-if="selected === 'chat'">
-			<h2>Chat</h2>
-			<div class="chat-top-bar">
-				<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
-				Ralf Weber
+					<tr id="top-row">
+						<th>position</th>
+						<th>picture</th>
+						<th>name</th>
+						<th>wins</th>
+					</tr>
+				</table>
+				<div class="content-rows">
+					<table>
+						<tr>
+							<td>1</td>
+							<td>
+								<img src="../assets/andi_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>anruland</td>
+							<td>5</td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>
+								<img src="../assets/desiree_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>djedasch</td>
+							<td>3</td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>
+								<img src="../assets/jorit_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>jtomala</td>
+							<td>2</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>
+								<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>raweber</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>
+								<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>raweber</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>
+								<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>raweber</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>
+								<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>raweber</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>
+								<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>raweber</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>
+								<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>raweber</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>
+								<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>raweber</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>
+								<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+							</td>
+							<td>raweber</td>
+							<td>1</td>
+						</tr>
+					</table>
 			</div>
-			<div class="chat-message-view">
-				<p class="message-recv">Hey Jorit!</p>
-				<p class="message-sent">Hey Ralf, what's up?</p>
+		</table>
+	</div>
+	
+	
+	<!-- CHAT WINDOW STARTS HERE -->
+	<div class="side-window" id="chat-window" v-if="selected === 'chat'">
+		<h2>Chat</h2>
+		<div class="chat-top-bar">
+			<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
+			Ralf Weber
+		</div>
+		<div class="chat-message-view">
+			<p class="message-recv">Hey Jorit!</p>
+			<p class="message-sent">Hey Ralf, what's up?</p>
 				<p class="message-recv">I am still doing transcendence and you?</p>
 				<p class="message-sent">Haha, same here...</p>
 			</div>
@@ -101,6 +164,16 @@ export default defineComponent({
 	#leaderboard-table {
 		border-collapse: collapse;
 	}
+	
+	.content-rows {
+		overflow: auto;
+		max-height: 200px;
+		display: inline-block;
+		scrollbar-gutter: stable both-edges;
+	}
+
+	/* table  { margin-top:  20px; display: inline-block; overflow: auto; } */
+/* th div { margin-top: -20px; position: absolute; } */
 
 	#leaderboard-table th, td {
 		padding: 10px;
