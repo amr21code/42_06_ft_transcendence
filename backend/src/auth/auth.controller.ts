@@ -2,6 +2,7 @@ import { Body, Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthDto } from './dto';
 import { FtAuthGuard } from './guards/guards';
 import { Request } from 'express';
+import { session } from 'passport';
 
 @Controller('auth')
 export class AuthController {
@@ -9,9 +10,9 @@ export class AuthController {
 
 	@Get('return')
 	@UseGuards(FtAuthGuard)
-	ftAuthCallback() {
-		console.log("callback")
-		return "Callback";
+	ftAuthCallback(@Req() request: Request) {
+		console.log('return', request.user);
+		return request.user;
 	}
 	
 	@Get('login')

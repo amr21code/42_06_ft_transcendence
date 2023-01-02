@@ -5,7 +5,7 @@ import { Request } from 'express';
 @Controller('users')
 export class UserController {
 	@Get('me')
-	@UseGuards(FtAuthGuard)
+	// @UseGuards(FtAuthGuard)
 	getMe(@Req() request: Request) {
 		console.log('users/me ', request.user);
 		return request.user;
