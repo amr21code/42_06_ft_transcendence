@@ -2,76 +2,30 @@
 	<div class="leaderboard-wrapper">
 		<h2>Leaderboard</h2>
 		<table id="leaderboard-table">
-			<!-- PUT FOR LOOP HERE AND MAKE LIST SCROLLABLE -->
-			<div id="top-row">
-
+			<thead id="top-row">
 				<tr>
 					<th>#</th>
 					<th>picture</th>
 					<th>name</th>
 					<th>wins</th>
 				</tr>
-			</div>
-			<div class="content-rows">
-				<tr
-					class="leaderboard-item"
-					v-for="(user, index) in users"
-					:key="index"
-					>
-					<td>
-						{{ user.id }}
-					</td>
-					<td>
-						{{ user.title }}
-					</td>
-					<td>
-						{{ user.completed }}
-					</td>
-					<td>
-						{{ user.userId }}
-					</td>
-				</tr>
-				<!-- <tr>
-						<td>1</td>
+			</thead>
+			<tbody>
+					<tr class="leaderboard-item" v-for="(user, index) in users" :key="index">
 						<td>
-							<img src="../assets/andi_profile.png" alt="user-photo" width="40" height="40">
+							{{ user.id }}
 						</td>
-						<td>anruland</td>
-						<td>5</td>
+						<td>
+							{{ user.title }}
+						</td>
+						<td>
+							{{ user.completed }}
+						</td>
+						<td>
+							{{ user.userId }}
+						</td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td>
-							<img src="../assets/desiree_profile.png" alt="user-photo" width="40" height="40">
-						</td>
-						<td>djedasch</td>
-						<td>3</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>
-							<img src="../assets/jorit_profile.png" alt="user-photo" width="40" height="40">
-						</td>
-						<td>jtomala</td>
-						<td>2</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>
-							<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
-						</td>
-						<td>raweber</td>
-						<td>1</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>
-							<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
-						</td>
-						<td>raweber</td>
-						<td>1</td>
-					</tr> -->
-			</div>
+			</tbody>
 		</table>
 	</div>
 </template>
@@ -111,18 +65,18 @@ export default defineComponent({
 </script>
 
 
-<style scoped>
-	.side-window {
-		background-color: white;
-		color: red;
-		border-radius: 4px;
-		padding: 30px;
-	}
-
+<style scoped>	
+	
 	#leaderboard-table {
 		border-collapse: collapse;
+		overflow: auto;
+		max-height: 500px;
+		/* table-layout: fixed; */
+		display: block;
+		position: relative;
+		scrollbar-gutter: stable both-edges;
 	}
-
+	
 	th {
 		position: sticky;
 		top: 0;
@@ -130,13 +84,6 @@ export default defineComponent({
 		color: white;
 	}
 	
-	table {
-		overflow: auto;
-		max-height: 500px;
-		table-layout: fixed;
-		display: block;
-		scrollbar-gutter: stable both-edges;
-	}
 	
 
 	#leaderboard-table th, td {
@@ -144,20 +91,17 @@ export default defineComponent({
 		text-align: center;
 	}
 
-	/*hover effect on all but the first line*/
-	/* #leaderboard-table tr:not(:first-child):hover {
-		background-color: var(--first-highlight-color);
-		color: white;
-		cursor: pointer;
-	} */
-
+	/* hover effect on all but the first line */
 	#leaderboard-table tr:hover {
 		background-color: var(--first-highlight-color);
 		color: white;
 		cursor: pointer;
 	}
 
-	#leaderboard-table img {
-		border-radius: 10%;
-	}
+	/* #leaderboard-table tr:hover {
+		background-color: var(--first-highlight-color);
+		color: white;
+		cursor: pointer;
+	} */
+
 </style>
