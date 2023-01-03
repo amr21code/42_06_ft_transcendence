@@ -6,11 +6,11 @@
 
 // export type { User }
 
-interface User {
+interface IUser {
 	userid: string,
 	username: string,
 	// title: string,
 	// completed: boolean
 }
 
-export type { User }
+export type { IUser }
