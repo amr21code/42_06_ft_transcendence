@@ -8,7 +8,7 @@ export class UserController {
 	// @UseGuards(FtAuthGuard)
 	getMe(@Req() request: Request) {
 		console.log('users/me ', request.user);
-		// return request.user;
-		return [{"userid":"anruland","username":"Andreas","avatar":null,"twofa":0,"status":"0","created":"2022-12-31T12:33:41.171Z"}];
+		return request.user;
+		// return [{"userid":"anruland","username":"Andreas","avatar":null,"twofa":0,"status":"0","created":"2022-12-31T12:33:41.171Z"}];
 	}
 }
