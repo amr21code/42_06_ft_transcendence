@@ -92,7 +92,7 @@ model users {
   friends_friends_addresseeidTousers friends?            @relation("friends_addresseeidTousers")
   user_chat                          user_chat[]
   user_match                         user_match[]
-  online_status                      online_status       @relation(fields: [status], references: [statuscode], onDelete: Cascade, map: "fk_users_online_codes")
+  online_status                      online_status       @relation(fields: [status], references: [statuscode], onDelete: Cascade, map: "fk_users_online_status")
   users_achievements                 users_achievements?
   userstats                          userstats?
 }

@@ -24,6 +24,9 @@ export class UserService {
 		const user = await this.db.users.findUnique({
 			where: {
 				userid: userid,
+			},
+			include: {
+				
 			}
 		});
 		console.log(user);
