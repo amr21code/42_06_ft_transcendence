@@ -32,19 +32,18 @@
 
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
-import type { User } from '../types/User'
+import type { IUser } from '../types/User'
 
 export default defineComponent({
 	name: 'leaderboard-window',
 	data () {
 		return {
-			users: [] as User[]
+			users: [] as IUser[]
 		}
 	},
-
 	methods: {
 		retrieveUsers() {
 			DataService.getAll()

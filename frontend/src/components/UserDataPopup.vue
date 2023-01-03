@@ -1,37 +1,67 @@
 <template>
-		<div class="popup" @keyup.esc="togglePopup" tabindex="0">
-			<div class="popup-inner">
-				<slot />
-				<h2>raweber's user data</h2>
-				<div class="user-data-wrapper">
-					<div>intra name: </div>
-					<input disabled type="text" value="raweber" />
-				</div>
-				<div class="user-data-wrapper">
-					<div>user alias: </div>
-					<input type="text" value="Ralf" />
-				</div>
-				<div class="user-data-wrapper">
-					<div>Profile picture:</div>
-					<img id="user-photo" src="../assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
-				</div>
-				<div class="user-data-wrapper">
-					<div>2-factor-authentication:</div>
-				</div>
-				<button class="popup-close" @click="togglePopup"> 
-					Close
-				</button>
+	<div class="popup" @keyup.esc="togglePopup" tabindex="0">
+		<div class="popup-inner">
+			<slot />
+			<!-- NON-DYNAMIC <h2>raweber's user data</h2> -->
+			<h2>{{ user.userid }}'s user data</h2>
+			<div class="user-data-wrapper">
+				<div>intra name: </div>
+				<!-- NON-DYNAMIC <input disabled type="text" value="raweber" /> -->
+				<input disabled type="text" :value="user.userid" /> 
 			</div>
+			<div class="user-data-wrapper">
+				<div>user alias: </div>
+				<!-- NON-DYNAMIC <input type="text" value="Ralf" /> -->
+				<input type="text" :value="user.username" />
+			</div>
+			<div class="user-data-wrapper">
+				<div>Profile picture:</div>
+				<img id="user-photo" src="../assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+				<!-- <img id="user-photo" src="DB-CONNECTION GOES HERE" alt="user-photo" width="40" height="40"> -->
+			</div>
+			<div class="user-data-wrapper">
+				<div>2-factor-authentication:</div>
+			</div>
+			<button class="popup-close" @click="togglePopup"> 
+				Close
+			</button>
 		</div>
+	</div>
 </template>
 
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
+import DataService from '../services/DataService'
+import type { ResponseData } from '../types/ResponseData'
+import type { IUser } from '../types/User'
 
 export default defineComponent({
+	name: "user-data-popup",
+	
+	data () {
+		return {
+			user: {} as IUser
+		}
+	},
+
 	props: ['togglePopup'],
-	components: {}
+	methods: {
+		retrieveCurrentUser() {
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				this.user = response.data;
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		}
+	},
+
+	mounted () {
+		this.retrieveCurrentUser();
+	}
 })
 </script>
 
