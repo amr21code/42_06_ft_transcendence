@@ -1,27 +1,26 @@
-import { Body, Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
-import { AuthDto } from './dto';
-import { FtAuthGuard } from './guards/guards';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { AuthenticatedGuard, FtAuthGuard } from './guards/guards';
 import { Request } from 'express';
-import { session } from 'passport';
 
 @Controller('auth')
 export class AuthController {
 	constructor() {}
 
-	@Get('return')
 	@UseGuards(FtAuthGuard)
+	@Get('return')
 	ftAuthCallback(@Req() request: Request) {
 		console.log('return', request.user);
 		return request.user;
 	}
 	
-	@Get('login')
 	@UseGuards(FtAuthGuard)
+	@Get('login')
 	login() {
 		console.log('Login function called');
-
+		return { msg: 'logged in!'};
 	}
-
+	
+	@UseGuards(AuthenticatedGuard)
 	@Get('status')
 	user(@Req() request: Request) {
 		console.log(request.user);

@@ -1,8 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { AuthDto } from './dto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { UserDetails } from 'src/user/types';
 import { Profile } from 'passport';
 
 @Injectable ()

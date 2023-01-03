@@ -50,8 +50,8 @@ model match_history {
 }
 
 model online_status {
-  statuscode String  @id(map: "pk_online_codes") @db.Char(1)
   statusname String? @db.VarChar(100)
+  statuscode Int     @id(map: "pk_online_status")
   users      users[]
 }
 
@@ -86,8 +86,8 @@ model users {
   username                           String?             @db.VarChar(100)
   avatar                             String?             @db.VarChar(100)
   twofa                              Int                 @default(0)
-  status                             String              @default(dbgenerated("0")) @db.Char(1)
   created                            DateTime            @default(now()) @db.Timestamp(6)
+  status                             Int                 @default(0)
   friends_friends_requesteridTousers friends?            @relation("friends_requesteridTousers")
   friends_friends_addresseeidTousers friends?            @relation("friends_addresseeidTousers")
   user_chat                          user_chat[]
@@ -95,8 +95,6 @@ model users {
   online_status                      online_status       @relation(fields: [status], references: [statuscode], onDelete: Cascade, map: "fk_users_online_codes")
   users_achievements                 users_achievements?
   userstats                          userstats?
-
-  @@index([status], map: "unq_users_status")
 }
 
 model users_achievements {

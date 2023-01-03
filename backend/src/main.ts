@@ -17,15 +17,17 @@ async function bootstrap() {
 			'http://192.168.56.2:5173',
 		],
 		methods: ["GET", "POST"],
-	})
-	app.use(session({
-		secret: "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0",
-		saveUninitialized: false,
-		resave: false,
-		cookie: {
-			maxAge: 60000,
-		}
-	}))
+	});
+	app.use(
+		session({
+			secret: "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0",
+			resave: false,
+			saveUninitialized: false,
+			cookie: {
+				maxAge: 60000,
+			}
+		})
+	);
 	app.use(passport.initialize());
 	app.use(passport.session());
   	await app.listen(3000);

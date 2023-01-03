@@ -29,7 +29,7 @@ export class FtStrategy extends PassportStrategy( Strategy, '42' ) {
 			// console.log('profile', profile.name.givenName);
 			const user = await this.authService.validateUser(profile);
 			console.log('Validate ', user.userid);
-			return cb(null, user);
-			// return user;
+			// return cb(null, user);
+			return user;
 		}
 }
