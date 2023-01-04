@@ -1,32 +1,40 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { AuthDto } from './dto';
 import { Profile } from 'passport';
+import { UserService } from 'src/user/user.service';
 
 @Injectable ()
 export class AuthService {
-	constructor (private db: DbService) {}
+	constructor (private db: DbService, private userService: UserService) {}
 
 	async validateUser(profile: Profile) {
-		console.log('User ', profile.username, ': searching');
-		const user = await this.db.users.findFirst({
-			where: {
-				userid: profile.username,
-			}
-		});
-		console.log('User ', profile.username, ': checking');
+		// console.log('User ', profile.username, ': searching');
+		// const user = await this.db.users.findFirst({
+		const user = await this.findUser(profile.username);
+		// ({
+		// 	where: {
+		// 		userid: profile.username,
+		// 	}
+		// });
+		// console.log('User ', profile.username, ': checking');
 		if (!user)
 		{
 			console.log('User ', profile.username, ' unknown, creating in DB');
-			const user = await this.db.users.create({
-				data: {
-					userid: profile.username,
-					username: profile.name.givenName,
-				},
-			})
+			this.userService.createUser(profile);
 		}
 		return user;
 	}
+
+	async findUser(userid: string)
+	{
+		const user = await this.db.users.findFirst({
+			where: {
+				userid: userid,
+			}
+		});
+		return user;
+	}
+
 	// async signup(dto: AuthDto) {
 	// 	// const hash = await argon.hash(dto.pass);
 	// 	try {
@@ -47,25 +55,16 @@ export class AuthService {
 	// 	}
 	// }
 
-	async findUser(userid: string)
-	{
-		const user = await this.db.users.findFirst({
-			where: {
-				userid: userid,
-			}
-		});
-		return user;
-	}
 
-	async login(dto: AuthDto) {
-		const user = await this.db.users.findFirst({
-			where: {
-				userid: dto.user,
-			},
-		});
-		if (!user) 
-			throw new ForbiddenException('user does not exist');
-		return user;
-	}
+	// async login(dto: AuthDto) {
+	// 	const user = await this.db.users.findFirst({
+	// 		where: {
+	// 			userid: dto.userid,
+	// 		},
+	// 	});
+	// 	if (!user) 
+	// 		throw new ForbiddenException('user does not exist');
+	// 	return user;
+	// }
 
 }
