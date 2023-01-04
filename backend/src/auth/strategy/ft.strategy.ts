@@ -25,10 +25,10 @@ export class FtStrategy extends PassportStrategy( Strategy, '42' ) {
 		): Promise<any> {
 			request.session.accessToken = accessToken;
 			console.log('accessToken', accessToken, 'refreshToken', refreshToken);
-			// console.log('profile', profile.username);
+			console.log('profile', profile);
 			// console.log('profile', profile.name.givenName);
 			const user = await this.authService.validateUser(profile);
-			console.log('Validate ', user.userid);
+			console.log('Validate ', user);
 			// return cb(null, user);
 			return user;
 		}

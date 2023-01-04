@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
-import { Profile } from 'passport';
+import { Profile } from 'passport-42';
 import { UserService } from 'src/user/user.service';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Injectable ()
 export class AuthService {
 	constructor (private db: DbService, private userService: UserService) {}
 
 	async validateUser(profile: Profile) {
+		var user;
 		// console.log('User ', profile.username, ': searching');
 		// const user = await this.db.users.findFirst({
-		const user = await this.findUser(profile.username);
+		user = await this.findUser(profile.username);
 		// ({
 		// 	where: {
 		// 		userid: profile.username,
@@ -22,6 +24,7 @@ export class AuthService {
 			console.log('User ', profile.username, ' unknown, creating in DB');
 			this.userService.createUser(profile);
 		}
+		user = await this.findUser(profile.username);
 		return user;
 	}
 

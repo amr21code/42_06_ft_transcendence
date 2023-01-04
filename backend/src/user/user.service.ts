@@ -1,6 +1,6 @@
 import { Injectable, Req } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { Profile } from 'passport';
+import { Profile } from 'passport-42';
 import { DbService } from 'src/db/db.service';
 
 @Injectable()
@@ -74,8 +74,10 @@ export class UserService {
 			data: {
 				userid: profile.username,
 				username: profile.name.givenName,
+				avatar: profile._json.image.versions.small,
 			},
 		})
+		return user;
 	}
 
 

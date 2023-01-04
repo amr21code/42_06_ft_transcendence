@@ -4,18 +4,18 @@ import { Request } from 'express';
 import { UserService } from './user.service';
 
 @Controller('users')
+// @UseGuards(AuthenticatedGuard)
 export class UserController {
 	constructor( private readonly userService: UserService){}
 
 	@Get('me')
-	@UseGuards(AuthenticatedGuard)
 	async getMe(@Req() request: Request) {
 		const user = await this.userService.getMe(request.user);
 		return user;
 	}
 
 	@Get('all')
-	@UseGuards(AuthenticatedGuard)
+	// @UseGuards(AuthenticatedGuard)
 	async getAll() {
 		const users = await this.userService.getAll();
 		return users;
@@ -30,7 +30,7 @@ export class UserController {
 	}
 	
 	@Get(':userid/:field/:new')
-	@UseGuards(AuthenticatedGuard)
+	// @UseGuards(AuthenticatedGuard)
 	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Param('new') newdata) {
 		if (userid == (await this.getMe(request)).userid) {
 			try {
