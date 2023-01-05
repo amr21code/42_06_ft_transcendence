@@ -84,14 +84,16 @@ model user_status_chat {
 model users {
   userid                             String              @id(map: "pk_users") @db.VarChar(8)
   username                           String?             @db.VarChar(100)
-  avatar                             String?             @db.VarChar(100)
   twofa                              Int                 @default(0)
   created                            DateTime            @default(now()) @db.Timestamp(6)
   user_status                        Int                 @default(0)
+  profilepic42                       String?             @db.VarChar(200)
+  avatar                             Int                 @default(42)
   friends_friends_requesteridTousers friends?            @relation("friends_requesteridTousers")
   friends_friends_addresseeidTousers friends?            @relation("friends_addresseeidTousers")
   user_chat                          user_chat[]
   user_match                         user_match[]
+  avatars                            avatars             @relation(fields: [avatar], references: [avatarid], onDelete: Cascade, map: "fk_users_avatars")
   online_status                      online_status       @relation(fields: [user_status], references: [statuscode], onDelete: Cascade, map: "fk_users_online_status")
   users_achievements                 users_achievements?
   userstats                          userstats?
@@ -110,4 +112,11 @@ model userstats {
   wins   Int?
   losses Int?
   users  users  @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_userstats_users")
+}
+
+model avatars {
+  avatarurl  String  @db.VarChar(200)
+  avatarname String? @db.VarChar(100)
+  avatarid   Int     @id(map: "pk_avatars")
+  users      users[]
 }

@@ -30,9 +30,12 @@ export class UserController {
 	}
 	
 	@Get(':userid/:field/:new')
-	// @UseGuards(AuthenticatedGuard)
+	@UseGuards(AuthenticatedGuard)
 	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Param('new') newdata) {
-		if (userid == (await this.getMe(request)).userid) {
+		const user = await this.getMe(request);
+		// console.log('change', user[0].userid, " ", userid);
+		// console.log('to ', newdata, ' field ', field);
+		if (userid == user[0].userid) {
 			try {
 				const status = await this.userService.changeUserData(userid, field, newdata);
 					return { msg : "ok" };
