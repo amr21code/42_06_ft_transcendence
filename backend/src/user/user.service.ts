@@ -32,7 +32,7 @@ export class UserService {
 	}
 
 	async getMe(user: any) {
-		console.log("getme", user);
+		// console.log("getme", user);
 		const meuser = await this.db.$queryRaw(
 			Prisma.sql`SELECT userid, username, 
 			CASE
