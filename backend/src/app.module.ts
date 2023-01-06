@@ -4,7 +4,7 @@ import { UserModule } from './user/user.module';
 import { DbModule } from './db/db.module';
 import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-// import { FriendlistModule } from './friendlist/friendlist.module';
+import { FriendlistModule } from './friendlist/friendlist.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -13,7 +13,6 @@ import { PassportModule } from '@nestjs/passport';
   AuthModule, 
   UserModule, 
   DbModule, 
-  PassportModule.register({ session: true }), ],
-//   FriendlistModule
+  PassportModule.register({ session: true }), FriendlistModule],
 })
 export class AppModule {}
