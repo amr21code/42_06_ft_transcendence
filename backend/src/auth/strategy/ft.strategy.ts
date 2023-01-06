@@ -24,11 +24,11 @@ export class FtStrategy extends PassportStrategy( Strategy, '42' ) {
 		cb: VerifyCallback,
 		): Promise<any> {
 			request.session.accessToken = accessToken;
-			console.log('accessToken', accessToken, 'refreshToken', refreshToken);
-			console.log('profile', profile);
+			// console.log('accessToken', accessToken, 'refreshToken', refreshToken);
+			// console.log('profile', profile);
 			// console.log('profile', profile.name.givenName);
 			const user = await this.authService.validateUser(profile);
-			console.log('Validate ', user);
+			// console.log('Validate ', user);
 			// return cb(null, user);
 			return user;
 		}

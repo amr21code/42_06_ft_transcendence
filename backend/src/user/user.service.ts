@@ -27,7 +27,7 @@ export class UserService {
 		// 		created: true,
 		// 	}
 		// });
-		console.log(user);
+		// console.log(user);
 		return (user);
 	}
 
