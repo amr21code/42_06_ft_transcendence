@@ -29,12 +29,14 @@ model chat_type {
 }
 
 model friends {
-  requesterid                      String            @unique(map: "unq_friends_requesterid") @db.VarChar(8)
-  addresseeid                      String            @unique(map: "unq_friends_addresseeid") @db.VarChar(8)
+  requesterid                      String            @db.VarChar(8)
+  addresseeid                      String            @db.VarChar(8)
   statuscode                       String?           @unique(map: "unq_friends_statuscode") @db.Char(1)
   friendship_codes                 friendship_codes? @relation(fields: [statuscode], references: [statuscode], onDelete: Cascade, map: "fk_friends_friendship_codes")
   users_friends_requesteridTousers users             @relation("friends_requesteridTousers", fields: [requesterid], references: [userid], onDelete: Cascade, map: "fk_friends_users")
   users_friends_addresseeidTousers users             @relation("friends_addresseeidTousers", fields: [addresseeid], references: [userid], onDelete: Cascade, map: "fk_friends_users_0")
+
+  @@unique([requesterid, addresseeid], map: "unq_friends")
 }
 
 model friendship_codes {
@@ -89,8 +91,8 @@ model users {
   user_status                        Int                 @default(0)
   profilepic42                       String?             @db.VarChar(200)
   avatar                             Int                 @default(42)
-  friends_friends_requesteridTousers friends?            @relation("friends_requesteridTousers")
-  friends_friends_addresseeidTousers friends?            @relation("friends_addresseeidTousers")
+  friends_friends_requesteridTousers friends[]           @relation("friends_requesteridTousers")
+  friends_friends_addresseeidTousers friends[]           @relation("friends_addresseeidTousers")
   user_chat                          user_chat[]
   user_match                         user_match[]
   avatars                            avatars             @relation(fields: [avatar], references: [avatarid], onDelete: Cascade, map: "fk_users_avatars")
@@ -115,7 +117,7 @@ model userstats {
 }
 
 model avatars {
-  avatarurl  String  @db.VarChar(200)
+  avatarurl  String? @db.VarChar(200)
   avatarname String? @db.VarChar(100)
   avatarid   Int     @id(map: "pk_avatars")
   users      users[]

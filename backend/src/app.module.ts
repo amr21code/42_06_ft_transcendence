@@ -13,6 +13,7 @@ import { FriendlistModule } from './friendlist/friendlist.module';
   AuthModule, 
   UserModule, 
   DbModule, 
-  PassportModule.register({ session: true }), FriendlistModule],
+  PassportModule.register({ session: true }), 
+  FriendlistModule],
 })
 export class AppModule {}

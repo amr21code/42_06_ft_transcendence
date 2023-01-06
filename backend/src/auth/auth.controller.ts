@@ -9,7 +9,7 @@ export class AuthController {
 	@UseGuards(FtAuthGuard)
 	@Get('return')
 	ftAuthCallback(@Req() request: Request) {
-		console.log('return', request.user);
+		// console.log('return', request.user);
 		return request.user;
 	}
 	
