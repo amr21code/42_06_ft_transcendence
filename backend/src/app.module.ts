@@ -5,6 +5,8 @@ import { DbModule } from './db/db.module';
 import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { FriendlistModule } from './friendlist/friendlist.module';
+import { AchievementsModule } from './achievements/achievements.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -13,6 +15,6 @@ import { FriendlistModule } from './friendlist/friendlist.module';
   AuthModule, 
   UserModule, 
   DbModule, 
-  PassportModule.register({ session: true }), FriendlistModule],
+  PassportModule.register({ session: true }), FriendlistModule, AchievementsModule, ChatModule],
 })
 export class AppModule {}
