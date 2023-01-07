@@ -33,14 +33,14 @@ export class UserController {
 	// @UseGuards(AuthenticatedGuard)
 	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Param('new') newdata) {
 		const user = await this.getMe(request);
-		if (userid == user[0].userid) {
-			try {
+		try {
+				if (userid == user[0].userid)
+					throw new ForbiddenException();
 				const status = await this.userService.changeUserData(userid, field, newdata);
 					return { msg : "ok" };
 			} catch (error) {
 				throw new ForbiddenException('invalid userstatus');
 			}
-		}
 	}
 	
 

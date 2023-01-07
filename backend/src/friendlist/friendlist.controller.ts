@@ -5,7 +5,7 @@ import { FriendlistService } from './friendlist.service';
 import { UserService } from 'src/user/user.service';
 
 @Controller('fl')
-// @UseGuards(AuthenticatedGuard)
+@UseGuards(AuthenticatedGuard)
 export class FriendlistController {
 	constructor(private readonly flservice: FriendlistService, private readonly userService: UserService) {}
 
@@ -19,7 +19,7 @@ export class FriendlistController {
 	async changeStatus(@Req() request: Request, @Param('userid') userid_other, @Param('action') action)
 	{
 		const user = await this.userService.getMe(request.user);
-		console.log('changestatus user', user[0].userid, 'other', userid_other, 'action', action);
+		// console.log('changestatus user', user[0].userid, 'other', userid_other, 'action', action);
 		try {
 			if (user[0].userid === userid_other)
 				throw new ForbiddenException();
