@@ -5,7 +5,7 @@ import { FriendlistService } from './friendlist.service';
 import { UserService } from 'src/user/user.service';
 
 @Controller('fl')
-@UseGuards(AuthenticatedGuard)
+// @UseGuards(AuthenticatedGuard)
 export class FriendlistController {
 	constructor(private readonly flservice: FriendlistService, private readonly userService: UserService) {}
 

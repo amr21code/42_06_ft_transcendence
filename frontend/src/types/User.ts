@@ -9,6 +9,8 @@
 interface IUser {
 	userid: string,
 	username: string,
+	picurl: string,
+	statusname: string,
 	// title: string,
 	// completed: boolean
 }

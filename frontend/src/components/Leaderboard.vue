@@ -16,13 +16,13 @@
 							{{ user.userid }}
 						</td>
 						<td>
+							{{ user.picurl }}
+						</td>
+						<td>
 							{{ user.username }}
 						</td>
 						<td>
-							{{ user.userid }}
-						</td>
-						<td>
-							{{ user.userid }}
+							{{ user.statusname }}
 						</td>
 					</tr>
 			</tbody>
