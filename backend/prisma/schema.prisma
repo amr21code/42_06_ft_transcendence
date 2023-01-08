@@ -22,22 +22,23 @@ model avatars {
 }
 
 model chat {
-  chatid        Int             @id(map: "pk_chatchannel")
   type          Int             @default(0)
   password      String?         @db.VarChar(100)
+  chatid        Int             @id(map: "pk_chat") @default(autoincrement())
+  chat_name     String?         @default("yet another chat") @db.VarChar(100)
   chat_type     chat_type       @relation(fields: [type], references: [typeid], onDelete: Cascade, map: "fk_chat_chat_type")
   chat_messages chat_messages[]
   user_chat     user_chat[]
 }
 
 model chat_messages {
-  userid    String    @db.VarChar(8)
+  userid    String   @db.VarChar(8)
   chatid    Int
   message   String?
-  time      DateTime  @default(now()) @db.Timestamp(6)
-  id        Int       @id(map: "pk_chat_messages")
-  chat      chat      @relation(fields: [chatid], references: [chatid], onDelete: Cascade, map: "fk_chat_messages_chat")
-  user_chat user_chat @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_chat_messages_user_chat")
+  time      DateTime @default(now()) @db.Timestamp(6)
+  id        Int      @id(map: "pk_chat_messages") @default(autoincrement())
+  chat      chat     @relation(fields: [chatid], references: [chatid], onDelete: Cascade, map: "fk_chat_messages_chat")
+  user_chat users    @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_chat_messages_user_chat")
 }
 
 model chat_type {
@@ -76,11 +77,10 @@ model online_status {
 }
 
 model user_chat {
-  userid           String           @unique(map: "unq_user_chat_userid") @db.VarChar(8)
+  userid           String           @db.VarChar(8)
   chatid           Int
   status           Int
-  time             Int              @default(0)
-  chat_messages    chat_messages[]
+  time             Int?
   chat             chat             @relation(fields: [chatid], references: [chatid], onDelete: Cascade, map: "fk_user_chat_chat")
   user_status_chat user_status_chat @relation(fields: [status], references: [statusid], onDelete: Cascade, map: "fk_user_chat_user_status_chat")
   users            users            @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_user_chat_users")
@@ -112,9 +112,10 @@ model users {
   user_status                        Int                  @default(0)
   profilepic42                       String?              @db.VarChar(200)
   avatar                             Int                  @default(42)
+  chat_messages                      chat_messages[]
   friends_friends_requesteridTousers friends[]            @relation("friends_requesteridTousers")
   friends_friends_addresseeidTousers friends[]            @relation("friends_addresseeidTousers")
-  user_chat                          user_chat?
+  user_chat                          user_chat[]
   user_match                         user_match[]
   avatars                            avatars              @relation(fields: [avatar], references: [avatarid], onDelete: Cascade, map: "fk_users_avatars")
   online_status                      online_status        @relation(fields: [user_status], references: [statuscode], onDelete: Cascade, map: "fk_users_online_status")
