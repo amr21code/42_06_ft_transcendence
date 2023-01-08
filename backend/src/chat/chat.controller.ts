@@ -1,8 +1,9 @@
-import { Controller, ForbiddenException, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
 import { UserService } from 'src/user/user.service';
-import { Request } from 'express';
+import { Request, request } from 'express';
+import { ChatMessageDto } from './dto';
 
 @Controller('chat')
 // @UseGuards(AuthenticatedGuard)
@@ -47,7 +48,33 @@ export class ChatController {
 	@Get('list/users/:chatid')
 	async listUsers(@Param('chatid') chatid?)
 	{
-		const list = await this.chatService.listUsers(chatid);
-		return list;
+		try {
+			const list = await this.chatService.listUsers(chatid);
+			return list;
+		} catch (error) {
+			throw new ForbiddenException();
+		}
+	}
+
+	@Post('message')
+	async newMessage(@Body() message: ChatMessageDto, @Req() request: Request) {
+		try {
+			// if (request[0].userid != message.userid)
+			// 	throw new ForbiddenException();
+			const msg = await this.chatService.addMessage(message);
+			return msg;
+		} catch (error) {
+			throw new ForbiddenException();
+		}
+	}
+
+	@Get('list/messages/:chatid')
+	async listMessages(@Param('chatid') chatid) {
+		try {
+			const list = await this.chatService.listMessages(chatid);
+			return list;
+		} catch (error) {
+			throw new ForbiddenException();
+		}
 	}
 }

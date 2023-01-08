@@ -1,6 +1,8 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
+import { ChatMessageDto } from './dto';
+import { MESSAGES } from '@nestjs/core/constants';
 
 @Injectable()
 export class ChatService {
@@ -109,5 +111,25 @@ export class ChatService {
 			);
 		}
 		return size;
+	}
+
+	async addMessage(message: ChatMessageDto) {
+		const msg = await this.db.$queryRaw(
+			Prisma.sql`INSERT INTO public.chat_messages(
+				userid, chatid, message)
+				VALUES (${message.userid}, CAST(${message.chatid} AS INTEGER), ${message.message});`
+		);
+		return msg;
+	}
+
+	async listMessages(chatid: string) {
+		const list = await this.db.$queryRaw(
+			Prisma.sql`SELECT u.username, cm.chatid, cm.message, cm.time
+			FROM public.chat_messages AS cm
+			LEFT JOIN public.users as u ON u.userid=cm.userid
+			WHERE chatid=CAST(${chatid} AS INTEGER)
+			ORDER BY cm.time ASC`
+		);
+		return list;
 	}
 }
