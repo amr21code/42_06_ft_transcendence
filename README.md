@@ -29,8 +29,8 @@ Achievements:
 | Get | auth | return | return route for 42 API |
 | Get | auth | login | login route directs to 42 API |
 | Get | auth | status | shows whether you are authenticated or not |
-| Get | chat | list/chats/:userid? | lists all available visible chats (public/protected) (where | userid is joined if specified) |
-| Get | chat | join/:chatid?/:pw? | creates a chat with first user as admin if nothing is specified or joins chatid with/without pw |
+| Get | chat | list/chats/:userid? | lists all available visible chats (public/protected) (where userid is joined if specified - if userid specified only for displaying their own) |
+| Get | chat | join/:chatid?/:pw? | creates a chat with first user as admin if nothing is specified or joins chatid with/without pw - checks for banned status |
 | Get | chat | leave/:chatid | leaves chatid and deletes it with all messages if last one leaves |
 | Get | chat | list/users/:chatid | lists all users in chatid |
 | Post | chat | message | sends the chatmessage as json object to the backend { userid: string; chatid: number; message: string; }|
@@ -38,8 +38,9 @@ Achievements:
 | Post | chat | details | changes the details of the chat with JSON object { type: number; chatid: number; chat_name: string; password: string; } |
 | Post | chat | user/status | changes the user status with a JSON object { userid: string; chatid: number;  status: number;	bantime: number; } |
 | Get | fl | show/:userid | show friendlist of userid |
-| Get | edit/:userid/:action | changes the status of a friendship (actions: request, confirm, block, unblock, remove) |
+| Get | fl | edit/:userid/:action | changes the status of a friendship (actions: request, confirm, block, unblock, remove) |
 | Get | users | me | shows the properties of the current user |
 | Get | users | all | shows all users in the database |
 | Get | users | :userid | shows the properties of userid |
 | Get | users | :userid/:field/:new | changes the properties of userid (fields: username (string), user_status (number), twofa (not implemented), avatar (number)) |
+
