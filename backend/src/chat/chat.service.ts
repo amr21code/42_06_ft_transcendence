@@ -69,12 +69,23 @@ export class ChatService {
 		return list;
 	}
 
-	async joinChat(userid: string, chatid: number, pw: string) {
+	async joinChat(userid: string, chatid?: number, pw?: string) {
 		const result = await this.db.$queryRaw(
 			Prisma.sql`SELECT chatid, password FROM public.chat
 			WHERE chatid=CAST(${chatid} AS INTEGER)`
 		);
-		console.log(result);
+		const banned = await this.db.$queryRaw(
+			Prisma.sql`SELECT * FROM public.user_chat
+			WHERE userid=${userid} AND chatid=CAST(${chatid} AS INTEGER)`
+		);
+		if (Object.keys(banned).length == 1) {
+			if (banned[0].bantime < (Date.now() / 1000)) {
+				this.leaveChat(userid, chatid);
+			} else {
+				throw new ForbiddenException();
+			}
+		}
+		// console.log(result)
 		try {
 			if (result[0].chatid == chatid && pw == result[0].password) {
 				// console.log("chat exists, password is correct, joining");
@@ -84,6 +95,8 @@ export class ChatService {
 						VALUES (${userid}, CAST(${chatid} AS INTEGER), 1);`
 						);
 				return ({msg: 'ok'});
+			} else {
+				throw new ForbiddenException();
 			}
 		} catch (error) {
 			// console.log("chat does not exist or pw is wrong");
@@ -100,7 +113,7 @@ export class ChatService {
 						userid, chatid, status) 
 						VALUES (${userid}, CAST(${create[0].chatid} AS INTEGER), 0);`
 				);
-				return ({msg: 'ok'});
+				return (create[0].chatid);
 			} catch (error) {
 				// console.log("error: wrong pw");
 				throw new ForbiddenException();
@@ -166,7 +179,7 @@ export class ChatService {
 	async changeUserStatus(details: ChatUserStatusDto) {
 		if (details.bantime > 0)
 			var newtime = (Date.now() / 1000) + details.bantime * 60;
-		console.log("bantime", newtime);
+		// console.log("bantime", newtime);
 		try {
 			const result = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.user_chat
@@ -185,5 +198,23 @@ export class ChatService {
 			}
 		}
 		return { msg:"ok"};
+	}
+
+	async createPMChatDto(user1id: string, user2id: string, chatid: number) {
+		var chatdetails: ChatDto;
+		console.log("chatid inside", chatid);
+		chatdetails.chat_name = "private " + user1id + "/" + user2id;
+		chatdetails.chatid = chatid;
+		chatdetails.type = 3;
+		return chatdetails;
+	}
+
+	async createPMUserDto(userid: string, chatid: number) {
+		var details: ChatUserStatusDto;
+		details.userid = userid;
+		details.status = 0;
+		details.bantime = 0;
+		details.chatid = chatid;
+		return details;
 	}
 }

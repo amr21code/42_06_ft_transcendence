@@ -109,4 +109,27 @@ export class ChatController {
 		const result = await this.chatService.changeUserStatus(details);
 		return {msg:"ok"};
 	}
+
+	@Get('open/pm/:userid')
+	async openPM(@Req() request: Request, @Param('userid') userid) {
+		// try {
+			const user = await this.userService.getMe(request.user);
+			const joinresult = await this.chatService.joinChat(user[0].userid);
+			console.log("test3", joinresult);
+			const chatdetails = await this.chatService.createPMChatDto(user[0].userid, userid, joinresult);
+			console.log("test4");
+			const modchat = await this.chatService.changeChatDetails(chatdetails);
+			console.log("test5");
+			var details = await this.chatService.createPMUserDto(user[0].userid, joinresult);
+			console.log("test6");
+			var moduser = await this.chatService.changeUserStatus(details);
+			console.log("test7");
+			details.userid = userid;
+			console.log("test8");
+			moduser = await this.chatService.changeUserStatus(details);
+			console.log("test9");
+		// } catch (error) {
+		// 	throw new ForbiddenException();
+		// }
+	}
 }
