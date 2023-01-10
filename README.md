@@ -27,6 +27,8 @@ Achievements:
 | Get | achieve | add/:userid/:achid | adds achievement with achid to user with userid | 
 | Get | auth | return | return route for 42 API |
 | Get | auth | login | login route directs to 42 API |
+
+
 | Get | auth | status | shows whether you are authenticated or not |
 | Get | chat | list/chats/:userid? | lists all available visible chats (public/protected) (where | userid is joined if specified) |
 | Get | chat | join/:chatid?/:pw? | creates a chat with first user as admin if nothing is specified or joins chatid with/without pw |
