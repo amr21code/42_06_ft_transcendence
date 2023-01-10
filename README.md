@@ -43,4 +43,3 @@ Achievements:
 | Get | users | all | shows all users in the database |
 | Get | users | :userid | shows the properties of userid |
 | Get | users | :userid/:field/:new | changes the properties of userid (fields: username (string), user_status (number), twofa (not implemented), avatar (number)) |
-
