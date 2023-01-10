@@ -21,7 +21,8 @@ all route elements with leading ":" are variables but will be used without ":"
 e.g. /achieve/show/mmuster
 variables with trailing "?" are optional
 Achievements:
-|Method | Route start | Route specifier | Effect |
+
+| Method | Route start | Route specifier | Effect |
 | Get | achieve | show/:userid | shows all achievements that belong to userid |
 | Get | achieve | add/:userid/:achid | adds achievement with achid to user with userid | 
 | Get | auth | return | return route for 42 API |
