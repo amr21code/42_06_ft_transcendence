@@ -6,7 +6,7 @@
 		
 		
 		<!-------MODULE WINDOW---------------------------->
-		
+<!-- 		
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
 			<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
@@ -18,25 +18,30 @@
 				<p class="message-recv">I am still doing transcendence and you?</p>
 				<p class="message-sent">Haha, same here...</p>
 			</div>
-			 <!-- <div class="message-recv" v-for="message in messages" :key="message">
+			  <div class="message-recv" v-for="message in messages" :key="message">
 				 <div class="">
             		<strong class="">{{ message.userid }}</strong>
          		</div>
           		<div class="">{{ message.message }}</div>
-			</div> -->
+			</div>
 			<div class="chat-write-and-send">
 				<form @submit.prevent="submit">
 					<input placeholder="Write message here" v-model="message">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
-			</div>
+			</div> -->
 <!-------MODULE WINDOW---------------------------->
 			<div class="chat-menu">
-				<a @click="handleClick('overview')">
+				<a @click="handleClick('chatwindow')">
 					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
 				</a>
-				<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
+				<a @click="handleClick('overview')">
+					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
+				</a>
+				<!--popup for a new chat-->
+				<a @click="handleClick('newchat')">
 				<img src="../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
+				</a>
 			</div>
 
 
@@ -55,6 +60,7 @@ type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
 	name: 'chat-window',
+	components: { ChatWindow, Overview },
 	setup(){
 		const userid = ref('userid');
 		const chatid = ref('chatid');
@@ -68,6 +74,7 @@ export default defineComponent({
 		const selected = ref<SelectedChat>('overview')
 		const handleClick = (term: SelectedChat) => {
 			selected.value = term;
+			console.log("handleClick", selected.value);
 		}
 
 		const getMessages = async () => {

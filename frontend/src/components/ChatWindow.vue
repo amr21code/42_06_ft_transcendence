@@ -35,13 +35,13 @@ import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
 	name: 'ChatWindow',
-	components: {},
-	props: {
-		selected: {
-			required: true,
-			type: String
-		}
-	}
+	// components: {},
+	// props: {
+	// 	selected: {
+	// 		required: true,
+	// 		type: String
+	// 	}
+	// }
 })
 </script>
 
