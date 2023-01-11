@@ -1,8 +1,8 @@
 import { Controller, ForbiddenException, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { AuthenticatedGuard } from 'src/auth/guards/guards';
+import { AuthenticatedGuard } from '../auth/guards/guards';
 import { FriendlistService } from './friendlist.service';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 
 @Controller('fl')
 // @UseGuards(AuthenticatedGuard)
