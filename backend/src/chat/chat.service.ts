@@ -200,21 +200,22 @@ export class ChatService {
 		return { msg:"ok"};
 	}
 
-	async createPMChatDto(user1id: string, user2id: string, chatid: number) {
-		var chatdetails: ChatDto;
-		console.log("chatid inside", chatid);
-		chatdetails.chat_name = "private " + user1id + "/" + user2id;
-		chatdetails.chatid = chatid;
-		chatdetails.type = 3;
-		return chatdetails;
-	}
+	// async createPMChatDto(user1id: string, user2id: string, chatid: number) {
+	// 	var chatdetails: ChatDto;
+	// 		chatdetails = JSON.stringify({
+	// 			chat_name = "private " + user1id + "/" + user2id,
+	// 		chatid = chatid,
+	// 		type = 3,
+	// 	}
+	// 	return chatdetails;
+	// }
 
-	async createPMUserDto(userid: string, chatid: number) {
-		var details: ChatUserStatusDto;
-		details.userid = userid;
-		details.status = 0;
-		details.bantime = 0;
-		details.chatid = chatid;
-		return details;
-	}
+	// async createPMUserDto(userid: string, chatid: number) {
+	// 	var details: ChatUserStatusDto;
+	// 	details.userid = userid;
+	// 	details.status = 0;
+	// 	details.bantime = 0;
+	// 	details.chatid = chatid;
+	// 	return details;
+	// }
 }
