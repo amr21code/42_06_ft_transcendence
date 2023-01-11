@@ -48,15 +48,17 @@ export default defineComponent({
 	components: { UserDataPopup, MatchCourt, SideWindow },
 	setup() {
 
+		// for popup (user data)
 		const popupTrigger = ref(false);
 		const togglePopup = () => {
 			popupTrigger.value = !popupTrigger.value;
 		}
-
-		const selected = ref<SelectedSideWindow>('chat')
+		
+		// for side window
+		const selected = ref<SelectedSideWindow>('chat');
 		const handleClick = (term: SelectedSideWindow) => {
-			selected.value = term
-		}
+			selected.value = term;
+		};
 
 		return { popupTrigger, togglePopup, handleClick, selected }
 	},
