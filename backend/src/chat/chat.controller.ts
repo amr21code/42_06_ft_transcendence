@@ -1,7 +1,7 @@
 import { Body, Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { Request, request } from 'express';
 import { ChatMessageDto } from './dto';
 import { ChatDto } from './dto/chat.dto';

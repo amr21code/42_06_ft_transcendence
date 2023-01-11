@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { DbService } from 'src/db/db.service';
+import { DbService } from '../db/db.service';
 import { ChatMessageDto } from './dto';
 import { MESSAGES } from '@nestjs/core/constants';
 import { threadId } from 'worker_threads';
