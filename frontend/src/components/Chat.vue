@@ -4,33 +4,6 @@
 		<Overview v-if="selected === 'overview'"/>
 		<ChatWindow v-if="selected === 'chatwindow'"/>
 		
-		
-		<!-------MODULE WINDOW---------------------------->
-<!-- 		
-		<h2>Chat</h2>
-		<div class="chat-top-bar">
-			<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
-			Ralf Weber
-		</div>
-		<div class="chat-message-view">
-			<p class="message-recv">Hey Jorit!</p>
-			<p class="message-sent">Hey Ralf, what's up?</p>
-				<p class="message-recv">I am still doing transcendence and you?</p>
-				<p class="message-sent">Haha, same here...</p>
-			</div>
-			  <div class="message-recv" v-for="message in messages" :key="message">
-				 <div class="">
-            		<strong class="">{{ message.userid }}</strong>
-         		</div>
-          		<div class="">{{ message.message }}</div>
-			</div>
-			<div class="chat-write-and-send">
-				<form @submit.prevent="submit">
-					<input placeholder="Write message here" v-model="message">
-					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
-				</form>
-			</div> -->
-<!-------MODULE WINDOW---------------------------->
 			<div class="chat-menu">
 				<a @click="handleClick('chatwindow')">
 					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
@@ -68,7 +41,7 @@ export default defineComponent({
 		const message = ref('');
 
 		onMounted(() => {
-			getMessages();
+			// getMessages();
 		});
 
 		const selected = ref<SelectedChat>('overview')

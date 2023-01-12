@@ -30,19 +30,49 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref, onMounted } from 'vue'
 
 
 export default defineComponent({
 	name: 'ChatWindow',
-	// components: {},
-	// props: {
-	// 	selected: {
-	// 		required: true,
-	// 		type: String
-	// 	}
-	// }
+	setup(){
+		const userid = ref('userid');
+		const chatid = ref('chatid');
+		const messages = ref([]);
+		const message = ref('');
+
+		onMounted(() => {
+			getMessages();
+		});
+
+		const getMessages = async () => {
+			//get the messages from the backend
+			fetch('http://localhost:3000/chat/list/messages/1')
+				.then(res => res.json())
+				.then(data => messages.value = data)
+				.catch(err => console.log(err.message))
+			console.log('got messages from backend')
+		}
+
+		const submit = async () => {
+			console.log("message got send to backend");
+			await fetch('http://localhost:3000/chat/message', {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify({
+					userid: "jtomala", //getIntraName()
+					chatid: 24, //getChatId()
+					message: message.value
+	
+				}) //end of stringify
+			})//end of fetch
+			message.value = '';
+		}//end of submit
+
+		return { userid, chatid, message, messages, submit}
+	}
 })
+
 </script>
 
 
