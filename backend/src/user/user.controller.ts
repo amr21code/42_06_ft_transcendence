@@ -10,7 +10,7 @@ export class UserController {
 
 	@Get('me')
 	async getMe(@Req() request: Request) {
-		console.log(request);
+		// console.log(request);
 		const user = await this.userService.getMe(request.user);
 		return user;
 	}

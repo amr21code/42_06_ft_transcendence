@@ -19,6 +19,7 @@ async function bootstrap() {
 			'http://localhost:8080',
 		],
 		methods: ["GET", "POST"],
+		allowedHeaders: 'user',
 	});
 	app.use(
 		session({

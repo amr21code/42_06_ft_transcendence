@@ -12,6 +12,7 @@ export class AuthController {
 	ftAuthCallback(@Res() res, @Req() request: Request) {
 		// console.log('return', request);
 		// console.log(res);
+		// res.cookie('user', request.user);
 		res.redirect(`${this.config.get('FRONTEND_URL')}`);
 		return request.user;
 	}
