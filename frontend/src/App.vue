@@ -11,17 +11,13 @@
 				<a>Watch</a>
 				<a @click="handleClick('chat')">Chat</a>
 				<a @click="handleClick('leaderboard')">Leaderboard</a>
-				<div class="logged-photo" @click="togglePopup()">
+				<div class="logged-photo" @click="toggleUserDataPopup()">
 					<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
 				</div>
 			</div>
-		<!-- <div class="order">
-			<button @click="handleClick('title')">order by title</button>
-			<button @click="handleClick('salary')">order by salary</button>
-			<button @click="handleClick('location')">order by location</button>
-		</div> -->
-	</header>
-	<UserDataPopup id="UserDataPopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
+		</header>
+	<LoginPopup id="LoginPopup" v-if="loginPopupTrigger === true" :toggleLoginPopup="() => toggleLoginPopup()" />
+	<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 	<div class="grid-container">
 		<MatchCourt />
 		<SideWindow :selected="selected"/>
@@ -40,18 +36,25 @@ import type { SelectedSideWindow } from './types/SelectedSideWindow'
 import JobList from './components/JobList.vue'
 import MatchCourt from './components/MatchCourt.vue'
 import SideWindow from './components/SideWindow.vue'
+import LoginPopup from './components/LoginPopup.vue'
 import UserDataPopup from './components/UserDataPopup.vue'
 
 export default defineComponent({
 	
 	name: 'App',
-	components: { UserDataPopup, MatchCourt, SideWindow },
+	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
 	setup() {
 
-		// for popup (user data)
-		const popupTrigger = ref(false);
-		const togglePopup = () => {
-			popupTrigger.value = !popupTrigger.value;
+		// for login popup (42 login)
+		const loginPopupTrigger = ref(true);
+		const toggleLoginPopup = () => {
+			loginPopupTrigger.value = !loginPopupTrigger.value;
+		}
+
+		// for user data popup (user data)
+		const userDataPopupTrigger = ref(false);
+		const toggleUserDataPopup = () => {
+			userDataPopupTrigger.value = !userDataPopupTrigger.value;
 		}
 		
 		// for side window
@@ -60,7 +63,7 @@ export default defineComponent({
 			selected.value = term;
 		};
 
-		return { popupTrigger, togglePopup, handleClick, selected }
+		return { loginPopupTrigger, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
 	methods: {}
 });
