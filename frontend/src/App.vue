@@ -38,13 +38,19 @@ import MatchCourt from './components/MatchCourt.vue'
 import SideWindow from './components/SideWindow.vue'
 import LoginPopup from './components/LoginPopup.vue'
 import UserDataPopup from './components/UserDataPopup.vue'
+import LoggingService from './services/LoggingService'
 
 export default defineComponent({
 	
 	name: 'App',
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
 	setup() {
-
+		LoggingService.getLog()
+		.then((response: Response)=> {
+				console.log(response);
+				// console.log(response); 
+			})
+			.catch((e: Error) => console.log("Error occured"));
 		// for login popup (42 login)
 		const loginPopupTrigger = ref(true);
 		const toggleLoginPopup = () => {
