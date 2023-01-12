@@ -7,23 +7,23 @@ import { ConfigService } from '@nestjs/config';
 export class AuthController {
 	constructor(private readonly config: ConfigService) {}
 
-	@UseGuards(FtAuthGuard)
 	@Get('return')
-	ftAuthCallback(@Req() request: Request) {
+	@UseGuards(FtAuthGuard)
+	ftAuthCallback(@Res() res, @Req() request: Request) {
 		// console.log('return', request.user);
+		res.redirect(`${this.config.get('FRONTEND_URL')}`);
 		return request.user;
 	}
 	
-	@UseGuards(FtAuthGuard)
 	@Get('login')
-	login(@Res() res) {
+	@UseGuards(FtAuthGuard)
+	login() {
 		// console.log('Login function called');
-		// return { msg: 'logged in!'};
-		res.redirect(`${this.config.get('FRONTEND_URL')}`);
+		return { msg: 'logged in!'};
 	}
 	
-	@UseGuards(AuthenticatedGuard)
 	@Get('status')
+	@UseGuards(AuthenticatedGuard)
 	user(@Req() request: Request) {
 		console.log(request.user);
 		if (request.user)

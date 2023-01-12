@@ -19,12 +19,12 @@ export class AuthService {
 		// 	}
 		// });
 		// console.log('User ', profile.username, ': checking');
-		if (!user)
-		{
+		if (!user)	{
 			console.log('User ', profile.username, ' unknown, creating in DB');
 			this.userService.createUser(profile);
+		} else {
+			user = await this.findUser(profile.username);
 		}
-		user = await this.findUser(profile.username);
 		return user;
 	}
 

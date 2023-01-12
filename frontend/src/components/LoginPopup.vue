@@ -5,8 +5,8 @@
 			<!-- NON-DYNAMIC <h2>raweber's user data</h2> -->
 			<h2>welcome to ft_pong</h2>
 			<p>please sign in with your 42 account first</p>
-			<button class="login_button" @click="callLoginApi"> 
-				Sign in with 42
+			<button class="login_button"> <!-- @click="callLoginApi"> -->
+				<a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6627b6e06635604efe0143bdaabec14c22c6f69d741ae654619148e7d2dea5be&redirect_uri=http%3A%2F%2F192.168.56.2%3A3000%2Fauth%2Freturn&response_type=code">Sign in with 42</a>
 			</button>
 		</div>
 	</div>

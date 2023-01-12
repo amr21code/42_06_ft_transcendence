@@ -1,4 +1,14 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
+import { AuthenticatedGuard } from 'src/auth/guards/guards';
 
 @Controller('match')
-export class MatchController {}
+@UseGuards(AuthenticatedGuard)
+export class MatchController {
+	constructor() {}
+
+	// @Get('list')
+	// async listMatches() {
+
+	// }
+
+}
