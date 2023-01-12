@@ -15,8 +15,8 @@ async function bootstrap() {
 		origin: [
 			'http://localhost:5173',
 			'http://192.168.56.2:5173',
-			// 'http://192.168.56.2:3000',
-			// 'http://localhost:8080',
+			'http://192.168.56.2:3000',
+			'http://localhost:8080',
 		],
 		methods: ["GET", "POST"],
 	});

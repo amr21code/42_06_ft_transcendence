@@ -10,7 +10,8 @@ export class AuthController {
 	@Get('return')
 	@UseGuards(FtAuthGuard)
 	ftAuthCallback(@Res() res, @Req() request: Request) {
-		// console.log('return', request.user);
+		// console.log('return', request);
+		// console.log(res);
 		res.redirect(`${this.config.get('FRONTEND_URL')}`);
 		return request.user;
 	}
