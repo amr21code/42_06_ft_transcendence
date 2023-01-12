@@ -1,10 +1,11 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthenticatedGuard, FtAuthGuard } from './guards/guards';
 import { Request } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-	constructor() {}
+	constructor(private readonly config: ConfigService) {}
 
 	@UseGuards(FtAuthGuard)
 	@Get('return')
@@ -15,9 +16,10 @@ export class AuthController {
 	
 	@UseGuards(FtAuthGuard)
 	@Get('login')
-	login() {
-		console.log('Login function called');
-		return { msg: 'logged in!'};
+	login(@Res() res) {
+		// console.log('Login function called');
+		// return { msg: 'logged in!'};
+		res.redirect(`${this.config.get('FRONTEND_URL')}`);
 	}
 	
 	@UseGuards(AuthenticatedGuard)
