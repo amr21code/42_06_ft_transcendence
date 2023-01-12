@@ -1,6 +1,5 @@
 <template>
 
-		
 		<!-------MODULE WINDOW---------------------------->
 		
 		<h2>Chat</h2>
@@ -21,10 +20,10 @@
           		<div class="">{{ message.message }}</div>
 			</div> -->
 			<div class="chat-write-and-send">
-				<!-- <form @submit.prevent="submit"> -->
+				<form @submit.prevent="submit">
 					<input placeholder="Write message here">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
-				<!-- </form> -->
+				</form>
 			</div>
 
 </template>
