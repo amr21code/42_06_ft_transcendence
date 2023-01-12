@@ -56,7 +56,6 @@ export default defineComponent({
 		const toggleLoginPopup = () => {
 			loginPopupTrigger.value = !loginPopupTrigger.value;
 		}
-
 		// for user data popup (user data)
 		const userDataPopupTrigger = ref(false);
 		const toggleUserDataPopup = () => {
