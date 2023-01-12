@@ -1,5 +1,5 @@
 <template>
-	<div class="popup" @keyup.esc="togglePopup" tabindex="0">
+	<div class="popup" @keyup.esc="toggleUserDataPopup" tabindex="0">
 		<div class="popup-inner">
 			<slot />
 			<!-- NON-DYNAMIC <h2>raweber's user data</h2> -->
@@ -22,7 +22,7 @@
 			<div class="user-data-wrapper">
 				<div>2-factor-authentication:</div>
 			</div>
-			<button class="popup-close" @click="togglePopup"> 
+			<button class="popup-close" @click="toggleUserDataPopup"> 
 				Close
 			</button>
 		</div>
@@ -45,7 +45,7 @@ export default defineComponent({
 		}
 	},
 
-	props: ['togglePopup'],
+	props: ['toggleUserDataPopup'],
 	methods: {
 		retrieveCurrentUser() {
 			DataService.getUser()
