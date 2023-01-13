@@ -42,7 +42,7 @@ export default defineComponent({
 			.then((response: ResponseData)=> {
 				console.log(response.data);
 			})
-			.catch((e: Error) => console.log(e));
+			.catch((e: Error) => console.log("Error in login process", e));
 			// this.toggleLoginPopup();
 		}
 		// retrieveCurrentUser() {
