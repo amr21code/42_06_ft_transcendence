@@ -50,6 +50,7 @@ export default defineComponent({
 			.then((response: ResponseData) => {
 				this.users = response.data;
 				console.log(response.data);
+				console.log(response.data.token);
 			})
 			.catch((e: Error) => {
 				console.log(e);

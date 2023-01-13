@@ -50,12 +50,12 @@ export default defineComponent({
 		// .then(function(response) {
 		// 	console.log("test", response);
 		// });
-		LoggingService.getLog()
-		.then((response: Response)=> {
-				console.log(response);
-				// console.log(response); 
-			})
-			.catch((e: Error) => console.log("Error occured"));
+		// LoggingService.getLog()
+		// .then((response: Response)=> {
+		// 		console.log(response);
+		// 		// console.log(response); 
+		// 	})
+		// 	.catch((e: Error) => console.log("Error occured"));
 		// for login popup (42 login)
 		const loginPopupTrigger = ref(true);
 		const toggleLoginPopup = () => {
