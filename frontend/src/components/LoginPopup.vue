@@ -6,9 +6,10 @@
 			<!-- NON-DYNAMIC <h2>raweber's user data</h2> -->
 			<h2>welcome to ft_pong</h2>
 			<p>please sign in with your 42 account first</p>
-			<button class="login_button" @click="testLog"> -->
+			<button class="login_button">
 			<!-- <button class="login_button"> @click="callLoginApi"> -->
-				<a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-8affeef3d6eb0d25d3d614179575e429a1b7c886e7d3848ac0750b211d36a9cc&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Freturn&response_type=code" @click="callLoginApi">Sign in with 42</a>
+				<a :href="apiLink42" @click="callLoginApi">Sign in with 42</a>
+				<!-- <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-8affeef3d6eb0d25d3d614179575e429a1b7c886e7d3848ac0750b211d36a9cc&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Freturn&response_type=code" @click="callLoginApi">Sign in with 42</a> -->
 			</button>
 		</div>
 	</div>
@@ -26,7 +27,9 @@ export default defineComponent({
 	
 	data () {
 		return {
-			user: {} as IUser
+			user: {} as IUser,
+			apiLink42: import.meta.env.VITE_API_42_URL
+			// apiLink42: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-8affeef3d6eb0d25d3d614179575e429a1b7c886e7d3848ac0750b211d36a9cc&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Freturn&response_type=code" as string
 		}
 	},
 
@@ -38,7 +41,6 @@ export default defineComponent({
 			LoginService.login()
 			.then((response: ResponseData)=> {
 				console.log(response.data);
-				// console.log(response); 
 			})
 			.catch((e: Error) => console.log(e));
 			// this.toggleLoginPopup();
