@@ -18,27 +18,14 @@ model avatars {
   avatarurl  String? @db.VarChar(200)
   avatarname String? @db.VarChar(100)
   avatarid   Int     @id(map: "pk_avatars")
-  users      users[]
 }
 
 model chat {
-  type          Int             @default(0)
-  password      String?         @db.VarChar(100)
-  chatid        Int             @id(map: "pk_chat") @default(autoincrement())
-  chat_name     String          @default("yet another chat") @db.VarChar(100)
-  chat_type     chat_type       @relation(fields: [type], references: [typeid], onDelete: Cascade, map: "fk_chat_chat_type")
-  chat_messages chat_messages[]
-  user_chat     user_chat[]
-}
-
-model chat_messages {
-  userid    String   @db.VarChar(8)
-  chatid    Int
-  message   String?
-  time      DateTime @default(now()) @db.Timestamp(6)
-  id        Int      @id(map: "pk_chat_messages") @default(autoincrement())
-  chat      chat     @relation(fields: [chatid], references: [chatid], onDelete: Cascade, map: "fk_chat_messages_chat")
-  user_chat users    @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_chat_messages_user_chat")
+  chatid    Int        @id(map: "pk_chatchannel")
+  type      Int        @default(0)
+  password  String?    @db.VarChar(100)
+  chat_type chat_type  @relation(fields: [type], references: [typeid], onDelete: Cascade, map: "fk_chat_chat_type")
+  user_chat user_chat?
 }
 
 model chat_type {
@@ -65,9 +52,9 @@ model friendship_codes {
 }
 
 model match_history {
-  match_status                                          Int
-  matchid                                               Int          @id(map: "pk_match_history") @default(autoincrement())
-  match_status_match_history_match_statusTomatch_status match_status @relation("match_history_match_statusTomatch_status", fields: [match_status], references: [statuscode], onDelete: Cascade, map: "fk_match_history_match_status")
+  matchid    Int         @id(map: "pk_match_history")
+  match_type Int
+  user_match user_match?
 }
 
 model online_status {
@@ -77,25 +64,23 @@ model online_status {
 }
 
 model user_chat {
-  userid           String           @db.VarChar(8)
-  chatid           Int
+  userid           String?          @db.VarChar(8)
+  chatid           Int              @id(map: "pk_user_chat")
   status           Int
-  bantime          DateTime?        @db.Timestamp(6)
+  time             Int              @default(0)
   chat             chat             @relation(fields: [chatid], references: [chatid], onDelete: Cascade, map: "fk_user_chat_chat")
   user_status_chat user_status_chat @relation(fields: [status], references: [statusid], onDelete: Cascade, map: "fk_user_chat_user_status_chat")
-  users            users            @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_user_chat_users")
-
-  @@id([chatid, userid], map: "pk_user_chat")
+  users            users?           @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_user_chat_users")
 }
 
 model user_match {
-  userid           String           @db.VarChar(8)
-  matchid          Int              @unique(map: "unq_user_match_matchid")
-  user_score       Int
-  challenge        Int              @default(0)
-  timeout          DateTime         @db.Timestamp(6)
-  challenge_status challenge_status @relation(fields: [challenge], references: [statuscode], onDelete: Cascade, map: "fk_user_match_challenge_status")
-  users            users            @relation(fields: [userid], references: [userid], onDelete: NoAction, map: "fk_user_match_users")
+  userid        String        @db.VarChar(8)
+  matchid       Int           @unique(map: "unq_user_match_matchid")
+  user_score    Int
+  challenge     Int           @default(0)
+  timeout       DateTime      @db.Timestamp(6)
+  match_history match_history @relation(fields: [matchid], references: [matchid], onDelete: Cascade, map: "fk_user_match_match_history")
+  users         users         @relation(fields: [userid], references: [userid], onDelete: NoAction, map: "fk_user_match_users")
 }
 
 model user_status_chat {
@@ -107,18 +92,14 @@ model user_status_chat {
 model users {
   userid                             String               @id(map: "pk_users") @db.VarChar(8)
   username                           String?              @db.VarChar(100)
+  avatar                             String?              @db.VarChar(100)
   twofa                              Int                  @default(0)
-  twofa_secret                       String?              
   created                            DateTime             @default(now()) @db.Timestamp(6)
   user_status                        Int                  @default(0)
-  profilepic42                       String?              @db.VarChar(200)
-  avatar                             Int                  @default(42)
-  chat_messages                      chat_messages[]
   friends_friends_requesteridTousers friends[]            @relation("friends_requesteridTousers")
   friends_friends_addresseeidTousers friends[]            @relation("friends_addresseeidTousers")
   user_chat                          user_chat[]
   user_match                         user_match[]
-  avatars                            avatars              @relation(fields: [avatar], references: [avatarid], onDelete: Cascade, map: "fk_users_avatars")
   online_status                      online_status        @relation(fields: [user_status], references: [statuscode], onDelete: Cascade, map: "fk_users_online_status")
   users_achievements                 users_achievements[]
   userstats                          userstats?
@@ -127,8 +108,7 @@ model users {
 model users_achievements {
   userid        String?       @db.VarChar(8)
   achievementid Int?
-  count         Int?
-  id            Int           @id(map: "pk_users_achievements") @default(autoincrement())
+  id            Int           @id(map: "pk_users_achievements")
   achievements  achievements? @relation(fields: [achievementid], references: [achievementid], onDelete: Cascade, map: "fk_users_achievements_achievements")
   users         users?        @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_users_achievements_users")
 }
@@ -138,16 +118,4 @@ model userstats {
   wins   Int?
   losses Int?
   users  users  @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "fk_userstats_users")
-}
-
-model challenge_status {
-  statuscode  Int          @id(map: "pk_challenge_status")
-  status_name String?      @db.VarChar(100)
-  user_match  user_match[]
-}
-
-model match_status {
-  statuscode                                             Int             @id(map: "pk_match_status")
-  statusname                                             String?         @db.VarChar(100)
-  match_history_match_history_match_statusTomatch_status match_history[] @relation("match_history_match_statusTomatch_status")
 }
