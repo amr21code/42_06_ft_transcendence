@@ -16,6 +16,10 @@ import { MatchModule } from './match/match.module';
   AuthModule, 
   UserModule, 
   DbModule, 
-  PassportModule.register({ session: true }), FriendlistModule, AchievementsModule, ChatModule, MatchModule],
+  PassportModule.register({ session: true }), 
+  FriendlistModule, 
+  AchievementsModule, 
+  ChatModule, 
+  MatchModule],
 })
 export class AppModule {}

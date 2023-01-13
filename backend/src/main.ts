@@ -19,7 +19,7 @@ async function bootstrap() {
 			'http://localhost:8080',
 		],
 		methods: ["GET", "POST"],
-		allowedHeaders: 'user',
+		allowedHeaders: '*',
 	});
 	app.use(
 		session({
@@ -27,9 +27,9 @@ async function bootstrap() {
 			secret: "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0",
 			resave: false,
 			saveUninitialized: false,
-			cookie: {
-				maxAge: 360000,
-			}
+			// cookie: {
+			// 	maxAge: 360000,
+			// }
 		})
 	);
 	app.use(passport.initialize());
