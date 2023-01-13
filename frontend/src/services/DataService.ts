@@ -2,10 +2,10 @@ import apiInstance from "../http.common";
 
 class DataService {
 	getUser() : Promise<any> {
-		return apiInstance.get("http://localhost:3000/users/me" );
+		return apiInstance.get("/users/me" );
 	}
 	getAll() : Promise<any> {
-		return apiInstance.get("http://localhost:3000/users/all")
+		return apiInstance.get("/users/all")
 	}
 }
 

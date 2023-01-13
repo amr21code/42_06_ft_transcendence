@@ -45,6 +45,10 @@ export default defineComponent({
 	name: 'App',
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
 	setup() {
+
+		// console.log(import.meta.env.VITE_TEST);
+		// console.log(process.env.BASE_URL);
+
 		// fetch('https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6627b6e06635604efe0143bdaabec14c22c6f69d741ae654619148e7d2dea5be&redirect_uri=http%3A%2F%2F192.168.56.2%3A3000%2Fauth%2Freturn&response_type=code')
 		// .then(response => response.json())
 		// .then(function(response) {
