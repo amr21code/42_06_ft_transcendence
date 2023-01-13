@@ -108,6 +108,7 @@ model users {
   userid                             String               @id(map: "pk_users") @db.VarChar(8)
   username                           String?              @db.VarChar(100)
   twofa                              Int                  @default(0)
+  twofa_secret                       String?              
   created                            DateTime             @default(now()) @db.Timestamp(6)
   user_status                        Int                  @default(0)
   profilepic42                       String?              @db.VarChar(200)
