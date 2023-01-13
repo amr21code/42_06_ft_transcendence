@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { DbService } from 'src/db/db.service';
+import { DbService } from '../db/db.service';
 import { ChatMessageDto } from './dto';
 import { MESSAGES } from '@nestjs/core/constants';
 import { threadId } from 'worker_threads';
@@ -181,41 +181,44 @@ export class ChatService {
 			var newtime = (Date.now() / 1000) + details.bantime * 60;
 		// console.log("bantime", newtime);
 		try {
-			const result = await this.db.$queryRaw(
+			// console.log("user update");
+			const result = await this.db.$executeRaw(
 				Prisma.sql`UPDATE public.user_chat
 				SET status=CAST(${details.status} AS INTEGER), bantime=to_timestamp(${newtime})
 				WHERE chatid=CAST(${details.chatid} AS INTEGER) AND userid=${details.userid};`
 			);
-		} catch (error) {
-			try {
-				const result = await this.db.$queryRaw(
+			// console.log(result);
+			if (result == 0) {
+				const result_insert = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_chat
-					userid, chatid, status, bantime
-					VALUES (${details.userid}, CAST(${details.chatid} AS INTEGER), CAST(${details.status} AS INTEGER), to_timestamp(${newtime});`
-				);
-			} catch (error) {
-				throw new ForbiddenException();
+					(userid, chatid, status)
+					VALUES (${details.userid}, CAST(${details.chatid} AS INTEGER), CAST(${details.status} AS INTEGER));`
+					);
 			}
+		} catch (error) {
+			throw new ForbiddenException();
 		}
 		return { msg:"ok"};
 	}
 
-	// async createPMChatDto(user1id: string, user2id: string, chatid: number) {
-	// 	var chatdetails: ChatDto;
-	// 		chatdetails = JSON.stringify({
-	// 			chat_name = "private " + user1id + "/" + user2id,
-	// 		chatid = chatid,
-	// 		type = 3,
-	// 	}
-	// 	return chatdetails;
-	// }
+	async createPMChatDto(user1id: string, user2id: string, chatid: number) {
+		var chatdetails = JSON.stringify({
+			chat_name: "private " + user1id + "/" + user2id,
+			chatid: chatid,
+			type: 3,
+		});
+		var ret = JSON.parse(chatdetails) as ChatDto;
+		return ret;
+	}
 
-	// async createPMUserDto(userid: string, chatid: number) {
-	// 	var details: ChatUserStatusDto;
-	// 	details.userid = userid;
-	// 	details.status = 0;
-	// 	details.bantime = 0;
-	// 	details.chatid = chatid;
-	// 	return details;
-	// }
+	async createPMUserDto(userid: string, chatid: number) {
+		var details = JSON.stringify({
+			userid: userid,
+			status: 1,
+			bantime: 0,
+			chatid: chatid,
+		});
+		var ret = JSON.parse(details) as ChatUserStatusDto;
+		return ret;
+	}
 }

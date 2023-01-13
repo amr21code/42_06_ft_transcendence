@@ -37,6 +37,7 @@ Achievements:
 | Get | chat | list/messages/:chatid | lists all messages in chatid for current userid but doesnt display messages from blocked users|
 | Post | chat | details | changes the details of the chat with JSON object { type: number; chatid: number; chat_name: string; password: string; } |
 | Post | chat | user/status | changes the user status with a JSON object { userid: string; chatid: number;  status: number;	bantime: number; } |
+| Get | chat | open/pm/:userid | opens a direct chat (pm) with userid |
 | Get | fl | show/:userid | show friendlist of userid |
 | Get | fl | edit/:userid/:action | changes the status of a friendship (actions: request, confirm, block, unblock, remove) |
 | Get | users | me | shows the properties of the current user |

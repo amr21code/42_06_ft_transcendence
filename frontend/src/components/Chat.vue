@@ -113,7 +113,7 @@ export default defineComponent({
 			
 		});
 
-		const selected = ref<SelectedChat>('overview')
+		const selected = ref<SelectedChat>('overview');
 		const handleClick = (term: SelectedChat) => {
 			selected.value = term;
 			console.log("handleClick", selected.value);

@@ -15,17 +15,21 @@ async function bootstrap() {
 		origin: [
 			'http://localhost:5173',
 			'http://192.168.56.2:5173',
+			'http://192.168.56.2:3000',
+			'http://localhost:8080',
 		],
 		methods: ["GET", "POST"],
+		allowedHeaders: '*',
 	});
 	app.use(
 		session({
+			name: 'ft_pong',
 			secret: "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0",
 			resave: false,
 			saveUninitialized: false,
-			cookie: {
-				maxAge: 3600000,
-			}
+			// cookie: {
+			// 	maxAge: 360000,
+			// }
 		})
 	);
 	app.use(passport.initialize());

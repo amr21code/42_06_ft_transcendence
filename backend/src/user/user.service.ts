@@ -1,7 +1,7 @@
 import { Injectable, Req } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Profile } from 'passport-42';
-import { DbService } from 'src/db/db.service';
+import { DbService } from '../db/db.service';
 
 @Injectable()
 export class UserService {
@@ -82,13 +82,14 @@ export class UserService {
 		return (user);
 	}
 
-	async createUser(profile: Profile) {
+	async createUser(profile: Profile, accessToken: string) {
 		const user = await this.db.users.create({
 			data: {
 				userid: profile.username,
 				username: profile.name.givenName,
 				avatar: 42,
 				profilepic42: profile._json.image.versions.small,
+				access_token: accessToken,
 			},
 		})
 		return user;

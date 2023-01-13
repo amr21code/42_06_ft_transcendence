@@ -11,17 +11,13 @@
 				<a>Watch</a>
 				<a @click="handleClick('chat')">Chat</a>
 				<a @click="handleClick('leaderboard')">Leaderboard</a>
-				<div class="logged-photo" @click="togglePopup()">
+				<div class="logged-photo" @click="toggleUserDataPopup()">
 					<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
 				</div>
 			</div>
-		<!-- <div class="order">
-			<button @click="handleClick('title')">order by title</button>
-			<button @click="handleClick('salary')">order by salary</button>
-			<button @click="handleClick('location')">order by location</button>
-		</div> -->
-	</header>
-	<UserDataPopup id="UserDataPopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
+		</header>
+	<LoginPopup id="LoginPopup" v-if="loginPopupTrigger === true" :toggleLoginPopup="() => toggleLoginPopup()" />
+	<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 	<div class="grid-container">
 		<MatchCourt />
 		<SideWindow :selected="selected"/>
@@ -40,25 +36,48 @@ import type { SelectedSideWindow } from './types/SelectedSideWindow'
 import JobList from './components/JobList.vue'
 import MatchCourt from './components/MatchCourt.vue'
 import SideWindow from './components/SideWindow.vue'
+import LoginPopup from './components/LoginPopup.vue'
 import UserDataPopup from './components/UserDataPopup.vue'
+import LoggingService from './services/LoggingService'
 
 export default defineComponent({
 	
 	name: 'App',
-	components: { UserDataPopup, MatchCourt, SideWindow },
+	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
 	setup() {
 
-		const popupTrigger = ref(false);
-		const togglePopup = () => {
-			popupTrigger.value = !popupTrigger.value;
-		}
+		// console.log(import.meta.env.VITE_TEST);
+		// console.log(process.env.BASE_URL);
 
-		const selected = ref<SelectedSideWindow>('chat')
+		// fetch('https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6627b6e06635604efe0143bdaabec14c22c6f69d741ae654619148e7d2dea5be&redirect_uri=http%3A%2F%2F192.168.56.2%3A3000%2Fauth%2Freturn&response_type=code')
+		// .then(response => response.json())
+		// .then(function(response) {
+		// 	console.log("test", response);
+		// });
+		// LoggingService.getLog()
+		// .then((response: Response)=> {
+		// 		console.log(response);
+		// 		// console.log(response); 
+		// 	})
+		// 	.catch((e: Error) => console.log("Error occured"));
+		// for login popup (42 login)
+		const loginPopupTrigger = ref(false); //needs to be true
+		const toggleLoginPopup = () => {
+			loginPopupTrigger.value = !loginPopupTrigger.value;
+		}
+		// for user data popup (user data)
+		const userDataPopupTrigger = ref(false);
+		const toggleUserDataPopup = () => {
+			userDataPopupTrigger.value = !userDataPopupTrigger.value;
+		}
+		
+		// for side window
+		const selected = ref<SelectedSideWindow>('chat');
 		const handleClick = (term: SelectedSideWindow) => {
-			selected.value = term
-		}
+			selected.value = term;
+		};
 
-		return { popupTrigger, togglePopup, handleClick, selected }
+		return { loginPopupTrigger, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
 	methods: {}
 });

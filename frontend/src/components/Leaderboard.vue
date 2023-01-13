@@ -11,20 +11,20 @@
 				</tr>
 			</thead>
 			<tbody>
-					<tr class="leaderboard-item" v-for="(user, index) in users" :key="index">
-						<td>
-							{{ user.userid }}
-						</td>
-						<td>
-							{{ user.picurl }}
-						</td>
-						<td>
-							{{ user.username }}
-						</td>
-						<td>
-							{{ user.statusname }}
-						</td>
-					</tr>
+				<tr class="leaderboard-item" v-for="(user, index) in users" :key="index">
+					<td>
+						{{ user.userid }}
+					</td>
+					<td>
+						{{ user.picurl }}
+					</td>
+					<td>
+						{{ user.username }}
+					</td>
+					<td>
+						{{ user.statusname }}
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -50,6 +50,8 @@ export default defineComponent({
 			.then((response: ResponseData) => {
 				this.users = response.data;
 				console.log(response.data);
+				console.log(response.headers);
+				console.log(response.data.token);
 			})
 			.catch((e: Error) => {
 				console.log(e);

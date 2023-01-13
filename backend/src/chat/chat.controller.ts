@@ -1,7 +1,7 @@
 import { Body, Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { Request, request } from 'express';
 import { ChatMessageDto } from './dto';
 import { ChatDto } from './dto/chat.dto';
@@ -61,9 +61,9 @@ export class ChatController {
 	@Post('message')
 	async newMessage(@Body() message: ChatMessageDto, @Req() request: Request) {
 		try {
-			// const user = await this.userService.getMe(request.user);
-			// if (user[0].userid != message.userid)
-			// 	throw new ForbiddenException();
+			const user = await this.userService.getMe(request.user);
+			if (user[0].userid != message.userid)
+				throw new ForbiddenException();
 			const msg = await this.chatService.addMessage(message);
 			return msg;
 		} catch (error) {
@@ -102,34 +102,27 @@ export class ChatController {
 
 	@Post('user/status')
 	async changeUserStatus(@Body() details: ChatUserStatusDto, @Req() request: Request) {
-		// const user = await this.userService.getMe(request.user);
-		// const userstatus = await this.chatService.getUserStatus(user[0].userid, details.chatid);
-		// if (userstatus[0].status != 0)
-		// 	throw new ForbiddenException();
+		const user = await this.userService.getMe(request.user);
+		const userstatus = await this.chatService.getUserStatus(user[0].userid, details.chatid);
+		if (userstatus[0].status != 0)
+			throw new ForbiddenException();
 		const result = await this.chatService.changeUserStatus(details);
 		return {msg:"ok"};
 	}
 
-	// @Get('open/pm/:userid')
-	// async openPM(@Req() request: Request, @Param('userid') userid) {
-	// 	// try {
-	// 		const user = await this.userService.getMe(request.user);
-	// 		const joinresult = await this.chatService.joinChat(user[0].userid);
-	// 		console.log("test3", joinresult);
-	// 		const chatdetails = await this.chatService.createPMChatDto(user[0].userid, userid, joinresult);
-	// 		console.log("test4");
-	// 		const modchat = await this.chatService.changeChatDetails(chatdetails);
-	// 		console.log("test5");
-	// 		var details = await this.chatService.createPMUserDto(user[0].userid, joinresult);
-	// 		console.log("test6");
-	// 		var moduser = await this.chatService.changeUserStatus(details);
-	// 		console.log("test7");
-	// 		details.userid = userid;
-	// 		console.log("test8");
-	// 		moduser = await this.chatService.changeUserStatus(details);
-	// 		console.log("test9");
-		// } catch (error) {
-		// 	throw new ForbiddenException();
-		// }
-	// }
+	@Get('open/pm/:userid')
+	async openPM(@Req() request: Request, @Param('userid') userid) {
+		try {
+			const user = await this.userService.getMe(request.user);
+			const joinresult = await this.chatService.joinChat(user[0].userid);
+			const chatdetails = await this.chatService.createPMChatDto(user[0].userid, userid, joinresult);
+			const modchat = await this.chatService.changeChatDetails(chatdetails);
+			var details = await this.chatService.createPMUserDto(user[0].userid, joinresult);
+			var moduser = await this.chatService.changeUserStatus(details);
+			details.userid = userid;
+			moduser = await this.chatService.changeUserStatus(details);
+		} catch (error) {
+			throw new ForbiddenException();
+		}
+	}
 }
