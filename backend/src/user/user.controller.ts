@@ -17,7 +17,8 @@ export class UserController {
 
 	@Get('all')
 	// @UseGuards(AuthenticatedGuard)
-	async getAll() {
+	async getAll(@Req() request: Request) {
+		console.log(request);
 		const users = await this.userService.getAll();
 		return users;
 	}

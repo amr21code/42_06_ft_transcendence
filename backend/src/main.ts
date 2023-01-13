@@ -23,11 +23,12 @@ async function bootstrap() {
 	});
 	app.use(
 		session({
+			name: 'ft_pong',
 			secret: "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0",
 			resave: false,
 			saveUninitialized: false,
 			cookie: {
-				maxAge: 60000,
+				maxAge: 360000,
 			}
 		})
 	);
