@@ -73,10 +73,12 @@
 					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<!--popup for a new chat-->
-				<a @click="handleClick('newchat')">
-				<img src="../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
+				<a @click="togglePopup()">
+					<img src="../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 			</div>
+
+			<NewMessagePopup id="NewMessagePopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
 
 
 		</div>
@@ -100,6 +102,11 @@ export default defineComponent({
 		const messages = ref([]);
 		const message = ref('');
 
+		const popupTrigger = ref(false);
+		const togglePopup = () => {
+			popupTrigger.value = !popupTrigger.value;
+		}
+
 		onMounted(() => {
 			
 		});
@@ -110,7 +117,7 @@ export default defineComponent({
 			console.log("handleClick", selected.value);
 		}
 
-		return { userid, chatid, messages, message, selected, handleClick }
+		return { userid, chatid, messages, message, selected, handleClick, togglePopup, popupTrigger }
 	} //end of setup
 }) //end of defineComponent
 </script>
