@@ -89,13 +89,14 @@
 <script lang="ts">
 import ChatWindow from './ChatWindow.vue'
 import Overview from './ChatOverview.vue'
+import NewMessagePopup from './NewMessagePopup.vue'
 import { defineComponent, ref, onMounted } from 'vue'
 
 type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
 	name: 'chat-module',
-	components: { ChatWindow, Overview },
+	components: { ChatWindow, Overview, NewMessagePopup },
 	setup(){
 		const userid = ref('userid');
 		const chatid = ref('chatid');
@@ -104,6 +105,7 @@ export default defineComponent({
 
 		const popupTrigger = ref(false);
 		const togglePopup = () => {
+			console.log("togglePopup(NewMessagesPopup) got triggert")
 			popupTrigger.value = !popupTrigger.value;
 		}
 
