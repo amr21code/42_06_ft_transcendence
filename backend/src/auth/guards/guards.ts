@@ -15,7 +15,8 @@ export class FtAuthGuard extends AuthGuard('42') {
 export class AuthenticatedGuard implements CanActivate {
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest();
-
+		console.log('--------------- authenticated guard');
+		console.log(request.query['sessionID']);
 		return request.isAuthenticated();
 	}
 }

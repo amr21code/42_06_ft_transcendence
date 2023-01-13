@@ -4,7 +4,7 @@ import { Request } from 'express';
 import { UserService } from './user.service';
 
 @Controller('users')
-// @UseGuards(AuthenticatedGuard)
+@UseGuards(AuthenticatedGuard)
 export class UserController {
 	constructor( private readonly userService: UserService){}
 
