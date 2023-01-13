@@ -12,7 +12,6 @@
             <input class="popup-textfield" type="text" placeholder="Name of the chat">
             <br>
             <br>
-            <br>
             <button class="popup-close" @click="togglePopup">Close</button>
         </div>
     </div>
@@ -65,6 +64,5 @@ export default defineComponent({
 
 .popup-close {
     color: black;
-    background-color: darkslategrey;
 }
 </style>
