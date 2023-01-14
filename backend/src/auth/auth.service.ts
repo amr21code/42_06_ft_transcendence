@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { Profile } from 'passport-42';
 import { UserService } from '../user/user.service';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { Prisma } from '@prisma/client';
 
 @Injectable ()

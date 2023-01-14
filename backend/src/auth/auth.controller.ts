@@ -40,7 +40,11 @@ export class AuthController {
 			return { msg: "not authenticated" };
 	}
 
-	// Logout function
 	// @Get('logout')
+	// logout (@Req() request: Request) {
+	// 	console.log(request);
+	// 	request.session.destroy();
+	// 	console.log(request);
+	// }
 
 }
