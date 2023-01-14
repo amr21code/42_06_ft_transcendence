@@ -16,7 +16,7 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>Profile picture:</div>
-				<img id="user-photo" src="../assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+				<img id="user-photo" :src="user.picurl" alt="user-photo" width="40" height="40">
 				<!-- <img id="user-photo" src="DB-CONNECTION GOES HERE" alt="user-photo" width="40" height="40"> -->
 			</div>
 			<div class="user-data-wrapper">
@@ -50,8 +50,8 @@ export default defineComponent({
 		retrieveCurrentUser() {
 			DataService.getUser()
 			.then((response: ResponseData) => {
-				this.user = response.data;
-				console.log(response.data);
+				this.user = response.data[0];
+				console.log(response.data[0]);
 			})
 			.catch((e: Error) => {
 				console.log(e);
