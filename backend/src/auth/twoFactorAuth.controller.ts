@@ -35,7 +35,7 @@ export class TwoFactorAuthenticationController {
       throw new UnauthorizedException('Wrong authentication code');
     }
 	const user = await this.userService.getMe(request.user);
-	await this.userService.changeUserData(user[0].userid, "2fa", 1);
+	await this.userService.changeUserData(user[0].userid, "twofa", 1);
   }
 
 @Post('authenticate')

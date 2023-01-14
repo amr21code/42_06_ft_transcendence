@@ -16,7 +16,7 @@ export class TwoFactorAuthenticationService {
     const secret = authenticator.generateSecret();
 	const user = await this.userService.getMe(request.user);
     const otpauthUrl = authenticator.keyuri(user[0].userid, this.configService.get('TWO_FACTOR_AUTHENTICATION_APP_NAME'), secret);
-    await this.userService.changeUserData(user[0].userid, "2fasecret", secret);
+    await this.userService.changeUserData(user[0].userid, "twofasecret", secret);
     return {
     	secret,
     	otpauthUrl

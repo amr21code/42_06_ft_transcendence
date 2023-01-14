@@ -113,13 +113,13 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET avatar=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
 				);
-		}else if (field == '2fa') {
+		}else if (field == 'twofa') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET 2fa=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET twofa=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
 				);
-		}else if (field == '2fasecret') {
+		}else if (field == 'twofasecret') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET 2fasecret=${newdata} WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET twofasecret=${newdata} WHERE userid=${userid}`
 				);
 		}
 	}
