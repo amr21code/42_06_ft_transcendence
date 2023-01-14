@@ -55,7 +55,7 @@ export default defineComponent({
 				this.gameCanvas = document.getElementById("match-court");
 				// console.log(this.gameCanvas);
 				this.gameContext = this.gameCanvas.getContext("2d");
-				this.gameContext.font = "30px Orbitron";
+				this.gameContext.font = "30px monospace";
 				
 				window.addEventListener("keydown",function(e){
 				Game.keysPressed[e.which] = true;
@@ -65,7 +65,10 @@ export default defineComponent({
 					Game.keysPressed[e.which] = false;
 				});
 				
-				var paddleWidth:number = 20, paddleHeight:number = 60, ballSize:number = 10, wallOffset:number = 20;
+				var paddleWidth:number = this.gameCanvas.width/25;
+				var paddleHeight:number = this.gameCanvas.height/4;
+				var ballSize:number = this.gameCanvas.width/25;
+				var wallOffset:number = this.gameCanvas.width/25;
 				
 				this.player1 = new Paddle(paddleWidth,paddleHeight,wallOffset,this.gameCanvas.height / 2 - paddleHeight / 2); 
 				this.computerPlayer = new ComputerPaddle(paddleWidth,paddleHeight,this.gameCanvas.width - (wallOffset + paddleWidth) ,this.gameCanvas.height / 2 - paddleHeight / 2);
@@ -77,17 +80,20 @@ export default defineComponent({
 				//draw court outline
 				this.gameContext.strokeStyle = "#fff";
 				this.gameContext.lineWidth = 5;
-				this.gameContext.strokeRect(10,10,this.gameCanvas.width - 20 ,this.gameCanvas.height - 20);
+				this.gameContext.centerLineWidth = 5;
+				this.gameContext.centerLineHeight = 20;
+				this.gameContext.strokeRect(0,0,this.gameCanvas.width,this.gameCanvas.height);
 				
 				//draw center lines
-				for (var i = 0; i + 30 < this.gameCanvas.height; i += 30) {
+				// FIND A WAY TO CENTER THIS
+				for (var i = 0; i < this.gameCanvas.height; i += this.gameCanvas.height / 5) {
 					this.gameContext.fillStyle = "#fff";
-					this.gameContext.fillRect(this.gameCanvas.width / 2 - 10, i + 10, 15, 20);
+					this.gameContext.fillRect(this.gameCanvas.width / 2 + this.gameContext.lineWidth - (this.gameContext.centerLineWidth / 2), i, this.gameContext.centerLineWidth, this.gameContext.centerLineHeight);
 				}
 				
 				//draw scores
-				this.gameContext.fillText(Game.playerScore, 280, 50);
-				this.gameContext.fillText(Game.computerScore, 390, 50);
+				this.gameContext.fillText(Game.playerScore, this.gameCanvas.width / 5 + this.gameContext.lineWidth, this.gameCanvas.height / 4);
+				this.gameContext.fillText(Game.computerScore, this.gameCanvas.width - this.gameContext.lineWidth * 2 - (this.gameCanvas.width / 5 + this.gameContext.lineWidth), this.gameCanvas.height / 4);
 				
 			}
 			update(){
@@ -275,6 +281,11 @@ export default defineComponent({
 			linear-gradient(to right, transparent 49.75%, white 0 50.25%, transparent 0);
 		padding: 30px; */
 	/* } */
+	#match-court {
+		width: 100%;
+		background-color: green;
+	}
+
 	.player_one {
 		/* background-color: blueviolet; */
 		height: 100px; /* MAKE ADJUSTABLE AND RESPONSIVE */

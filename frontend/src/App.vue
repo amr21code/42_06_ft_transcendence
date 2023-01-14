@@ -17,6 +17,7 @@
 			</div>
 		</header>
 	<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
+		<!-- make Game stop while loggedIn === false -->
 	<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 	<div class="grid-container">
 		<MatchCourt />
@@ -61,7 +62,7 @@ export default defineComponent({
 		// 	})
 		// 	.catch((e: Error) => console.log("Error occured"));
 		// for login popup (42 login)
-		const loggedIn = ref(false); // make 'false' for not showing login screen
+		const loggedIn = ref(true); // make 'false' for not showing login screen
 		const toggleLoginPopup = () => {
 			loggedIn.value = !loggedIn.value; // make this read the session
 		}
