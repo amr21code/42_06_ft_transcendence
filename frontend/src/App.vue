@@ -16,7 +16,7 @@
 				</div>
 			</div>
 		</header>
-	<LoginPopup id="LoginPopup" v-if="loginPopupTrigger === true" :toggleLoginPopup="() => toggleLoginPopup()" />
+	<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
 	<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 	<div class="grid-container">
 		<MatchCourt />
@@ -61,9 +61,9 @@ export default defineComponent({
 		// 	})
 		// 	.catch((e: Error) => console.log("Error occured"));
 		// for login popup (42 login)
-		const loginPopupTrigger = ref(true);
+		const loggedIn = ref(false); // make 'false' for not showing login screen
 		const toggleLoginPopup = () => {
-			loginPopupTrigger.value = !loginPopupTrigger.value;
+			loggedIn.value = !loggedIn.value; // make this read the session
 		}
 		// for user data popup (user data)
 		const userDataPopupTrigger = ref(false);
@@ -77,7 +77,7 @@ export default defineComponent({
 			selected.value = term;
 		};
 
-		return { loginPopupTrigger, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
+		return { loggedIn, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
 	methods: {}
 });
