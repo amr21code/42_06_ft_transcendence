@@ -39,4 +39,7 @@ export class AuthController {
 		else 
 			return { msg: "not authenticated" };
 	}
+
+	// @Get('logout')
+
 }
