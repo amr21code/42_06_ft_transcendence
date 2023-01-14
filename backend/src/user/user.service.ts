@@ -112,6 +112,14 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET avatar=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
 				);
+		}else if (field == '2fa') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET 2fa=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
+				);
+		}else if (field == '2fasecret') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET 2fasecret=${newdata} WHERE userid=${userid}`
+				);
 		}
 	}
 }
