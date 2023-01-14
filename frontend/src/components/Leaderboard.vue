@@ -16,7 +16,7 @@
 						{{ user.userid }}
 					</td>
 					<td>
-						{{ user.picurl }}
+						<img :src="user.picurl">
 					</td>
 					<td>
 						{{ user.username }}
