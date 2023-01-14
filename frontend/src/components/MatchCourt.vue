@@ -64,6 +64,12 @@ export default defineComponent({
 				window.addEventListener("keyup",function(e){
 					Game.keysPressed[e.which] = false;
 				});
+
+				window.addEventListener("keydown", function(e) {
+					if(["Space","ArrowUp","ArrowDown"].indexOf(e.code) > -1) {
+						e.preventDefault();
+					}
+				}, false);
 				
 				var paddleWidth:number = this.gameCanvas.width/25;
 				var paddleHeight:number = this.gameCanvas.height/4;
@@ -272,18 +278,19 @@ export default defineComponent({
 		border: white solid;
 		color: red;
 		text-align: center;
-		aspect-ratio: 5/3;
 		border-radius: 4px;
 		background-image:
-			radial-gradient(circle at 50% 50%, transparent 15%, white 0 16%, transparent 16%),
-			radial-gradient(circle at 50% 50%, transparent 15%, white , transparent 500%),
-			radial-gradient(circle at 50% 50%, white 0 14.75%, transparent 15%),
-			linear-gradient(to right, transparent 49.75%, white 0 50.25%, transparent 0);
+		radial-gradient(circle at 50% 50%, transparent 15%, white 0 16%, transparent 16%),
+		radial-gradient(circle at 50% 50%, transparent 15%, white , transparent 500%),
+		radial-gradient(circle at 50% 50%, white 0 14.75%, transparent 15%),
+		linear-gradient(to right, transparent 49.75%, white 0 50.25%, transparent 0);
 		padding: 30px; */
-	/* } */
+		/* } */
 	#match-court {
 		width: 100%;
+		aspect-ratio: 5/3;
 		background-color: green;
+		min-width: 200px; /*FIND DYNAMIC WAY*/
 	}
 
 	.player_one {

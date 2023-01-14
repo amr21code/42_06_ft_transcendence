@@ -7,8 +7,8 @@
 				<h1>The Pong Game</h1>
 			</div>
 			<div class="top-nav">
-				<a>Play</a>
-				<a>Watch</a>
+				<a @click="handleClick('play')">Play</a>
+				<a @click="handleClick('watch')">Watch</a>
 				<a @click="handleClick('chat')">Chat</a>
 				<a @click="handleClick('leaderboard')">Leaderboard</a>
 				<div class="logged-photo" @click="toggleUserDataPopup()">
@@ -19,10 +19,15 @@
 	<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
 		<!-- make Game stop while loggedIn === false -->
 	<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
-	<div class="grid-container">
+	<div v-if="selected !== 'play' && selected !== 'watch'" class="grid-container">
 		<MatchCourt />
 		<SideWindow :selected="selected"/>
 	</div>
+	<!-- BEGIN ONLY TEMPORARY, should be implemented above -->
+	<div class="game-full-screen" v-if="selected === 'play' || selected === 'watch'">
+		<MatchCourt />
+	</div>
+	<!-- ONLY TEMPORARY, should be implemented above END -->
 	<footer>
 		Made with ❤️ by anruland, djedasch, jtomala and raweber
 	</footer>
@@ -73,7 +78,7 @@ export default defineComponent({
 		}
 		
 		// for side window
-		const selected = ref<SelectedSideWindow>('chat');
+		const selected = ref<SelectedSideWindow>('play'); // new default: no side window
 		const handleClick = (term: SelectedSideWindow) => {
 			selected.value = term;
 		};
@@ -126,12 +131,12 @@ export default defineComponent({
 		height: 40px;
 		margin: 3px;
 	}
-
+	
 	.logged-photo img {
 		background: white;
 		border-radius: 50%;
 	}
-
+	
 	.logged-photo img:hover {
 		opacity: 50%;
 	}
@@ -139,6 +144,15 @@ export default defineComponent({
 	.grid-container {
 		display: grid;
 		grid-template-columns: 2fr 1fr;
+		margin: 20px;
+		gap: 20px;
+	}
+
+	.grid-container MatchCourt {
+		min-width: 66%;
+	}
+
+	.game-full-screen {
 		margin: 20px;
 		gap: 20px;
 	}

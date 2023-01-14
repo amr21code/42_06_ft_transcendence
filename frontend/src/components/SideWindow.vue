@@ -1,5 +1,5 @@
 <template>
-	<div class="side-window-wrapper">
+	<div v-if="selected !== 'play' && selected !== 'watch'" class="side-window-wrapper">
 		<ChatWindow v-if="selected === 'chat'" />
 		<Leaderboard v-if="selected === 'leaderboard'"/>
 	</div>
