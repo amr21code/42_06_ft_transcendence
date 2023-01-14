@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, Session, UseGuards } from '@nestjs/common';
 import { AuthenticatedGuard, FtAuthGuard } from './guards/guards';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -9,10 +9,15 @@ export class AuthController {
 
 	@Get('return')
 	@UseGuards(FtAuthGuard)
-	ftAuthCallback(@Res() res, @Req() request: Request) {
+	ftAuthCallback(@Res() res, @Req() request: Request, @Session() session: Record<string, any>) {
+		console.log('auth/return');
 		// console.log('return', request);
-		// console.log(res);
-		// res.cookie('user', request.user);
+		// console.log('session', session.passport.user.access_token);
+		
+		// console.log('response', res);
+		// res.cookie('user', request);
+		// res.setHeader('session', session.passport.user.userid);
+		// console.log('response', request);
 		res.redirect(`${this.config.get('FRONTEND_URL')}`);
 		return request.user;
 	}
@@ -20,6 +25,7 @@ export class AuthController {
 	@Get('login')
 	@UseGuards(FtAuthGuard)
 	login() {
+		console.log("auth/login");
 		// console.log('Login function called');
 		return { msg: 'logged in!'};
 	}

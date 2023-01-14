@@ -16,7 +16,8 @@
 				</div>
 			</div>
 		</header>
-	<LoginPopup id="LoginPopup" v-if="loginPopupTrigger === true" :toggleLoginPopup="() => toggleLoginPopup()" />
+	<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
+		<!-- make Game stop while loggedIn === false -->
 	<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 	<div class="grid-container">
 		<MatchCourt />
@@ -45,21 +46,25 @@ export default defineComponent({
 	name: 'App',
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
 	setup() {
+
+		// console.log(import.meta.env.VITE_TEST);
+		// console.log(process.env.BASE_URL);
+
 		// fetch('https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6627b6e06635604efe0143bdaabec14c22c6f69d741ae654619148e7d2dea5be&redirect_uri=http%3A%2F%2F192.168.56.2%3A3000%2Fauth%2Freturn&response_type=code')
 		// .then(response => response.json())
 		// .then(function(response) {
 		// 	console.log("test", response);
 		// });
-		LoggingService.getLog()
-		.then((response: Response)=> {
-				console.log(response);
-				// console.log(response); 
-			})
-			.catch((e: Error) => console.log("Error occured"));
+		// LoggingService.getLog()
+		// .then((response: Response)=> {
+		// 		console.log(response);
+		// 		// console.log(response); 
+		// 	})
+		// 	.catch((e: Error) => console.log("Error occured"));
 		// for login popup (42 login)
-		const loginPopupTrigger = ref(true);
+		const loggedIn = ref(true); // make 'false' for not showing login screen
 		const toggleLoginPopup = () => {
-			loginPopupTrigger.value = !loginPopupTrigger.value;
+			loggedIn.value = !loggedIn.value; // make this read the session
 		}
 		// for user data popup (user data)
 		const userDataPopupTrigger = ref(false);
@@ -73,7 +78,7 @@ export default defineComponent({
 			selected.value = term;
 		};
 
-		return { loginPopupTrigger, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
+		return { loggedIn, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
 	methods: {}
 });

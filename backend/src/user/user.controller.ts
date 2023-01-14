@@ -1,10 +1,11 @@
 import { Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthenticatedGuard } from '../auth/guards/guards';
+import { AuthenticatedGuard, FtAuthGuard } from '../auth/guards/guards';
 import { Request } from 'express';
 import { UserService } from './user.service';
 
 @Controller('users')
-// @UseGuards(AuthenticatedGuard)
+@UseGuards(AuthenticatedGuard)
+// @UseGuards(FtAuthGuard)
 export class UserController {
 	constructor( private readonly userService: UserService){}
 
@@ -17,7 +18,8 @@ export class UserController {
 
 	@Get('all')
 	// @UseGuards(AuthenticatedGuard)
-	async getAll() {
+	async getAll(@Req() request: Request) {
+		// console.log(request);
 		const users = await this.userService.getAll();
 		return users;
 	}
