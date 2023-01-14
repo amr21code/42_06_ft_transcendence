@@ -29,7 +29,15 @@ export class AuthenticatedGuard implements CanActivate {
 		// console.log(request.sessionID);
 		try {
 			const session = JSON.parse(request.sessionStore.sessions[request.sessionID]).passport.user;
+			
+			
+			
+			// DB Query not necessary - Access Token also not necessary
 			const user = await this.authService.findUser(session.userid);
+
+
+
+
 			// console.log('user', user);
 			// console.log('accesstoken', session.access_token);
 			if (session.access_token == user.access_token) {
