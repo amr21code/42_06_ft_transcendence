@@ -1,3 +1,8 @@
+<!--
+	This window should show an overview of all the chats and is responsible
+	for the footer so that you can switch between chats and create a new chat
+-->
+
 <template>
 	<div class="chat-wrapper">
 
@@ -5,8 +10,8 @@
 		<ChatWindow v-if="selected === 'chatwindow'"/>
 		<div v-if="selected === 'overview'">
 			<h2>Chat overview</h2>
-			<div class="chat-overview">
-			<a @click="handleClick('chatwindow')">
+			 <div class="chat-overview">
+			<!--<a @click="handleClick('chatwindow')">
 				<div class="chat-message-view">
 					<img src="../assets/jorit_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
 					<p class="chat-person-text">Jorit</p>
@@ -33,35 +38,14 @@
 					<p class="chat-person-text">Desiree</p>
 					<p class="chat-person-message">This is a sample message</p>
 				</div>
-			</a>
-			<a @click="handleClick('chatwindow')">
-				<div class="chat-message-view">
-					<img src="../assets/jorit_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
-					<p class="chat-person-text">Jorit</p>
-					<p class="chat-person-message">This is a sample message</p>
-				</div>
-			</a>
-			<a @click="handleClick('chatwindow')">
-				<div class="chat-message-view">
-					<img src="../assets/ralf_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
-					<p class="chat-person-text">Ralf</p>
-					<p class="chat-person-message">This is a sample message</p>
-				</div>
-			</a>
-			<a @click="handleClick('chatwindow')">
-				<div class="chat-message-view">
-					<img src="../assets/andi_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
-					<p class="chat-person-text">Andi</p>
-					<p class="chat-person-message">This is a sample message</p>
-				</div>
-			</a>
-			<a @click="handleClick('chatwindow')">
-				<div class="chat-message-view">
-					<img src="../assets/desiree_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
-					<p class="chat-person-text">Desiree</p>
-					<p class="chat-person-message">This is a sample message</p>
-				</div>
-			</a>
+			</a> -->
+
+			<!-- <strong class="">{{ chats }}</strong>  -->
+			<div class="chat-message-view" v-for="chat in chats" :key="chat">
+            		<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+					<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+					<a class="chat-typename">{{ chat.typename }}</a>
+			</div>
 		</div>
 	</div>
 		
@@ -92,15 +76,53 @@ import Overview from './ChatOverview.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
 import { defineComponent, ref, onMounted } from 'vue'
 
+import DataService from '../services/DataService'
+import type { ResponseData } from '../types/ResponseData'
+import type { IUser } from '../types/User'
+import type { IChats } from '../types/Chats'
+
 type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
 	name: 'chat-module',
 	components: { ChatWindow, Overview, NewMessagePopup },
+
+	data () {
+		return {
+			user: {} as IUser,
+			chats: {} as IChats
+		}
+	},
+	methods: {
+		retrieveCurrentUser() {
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				this.user = response.data;
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+
+		retrieveCurrentChats() {
+			DataService.getChats()
+			.then((response: ResponseData) => {
+				this.chats = response.data;
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		}
+	},
+
+	mounted () {
+		this.retrieveCurrentUser();
+		this.retrieveCurrentChats();
+	},
+
 	setup(){
-		const userid = ref('userid');
-		const chatid = ref('chatid');
-		const messages = ref([]);
 		const message = ref('');
 
 		const popupTrigger = ref(false);
@@ -110,7 +132,7 @@ export default defineComponent({
 		}
 
 		onMounted(() => {
-			
+	
 		});
 
 		const selected = ref<SelectedChat>('overview');
@@ -119,13 +141,30 @@ export default defineComponent({
 			console.log("handleClick", selected.value);
 		}
 
-		return { userid, chatid, messages, message, selected, handleClick, togglePopup, popupTrigger }
+		return {message, selected, handleClick, togglePopup, popupTrigger }
 	} //end of setup
 }) //end of defineComponent
 </script>
 
 
 <style scoped>
+
+.chat-chatid {
+	padding-right: 5%;
+	background-color: black;
+	border: 5%;
+}
+
+.chat-chatname {
+	color: black;
+}
+
+.chat-typename {
+	/* text-align: right; */
+	padding-left: auto;
+	padding-right: 0px;
+	color: green;
+}
 
 .chat-overview {
 		height: 340px;

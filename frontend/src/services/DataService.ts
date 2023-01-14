@@ -5,7 +5,10 @@ class DataService {
 		return apiInstance.get("/users/me" );
 	}
 	getAll() : Promise<any> {
-		return apiInstance.get("/users/all")
+		return apiInstance.get("/users/all");
+	}
+	getChats() : Promise<any> {
+		return apiInstance.get("/chat/list/chats");
 	}
 }
 

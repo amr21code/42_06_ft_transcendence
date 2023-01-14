@@ -2,7 +2,7 @@
 	<div class="popup" @keyup.esc="toggleLoginPopup" tabindex="0"> 
 		<!-- REMOVE ESC OPTION ABOVE -->
 		<div class="popup-inner">
-			<slot />
+			<slot/>
 			<!-- NON-DYNAMIC <h2>raweber's user data</h2> -->
 			<h2>welcome to ft_pong</h2>
 			<p>please sign in with your 42 account first</p>

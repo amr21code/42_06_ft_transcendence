@@ -35,23 +35,21 @@ import { computed, defineComponent, ref, onMounted } from 'vue'
 export default defineComponent({
 	name: 'ChatWindow',
 	setup(){
-		const userid = ref('userid');
-		const chatid = ref('chatid');
 		const messages = ref([]);
 		const message = ref('');
 
 		onMounted(() => {
-			getMessages();
+			
 		});
 
-		const getMessages = async () => {
-			//get the messages from the backend
-			fetch('http://localhost:3000/chat/list/messages/1')
-				.then(res => res.json())
-				.then(data => messages.value = data)
-				.catch(err => console.log(err.message))
-			console.log('got messages from backend')
-		}
+		// const getMessages = async () => {
+		// 	//get the messages from the backend
+		// 	fetch('http://localhost:3000/chat/list/messages/1')
+		// 		.then(res => res.json())
+		// 		.then(data => messages.value = data)
+		// 		.catch(err => console.log(err.message))
+		// 	console.log('got messages from backend')
+		// } ---> needs to be done as a service
 
 		const submit = async () => {
 			console.log("message got send to backend");
@@ -68,7 +66,7 @@ export default defineComponent({
 			message.value = '';
 		}//end of submit
 
-		return { userid, chatid, message, messages, submit}
+		return { message, messages, submit}
 	}
 })
 
