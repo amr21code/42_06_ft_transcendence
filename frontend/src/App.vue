@@ -23,9 +23,11 @@
 		<MatchCourt />
 		<SideWindow :selected="selected"/>
 	</div>
+	<!-- BEGIN ONLY TEMPORARY, should be implemented above -->
 	<div class="game-full-screen" v-if="selected === 'play' || selected === 'watch'">
 		<MatchCourt />
 	</div>
+	<!-- ONLY TEMPORARY, should be implemented above END -->
 	<footer>
 		Made with ❤️ by anruland, djedasch, jtomala and raweber
 	</footer>
