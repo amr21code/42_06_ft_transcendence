@@ -62,7 +62,7 @@ export default defineComponent({
 		// 	})
 		// 	.catch((e: Error) => console.log("Error occured"));
 		// for login popup (42 login)
-		const loggedIn = ref(false); // make 'false' for not showing login screen
+		const loggedIn = ref(true); // make 'false' for not showing login screen
 		const toggleLoginPopup = () => {
 			loggedIn.value = !loggedIn.value; // make this read the session
 		}
