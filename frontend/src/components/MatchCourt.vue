@@ -284,6 +284,7 @@ export default defineComponent({
 		width: 100%;
 		aspect-ratio: 5/3;
 		background-color: green;
+		min-width: 200px; /*FIND DYNAMIC WAY*/
 	}
 
 	.player_one {
