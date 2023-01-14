@@ -64,6 +64,12 @@ export default defineComponent({
 				window.addEventListener("keyup",function(e){
 					Game.keysPressed[e.which] = false;
 				});
+
+				window.addEventListener("keydown", function(e) {
+					if(["Space","ArrowUp","ArrowDown"].indexOf(e.code) > -1) {
+						e.preventDefault();
+					}
+				}, false);
 				
 				var paddleWidth:number = this.gameCanvas.width/25;
 				var paddleHeight:number = this.gameCanvas.height/4;
