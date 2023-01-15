@@ -1,11 +1,11 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
+import { UserService } from 'src/user/user.service';
 import { Prisma } from '@prisma/client';
-import { threadId } from 'worker_threads';
 
 @Injectable()
 export class MatchService {
-	constructor(private readonly db: DbService) {}
+	constructor(private readonly db: DbService, private readonly userService: UserService) {}
 
 	async listMatches() {
 		const matchlist = await this.db.$queryRaw(
@@ -24,26 +24,39 @@ export class MatchService {
 		return match;
 	}
 
-	async openMatch(userid: string) {
-		try {
+	async openMatch(userid: string, opponent?: string) {
+		// try {
+			var opp;
+			if (opponent) {
+				opp = await this.userService.getOne(opponent);
+			}
+			console.log("opponent", opponent);
+			console.log("opp", opp);
 			const already_open = await this.listMatch(userid);
-			if (Object.keys(already_open).length == 0)
+			if (Object.keys(already_open).length == 0 && Object.keys(opp[0].userid).length != 1)
 			{
+				console.log("no open session - creating");
 				const open = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.match_history (match_status)
 					VALUES (2)
 					RETURNING matchid;`
 				);
-				var timeout = (Date.now() / 1000) + 60;
+				console.log("new matchid", open[0].matchid);
+				// var timeout = (Date.now() / 1000) + 60;
+				// console.log("settimeout", timeout);
 				const join = await this.db.$queryRaw(
-					Prisma.sql`INSERT INTO public.user_match (userid, matchid, timeout)
-					VALUES (${userid}, ${open[0].matchid}, CAST(${timeout} AS INTEGER));`
+					Prisma.sql`INSERT INTO public.user_match (userid, matchid)
+					VALUES (${userid}, ${open[0].matchid});` //, to_timestamp(${timeout}));`
+				);
+				const join_opp = await this.db.$queryRaw(
+					Prisma.sql`INSERT INTO public.user_match (userid, matchid)
+					VALUES (${opponent}, ${open[0].matchid});` //, to_timestamp(${timeout}));`
 				);
 			} else {
 				throw new ForbiddenException();
 			}
-		} catch (error) {
-			throw new ForbiddenException();
-		}
+		// } catch (error) {
+		// 	throw new ForbiddenException();
+		// }
 	}
 }
