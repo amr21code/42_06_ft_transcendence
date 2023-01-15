@@ -2,6 +2,8 @@
 
 <!--------------HEAD----------------------------------------------------------------------------->
 		
+		<!--show current chatid and chatname-->
+		<!--have a info button on the right to show all the users in the chat-->
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
 			<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
@@ -11,18 +13,20 @@
 <!--------------BODY------------------------------------------------------------------------------------>
 
 		<div class="chat-message-view">
-			<p class="message-recv">Hey Jorit!</p>
+
+			<!-- <p class="message-recv">Hey Jorit!</p>
 			<p class="message-sent">Hey Ralf, what's up?</p>
 				<p class="message-recv">I am still doing transcendence and you?</p>
-				<p class="message-sent">Haha, same here...</p>
+				<p class="message-sent">Haha, same here...</p> -->
 
-	
+
+			<!--if username == currentusername then class="message-sent"-->
 			<div class="message-recv" v-for="chat in chats" :key="chat">
 				<div class="">
-            		<strong class="">from: {{ chat.username }}</strong>
+            		<strong class="message-username">{{ chat.username }}</strong>
          		</div>
 				 <div class="">
-            		<strong class="">{{ chat.message }}</strong>
+            		<strong class="message-text">{{ chat.message }}</strong>
          		</div>
 			</div>
 
@@ -127,6 +131,15 @@ export default defineComponent({
 
 
 <style scoped>
+
+	.message-text {
+		padding-left: 1%;
+		font-weight: normal;
+	}
+	.message-username {
+		color: black;
+		padding-left: 1%;
+	}
 	.chat-top-bar {
 		background-color: var(--second-bg-color);
 		color: white;
