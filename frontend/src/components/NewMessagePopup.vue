@@ -2,16 +2,21 @@
     <div class="popup" @keyup.esc="togglePopup" tabindex="0">
         <div class="popup-inner">
             <h2>Create a new chat</h2>
-            <label>
+            <!-- <label>
                 Privat<input class="radio" type="checkbox">
             </label>
             <label>
                 Group<input class="radio" type="checkbox">
-            </label>
+            </label> -->
             <br>
             <input class="popup-textfield" type="text" placeholder="Name of the chat">
             <br>
+            <input class="popup-textfield" type="text" placeholder="password">
             <br>
+            <button class="submit-button" name="submit">
+                <input class="submit-button" type="submit" @click="createNewChat">
+            </button>
+
             <button class="popup-close" @click="togglePopup">Close</button>
         </div>
     </div>
@@ -23,9 +28,51 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+
+//for getting data from the backend
+import DataService from '../services/DataService'
+import type { ResponseData } from '../types/ResponseData'
+import type { IUser } from '../types/User'
+import type { IChats } from '../types/Chats'
+
+
 export default defineComponent({
 	name: "NewMessagePopup",
-    props: ['togglePopup']
+    props: ['togglePopup'],
+
+    data () {
+		return {
+			user: {} as IUser,
+			chats: {} as IChats
+		}
+	},
+	methods: {
+		retrieveCurrentUser() {
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				this.user = response.data;
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+
+        //needs to take the chatname and chatid in order to pass it to the backend
+        createNewChat() {
+            DataService.createChat()
+            .then((response: ResponseData) => {
+				console.log("chat got created with id ", response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+        }
+        
+	},
+    setup () {
+
+    }  
 
 })
 
@@ -35,6 +82,17 @@ export default defineComponent({
 
 
 <style scoped>
+
+.submit-button {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+}
 .popup {
 	text-align: left;
 	background-color: rgba(0,0,0,0.8);

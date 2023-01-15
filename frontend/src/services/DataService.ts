@@ -10,6 +10,12 @@ class DataService {
 	getChats() : Promise<any> {
 		return apiInstance.get("/chat/list/chats");
 	}
+	createChat() : Promise<any> {
+		return apiInstance.get('/chat/join');
+	}
+	getMessages(chatid : string) : Promise<any> {
+		return apiInstance.get('/chat/list/messages/' + chatid);
+	}
 }
 
 export default new DataService();

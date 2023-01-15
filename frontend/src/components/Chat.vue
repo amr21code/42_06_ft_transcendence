@@ -42,10 +42,15 @@
 
 			<!-- <strong class="">{{ chats }}</strong>  -->
 			<div class="chat-message-view" v-for="chat in chats" :key="chat">
-            		<strong class="chat-chatid" >{{ chat.chatid }}</strong>
-					<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-					<a class="chat-typename">{{ chat.typename }}</a>
+				<a @click="handleClick('chatwindow', chat)"> <!--need to pass the chatid here?-->
+					<div class="">
+							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+							<a class="chat-typename">{{ chat.typename }}</a>
+					</div>
+				</a>
 			</div>
+
 		</div>
 	</div>
 		
@@ -53,7 +58,7 @@
 				<!-- <a @click="handleClick('chatwindow')"> -->
 					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
 				<!-- </a> -->
-				<a @click="handleClick('overview')">
+				<a @click="handleClick('overview', 0)">
 					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<!--popup for a new chat-->
@@ -76,6 +81,7 @@ import Overview from './ChatOverview.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
 import { defineComponent, ref, onMounted } from 'vue'
 
+//for getting data from the backend
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
@@ -136,12 +142,14 @@ export default defineComponent({
 		});
 
 		const selected = ref<SelectedChat>('overview');
-		const handleClick = (term: SelectedChat) => {
+		const chat = ref('');
+		const handleClick = (term: SelectedChat, selected_chat: string) => {
+			chat.value = selected_chat;
 			selected.value = term;
 			console.log("handleClick", selected.value);
 		}
 
-		return {message, selected, handleClick, togglePopup, popupTrigger }
+		return {message, selected, handleClick, togglePopup, popupTrigger, chat }
 	} //end of setup
 }) //end of defineComponent
 </script>
@@ -150,19 +158,18 @@ export default defineComponent({
 <style scoped>
 
 .chat-chatid {
-	padding-right: 5%;
+	float: left;
+	color: white;
 	background-color: black;
 	border: 5%;
 }
 
 .chat-chatname {
 	color: black;
+	padding-left: 20%;
 }
 
 .chat-typename {
-	/* text-align: right; */
-	padding-left: auto;
-	padding-right: 0px;
 	color: green;
 }
 

@@ -1,24 +1,35 @@
 <template>
 
-		<!-------MODULE WINDOW---------------------------->
+<!--------------HEAD----------------------------------------------------------------------------->
 		
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
 			<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
 			Ralf Weber
 		</div>
+
+<!--------------BODY------------------------------------------------------------------------------------>
+
 		<div class="chat-message-view">
 			<p class="message-recv">Hey Jorit!</p>
 			<p class="message-sent">Hey Ralf, what's up?</p>
 				<p class="message-recv">I am still doing transcendence and you?</p>
 				<p class="message-sent">Haha, same here...</p>
-			</div>
-			<!-- <div class="message-recv" v-for="message in messages" :key="message">
-				 <div class="">
-            		<strong class="">{{ message.userid }}</strong>
+
+	
+			<div class="message-recv" v-for="chat in chats" :key="chat">
+				<div class="">
+            		<strong class="">from: {{ chat.username }}</strong>
          		</div>
-          		<div class="">{{ message.message }}</div>
-			</div> -->
+				 <div class="">
+            		<strong class="">{{ chat.message }}</strong>
+         		</div>
+			</div>
+
+		</div>
+
+<!--------------FOOTER------------------------------------------------------------------------------------>
+
 			<div class="chat-write-and-send">
 				<form @submit.prevent="submit">
 					<input placeholder="Write message here">
@@ -31,9 +42,51 @@
 <script lang="ts">
 import { computed, defineComponent, ref, onMounted } from 'vue'
 
+//for getting data from the backend
+import DataService from '../services/DataService'
+import type { ResponseData } from '../types/ResponseData'
+import type { IUser } from '../types/User'
+import type { IChats } from '../types/Chats'
+
 
 export default defineComponent({
 	name: 'ChatWindow',
+	data () {
+		return {
+			user: {} as IUser,
+			chats: {} as IChats
+		}
+	},
+
+	methods: {
+		retrieveCurrentUser() {
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				this.user = response.data;
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+
+		retrieveCurrentMessages(chatid : string) {
+			DataService.getMessages(chatid)
+			.then((response: ResponseData) => {
+				this.chats = response.data;
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		}
+
+	},
+
+	mounted () {
+		this.retrieveCurrentMessages('1'); //needs to get the chatid that got clicked
+	},
+
 	setup(){
 		const messages = ref([]);
 		const message = ref('');
