@@ -17,16 +17,19 @@
 <!--------------BODY------------------------------------------------------------------------------------>
 
 		<div class="chat-message-view">
-
-			<!-- <p class="message-recv">Hey Jorit!</p>
-			<p class="message-sent">Hey Ralf, what's up?</p>
-				<p class="message-recv">I am still doing transcendence and you?</p>
-				<p class="message-sent">Haha, same here...</p> -->
-
-
-			<!--if username == currentusername then class="message-sent"-->
-			<div class="" v-for="chat in chats" :key="chat">
-				<div class="message-recv">
+			
+			<div class="messages-wrapper" v-for="chat in chats" :key="chat">
+				<!-- message sent -->
+				<div class="message-sent" v-if="user[0].username == chat.username">
+					<div class="message-username">
+						<strong >{{ chat.username }}</strong>
+					</div>
+					<div class="message-text">
+						<a >{{ chat.message }}</a>
+					</div>
+				</div>
+				<!--message recv-->
+				<div class="message-recv" v-else>
 					<div class="message-username">
 						<strong >{{ chat.username }}</strong>
 					</div>
@@ -187,8 +190,10 @@ export default defineComponent({
 	
 	.chat-message-view {
 		border: black solid 3px;
-		min-height: 300px; 
-		/* find good way for min-height */
+		height: 300px;
+		overflow-y: scroll;
+		scrollbar-color: rebeccapurple green;
+		scrollbar-width: thin;
 	}
 	.message-recv {
 		background-color: rgb(155, 155, 160);
