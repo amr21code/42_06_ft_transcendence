@@ -23,21 +23,23 @@
 
 
 			<!--if username == currentusername then class="message-sent"-->
-			<div class="message-recv" v-for="chat in chats" :key="chat">
-				<div class="">
-            		<strong class="message-username">{{ chat.username }}</strong>
-         		</div>
-				 <div class="">
-            		<strong class="message-text">{{ chat.message }}</strong>
-         		</div>
+			<div class="" v-for="chat in chats" :key="chat">
+				<div class="message-recv">
+					<div class="message-username">
+						<strong >{{ chat.username }}</strong>
+					</div>
+					<div class="message-text">
+						<a >{{ chat.message }}</a>
+					</div>
+				</div>
 			</div>
 
 		</div>
 
 <!--------------FOOTER------------------------------------------------------------------------------------>
-
+			
 			<div class="chat-write-and-send">
-				<form @submit.prevent="submit">
+				<form @submit.prevent="sendMessage( user[0].userid, +chatid, 'Grüße aus dem frontend')"> <!--write a submit function-->
 					<input placeholder="Write message here">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
@@ -95,42 +97,56 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
-		}
+		},
+
+		// async sendMessage (userid : string, chatid : number, message : string) {
+		// 	console.log("sendMessage function for triggert with", userid, chatid, message);
+		// 	await fetch('http://localhost:3000/chat/message', {
+		// 		method: 'POST',
+		// 		headers: {'Content-Type': 'application/json'},
+		// 		body: JSON.stringify({
+		// 			userid: userid, 
+		// 			chatid: chatid,
+		// 			message: message
+	
+		// 		})
+		// 	})
+	
+		// }
 
 	},
 
 	mounted () {
-		console.log(this.chatid);
-		if (this.chatid === undefined)
-			return console.log("Error: chatid is not defined!");
-		this.retrieveCurrentMessages(this.chatid); //needs to get the chatid that got clicked
+		this.retrieveCurrentUser();
+		this.retrieveCurrentMessages(this.chatid);
 	},
 
 	setup(){
 		const messages = ref([]);
 		const message = ref('');
-
 		onMounted(() => {
 			
 		});
 
-		const submit = async () => {
-			console.log("message got send to backend");
+
+	const sendMessage = async (userid : string, chatid : number, message : string) => {
+			console.log("sendMessage function for triggert with", userid, chatid, message);
 			await fetch('http://localhost:3000/chat/message', {
 				method: 'POST',
 				headers: {'Content-Type': 'application/json'},
 				body: JSON.stringify({
-					userid: "jtomala", //getIntraName()
-					chatid: 24, //getChatId()
-					message: message.value
+					userid: userid, 
+					chatid: chatid,
+					message: message
 	
-				}) //end of stringify
-			})//end of fetch
-			message.value = '';
-		}//end of submit
+				})
+			})
+	
+		}
+		return { message, messages, sendMessage}
 
-		return { message, messages, submit}
 	}
+
 })
 
 </script>

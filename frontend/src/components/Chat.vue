@@ -54,7 +54,6 @@
 		</div>
 	</div>
 
-	<a>{{ sel_chatid }}</a>
 	<ChatWindow v-if="selected === 'chatwindow'" :chatid="sel_chatid" />
 
 			<div class="chat-menu">
