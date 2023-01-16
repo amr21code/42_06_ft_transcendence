@@ -41,7 +41,8 @@
 <!--------------FOOTER------------------------------------------------------------------------------------>
 			
 			<div class="chat-write-and-send">
-				<form @submit.prevent="sendMessage( user[0].userid, curr_chat, 'Grüße aus dem frontend')"> <!--write a submit function-->
+				<!-- <form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')"> -->
+				<form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')">
 					<input placeholder="Write message here">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
@@ -101,37 +102,7 @@ export default defineComponent({
 			});
 		},
 
-		// async sendMessage (userid : string, chatid : number, message : string) {
-		// 	console.log("sendMessage function for triggert with", userid, chatid, message);
-		// 	await fetch('http://localhost:3000/chat/message', {
-		// 		method: 'POST',
-		// 		headers: {'Content-Type': 'application/json'},
-		// 		body: JSON.stringify({
-		// 			userid: userid, 
-		// 			chatid: chatid,
-		// 			message: message
-	
-		// 		})
-		// 	})
-	
-		// }
-
-	},
-
-	mounted () {
-		this.retrieveCurrentUser();
-		this.retrieveCurrentMessages(this.curr_chat.chatid);
-	},
-
-	setup(){
-		const messages = ref([]);
-		const message = ref('');
-		onMounted(() => {
-			
-		});
-
-
-	const sendMessage = async (userid : string, chatid : number, message : string) => {
+		async sendMessage (userid : string, chatid : number, message : string) {
 			console.log("sendMessage function for triggert with", userid, chatid, message);
 			await fetch('http://localhost:3000/chat/message', {
 				method: 'POST',
@@ -140,14 +111,43 @@ export default defineComponent({
 					userid: userid, 
 					chatid: chatid,
 					message: message
-	
 				})
 			})
 	
 		}
-		return { message, messages, sendMessage}
 
-	}
+	},
+
+	mounted () {
+		this.retrieveCurrentUser();
+		this.retrieveCurrentMessages(this.curr_chat.chatid);
+	},
+
+	// setup(){
+	// 	const messages = ref([]);
+	// 	const message = ref('');
+	// 	onMounted(() => {
+			
+	// 	});
+
+
+	// const sendMessage = async (userid : string, chatid : number, message : string) => {
+	// 		console.log("sendMessage function for triggert with", userid, chatid, message);
+	// 		await fetch('http://localhost:3000/chat/message', {
+	// 			method: 'POST',
+	// 			headers: {'Content-Type': 'application/json'},
+	// 			body: JSON.stringify({
+	// 				userid: userid, 
+	// 				chatid: chatid,
+	// 				message: message
+	
+	// 			})
+	// 		})
+	
+	// 	}
+	// 	return { message, messages, sendMessage}
+
+	// }
 
 })
 
