@@ -25,7 +25,7 @@ export class MatchService {
 	}
 
 	async openMatch(userid: string, opponent?: string) {
-		// try {
+		try {
 			var opp;
 			if (opponent) {
 				opp = await this.userService.getOne(opponent);
@@ -44,19 +44,45 @@ export class MatchService {
 				console.log("new matchid", open[0].matchid);
 				// var timeout = (Date.now() / 1000) + 60;
 				// console.log("settimeout", timeout);
-				const join = await this.db.$queryRaw(
-					Prisma.sql`INSERT INTO public.user_match (userid, matchid)
-					VALUES (${userid}, ${open[0].matchid});` //, to_timestamp(${timeout}));`
-				);
-				const join_opp = await this.db.$queryRaw(
-					Prisma.sql`INSERT INTO public.user_match (userid, matchid)
-					VALUES (${opponent}, ${open[0].matchid});` //, to_timestamp(${timeout}));`
-				);
+				if (open[0].matchid) {
+
+					const join = await this.db.$queryRaw(
+						Prisma.sql`INSERT INTO public.user_match (userid, matchid)
+						VALUES (${userid}, ${open[0].matchid})
+						RETURNING matchid;` //, to_timestamp(${timeout}));`
+					);
+					if (join[0].matchid) {
+
+						const join_opp = await this.db.$queryRaw(
+							Prisma.sql`INSERT INTO public.user_match (userid, matchid)
+							VALUES (${opponent}, ${open[0].matchid});` //, to_timestamp(${timeout}));`
+						);
+					} else {
+						throw new ForbiddenException();
+					}
+				} else {
+					throw new ForbiddenException();
+				}
 			} else {
 				throw new ForbiddenException();
 			}
-		// } catch (error) {
-		// 	throw new ForbiddenException();
-		// }
+		} catch (error) {
+			throw new ForbiddenException();
+		}
+	}
+
+	async acceptMatch(userid: string) {
+		const accept = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.user_match
+			SET challenge=1
+			WHERE userid=${userid};`
+		);
+	}
+
+	async deleteMatch(userid: string) {
+		const accept = await this.db.$queryRaw(
+			Prisma.sql`DELETE FROM public.match_history
+			WHERE matchid=(SELECT matchid FROM public.user_match WHERE userid=${userid} AND challenge!=3);`
+		);
 	}
 }
