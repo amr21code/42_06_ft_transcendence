@@ -55,7 +55,7 @@
 	</div>
 
 	<a>{{ sel_chatid }}</a>
-	<ChatWindow v-if="selected === 'chatwindow'" chatid: sel_chatid />
+	<ChatWindow v-if="selected === 'chatwindow'" :chatid="sel_chatid" />
 
 			<div class="chat-menu">
 				<!-- <a @click="handleClick('chatwindow')"> -->
