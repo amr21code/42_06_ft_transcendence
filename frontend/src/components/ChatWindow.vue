@@ -8,8 +8,10 @@
 		<!--have a info button on the right to show all the users in the chat-->
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
-			<img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40">
-			Ralf Weber
+			<!-- <img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40"> -->
+			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
+			<a class="chat-chatname">{{ curr_chat.chat_name }}</a>
+			<a class="chat-typename">{{ curr_chat.typename }}</a>
 		</div>
 
 <!--------------BODY------------------------------------------------------------------------------------>
@@ -39,7 +41,7 @@
 <!--------------FOOTER------------------------------------------------------------------------------------>
 			
 			<div class="chat-write-and-send">
-				<form @submit.prevent="sendMessage( user[0].userid, +chatid, 'Grüße aus dem frontend')"> <!--write a submit function-->
+				<form @submit.prevent="sendMessage( user[0].userid, curr_chat, 'Grüße aus dem frontend')"> <!--write a submit function-->
 					<input placeholder="Write message here">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
@@ -70,7 +72,7 @@ export default defineComponent({
 	},
 
 	props: {
-		chatid: {
+		curr_chat: {
 			required: true,
 			type: String
 		},
@@ -118,7 +120,7 @@ export default defineComponent({
 
 	mounted () {
 		this.retrieveCurrentUser();
-		this.retrieveCurrentMessages(this.chatid);
+		this.retrieveCurrentMessages(this.curr_chat.chatid);
 	},
 
 	setup(){
@@ -154,6 +156,24 @@ export default defineComponent({
 
 <style scoped>
 
+	.chat-chatid {
+		float: left;
+		color: white;
+		padding-left: 5%;
+	}
+
+	.chat-chatname {
+		color: white;
+		padding-left: 20%;
+		float: middle;
+	}
+
+	.chat-typename {
+		color: lightgreen;
+		padding-right: 5%;
+		float: right;
+	}
+
 	.message-text {
 		padding-left: 1%;
 		font-weight: normal;
@@ -165,6 +185,8 @@ export default defineComponent({
 	.chat-top-bar {
 		background-color: var(--second-bg-color);
 		color: white;
+		padding-top: 2%;
+		padding-bottom: 2%;
 	}
 	
 	.chat-message-view {

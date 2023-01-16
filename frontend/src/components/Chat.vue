@@ -42,7 +42,7 @@
 
 			<!-- <strong class="">{{ chats }}</strong>  -->
 			<div class="chat-message-view" v-for="chat in chats" :key="chat">
-				<a @click="handleClick('chatwindow', chat.chatid)"> <!--need to pass the chatid here?-->
+				<a @click="handleClick('chatwindow', chat)"> <!--need to pass the chatid here?-->
 					<div class="">
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
@@ -54,7 +54,7 @@
 		</div>
 	</div>
 
-	<ChatWindow v-if="selected === 'chatwindow'" :chatid="sel_chatid" />
+	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
 				<!-- <a @click="handleClick('chatwindow')"> -->
@@ -144,14 +144,14 @@ export default defineComponent({
 		});
 
 		const selected = ref<SelectedChat>('overview');
-		const sel_chatid = ref('');
-		const handleClick = (term: SelectedChat, selected_chatid: string) => {
-			sel_chatid.value = selected_chatid;
+		const sel_chat = ref('');
+		const handleClick = (term: SelectedChat, selected_chat: string) => {
+			sel_chat.value = selected_chat;
 			selected.value = term;
-			console.log("handleClick", selected.value, sel_chatid.value);
+			console.log("handleClick", selected.value, sel_chat.value);
 		}
 
-		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chatid }
+		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat }
 	} //end of setup
 }) //end of defineComponent
 </script>
