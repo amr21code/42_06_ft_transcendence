@@ -7,7 +7,7 @@
 	<div class="chat-wrapper">
 
 		<!-- <Overview v-if="selected === 'overview'"/> -->
-		<ChatWindow v-if="selected === 'chatwindow'"/>
+		
 		<div v-if="selected === 'overview'">
 			<h2>Chat overview</h2>
 			 <div class="chat-overview">
@@ -42,7 +42,7 @@
 
 			<!-- <strong class="">{{ chats }}</strong>  -->
 			<div class="chat-message-view" v-for="chat in chats" :key="chat">
-				<a @click="handleClick('chatwindow', chat)"> <!--need to pass the chatid here?-->
+				<a @click="handleClick('chatwindow', chat.chatid)"> <!--need to pass the chatid here?-->
 					<div class="">
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
@@ -53,12 +53,15 @@
 
 		</div>
 	</div>
-		
+
+	<a>{{ sel_chatid }}</a>
+	<ChatWindow v-if="selected === 'chatwindow'" chatid: sel_chatid />
+
 			<div class="chat-menu">
 				<!-- <a @click="handleClick('chatwindow')"> -->
 					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
 				<!-- </a> -->
-				<a @click="handleClick('overview', 0)">
+				<a @click="handleClick('overview', '0')">
 					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<!--popup for a new chat-->
@@ -142,14 +145,14 @@ export default defineComponent({
 		});
 
 		const selected = ref<SelectedChat>('overview');
-		const chat = ref('');
-		const handleClick = (term: SelectedChat, selected_chat: string) => {
-			chat.value = selected_chat;
+		const sel_chatid = ref('');
+		const handleClick = (term: SelectedChat, selected_chatid: string) => {
+			sel_chatid.value = selected_chatid;
 			selected.value = term;
-			console.log("handleClick", selected.value);
+			console.log("handleClick", selected.value, sel_chatid.value);
 		}
 
-		return {message, selected, handleClick, togglePopup, popupTrigger, chat }
+		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chatid }
 	} //end of setup
 }) //end of defineComponent
 </script>

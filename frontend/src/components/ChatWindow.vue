@@ -1,5 +1,7 @@
 <template>
 
+	<div class="wrapper">
+
 <!--------------HEAD----------------------------------------------------------------------------->
 		
 		<!--show current chatid and chatname-->
@@ -41,6 +43,8 @@
 				</form>
 			</div>
 
+	</div>
+
 </template>
 
 <script lang="ts">
@@ -53,13 +57,21 @@ import type { IUser } from '../types/User'
 import type { IChats } from '../types/Chats'
 
 
+
 export default defineComponent({
 	name: 'ChatWindow',
 	data () {
 		return {
 			user: {} as IUser,
-			chats: {} as IChats
+			chats: {} as IChats,
 		}
+	},
+
+	props: {
+		chatid: {
+			required: true,
+			type: String
+		},
 	},
 
 	methods: {
@@ -88,7 +100,10 @@ export default defineComponent({
 	},
 
 	mounted () {
-		this.retrieveCurrentMessages('1'); //needs to get the chatid that got clicked
+		console.log(this.chatid);
+		if (this.chatid === undefined)
+			return console.log("Error: chatid is not defined!");
+		this.retrieveCurrentMessages(this.chatid); //needs to get the chatid that got clicked
 	},
 
 	setup(){
@@ -98,15 +113,6 @@ export default defineComponent({
 		onMounted(() => {
 			
 		});
-
-		// const getMessages = async () => {
-		// 	//get the messages from the backend
-		// 	fetch('http://localhost:3000/chat/list/messages/1')
-		// 		.then(res => res.json())
-		// 		.then(data => messages.value = data)
-		// 		.catch(err => console.log(err.message))
-		// 	console.log('got messages from backend')
-		// } ---> needs to be done as a service
 
 		const submit = async () => {
 			console.log("message got send to backend");
