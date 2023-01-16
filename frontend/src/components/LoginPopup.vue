@@ -97,3 +97,7 @@ button {
 	display: block;
 }
 </style>
+
+<!-- check if cookie present -> if yes, /auth/status ('authenticated' or 'not authenticated') -->
+<!-- msg: 'authenticated' -->
+<!-- if not authenticated -> cookie löschen -->
