@@ -45,8 +45,8 @@
 			
 			<div class="chat-write-and-send">
 				<!-- <form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')"> -->
-				<form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')">
-					<input placeholder="Write message here">
+				<form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, message), submit()" >
+					<input placeholder="Write message here" v-model="message">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
 			</div>
@@ -72,6 +72,7 @@ export default defineComponent({
 		return {
 			user: {} as IUser,
 			chats: {} as IChats,
+			message: '' as String
 		}
 	},
 
@@ -108,6 +109,7 @@ export default defineComponent({
 		async sendMessage (userid : string, chatid : number, message : string) {
 			DataService.sendMessage(userid, chatid, message)
 			.then((response: ResponseData) => {
+				message = '';
 				console.log(response.data);
 			})
 			.catch((e: Error) => {
@@ -122,31 +124,16 @@ export default defineComponent({
 		this.retrieveCurrentMessages(this.curr_chat.chatid);
 	},
 
-	// setup(){
-	// 	const messages = ref([]);
-	// 	const message = ref('');
-	// 	onMounted(() => {
-			
-	// 	});
+	setup() {
 
+		const message = ref('');
 
-	// const sendMessage = async (userid : string, chatid : number, message : string) => {
-	// 		console.log("sendMessage function for triggert with", userid, chatid, message);
-	// 		await fetch('http://localhost:3000/chat/message', {
-	// 			method: 'POST',
-	// 			headers: {'Content-Type': 'application/json'},
-	// 			body: JSON.stringify({
-	// 				userid: userid, 
-	// 				chatid: chatid,
-	// 				message: message
-	
-	// 			})
-	// 		})
-	
-	// 	}
-	// 	return { message, messages, sendMessage}
+		const submit = () => {
+			message.value = '';
+		}
 
-	// }
+		return { message, submit }
+	}
 
 })
 
