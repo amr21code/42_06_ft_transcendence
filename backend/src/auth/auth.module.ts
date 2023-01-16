@@ -6,13 +6,16 @@ import { SessionSerializer } from './serializer';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
+import { TwoFactorAuthenticationService } from './twoFactorAuth.service';
+import { TwoFactorAuthenticationController } from './twoFactorAuth.controller';
 
 @Module({
 	imports: [UserModule, PassportModule.register({session: true})],
-	controllers: [AuthController],
+	controllers: [AuthController, TwoFactorAuthenticationController],
 	providers: [{ provide: 'AUTH_SERVICE', useClass: AuthService }, 
 	FtStrategy,
 	AuthService,
+	TwoFactorAuthenticationService,
 	SessionSerializer,
 	UserService,
 	],

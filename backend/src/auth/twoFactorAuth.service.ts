@@ -23,10 +23,11 @@ export class TwoFactorAuthenticationService {
     }
   }
 
-	public isTwoFactorAuthenticationCodeValid(twoFactorAuthenticationCode: string, user: any) {
+	public isTwoFactorAuthenticationCodeValid(twoFactorAuthenticationCode: string, twofasecret: any) {
+    console.log(twofasecret);
 		return authenticator.verify({
 			token: twoFactorAuthenticationCode,
-			secret: user.twoFactorAuthenticationSecret
+			secret: twofasecret[0].twofasecret
 	})
 	}
 

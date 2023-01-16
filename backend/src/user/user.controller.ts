@@ -44,6 +44,20 @@ export class UserController {
 				throw new ForbiddenException('invalid userstatus');
 			}
 	}
+
+	@Get(':userid/:field')
+	// @UseGuards(AuthenticatedGuard)
+	async getUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field) {
+		const user = await this.getMe(request);
+		try {
+				if (userid == user[0].userid)
+					throw new ForbiddenException();
+				const status = await this.userService.getUserData(userid, field);
+					return { msg : "ok" };
+			} catch (error) {
+				throw new ForbiddenException('invalid userstatus');
+			}
+	}
 	
 
 }
