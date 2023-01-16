@@ -16,7 +16,7 @@
 						{{ user.userid }}
 					</td>
 					<td>
-						{{ user.picurl }}
+						<img :src="user.picurl">
 					</td>
 					<td>
 						{{ user.username }}
@@ -84,8 +84,6 @@ export default defineComponent({
 		background-color: var(--second-bg-color);
 		color: white;
 	}
-	
-	
 
 	#leaderboard-table th, td {
 		padding: 20px 40px;
@@ -99,10 +97,16 @@ export default defineComponent({
 		cursor: pointer;
 	}
 
+	.leaderboard-item img {
+		max-height: 30px;
+	}
+
 	/* #leaderboard-table tr:hover {
 		background-color: var(--first-highlight-color);
 		color: white;
 		cursor: pointer;
 	} */
+
+
 
 </style>

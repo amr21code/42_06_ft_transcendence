@@ -52,9 +52,10 @@ model friendship_codes {
 }
 
 model match_history {
-  matchid    Int         @id(map: "pk_match_history")
-  match_type Int
-  user_match user_match?
+  match_status                                          Int
+  matchid                                               Int          @id(map: "pk_match_history") @default(autoincrement())
+  match_status_match_history_match_statusTomatch_status match_status @relation("match_history_match_statusTomatch_status", fields: [match_status], references: [statuscode], onDelete: Cascade, map: "fk_match_history_match_status")
+  user_match                                            user_match[]
 }
 
 model online_status {
@@ -74,13 +75,16 @@ model user_chat {
 }
 
 model user_match {
-  userid        String        @db.VarChar(8)
-  matchid       Int           @unique(map: "unq_user_match_matchid")
-  user_score    Int
-  challenge     Int           @default(0)
-  timeout       DateTime      @db.Timestamp(6)
-  match_history match_history @relation(fields: [matchid], references: [matchid], onDelete: Cascade, map: "fk_user_match_match_history")
-  users         users         @relation(fields: [userid], references: [userid], onDelete: NoAction, map: "fk_user_match_users")
+  userid           String           @db.VarChar(8)
+  matchid          Int
+  user_score       Int              @default(0)
+  challenge        Int              @default(0)
+  timeout          DateTime?        @db.Timestamp(6)
+  challenge_status challenge_status @relation(fields: [challenge], references: [statuscode], onDelete: Cascade, map: "fk_user_match_challenge_status")
+  match_history    match_history    @relation(fields: [matchid], references: [matchid], onDelete: Cascade, map: "fk_user_match_match_history")
+  users            users            @relation(fields: [userid], references: [userid], onDelete: NoAction, map: "fk_user_match_users")
+
+  @@unique([matchid, userid], map: "unq_user_match_matchid")
 }
 
 model user_status_chat {

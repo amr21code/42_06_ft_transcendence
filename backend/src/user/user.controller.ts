@@ -5,7 +5,6 @@ import { UserService } from './user.service';
 
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
-// @UseGuards(FtAuthGuard)
 export class UserController {
 	constructor( private readonly userService: UserService){}
 
