@@ -103,17 +103,13 @@ export default defineComponent({
 		},
 
 		async sendMessage (userid : string, chatid : number, message : string) {
-			// console.log("sendMessage function for triggert with", userid, chatid, message);
-			// await fetch('http://localhost:3000/chat/message', {
-			// 	method: 'POST',
-			// 	headers: {'Content-Type': 'application/json'},
-			// 	body: JSON.stringify({
-			// 		userid: userid, 
-			// 		chatid: chatid,
-			// 		message: message
-			// 	})
-			// })
-			DataService.sendMessage(userid, chatid, message);
+			DataService.sendMessage(userid, chatid, message)
+			.then((response: ResponseData) => {
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 		}
 
 	},

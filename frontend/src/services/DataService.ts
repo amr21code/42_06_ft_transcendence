@@ -22,16 +22,15 @@ class DataService {
 
 	sendMessage (userid : string, chatid : number, message : string) {
 		console.log("sendMessage function got triggered with", userid, chatid, message);
-		return apiInstance.post('/chat/message', {
+		return apiInstance.post('/chat/message', JSON.stringify({
+			userid: userid,
+			chatid: chatid,
+			message: message
+		}), 
+		{
 			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify({
-				userid: userid,
-				chatid: chatid,
-				message: message
-			})
+			headers: {'Content-Type': 'application/json'}
 		})
-
 	}
 }
 
