@@ -51,3 +51,6 @@ Achievements:
 | Get | match | open/:opponent? | start game and wait for opponent or challenge an opponent if they exist and are not in an open game |
 | Get | match | accept | accept challenge |
 | Get | match | delete | delete / cancel challenge / queue |
+| Get | 2fa | generate | generates QR code for google authenticator
+| Get | 2fa | turn-on/:secret | turns 2fa on if secret is a valid code
+| Get | 2fa | authenticate/:secret | checks if secret is a valid code

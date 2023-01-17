@@ -1,10 +1,13 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "../auth.service";
+import { TwoFactorAuthenticationService } from "../twoFactorAuth.service";
 
 @Injectable()
 export class FtAuthGuard extends AuthGuard('42') {
+	constructor(public readonly authService: AuthService) {super()}
 	async canActivate(context: ExecutionContext): Promise<boolean> {
+
 		// console.log("authguard");
 
 		const activate = await super.canActivate(context) as boolean;
@@ -13,6 +16,16 @@ export class FtAuthGuard extends AuthGuard('42') {
 		// console.log(request.sessionID);
 
 		await super.logIn(request);
+		//try{
+		//	const session = JSON.parse(request.sessionStore.sessions[request.sessionID]).passport.user;
+		//	const user = await this.authService.findUser(session.userid);
+		//	if (user.twofa == 1)
+		//		console.log("2fa");
+		//}catch (error) {
+		//	// console.log('not authenticated');
+		//	request.isUnauthenticated();
+		//	throw new ForbiddenException();
+		//}
 		return activate;
 	}
 }
@@ -29,20 +42,15 @@ export class AuthenticatedGuard implements CanActivate {
 		// console.log(request.sessionID);
 		try {
 			const session = JSON.parse(request.sessionStore.sessions[request.sessionID]).passport.user;
-			
-			
-			
+
 			// DB Query not necessary - Access Token also not necessary
 			const user = await this.authService.findUser(session.userid);
-
-
-
 
 			// console.log('user', user);
 			// console.log('accesstoken', session.access_token);
 			if (session.access_token == user.access_token) {
 				// console.log('authenticated');
-				return request.isAuthenticated();
+				return request.isAuthenticated()
 			} else {
 				// console.log("access token wrong");
 				throw new ForbiddenException();
