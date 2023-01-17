@@ -47,3 +47,6 @@ Achievements:
 | Get | users | all | shows all users in the database |
 | Get | users | :userid | shows the properties of userid |
 | Get | users | :userid/:field/:new | changes the properties of userid (fields: username (string), user_status (number), twofa (not implemented), avatar (number)) |
+| Get | 2fa | generate | generates QR code for google authenticator
+| Get | 2fa | turn-on/:secret | turns 2fa on if secret is a valid code
+| Get | 2fa | authenticate/:secret | checks if secret is a valid code
