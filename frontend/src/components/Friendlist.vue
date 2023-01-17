@@ -56,8 +56,8 @@ export default defineComponent({
 				console.log(e);
 			});
 		},
-		retrieveFriends(userid: string) {
-			DataService.getFriends(userid)
+		retrieveFriends() {
+			DataService.getFriends()
 			.then((response: ResponseData) => {
 				this.friends = response.data;
 				console.log(response.data);
@@ -69,7 +69,7 @@ export default defineComponent({
 	},
 
 	mounted () {
-		this.retrieveFriends(this.user.userid);
+		this.retrieveFriends();
 	}
 })
 </script>

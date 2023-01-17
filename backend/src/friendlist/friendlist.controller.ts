@@ -1,17 +1,20 @@
-import { Controller, ForbiddenException, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Param, Req, Session, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthenticatedGuard } from '../auth/guards/guards';
 import { FriendlistService } from './friendlist.service';
 import { UserService } from '../user/user.service';
 
 @Controller('fl')
-// @UseGuards(AuthenticatedGuard)
+@UseGuards(AuthenticatedGuard)
 export class FriendlistController {
 	constructor(private readonly flservice: FriendlistService, private readonly userService: UserService) {}
 
-	@Get('show/:userid')
-	async showFL(@Param('userid') userid){
+	@Get('show/:userid?')
+	async showFL(@Session() session: Record<string, any>, @Param('userid') userid?){
+		if (!userid)
+			userid = session.passport.user.userid;
 		const fl = await this.flservice.showFL(userid);
+		// console.log(fl);
 		return fl;
 	}
 	
