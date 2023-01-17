@@ -95,7 +95,7 @@ export default defineComponent({
 			});
 		},
 
-		retrieveCurrentMessages(chatid : string) {
+		async retrieveCurrentMessages(chatid : string) {
 			DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
 				this.chats = response.data;
@@ -121,8 +121,16 @@ export default defineComponent({
 
 	mounted () {
 		this.retrieveCurrentUser();
-		this.retrieveCurrentMessages(this.curr_chat.chatid);
+
+		//checks for new messages every second; change to getting messages when a change is in the db
+		window.setInterval(() => {
+			this.retrieveCurrentMessages(this.curr_chat.chatid)
+		}, 1000)
 	},
+
+	// onSnapshot() {
+	// 	this.retrieveCurrentMessages(this.curr_chat.chatid);
+	// },
 
 	setup() {
 

@@ -117,7 +117,7 @@ export default defineComponent({
 			DataService.getChats()
 			.then((response: ResponseData) => {
 				this.chats = response.data;
-				console.log(response.data);
+				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -127,7 +127,11 @@ export default defineComponent({
 
 	mounted () {
 		this.retrieveCurrentUser();
-		this.retrieveCurrentChats();
+
+		//checks for new chats every second; change to getting messages when a change is in the db
+		window.setInterval(() => {
+			this.retrieveCurrentChats();
+		}, 1000)
 	},
 
 	setup(){
@@ -180,8 +184,8 @@ export default defineComponent({
 		overflow-y: scroll;
 		scrollbar-color: rebeccapurple green;
 		scrollbar-width: thin;
-		display: flex;
-		flex-direction: column-reverse;
+		/* display: flex;
+		flex-direction: column-reverse; */
 	}
 
 	.user-photo {
