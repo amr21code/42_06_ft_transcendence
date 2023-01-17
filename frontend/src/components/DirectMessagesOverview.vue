@@ -128,6 +128,10 @@ export default defineComponent({
 		}, 1000)
 	},
 
+	// onSnapshot() {
+	// 	this.retrieveCurrentMessages(this.curr_chat.chatid);
+	// },
+
 	setup() {
 
 		const message = ref('');
