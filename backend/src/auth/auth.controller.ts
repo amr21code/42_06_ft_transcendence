@@ -39,4 +39,12 @@ export class AuthController {
 		else 
 			return { msg: "not authenticated" };
 	}
+
+	// @Get('logout')
+	// logout (@Req() request: Request) {
+	// 	console.log(request);
+	// 	request.session.destroy();
+	// 	console.log(request);
+	// }
+
 }

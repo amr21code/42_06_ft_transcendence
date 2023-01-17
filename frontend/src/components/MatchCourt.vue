@@ -16,26 +16,6 @@ import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
 
-	// components: {},
-	// data () {
-	// 	return {
-	// 		game: {} as Game
-	// 		// HEREEEEEEE
-	// 	}
-	// },
-	// methods: {
-	// 	gameLoop(){
-	// 		this.game.update();
-	// 		this.game.draw();
-	// 		requestAnimationFrame(this.game.gameLoop);
-	// 	}
-	// },
-	// mounted () {
-	// 	var game = new Game();
-	// 	requestAnimationFrame(this.game.gameLoop);
-
-	// }
-
 	mounted () {
 		enum KeyBindings{
 			UP = 38,
@@ -48,10 +28,13 @@ export default defineComponent({
 			public static keysPressed: boolean[] = [];
 			public static playerScore: number = 0;
 			public static computerScore: number = 0;
+			public static paused: boolean;
 			private player1: Paddle;
 			private computerPlayer: ComputerPaddle;
 			private ball: Ball;
+
 			constructor(){
+				Game.paused = false;
 				this.gameCanvas = document.getElementById("match-court");
 				// console.log(this.gameCanvas);
 				this.gameContext = this.gameCanvas.getContext("2d");
@@ -64,6 +47,23 @@ export default defineComponent({
 				window.addEventListener("keyup",function(e){
 					Game.keysPressed[e.which] = false;
 				});
+
+				// remove default arrow scrolling
+				window.addEventListener("keydown", function(e) {
+					if(["Space", "ArrowUp","ArrowDown"].indexOf(e.code) > -1) {
+						e.preventDefault();
+					}
+				}, false);
+
+				// pause game, if "SPACE" is clicked
+				window.addEventListener('keydown', (e) => {
+					var key = e.code;
+					if (["Space"].indexOf(e.code) > -1 || ["KeyP"].indexOf(e.code) > -1 )// p key
+					{
+						this.togglePause(); // HOW?
+						console.log("called toggle");
+					}
+				});
 				
 				var paddleWidth:number = this.gameCanvas.width/25;
 				var paddleHeight:number = this.gameCanvas.height/4;
@@ -75,6 +75,7 @@ export default defineComponent({
 				this.ball = new Ball(ballSize,ballSize,this.gameCanvas.width / 2 - ballSize / 2, this.gameCanvas.height / 2 - ballSize / 2);    
 				
 			}
+			
 			drawBoardDetails(){
 				
 				//draw court outline
@@ -96,11 +97,13 @@ export default defineComponent({
 				this.gameContext.fillText(Game.computerScore, this.gameCanvas.width - this.gameContext.lineWidth * 2 - (this.gameCanvas.width / 5 + this.gameContext.lineWidth), this.gameCanvas.height / 4);
 				
 			}
+
 			update(){
 				this.player1.update(this.gameCanvas);
 				this.computerPlayer.update(this.ball,this.gameCanvas);
 				this.ball.update(this.player1,this.computerPlayer,this.gameCanvas);
 			}
+
 			draw(){
 				this.gameContext.fillStyle = "#000";
 				this.gameContext.fillRect(0,0,this.gameCanvas.width,this.gameCanvas.height);
@@ -110,9 +113,17 @@ export default defineComponent({
 				this.computerPlayer.draw(this.gameContext);
 				this.ball.draw(this.gameContext);
 			}
+
+			togglePause(){
+				Game.paused = !Game.paused;
+			}
+			
 			gameLoop(){
-				game.update();
-				game.draw();
+				if (!Game.paused) // PROBLEM HERE
+				{
+					game.update();
+					game.draw();
+				}
 				requestAnimationFrame(game.gameLoop);
 			}
 		}
@@ -138,7 +149,7 @@ export default defineComponent({
 
 		class Paddle extends Entity{
 			
-			private speed:number = 10;
+			private speed:number = 5;
 			
 			constructor(w:number,h:number,x:number,y:number){
 				super(w,h,x,y);
@@ -166,7 +177,7 @@ export default defineComponent({
 
 		class ComputerPaddle extends Entity{
 			
-			private speed:number = 10;
+			private speed:number = 5;
 			
 			constructor(w:number,h:number,x:number,y:number){
 				super(w,h,x,y);        
@@ -201,7 +212,7 @@ export default defineComponent({
 
 		class Ball extends Entity{
 			
-			private speed:number = 5;
+			private speed:number = 3;
 			
 			constructor(w:number,h:number,x:number,y:number){
 				super(w,h,x,y);
@@ -272,18 +283,19 @@ export default defineComponent({
 		border: white solid;
 		color: red;
 		text-align: center;
-		aspect-ratio: 5/3;
 		border-radius: 4px;
 		background-image:
-			radial-gradient(circle at 50% 50%, transparent 15%, white 0 16%, transparent 16%),
-			radial-gradient(circle at 50% 50%, transparent 15%, white , transparent 500%),
-			radial-gradient(circle at 50% 50%, white 0 14.75%, transparent 15%),
-			linear-gradient(to right, transparent 49.75%, white 0 50.25%, transparent 0);
+		radial-gradient(circle at 50% 50%, transparent 15%, white 0 16%, transparent 16%),
+		radial-gradient(circle at 50% 50%, transparent 15%, white , transparent 500%),
+		radial-gradient(circle at 50% 50%, white 0 14.75%, transparent 15%),
+		linear-gradient(to right, transparent 49.75%, white 0 50.25%, transparent 0);
 		padding: 30px; */
-	/* } */
+		/* } */
 	#match-court {
 		width: 100%;
+		aspect-ratio: 5/3;
 		background-color: green;
+		min-width: 200px; /*FIND DYNAMIC WAY*/
 	}
 
 	.player_one {
@@ -305,4 +317,5 @@ export default defineComponent({
 		border-radius: 50%;
 		margin-left: 100px;
 	}
+
 </style>

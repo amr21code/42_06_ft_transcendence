@@ -3,6 +3,9 @@
 in backend folder to install all the necessary modules
 npm i @nestjs/common @nestjs/passport @nestjs/config express passport passport-42 prisma @prisma/client
 
+for 2fa
+npm install otplib qrcode
+
 in backend folder to load the db scheme into the db
 npx prisma db push
 

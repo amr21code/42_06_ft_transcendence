@@ -113,6 +113,44 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET avatar=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
 				);
+		}else if (field == 'twofa') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET twofa=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
+				);
+		}else if (field == 'twofasecret') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET twofasecret=${newdata} WHERE userid=${userid}`
+				);
 		}
+	}
+	async getUserData(userid: string, field: string)
+	{
+		var status = userid;
+		if (field == 'username') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT username FROM public.users WHERE userid=${userid}`
+				);
+		} else if (field == 'user_status'){
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT user_status FROM public.users WHERE userid=${userid}`
+				);
+		} else if (field == 'twofa') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT twofa FROM public.users WHERE userid=${userid}`
+				);
+		} else if (field == 'avatar') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT avatar FROM public.users WHERE userid=${userid}`
+				);
+		}else if (field == 'twofa') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT twofa FROM public.users WHERE userid=${userid}`
+				);
+		}else if (field == 'twofasecret') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT twofasecret FROM public.users WHERE userid=${userid}`
+				);
+		}
+		return status;
 	}
 }
