@@ -15,11 +15,17 @@
 
 			<!-- <strong class="">{{ chats }}</strong>  -->
 			<div class="chat-message-view" v-for="chat in chats" :key="chat">
-				<a @click="handleClick('chatwindow', chat)"> <!--need to pass the chatid here?-->
-					<div class="">
+				<a @click="handleClick('chatwindow', chat)" v-if="type === 'groups'">
+					<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-							<a class="chat-typename">{{ chat.typename }}</a>
+							<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
+							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+					</div>
+				</a>
+				<a @click="handleClick('chatwindow', chat)" v-if="type === 'dms'"> <!--need a function for getting the dms-->
+					<div class="">
+							Hier könnte ihre Werbung stehen
 					</div>
 				</a>
 			</div>
@@ -30,10 +36,10 @@
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
-				<!-- <a @click="handleClick('chatwindow')"> -->
+				<a @click="handleClick('overview', '0'), changeType('dms')">
 					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
-				<!-- </a> -->
-				<a @click="handleClick('overview', '0')">
+				</a>
+				<a @click="handleClick('overview', '0'), changeType('groups')">
 					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<!--popup for a new chat-->
@@ -56,7 +62,6 @@
 
 <script lang="ts">
 import ChatWindow from './ChatWindow.vue'
-import Overview from './ChatOverview.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
 import LeaveChatPopup from './LeaveChat.vue'
 import { defineComponent, ref, onMounted } from 'vue'
@@ -130,6 +135,10 @@ export default defineComponent({
 		onMounted(() => {
 	
 		});
+		const type = ref<String>('groups');
+		const changeType = (term: String) => {
+			type.value = term;
+		}
 
 		const selected = ref<SelectedChat>('overview');
 		const sel_chat = ref('');
@@ -139,7 +148,7 @@ export default defineComponent({
 			console.log("handleClick", selected.value, sel_chat.value);
 		}
 
-		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger }
+		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger, changeType, type }
 	} //end of setup
 }) //end of defineComponent
 </script>
@@ -159,8 +168,12 @@ export default defineComponent({
 	padding-left: 20%;
 }
 
-.chat-typename {
+.chat-typename-green {
 	color: green;
+}
+
+.chat-typename-red {
+	color: red;
 }
 
 .chat-overview {

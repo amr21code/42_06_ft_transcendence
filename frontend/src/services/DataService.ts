@@ -13,8 +13,11 @@ class DataService {
 	createChat() : Promise<any> {
 		return apiInstance.get('/chat/join');
 	}
-	async getMessages(chatid : string) : Promise<any> {
+	async getMessages(chatid : number) : Promise<any> {
 		return apiInstance.get('/chat/list/messages/' + chatid);
+	}
+	leaveChat(chatid : number) : Promise<any> {
+		return apiInstance.get('/chat/leave/' + chatid)
 	}
 
 	sendMessage (userid : string, chatid : number, message : string) {
