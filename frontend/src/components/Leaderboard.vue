@@ -13,7 +13,7 @@
 			<tbody>
 				<tr class="leaderboard-item" v-for="(user, index) in users" :key="index">
 					<td>
-						{{ user.userid }}
+						{{ index + 1 }}
 					</td>
 					<td>
 						<img :src="user.picurl">
@@ -23,6 +23,7 @@
 					</td>
 					<td>
 						{{ user.statusname }}
+						<!-- {{ user.wins }} -->
 					</td>
 				</tr>
 			</tbody>

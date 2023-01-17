@@ -4,17 +4,14 @@
 		<table id="friendlist-table">
 			<thead id="top-row">
 				<tr>
-					<th>#</th>
 					<th>picture</th>
 					<th>name</th>
-					<th>wins</th>
+					<th>status</th>
+					<th>invite</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr class="friendlist-item" v-for="(friend, index) in friends" :key="index">
-					<td>
-						{{ friend.userid }}
-					</td>
 					<td>
 						<img :src="friend.picurl">
 					</td>
@@ -23,6 +20,9 @@
 					</td>
 					<td>
 						{{ friend.statusname }}
+					</td>
+					<td>
+						<button class="invite-button">Challenge</button>
 					</td>
 				</tr>
 			</tbody>
