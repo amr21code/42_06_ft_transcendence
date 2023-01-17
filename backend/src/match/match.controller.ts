@@ -28,10 +28,10 @@ export class MatchController {
 
 	@Get('delete')
 	async deleteMatch(@Session() session: Record<string, any>) {
-	try {
-		const del = await this.matchService.deleteMatch(session.passport.user.userid);
-	} catch (error) {
-		throw new ForbiddenException();
-	}
+		try {
+			const del = await this.matchService.deleteMatch(session.passport.user.userid);
+		} catch (error) {
+			throw new ForbiddenException();
+		}
 	}
 }

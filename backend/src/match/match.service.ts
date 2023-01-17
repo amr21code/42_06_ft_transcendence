@@ -29,12 +29,13 @@ export class MatchService {
 			var opp;
 			if (opponent) {
 				opp = await this.userService.getOne(opponent);
-				const opp_open = await this.listMatch(open[0].userid);
+				console.log('opp in if', opp);
+				const opp_open = await this.listMatch(opp[0].userid);
 				if (Object.keys(opp).length != 1 || Object.keys(opp_open).length != 0)
-					throw new ForbiddenException();
+				throw new ForbiddenException();
 			}
-			// console.log("opponent", opponent);
-			// console.log("opp", opp);
+			console.log("opponent", opponent);
+			console.log("opp", opp);
 			const already_open = await this.listMatch(userid);
 			if (Object.keys(already_open).length == 0)
 			{
@@ -61,6 +62,7 @@ export class MatchService {
 							VALUES (${opponent}, ${open[0].matchid});` //, to_timestamp(${timeout}));`
 						);
 					} else {
+						this.deleteMatchID(open[0].matchid);
 						throw new ForbiddenException();
 					}
 				} else {
@@ -79,6 +81,13 @@ export class MatchService {
 			Prisma.sql`UPDATE public.user_match
 			SET challenge=1
 			WHERE userid=${userid};`
+		);
+	}
+
+	async deleteMatchID(matchid: string) {
+		const accept = await this.db.$queryRaw(
+			Prisma.sql`DELETE FROM public.match_history
+			WHERE matchid=${matchid};`
 		);
 	}
 

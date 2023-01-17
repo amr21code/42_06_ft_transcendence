@@ -1,4 +1,4 @@
-import { Body, Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Param, Post, Req, Session, UseGuards } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
 import { UserService } from '../user/user.service';
@@ -32,6 +32,22 @@ export class ChatController {
 			return join;
 		} catch (error) {
 			// console.log("error joining chat");
+			throw new ForbiddenException();
+		}
+	}
+
+	@Post('create')
+	async createChat(@Body() details: ChatDto, @Session() session: Record<string, any>) {
+		try {
+			if (details.password != "" && details.type == 0)
+				details.type = 1;
+			else if (details.password == "" && details.type == 1)
+				details.type = 0;
+			const join = await this.chatService.joinChat(session.passport.user.userid);
+			details.chatid = join;
+			const msg = await this.chatService.changeChatDetails(details);
+			return { "msg" : "ok" };
+		} catch (error) {
 			throw new ForbiddenException();
 		}
 	}

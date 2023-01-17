@@ -34,6 +34,7 @@ Achievements:
 | Get | auth | status | shows whether you are authenticated or not |
 | Get | chat | list/chats/:userid? | lists all available visible chats (public/protected) (where userid is joined if specified - if userid specified only for displaying their own) |
 | Get | chat | join/:chatid?/:pw? | creates a chat with first user as admin if nothing is specified or joins chatid with/without pw - checks for banned status |
+| Post | chat | create | creates a chat with information in JSON object { type: number; chatid: number; chat_name: string; password: string; } |
 | Get | chat | leave/:chatid | leaves chatid and deletes it with all messages if last one leaves |
 | Get | chat | list/users/:chatid | lists all users in chatid |
 | Post | chat | message | sends the chatmessage as json object to the backend { userid: string; chatid: number; message: string; }|
