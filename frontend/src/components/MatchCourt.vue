@@ -115,9 +115,14 @@ export default defineComponent({
 				
 				//draw scores
 				this.gameContext.fillStyle = "#444040";
-				this.gameContext.fillText(Game.playerScore, this.gameCanvas.width / 5 + this.gameContext.lineWidth, this.gameCanvas.height / 4);
-				this.gameContext.fillText(Game.computerScore, this.gameCanvas.width - this.gameContext.lineWidth * 2 - (this.gameCanvas.width / 5 + this.gameContext.lineWidth), this.gameCanvas.height / 4);
+				this.gameContext.textalign = "center";
+				// this.gameContext.fillText(Game.playerScore, this.gameCanvas.width / 5 + this.gameContext.lineWidth, this.gameCanvas.height / 4);
+				// this.gameContext.fillText(Game.computerScore, this.gameCanvas.width - this.gameContext.lineWidth * 2 - (this.gameCanvas.width / 5 + this.gameContext.lineWidth), this.gameCanvas.height / 4);
+				// this.gameContext.fillText(Game.playerScore, this.gameCanvas.width / 5 + this.gameContext.lineWidth + (this.gameContext.measureText(Game.playerScore).width / 2), this.gameCanvas.height / 4);
+				// this.gameContext.fillText(Game.computerScore, this.gameCanvas.width - this.gameContext.lineWidth - (this.gameCanvas.width / 5) - (this.gameContext.measureText(Game.playerScore).width / 2), this.gameCanvas.height / 4);
 				
+				this.gameContext.fillText(Game.playerScore, (this.gameCanvas.width / 5), this.gameCanvas.height / 4);
+				this.gameContext.fillText(Game.computerScore,  this.gameCanvas.width - (this.gameCanvas.width / 5) - this.gameContext.measureText(Game.playerScore).width , this.gameCanvas.height / 4);
 			}
 
 			update(){
