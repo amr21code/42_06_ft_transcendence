@@ -180,6 +180,8 @@ export default defineComponent({
 		overflow-y: scroll;
 		scrollbar-color: rebeccapurple green;
 		scrollbar-width: thin;
+		display: flex;
+		flex-direction: column-reverse;
 	}
 
 	.user-photo {

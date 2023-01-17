@@ -106,7 +106,7 @@ export default defineComponent({
 			});
 		},
 
-		async sendMessage (userid : string, chatid : number, message : string) {
+		sendMessage (userid : string, chatid : number, message : string) {
 			DataService.sendMessage(userid, chatid, message)
 			.then((response: ResponseData) => {
 				message = '';

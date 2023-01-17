@@ -21,7 +21,7 @@
     "test:e2e": "jest --watch --no-cache --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^9.0.0",
+    "@nestjs/common": "^9.2.1",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
@@ -30,6 +30,7 @@
     "argon2": "^0.30.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "express": "^4.18.2",
     "express-session": "^1.17.3",
     "pactum": "^3.3.2",
     "passport": "^0.6.0",
