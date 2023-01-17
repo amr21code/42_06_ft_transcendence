@@ -29,11 +29,14 @@ export class MatchService {
 			var opp;
 			if (opponent) {
 				opp = await this.userService.getOne(opponent);
+				const opp_open = await this.listMatch(open[0].userid);
+				if (Object.keys(opp).length != 1 || Object.keys(opp_open).length != 0)
+					throw new ForbiddenException();
 			}
-			console.log("opponent", opponent);
-			console.log("opp", opp);
+			// console.log("opponent", opponent);
+			// console.log("opp", opp);
 			const already_open = await this.listMatch(userid);
-			if (Object.keys(already_open).length == 0 && Object.keys(opp[0].userid).length != 1)
+			if (Object.keys(already_open).length == 0)
 			{
 				console.log("no open session - creating");
 				const open = await this.db.$queryRaw(
@@ -41,7 +44,7 @@ export class MatchService {
 					VALUES (2)
 					RETURNING matchid;`
 				);
-				console.log("new matchid", open[0].matchid);
+				// console.log("new matchid", open[0].matchid);
 				// var timeout = (Date.now() / 1000) + 60;
 				// console.log("settimeout", timeout);
 				if (open[0].matchid) {
@@ -51,7 +54,7 @@ export class MatchService {
 						VALUES (${userid}, ${open[0].matchid})
 						RETURNING matchid;` //, to_timestamp(${timeout}));`
 					);
-					if (join[0].matchid) {
+					if (join[0].matchid && opponent) {
 
 						const join_opp = await this.db.$queryRaw(
 							Prisma.sql`INSERT INTO public.user_match (userid, matchid)
