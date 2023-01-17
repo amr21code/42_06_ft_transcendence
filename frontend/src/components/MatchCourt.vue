@@ -1,5 +1,5 @@
 <template>
-	<canvas id="match-court"></canvas>
+	<canvas ref="matchCourtRef" id="match-court"></canvas>
 	<!-- <div class="match-court">
 		Match Court
 		<div class="player_one"></div>
@@ -15,6 +15,12 @@
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
+	
+	data () {
+		return {
+			gamePaused: Boolean
+		}
+	},
 
 	mounted () {
 		enum KeyBindings{
@@ -38,8 +44,22 @@ export default defineComponent({
 				this.gameCanvas = document.getElementById("match-court");
 				// console.log(this.gameCanvas);
 				this.gameContext = this.gameCanvas.getContext("2d");
-				this.gameContext.font = "30px monospace";
+				// this.gameContext.font = "70px monospace";
+				// this.gameContext.imageSmoothingEnabled = false;
 				
+
+				// REMOVE BLURRINESS ---------------------------------------------------
+				let dpi = window.devicePixelRatio;
+				const fix_dpi = () => {
+					let styleHeight = +getComputedStyle(this.gameCanvas).getPropertyValue("height").slice(0, -2);
+					let styleWidth = +getComputedStyle(this.gameCanvas).getPropertyValue("width").slice(0, -2);
+					this.gameCanvas.setAttribute('height', styleHeight * dpi);
+					this.gameCanvas.setAttribute('width', styleWidth * dpi);
+				}
+				fix_dpi();
+				// REMOVE BLURRINESS END ---------------------------------------------------
+				
+
 				window.addEventListener("keydown",function(e){
 				Game.keysPressed[e.which] = true;
 				});
@@ -56,7 +76,8 @@ export default defineComponent({
 				}, false);
 
 				// pause game, if "SPACE" is clicked
-				window.addEventListener('keydown', (e) => {
+				// this.$refs.matchCourtRef.querySelector('#match-court').addEventListener('keydown', (e: any) => {
+				window.addEventListener('keydown', (e: any) => {
 					var key = e.code;
 					if (["Space"].indexOf(e.code) > -1 || ["KeyP"].indexOf(e.code) > -1 )// p key
 					{
@@ -80,19 +101,20 @@ export default defineComponent({
 				
 				//draw court outline
 				this.gameContext.strokeStyle = "#fff";
+				this.gameContext.font = "200px monspace";
 				this.gameContext.lineWidth = 5;
 				this.gameContext.centerLineWidth = 5;
 				this.gameContext.centerLineHeight = 20;
 				this.gameContext.strokeRect(0,0,this.gameCanvas.width,this.gameCanvas.height);
 				
 				//draw center lines
-				// FIND A WAY TO CENTER THIS
 				for (var i = 0; i < this.gameCanvas.height; i += this.gameCanvas.height / 5) {
 					this.gameContext.fillStyle = "#fff";
 					this.gameContext.fillRect(this.gameCanvas.width / 2 + this.gameContext.lineWidth - (this.gameContext.centerLineWidth / 2), i, this.gameContext.centerLineWidth, this.gameContext.centerLineHeight);
 				}
 				
 				//draw scores
+				this.gameContext.fillStyle = "#444040";
 				this.gameContext.fillText(Game.playerScore, this.gameCanvas.width / 5 + this.gameContext.lineWidth, this.gameCanvas.height / 4);
 				this.gameContext.fillText(Game.computerScore, this.gameCanvas.width - this.gameContext.lineWidth * 2 - (this.gameCanvas.width / 5 + this.gameContext.lineWidth), this.gameCanvas.height / 4);
 				
@@ -142,7 +164,7 @@ export default defineComponent({
 				this.y = y;
 			}
 			draw(context: any){
-				context.fillStyle = "#fff";
+				context.fillStyle = "#AC4018";
 				context.fillRect(this.x,this.y,this.width,this.height);
 			}
 		}
@@ -155,23 +177,22 @@ export default defineComponent({
 				super(w,h,x,y);
 			}
 			
-			update(canvas: any){
-			if( Game.keysPressed[KeyBindings.UP] ){
-				this.yVel = -1;
-				if(this.y <= 20){
-					this.yVel = 0
-				}
-			}else if(Game.keysPressed[KeyBindings.DOWN]){
-				this.yVel = 1;
-				if(this.y + this.height >= canvas.height - 20){
+			update(canvas: any) {
+				if (Game.keysPressed[KeyBindings.UP]) {
+					this.yVel = -1;
+					if (this.y <= 20) {
+						this.yVel = 0
+					}
+				} else if (Game.keysPressed[KeyBindings.DOWN]) {
+					this.yVel = 1;
+					if (this.y + this.height >= canvas.height - 20){
+						this.yVel = 0;
+					}
+				} else {
 					this.yVel = 0;
 				}
-			}else{
-				this.yVel = 0;
-			}
-			
-			this.y += this.yVel * this.speed;
-			
+				
+				this.y += this.yVel * this.speed;
 			}
 		}
 
@@ -183,31 +204,29 @@ export default defineComponent({
 				super(w,h,x,y);        
 			}
 			
-			update(ball:Ball, canvas: any){ 
+			update(ball:Ball, canvas: any) { 
 			
-			//chase ball
-			if(ball.y < this.y && ball.xVel == 1){
-					this.yVel = -1; 
+				//chase ball
+				if(ball.y < this.y && ball.xVel == 1){
+						this.yVel = -1; 
+						
+						if(this.y <= 20){
+							this.yVel = 0;
+						}
+				}
+				else if(ball.y > this.y + this.height && ball.xVel == 1){
+					this.yVel = 1;
 					
-					if(this.y <= 20){
+					if(this.y + this.height >= canvas.height - 20){
 						this.yVel = 0;
 					}
-			}
-			else if(ball.y > this.y + this.height && ball.xVel == 1){
-				this.yVel = 1;
-				
-				if(this.y + this.height >= canvas.height - 20){
+				}
+				else{
 					this.yVel = 0;
 				}
-			}
-			else{
-				this.yVel = 0;
-			}
-			
+				
 				this.y += this.yVel * this.speed;
-
 			}
-			
 		}
 
 		class Ball extends Entity{
@@ -216,24 +235,25 @@ export default defineComponent({
 			
 			constructor(w:number,h:number,x:number,y:number){
 				super(w,h,x,y);
-				var randomDirection = Math.floor(Math.random() * 2) + 1; 
-				if(randomDirection % 2){
-					this.xVel = 1;
-				}else{
-					this.xVel = -1;
-				}
+				// var randomDirection = Math.floor(Math.random() * 2) + 1; 
+				// if (randomDirection % 2) {
+				// 	this.xVel = 1;
+				// } else {
+				// 	this.xVel = -1;
+				// }
+				this.xVel = -1;
 				this.yVel = 1;
 			}
 			
-			update(player:Paddle,computer:ComputerPaddle,canvas: any){
+			update (player: Paddle, computer: ComputerPaddle, canvas: any){
 			
 				//check top canvas bounds
-				if(this.y <= 10){
+				if(this.y <= 0){
 					this.yVel = 1;
 				}
 				
 				//check bottom canvas bounds
-				if(this.y + this.height >= canvas.height - 10){
+				if(this.y + this.height >= canvas.height){
 					this.yVel = -1;
 				}
 				
@@ -249,17 +269,17 @@ export default defineComponent({
 					Game.playerScore += 1;
 				}
 				
-				
 				//check player collision
-				if(this.x <= player.x + player.width){
-					if(this.y >= player.y && this.y + this.height <= player.y + player.height){
+				if (this.x <= player.x + player.width){
+					if (this.y >= player.y && this.y <= player.y + player.height){
 						this.xVel = 1;
+						// player.update(Game.)
 					}
 				}
 				
 				//check computer collision
 				if(this.x + this.width >= computer.x){
-					if(this.y >= computer.y && this.y + this.height <= computer.y + computer.height){
+					if(this.y >= computer.y && this.y <= computer.y + computer.height){
 						this.xVel = -1;
 					}
 				}
@@ -270,10 +290,12 @@ export default defineComponent({
 		}
 
 		
+		
 		var game = new Game();
 		// COMMENT BELOW OUT TO NOT SHOW THE GAME
 		requestAnimationFrame(game.gameLoop);
-	}
+	},
+
 })
 </script>
 
@@ -292,10 +314,14 @@ export default defineComponent({
 		padding: 30px; */
 		/* } */
 	#match-court {
+		/* max-width: 100%; */
+		/* max-height: 60%; */
 		width: 100%;
+		/* max-height: 100%; */
 		aspect-ratio: 5/3;
 		background-color: green;
 		min-width: 200px; /*FIND DYNAMIC WAY*/
+		/* outline: 10px solid red; */
 	}
 
 	.player_one {
