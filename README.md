@@ -47,3 +47,7 @@ Achievements:
 | Get | users | all | shows all users in the database |
 | Get | users | :userid | shows the properties of userid |
 | Get | users | :userid/:field/:new | changes the properties of userid (fields: username (string), user_status (number), twofa (not implemented), avatar (number)) |
+| Get | match | list | lists all matches |
+| Get | match | open/:opponent? | start game and wait for opponent or challenge an opponent if they exist and are not in an open game |
+| Get | match | accept | accept challenge |
+| Get | match | delete | delete / cancel challenge / queue |
