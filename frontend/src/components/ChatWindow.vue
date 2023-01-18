@@ -79,7 +79,7 @@ export default defineComponent({
 	props: {
 		curr_chat: {
 			required: true,
-			type: String
+			type: Object
 		},
 	},
 
