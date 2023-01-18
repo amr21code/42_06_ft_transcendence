@@ -76,9 +76,8 @@ export default defineComponent({
 		const toggleUserDataPopup = () => {
 			userDataPopupTrigger.value = !userDataPopupTrigger.value;
 		}
-		
-		// for side window
-		const selected = ref<SelectedSideWindow>('play'); // new default: no side window
+		// for side window selection
+		const selected = ref<SelectedSideWindow>('play');
 		const handleClick = (term: SelectedSideWindow) => {
 			selected.value = term;
 		};
