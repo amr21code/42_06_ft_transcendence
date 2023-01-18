@@ -13,9 +13,9 @@ export class ChatController {
 	constructor(private readonly chatService: ChatService, private readonly userService: UserService) {}
 
 	@Get('list/chats')
-	async listChats(@Param('userid') userid?) {
+	async listChats(@Session() session: Record<string, any>) {
 		try {
-			const list = await this.chatService.listChats();
+			const list = await this.chatService.listChats(session.passport.user.userid);
 			return list;
 		} catch (error) {
 			throw new ForbiddenException();

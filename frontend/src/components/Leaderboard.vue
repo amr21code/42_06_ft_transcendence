@@ -22,7 +22,7 @@
 						{{ user.username }}
 					</td>
 					<td>
-						{{ user.statusname }}
+						{{ user.wins }}
 						<!-- {{ user.wins }} -->
 					</td>
 				</tr>
