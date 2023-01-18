@@ -15,9 +15,23 @@
 				<input type="text" :value="user.username" />
 			</div>
 			<div class="user-data-wrapper">
-				<div>Profile picture:</div>
+				<div>avatar:</div>
 				<img id="user-photo" :src="user.picurl" alt="user-photo" width="40" height="40">
-				<!-- <img id="user-photo" src="DB-CONNECTION GOES HERE" alt="user-photo" width="40" height="40"> -->
+			</div>
+			<div class="user-data-wrapper">
+				<div>member since: {{ memberSince }}</div>
+				<!-- CHANGE TO FORMATTED STRING -->
+			</div>
+			<div class="user-data-wrapper">
+				<div>wins: {{ user.wins }}</div>
+				<!-- CHANGE TO FORMATTED STRING -->
+			</div>
+			<div class="user-data-wrapper">
+				<div>losses: {{ user.losses }}</div>
+				<!-- CHANGE TO FORMATTED STRING -->
+			</div>
+			<div class="user-data-wrapper">
+				<div>achievements:</div>
 			</div>
 			<div class="user-data-wrapper">
 				<div>2-factor-authentication:</div>
@@ -41,7 +55,8 @@ export default defineComponent({
 	
 	data () {
 		return {
-			user: {} as IUser
+			user: {} as IUser,
+			memberSince: {} as string
 		}
 	},
 
@@ -56,11 +71,15 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
-		}
+		},
+		formatDate() {
+			this.memberSince = new Intl.DateTimeFormat('en-us').format(this.user.created);
+		},
 	},
 
 	mounted () {
 		this.retrieveCurrentUser();
+		this.formatDate();
 	}
 })
 </script>
@@ -116,3 +135,5 @@ button {
 	border-radius: 10%;
 }
 </style>
+
+<!-- member since, avatar auswahl, wins, losses, user status, achievements-->
