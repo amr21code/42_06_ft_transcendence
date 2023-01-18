@@ -1,11 +1,5 @@
 <template>
 	<canvas ref="matchCourtRef" id="match-court"></canvas>
-	<!-- <div class="match-court">
-		Match Court
-		<div class="player_one"></div>
-		<div class="player_two"></div>
-		<div class="play-ball"></div>
-	</div>	 -->
 </template>
 
 
@@ -293,9 +287,6 @@ export default defineComponent({
 				this.y += this.yVel * this.speed;
 			}
 		}
-
-		
-		
 		var game = new Game();
 		// COMMENT BELOW OUT TO NOT SHOW THE GAME
 		requestAnimationFrame(game.gameLoop);
@@ -327,26 +318,6 @@ export default defineComponent({
 		background-color: green;
 		min-width: 200px; /*FIND DYNAMIC WAY*/
 		/* outline: 10px solid red; */
-	}
-
-	.player_one {
-		/* background-color: blueviolet; */
-		height: 100px; /* MAKE ADJUSTABLE AND RESPONSIVE */
-		border-left: 10px solid blueviolet;
-		margin: 10px;
-	}
-	.player_two {
-		/* background-color: blueviolet; */
-		height: 100px; /* MAKE ADJUSTABLE AND RESPONSIVE */
-		border-right: 10px solid blueviolet;
-		margin: 10px;
-	}
-	.play-ball {
-		background-color: yellow;
-		height: 25px;
-		width: 25px;
-		border-radius: 50%;
-		margin-left: 100px;
 	}
 
 </style>
