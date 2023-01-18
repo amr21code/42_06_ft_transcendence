@@ -8,7 +8,7 @@ import { ChatDto } from './dto/chat.dto';
 import { ChatUserStatusDto } from './dto/chatuserstatus.dto';
 
 @Controller('chat')
-// @UseGuards(AuthenticatedGuard)
+@UseGuards(AuthenticatedGuard)
 export class ChatController {
 	constructor(private readonly chatService: ChatService, private readonly userService: UserService) {}
 
