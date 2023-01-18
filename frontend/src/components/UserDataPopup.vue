@@ -2,16 +2,13 @@
 	<div class="popup" @keyup.esc="toggleUserDataPopup" tabindex="0">
 		<div class="popup-inner">
 			<slot />
-			<!-- NON-DYNAMIC <h2>raweber's user data</h2> -->
 			<h2>{{ user.userid }}'s user data</h2>
 			<div class="user-data-wrapper">
 				<div>intra name: </div>
-				<!-- NON-DYNAMIC <input disabled type="text" value="raweber" /> -->
 				<input disabled type="text" :value="user.userid" /> 
 			</div>
 			<div class="user-data-wrapper">
 				<div>user alias: </div>
-				<!-- NON-DYNAMIC <input type="text" value="Ralf" /> -->
 				<input type="text" :value="user.username" />
 			</div>
 			<div class="user-data-wrapper">
@@ -20,15 +17,12 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>member since: {{ memberSince }}</div>
-				<!-- CHANGE TO FORMATTED STRING -->
 			</div>
 			<div class="user-data-wrapper">
 				<div>wins: {{ user.wins }}</div>
-				<!-- CHANGE TO FORMATTED STRING -->
 			</div>
 			<div class="user-data-wrapper">
 				<div>losses: {{ user.losses }}</div>
-				<!-- CHANGE TO FORMATTED STRING -->
 			</div>
 			<div class="user-data-wrapper">
 				<div>achievements:</div>
