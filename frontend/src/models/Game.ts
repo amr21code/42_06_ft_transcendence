@@ -33,7 +33,6 @@ export default class Game {
 
 		window.addEventListener("keydown",function(e){
 			Game.keysPressed[e.which] = true;
-			console.log("Key down pressed");
 		});
 		
 		window.addEventListener("keyup",function(e){
@@ -53,8 +52,7 @@ export default class Game {
 			var key = e.code;
 			if (["Space"].indexOf(e.code) > -1 || ["KeyP"].indexOf(e.code) > -1 )// p key
 			{
-				this.togglePause(); // HOW?
-				console.log("called toggle");
+				this.togglePause();
 			}
 		});
 		

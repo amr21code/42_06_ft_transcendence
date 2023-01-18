@@ -5,7 +5,7 @@ import type ComputerPaddle from "./ComputerPaddle"
 
 export default class Ball extends Entity{
 	
-	private speed:number = 3;
+	private speed:number = 5;
 	
 	constructor(w:number,h:number,x:number,y:number){
 		super(w,h,x,y);

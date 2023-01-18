@@ -23,7 +23,6 @@
 					</td>
 					<td>
 						{{ user.wins }}
-						<!-- {{ user.wins }} -->
 					</td>
 				</tr>
 			</tbody>
