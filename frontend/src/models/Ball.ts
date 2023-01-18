@@ -1,7 +1,7 @@
 import Entity from "./Entity"
 import Game from "./Game"
-import PlayerPaddle from "./Paddles"
-import ComputerPaddle from "./Paddles"
+import type PlayerPaddle from "./PlayerPaddle"
+import type ComputerPaddle from "./ComputerPaddle"
 
 export default class Ball extends Entity{
 	
@@ -9,12 +9,12 @@ export default class Ball extends Entity{
 	
 	constructor(w:number,h:number,x:number,y:number){
 		super(w,h,x,y);
-		// var randomDirection = Math.floor(Math.random() * 2) + 1; 
-		// if (randomDirection % 2) {
-		// 	this.xVel = 1;
-		// } else {
-		// 	this.xVel = -1;
-		// }
+		var randomDirection = Math.floor(Math.random() * 2) + 1; 
+		if (randomDirection % 2) {
+			this.xVel = 1;
+		} else {
+			this.xVel = -1;
+		}
 		this.xVel = -1;
 		this.yVel = 1;
 	}
