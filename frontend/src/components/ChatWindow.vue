@@ -15,7 +15,10 @@
 			<input v-if="showinput === true" placeholder="enter new name" v-model="newName">
 			<button class="ok-button" @click="showChangeNameField(), changeChatName(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
 			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
-			<a class="chat-typename">{{ curr_chat.typename }}</a>
+			<!-- <a class="chat-typename">{{ curr_chat.typename }}</a> -->
+			<a class="info-icon">
+				<img src="../assets/info-icon.png" alt="user-photo" width="20" height="20">
+			</a>
 		</div>
 
 <!--------------BODY------------------------------------------------------------------------------------>
@@ -167,6 +170,9 @@ export default defineComponent({
 
 <style scoped>
 
+	.info-icon{
+		padding-left: 15%;
+	}
 	.ok-button {
 		width: 20px;
 		height: 20px;

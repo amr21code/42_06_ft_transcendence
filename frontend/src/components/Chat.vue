@@ -54,6 +54,9 @@
 				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'">
 					<img src="../assets/blackcross.png" alt="user-photo" width="35" height="40">
 				</a>
+				<!-- <a  v-if="selected === 'chatwindow'">
+					<img src="../assets/info-icon.png" alt="user-photo" width="40" height="40">
+				</a> -->
 			</div>
 
 			<NewMessagePopup id="NewMessagePopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
