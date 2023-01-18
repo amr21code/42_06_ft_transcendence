@@ -16,7 +16,6 @@ export class UserController {
 	}
 
 	@Get('all')
-	// @UseGuards(AuthenticatedGuard)
 	async getAll(@Req() request: Request) {
 		// console.log(request);
 		const users = await this.userService.getAll();
@@ -24,7 +23,6 @@ export class UserController {
 	}
 
 	@Get(':userid')
-	// @UseGuards(AuthenticatedGuard)
 	async getOne(@Param('userid') userid) {
 		
 		const users = await this.userService.getOne(userid);
@@ -32,7 +30,6 @@ export class UserController {
 	}
 	
 	@Get(':userid/:field/:new')
-	// @UseGuards(AuthenticatedGuard)
 	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Param('new') newdata) {
 		const user = await this.getMe(request);
 		try {
@@ -46,7 +43,6 @@ export class UserController {
 	}
 
 	@Get(':userid/:field')
-	// @UseGuards(AuthenticatedGuard)
 	async getUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field) {
 		const user = await this.getMe(request);
 		try {
