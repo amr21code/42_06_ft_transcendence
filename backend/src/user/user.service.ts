@@ -2,10 +2,8 @@ import { Injectable, UseGuards } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Profile } from 'passport-42';
 import { DbService } from '../db/db.service';
-import { AuthenticatedGuard } from 'src/auth/guards/guards';
 
 @Injectable()
-@UseGuards(AuthenticatedGuard)
 export class UserService {
 	constructor (private db: DbService) {}
 
