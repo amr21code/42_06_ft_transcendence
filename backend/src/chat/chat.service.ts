@@ -2,8 +2,6 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DbService } from '../db/db.service';
 import { ChatMessageDto } from './dto';
-import { MESSAGES } from '@nestjs/core/constants';
-import { threadId } from 'worker_threads';
 import { ChatDto } from './dto/chat.dto';
 import { ChatUserStatusDto } from './dto/chatuserstatus.dto';
 
@@ -20,26 +18,26 @@ export class ChatService {
 		return status;
 	}
 
-	async listChats(userid?: string) {
-		var list;
-		if (userid) {
-			list = await this.db.$queryRaw(
-				Prisma.sql`SELECT uc.userid, usc.statusname, c.chatid, c.chat_name, ct.typename, password
-				FROM public.user_chat AS uc
-				LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
-				LEFT JOIN public.chat as c ON uc.chatid=c.chatid
-				LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-				WHERE uc.userid=${userid}
-				ORDER BY chatid ASC`
-			);
-		} else {
-			list = await this.db.$queryRaw(
-				Prisma.sql`SELECT chatid, chat_name, ct.typename
-				FROM public.chat AS c
-				LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-				WHERE c.type<2`
-			);
-		}
+	async listChats() {
+		const list = await this.db.$queryRaw(
+			Prisma.sql`SELECT chatid, chat_name, ct.typename
+			FROM public.chat AS c
+			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
+			WHERE c.type<2`
+		);
+		return list;
+	}
+
+	async listUserChats(userid: string) {
+		const list = await this.db.$queryRaw(
+			Prisma.sql`SELECT uc.userid, usc.statusname, c.chatid, c.chat_name, ct.typename, password
+			FROM public.user_chat AS uc
+			LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
+			LEFT JOIN public.chat as c ON uc.chatid=c.chatid
+			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
+			WHERE uc.userid=${userid}
+			ORDER BY chatid ASC`
+		);
 		return list;
 	}
 

@@ -12,10 +12,20 @@ import { ChatUserStatusDto } from './dto/chatuserstatus.dto';
 export class ChatController {
 	constructor(private readonly chatService: ChatService, private readonly userService: UserService) {}
 
-	@Get('list/chats/:userid?')
+	@Get('list/chats')
 	async listChats(@Param('userid') userid?) {
 		try {
-			const list = await this.chatService.listChats(userid);
+			const list = await this.chatService.listChats();
+			return list;
+		} catch (error) {
+			throw new ForbiddenException();
+		}
+	}
+
+	@Get('list/userchats')
+	async listUserChats(@Session() session: Record<string, any>) {
+		try {
+			const list = await this.chatService.listUserChats(session.passport.user.userid);
 			return list;
 		} catch (error) {
 			throw new ForbiddenException();
