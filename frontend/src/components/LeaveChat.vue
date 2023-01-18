@@ -3,11 +3,11 @@
         <div class="popup-inner">
             <h2>Leave chat</h2>
             <a>Are you sure that you want to leave the chat?</a><br>
-            <button class="submit-button" @click="LeaveChattogglePopup">
+            <button class="" @click="LeaveChattogglePopup">
                 <input class="submit-button" type="submit" @click="leaveChat(curr_chat.chatid), setSelectedWindow('overview')">
             </button>
 
-            <button class="popup-close" @click="LeaveChattogglePopup">Close</button>
+            <button class="close-button" @click="LeaveChattogglePopup">Close</button>
         </div>
     </div>
 </template>
@@ -85,6 +85,17 @@ export default defineComponent({
 
 
 <style scoped>
+
+.close-button {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+}
 
 .submit-button {
   background-color: blue;

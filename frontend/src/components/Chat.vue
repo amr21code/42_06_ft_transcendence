@@ -97,7 +97,34 @@ export default defineComponent({
 		},
 
 		retrieveCurrentChats() {
-			DataService.getChats()
+			// console.log("type:", this.type);
+			if (this.type == 'groups')
+			{
+				DataService.getChats()
+				.then((response: ResponseData) => {
+				this.chats = response.data;
+				// console.log(response.data);
+				})
+				.catch((e: Error) => {
+					console.log(e);
+			})
+			}
+			else if (this.type == 'dms') //not sure if that works like this
+			{
+				DataService.getDms()
+				.then((response: ResponseData) => {
+					this.chats = response.data;
+					// console.log(response.data);
+				})
+				.catch((e: Error) => {
+					console.log(e);
+				})
+			}
+		},
+
+		retrieveCurrentDms() {
+			console.log("Recieve Dms");
+			DataService.getDms()
 			.then((response: ResponseData) => {
 				this.chats = response.data;
 				// console.log(response.data);
