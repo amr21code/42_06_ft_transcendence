@@ -6,8 +6,8 @@ export default class Game {
 	private gameCanvas: any;
 	private gameContext: any;
 	public static keysPressed: boolean[] = [];
-	public static playerScore: number = 0;
-	public static computerScore: number = 0;
+	public static playerScore1: number = 0;
+	public static playerScore2: number = 0;
 	paused: boolean;
 	private player1: PlayerPaddle;
 	private computerPlayer: ComputerPaddle;
@@ -17,6 +17,8 @@ export default class Game {
 		this.paused = false;
 		this.gameCanvas = document.getElementById("match-court");
 		this.gameContext = this.gameCanvas.getContext("2d");
+		// this.playerScore1 = 0;
+		// this.playerScore2 = 0;
 
 
 		// REMOVE BLURRINESS ---------------------------------------------------
@@ -86,13 +88,9 @@ export default class Game {
 		//draw scores
 		this.gameContext.fillStyle = "#444040";
 		this.gameContext.textalign = "center";
-		// this.gameContext.fillText(Game.playerScore, this.gameCanvas.width / 5 + this.gameContext.lineWidth, this.gameCanvas.height / 4);
-		// this.gameContext.fillText(Game.computerScore, this.gameCanvas.width - this.gameContext.lineWidth * 2 - (this.gameCanvas.width / 5 + this.gameContext.lineWidth), this.gameCanvas.height / 4);
-		// this.gameContext.fillText(Game.playerScore, this.gameCanvas.width / 5 + this.gameContext.lineWidth + (this.gameContext.measureText(Game.playerScore).width / 2), this.gameCanvas.height / 4);
-		// this.gameContext.fillText(Game.computerScore, this.gameCanvas.width - this.gameContext.lineWidth - (this.gameCanvas.width / 5) - (this.gameContext.measureText(Game.playerScore).width / 2), this.gameCanvas.height / 4);
-		
-		this.gameContext.fillText(Game.playerScore, (this.gameCanvas.width / 5), this.gameCanvas.height / 4);
-		this.gameContext.fillText(Game.computerScore,  this.gameCanvas.width - (this.gameCanvas.width / 5) - this.gameContext.measureText(Game.playerScore).width , this.gameCanvas.height / 4);
+	
+		this.gameContext.fillText(Game.playerScore1, (this.gameCanvas.width / 5), this.gameCanvas.height / 4);
+		this.gameContext.fillText(Game.playerScore2,  this.gameCanvas.width - (this.gameCanvas.width / 5) - this.gameContext.measureText(Game.playerScore2).width , this.gameCanvas.height / 4);
 	}
 
 	update(){

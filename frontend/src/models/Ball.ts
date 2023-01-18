@@ -34,13 +34,13 @@ export default class Ball extends Entity{
 		//check left canvas bounds
 		if(this.x <= 0){  
 			this.x = canvas.width / 2 - this.width / 2;
-			Game.computerScore += 1;
+			Game.playerScore2 += 1;
 		}
 		
 		//check right canvas bounds
 		if(this.x + this.width >= canvas.width){
 			this.x = canvas.width / 2 - this.width / 2;
-			Game.playerScore += 1;
+			Game.playerScore1 += 1;
 		}
 		
 		//check player collision

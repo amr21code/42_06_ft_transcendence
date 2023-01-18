@@ -13,7 +13,9 @@ export default defineComponent({
 	
 	data () {
 		return {
-			game: {} as Game
+			game: {} as Game,
+			playerScore1: {} as number,
+			playerScore2: {} as number,
 		}
 	},
 
@@ -23,7 +25,10 @@ export default defineComponent({
 			{
 				this.game.update();
 				this.game.draw();
+				// this.playerScore1 = this.game.playerScore1;
+				// this.playerScore1 = this.Game.playerScore2;
 			}
+			// console.log("player one has ", this.playerScore1);
 			requestAnimationFrame(this.gameLoop);
 		}
 	},
@@ -32,6 +37,7 @@ export default defineComponent({
 		this.game = new Game();
 		// COMMENT BELOW OUT TO NOT SHOW THE GAME
 		requestAnimationFrame(this.gameLoop);
+		
 	},
 
 })
