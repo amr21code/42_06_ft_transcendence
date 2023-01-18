@@ -124,7 +124,7 @@ export default defineComponent({
 			});
 		},
 
-		changeChatName (type : number, chatid : number, chatname : String, password : String) {
+		changeChatName (type : String, chatid : number, chatname : String, password : String) {
 			console.log(type, chatid, chatname, password);
 			DataService.changeChatName(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
@@ -133,6 +133,7 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
+			this.curr_chat.chat_name = chatname;
 		}
 
 	},
