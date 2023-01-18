@@ -25,7 +25,12 @@
 				</a>
 				<a @click="handleClick('chatwindow', chat)" v-if="type === 'dms'"> <!--need a function for getting the dms-->
 					<div class="">
-							Hier könnte ihre Werbung stehen
+						<div class="" >
+							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+							<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
+							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+					</div>
 					</div>
 				</a>
 			</div>

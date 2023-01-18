@@ -8,9 +8,13 @@
 		<!--have a info button on the right to show all the users in the chat-->
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
+			<!-- {{ curr_chat }} -->
 			<!-- <img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40"> -->
 			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
-			<a class="chat-chatname">{{ curr_chat.chat_name }}</a>
+			<a @click="showChangeNameField()" class="chat-chatname" v-if="showinput === false">{{ curr_chat.chat_name }}</a>
+			<input v-if="showinput === true" placeholder="enter new name" v-model="newName">
+			<button class="ok-button" @click="showChangeNameField(), changeChatName(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
+			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
 			<a class="chat-typename">{{ curr_chat.typename }}</a>
 		</div>
 
@@ -95,7 +99,7 @@ export default defineComponent({
 			});
 		},
 
-		async retrieveCurrentMessages(chatid : string) {
+		retrieveCurrentMessages(chatid : string) {
 			DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
 				this.chats = response.data;
@@ -110,6 +114,17 @@ export default defineComponent({
 			DataService.sendMessage(userid, chatid, message)
 			.then((response: ResponseData) => {
 				message = '';
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+
+		changeChatName (type : number, chatid : number, chatname : String, password : String) {
+			console.log(type, chatid, chatname, password);
+			DataService.changeChatName(type, chatid, chatname, password)
+			.then((response: ResponseData) => {
 				console.log(response.data);
 			})
 			.catch((e: Error) => {
@@ -131,12 +146,18 @@ export default defineComponent({
 	setup() {
 
 		const message = ref('');
+		const newName = ref('')
 
 		const submit = () => {
 			message.value = '';
 		}
 
-		return { message, submit }
+		const showinput = ref(false);
+		const showChangeNameField = () => {
+			showinput.value = !showinput.value;
+		}
+
+		return { message, submit, showChangeNameField, showinput, newName }
 	}
 
 })
@@ -145,6 +166,17 @@ export default defineComponent({
 
 
 <style scoped>
+
+	.ok-button {
+		width: 20px;
+		height: 20px;
+	}
+
+	.cancel-button {
+		width: 45px;
+		height: 20px;
+		color: black;
+	}
 
 	.chat-chatid {
 		float: left;

@@ -35,6 +35,22 @@ class DataService {
 			headers: {'Content-Type': 'application/json'}
 		})
 	}
+
+	changeChatName (type : number, chatid : number, chat_name : String, password : String) {
+		//{ type: number; chatid: number; chat_name: string; password: string; }
+		if (password == undefined)
+			password = '';
+		return apiInstance.post('/chat/details', JSON.stringify({
+			type : type,
+			chatid: chatid,
+			chat_name: chat_name,
+			password: password
+		}), 
+		{
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'}
+		})
+	}
 }
 
 export default new DataService();
