@@ -49,9 +49,6 @@ export default defineComponent({
 			DataService.getAll()
 			.then((response: ResponseData) => {
 				this.users = response.data;
-				console.log(response.data);
-				console.log(response.headers);
-				console.log(response.data.token);
 			})
 			.catch((e: Error) => {
 				console.log(e);
