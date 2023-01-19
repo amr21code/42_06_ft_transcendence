@@ -95,13 +95,6 @@ export default defineComponent({
 			chats: {} as IChats
 		}
 	},
-	created () {
-		console.log('connecting to socket.io');
-   		SocketioService.setupSocketConnection();
-	},
-	beforeUnmount() {
-    	SocketioService.disconnect();
-  	},
 
 	methods: {
 		retrieveCurrentUser() {

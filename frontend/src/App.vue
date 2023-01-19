@@ -45,12 +45,24 @@ import LoginPopup from './components/LoginPopup.vue'
 import UserDataPopup from './components/UserDataPopup.vue'
 import LoggingService from './services/LoggingService'
 
+import SocketioService from '../services/SocketioService.js';
+
 export default defineComponent({
 	
 	name: 'App',
 	el: "#app",
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
+	created () {
+		console.log('connecting to socket.io');
+		SocketioService.setupSocketConnection();
+	},
+	beforeUnmount() {
+		SocketioService.disconnect();
+	},
+	
 	setup() {
+
+		
 
 		// console.log(import.meta.env.VITE_TEST);
 		// console.log(process.env.BASE_URL);
