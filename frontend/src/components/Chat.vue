@@ -80,6 +80,9 @@ import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import type { IChats } from '../types/Chats'
 
+//socket.io
+import SocketioService from '../services/SocketioService.js';
+
 type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
@@ -92,6 +95,14 @@ export default defineComponent({
 			chats: {} as IChats
 		}
 	},
+	created () {
+		console.log('connecting to socket.io');
+   		SocketioService.setupSocketConnection();
+	},
+	beforeUnmount() {
+    	SocketioService.disconnect();
+  	},
+
 	methods: {
 		retrieveCurrentUser() {
 			DataService.getUser()
@@ -147,9 +158,9 @@ export default defineComponent({
 		this.retrieveCurrentUser();
 
 		//checks for new chats every second; change to getting messages when a change is in the db
-		window.setInterval(() => {
-			this.retrieveCurrentChats();
-		}, 1000)
+		// window.setInterval(() => {
+		// 	this.retrieveCurrentChats();
+		// }, 1000)
 	},
 
 	setup(){
