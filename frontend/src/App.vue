@@ -46,6 +46,7 @@ import UserDataPopup from './components/UserDataPopup.vue'
 import LoggingService from './services/LoggingService'
 
 import SocketioService from './services/SocketioService.js'
+import DataService from './services/DataService'
 
 export default defineComponent({
 	
@@ -61,9 +62,6 @@ export default defineComponent({
 	},
 	
 	setup() {
-
-		
-
 		// console.log(import.meta.env.VITE_TEST);
 		// console.log(process.env.BASE_URL);
 
@@ -96,17 +94,27 @@ export default defineComponent({
 
 		return { loggedIn, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
-	// mounted() {
-	// 	// pause game, if "SPACE" is clicked
-	// 	this.$el.querySelector('game-part-screen').addEventListener('keydown', (e: any) => {
-	// 		var key = e.code;
-	// 		if (["Space"].indexOf(e.code) > -1 || ["KeyP"].indexOf(e.code) > -1 )// p key
-	// 		{
-	// 			this.$refs.matchCourtRef1.game.togglePause(); // HOW?
-	// 			console.log("called toggle");
-	// 		}
-	// 	});
-	// }
+	
+	methods: {
+		checkAuthStatus() {
+			DataService.getAuthStatus()
+			.then((authStatus: any) => {
+				if (authStatus.data.msg !== 'authenticated') {
+					this.loggedIn = false;
+				}
+				else {
+					this.loggedIn = true;
+				}
+				console.log('Your authentication status is: ', authStatus.data.msg);
+			})
+			.catch((e: Error) => {
+				console.log("Error occured in getAuthStatus", e);
+			})
+		},
+	},
+	mounted () {
+		this.checkAuthStatus();
+	}
 });
 </script>
 

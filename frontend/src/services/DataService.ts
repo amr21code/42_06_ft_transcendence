@@ -1,6 +1,9 @@
 import apiInstance from "../http.common";
 
 class DataService {
+	getAuthStatus() : Promise<any> {
+		return apiInstance.get("/auth/status");
+	}
 	getUser() : Promise<any> {
 		return apiInstance.get("/users/me");
 	}

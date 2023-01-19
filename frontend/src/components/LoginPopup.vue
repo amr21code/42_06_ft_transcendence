@@ -1,5 +1,5 @@
 <template>
-	<div class="popup" @keyup.esc="toggleLoginPopup" tabindex="0"> 
+	<div class="popup" tabindex="0">
 		<!-- REMOVE ESC OPTION ABOVE -->
 		<div class="popup-inner">
 			<slot/>
@@ -19,6 +19,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import LoginService from '../services/LoginService'
+import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 
@@ -40,11 +41,13 @@ export default defineComponent({
 			// LoginService.login();
 			LoginService.login()
 			.then((response: ResponseData)=> {
-				// console.log(response.data);
+
+				console.log(response.data);
 			})
 			.catch((e: Error) => console.log("Error in login process", e));
-			// this.toggleLoginPopup();
-		}
+			
+		},
+		
 		// retrieveCurrentUser() {
 		// 	DataService.getUser()
 		// 	.then((response: ResponseData) => {
@@ -58,6 +61,12 @@ export default defineComponent({
 	}
 })
 </script>
+
+
+
+<!-- check if cookie present -> if yes, /auth/status ('authenticated' or 'not authenticated') -->
+<!-- msg: 'authenticated' -->
+<!-- if not authenticated -> cookie löschen -->
 
 
 <style scoped>
@@ -97,7 +106,3 @@ button {
 	display: block;
 }
 </style>
-
-<!-- check if cookie present -> if yes, /auth/status ('authenticated' or 'not authenticated') -->
-<!-- msg: 'authenticated' -->
-<!-- if not authenticated -> cookie löschen -->
