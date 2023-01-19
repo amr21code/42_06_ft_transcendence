@@ -17,9 +17,6 @@ export default class Game {
 		this.paused = false;
 		this.gameCanvas = document.getElementById("match-court");
 		this.gameContext = this.gameCanvas.getContext("2d");
-		// this.playerScore1 = 0;
-		// this.playerScore2 = 0;
-
 
 		// REMOVE BLURRINESS ---------------------------------------------------
 		let dpi = window.devicePixelRatio;
@@ -51,6 +48,8 @@ export default class Game {
 		// pause game, if "SPACE" is clicked
 		// this.$refs.matchCourtRef.querySelector('#match-court').addEventListener('keydown', (e: any) => {
 		window.addEventListener('keydown', (e: any) => {
+			// if (!e.target.matches('#match-court'))
+			// 	return;
 			var key = e.code;
 			if (["Space"].indexOf(e.code) > -1 || ["KeyP"].indexOf(e.code) > -1 )// p key
 			{
@@ -109,10 +108,18 @@ export default class Game {
 		this.ball.draw(this.gameContext);
 	}
 
-	togglePause(){
+	togglePause() {
 		this.paused = !this.paused;
 	}
-	
+
+	public static playerTwoScores() {
+		this.playerScore2++;
+	}
+
+	public static playerOneScores() {
+		this.playerScore1++;
+	}
+
 	// gameLoop(){
 	// 	if (!Game.paused) // PROBLEM HERE
 	// 	{

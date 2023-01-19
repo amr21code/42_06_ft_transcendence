@@ -25,10 +25,10 @@ export default defineComponent({
 			{
 				this.game.update();
 				this.game.draw();
-				// this.playerScore1 = this.game.playerScore1;
-				// this.playerScore1 = this.Game.playerScore2;
+				this.playerScore1 = Game.playerScore1;
+				this.playerScore2 = Game.playerScore2;
 			}
-			// console.log("player one has ", this.playerScore1);
+			console.log("player one has ", this.playerScore1);
 			requestAnimationFrame(this.gameLoop);
 		}
 	},
