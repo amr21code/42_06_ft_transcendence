@@ -5,7 +5,7 @@ class SocketioService {
   constructor() {}
 
   setupSocketConnection() {
-    this.socket = io('http://192.168.56.2:3002');
+    this.socket = io('http://192.168.56.2:3002', { withCredentials: true });
     this.socket.emit('my message', 'Hello there from Vue.');
 
     this.socket.on('my broadcast', (data : String) => {

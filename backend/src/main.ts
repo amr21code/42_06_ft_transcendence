@@ -34,6 +34,7 @@ async function bootstrap() {
 			}
 		})
 	);
+	
 	app.use(passport.initialize());
 	app.use(passport.session());
   	await app.listen(3000);
