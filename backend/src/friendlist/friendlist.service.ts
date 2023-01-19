@@ -8,17 +8,33 @@ export class FriendlistService {
 
 	async showFL(userid: string) {
 		const user = await this.db.$queryRaw(
-			Prisma.sql`(SELECT fl.addresseeid as friendid, ua.username as friendname, os.statusname, fc.statusname as status
+			Prisma.sql`(SELECT fl.addresseeid as userid, ua.username as username, os.statusname, fc.statusname as friendstatus, ua.picurl
 				FROM public.friends as fl
 				LEFT JOIN public.friendship_codes as fc ON fc.statuscode = fl.statuscode
-				LEFT JOIN public.users as ua ON fl.addresseeid = ua.userid
+				LEFT JOIN (SELECT userid, username, user_status,  
+					CASE 
+						WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN 
+						profilepic42 
+						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
+						END as picurl, 
+						created, statusname from public.users
+						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
+						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ua ON fl.addresseeid = ua.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ua.user_status
 				WHERE fl.requesterid=${userid})
 				UNION
-				(SELECT fl.requesterid as friendid, ur.username as friendname, os.statusname, fc.statusname as status
+(SELECT fl.requesterid as friendid, ur.username as friendname, os.statusname, fc.statusname as friendstatus, ur.picurl
 				FROM public.friends as fl
 				LEFT JOIN public.friendship_codes as fc ON fc.statuscode = fl.statuscode
-				LEFT JOIN public.users as ur ON fl.requesterid = ur.userid
+				LEFT JOIN (SELECT userid, username, user_status,  
+					CASE 
+						WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN 
+						profilepic42 
+						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
+						END as picurl, 
+						created, statusname from public.users
+						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
+						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ur ON fl.addresseeid = ur.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ur.user_status
 				WHERE addresseeid=${userid})`
 				);

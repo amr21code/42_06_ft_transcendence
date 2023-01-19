@@ -9,5 +9,9 @@ body {
     font-family: monospace;
 	background: black;
 	color: white;
-	/* , sans-serif, -apple-system, BlinkMacSystemFont, sans-serif; */
+}
+
+body, html {
+	margin: 0;
+	padding: 0;
 }

@@ -1,4 +1,4 @@
-import { Injectable, Req } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Profile } from 'passport-42';
 import { DbService } from '../db/db.service';
@@ -9,7 +9,12 @@ export class UserService {
 
 	async getAll() {
 		const user = await this.db.$queryRaw(
-			Prisma.sql`select userid, username, CASE WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN profilepic42 ELSE (select avatarurl from public.avatars where avatarid = avatar) END as picurl,created, statusname from public.users
+			Prisma.sql`select userid, username, 
+			CASE 
+			WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL 
+			THEN profilepic42 
+			ELSE (select avatarurl from public.avatars where avatarid = avatar) 
+			END as picurl,created, statusname, wins, losses FROM public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid`
 			);
@@ -40,7 +45,7 @@ export class UserService {
 				profilepic42 
 				ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 				END as picurl, 
-				created, statusname from public.users
+				created, statusname, wins, losses from public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
 			WHERE userid=${user.userid}`
@@ -74,7 +79,7 @@ export class UserService {
 				profilepic42 
 				ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 				END as picurl, 
-				created, statusname from public.users
+				created, statusname, wins, losses from public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
 			WHERE userid=${userid}`
@@ -123,6 +128,7 @@ export class UserService {
 				);
 		}
 	}
+
 	async getUserData(userid: string, field: string)
 	{
 		var status = userid;
@@ -134,9 +140,13 @@ export class UserService {
 			status = await this.db.$queryRaw(
 				Prisma.sql`SELECT user_status FROM public.users WHERE userid=${userid}`
 				);
-		} else if (field == 'twofa') {
+		} else if (field == 'wins') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT twofa FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT wins FROM public.users WHERE userid=${userid}`
+				);
+		} else if (field == 'losses') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT losses FROM public.users WHERE userid=${userid}`
 				);
 		} else if (field == 'avatar') {
 			status = await this.db.$queryRaw(
@@ -152,5 +162,18 @@ export class UserService {
 				);
 		}
 		return status;
+	}
+
+	async updateWinsLosses(userid: string, wl: string) {
+		var WinOrLossNumber = Number(this.getUserData(userid, wl)) + 1;
+		if (wl == 'wins') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET wins=${WinOrLossNumber} WHERE userid=${userid}`
+			);
+		} else if (wl == 'losses') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET losses=${WinOrLossNumber} WHERE userid=${userid}`
+			);
+		}
 	}
 }

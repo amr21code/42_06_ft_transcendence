@@ -14,7 +14,7 @@ export class MatchController {
 
 	@Get('open/:opponent?')
 	async openMatch(@Param('opponent') opponent, @Session() session: Record<string, any>) {
-		const open = await this.matchService.openMatch(session.passport.user.userid, opponent);
+		const open = await this.matchService.openMatch(session.passport.user.userid, 1, opponent);
 	}
 
 	@Get('accept')
@@ -28,10 +28,20 @@ export class MatchController {
 
 	@Get('delete')
 	async deleteMatch(@Session() session: Record<string, any>) {
-	try {
-		const del = await this.matchService.deleteMatch(session.passport.user.userid);
-	} catch (error) {
-		throw new ForbiddenException();
+		try {
+			const del = await this.matchService.deleteMatch(session.passport.user.userid);
+		} catch (error) {
+			throw new ForbiddenException();
+		}
 	}
+
+	@Get('making')
+	async matchmaking(@Session() session: Record<string, any>) {
+		try {
+			const match = await this.matchService.matchmaking(session.passport.user.userid);
+			return {"msg" : "ok" };
+		} catch (error) {
+			throw error;
+		}
 	}
 }

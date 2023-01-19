@@ -7,6 +7,9 @@ class DataService {
 	getAll() : Promise<any> {
 		return apiInstance.get("/users/all");
 	}
+	getFriends() : Promise<any> {
+		return apiInstance.get("/fl/show");
+	}
 	getChats() : Promise<any> {
 		return apiInstance.get("/chat/list/chats");
 	}

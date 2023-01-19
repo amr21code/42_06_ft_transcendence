@@ -1,28 +1,28 @@
 <template>
-	<div class="leaderboard-wrapper">
-		<h2>Leaderboard</h2>
-		<table id="leaderboard-table">
+	<div class="friendlist-wrapper">
+		<h2>Friendlist</h2>
+		<table id="friendlist-table">
 			<thead id="top-row">
 				<tr>
-					<th>#</th>
 					<th>picture</th>
 					<th>name</th>
-					<th>wins</th>
+					<th>status</th>
+					<th>invite</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="leaderboard-item" v-for="(user, index) in users" :key="index">
+				<tr class="friendlist-item" v-for="(friend, index) in friends" :key="index">
 					<td>
-						{{ index + 1 }}
+						<img :src="friend.picurl">
 					</td>
 					<td>
-						<img :src="user.picurl">
+						{{ friend.username }}
 					</td>
 					<td>
-						{{ user.username }}
+						{{ friend.statusname }}
 					</td>
 					<td>
-						{{ user.wins }}
+						<button class="invite-button">Challenge</button>
 					</td>
 				</tr>
 			</tbody>
@@ -38,20 +38,29 @@ import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 
 export default defineComponent({
-	name: 'leaderboard-window',
+	name: 'friendlist-window',
 	data () {
 		return {
-			users: [] as IUser[]
+			user: {} as IUser,
+			friends: [] as IUser[]
 		}
 	},
 	methods: {
-		retrieveUsers() {
-			DataService.getAll()
+		retrieveCurrentUser() {
+			DataService.getUser()
 			.then((response: ResponseData) => {
-				this.users = response.data;
+				this.user = response.data;
 				console.log(response.data);
-				console.log(response.headers);
-				console.log(response.data.token);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+		retrieveFriends() {
+			DataService.getFriends()
+			.then((response: ResponseData) => {
+				this.friends = response.data;
+				console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -60,7 +69,7 @@ export default defineComponent({
 	},
 
 	mounted () {
-		this.retrieveUsers();
+		this.retrieveFriends();
 	}
 })
 </script>
@@ -68,7 +77,7 @@ export default defineComponent({
 
 <style scoped>	
 	
-	#leaderboard-table {
+	#friendlist-table {
 		border-collapse: collapse;
 		overflow: auto;
 		max-height: 500px;
@@ -85,23 +94,23 @@ export default defineComponent({
 		color: white;
 	}
 
-	#leaderboard-table th, td {
+	#friendlist-table th, td {
 		padding: 20px 40px;
 		text-align: center;
 	}
 
 	/* hover effect on all but the first line */
-	#leaderboard-table tr:hover {
+	#friendlist-table tr:hover {
 		background-color: var(--first-highlight-color);
 		color: white;
 		cursor: pointer;
 	}
 
-	.leaderboard-item img {
+	.friendlist-item img {
 		max-height: 30px;
 	}
 
-	/* #leaderboard-table tr:hover {
+	/* #friendlist-table tr:hover {
 		background-color: var(--first-highlight-color);
 		color: white;
 		cursor: pointer;

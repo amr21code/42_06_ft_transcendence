@@ -2,22 +2,30 @@
 	<div class="popup" @keyup.esc="toggleUserDataPopup" tabindex="0">
 		<div class="popup-inner">
 			<slot />
-			<!-- NON-DYNAMIC <h2>raweber's user data</h2> -->
 			<h2>{{ user.userid }}'s user data</h2>
 			<div class="user-data-wrapper">
 				<div>intra name: </div>
-				<!-- NON-DYNAMIC <input disabled type="text" value="raweber" /> -->
 				<input disabled type="text" :value="user.userid" /> 
 			</div>
 			<div class="user-data-wrapper">
 				<div>user alias: </div>
-				<!-- NON-DYNAMIC <input type="text" value="Ralf" /> -->
 				<input type="text" :value="user.username" />
 			</div>
 			<div class="user-data-wrapper">
-				<div>Profile picture:</div>
+				<div>avatar:</div>
 				<img id="user-photo" :src="user.picurl" alt="user-photo" width="40" height="40">
-				<!-- <img id="user-photo" src="DB-CONNECTION GOES HERE" alt="user-photo" width="40" height="40"> -->
+			</div>
+			<div class="user-data-wrapper">
+				<div>member since: {{ memberSince }}</div>
+			</div>
+			<div class="user-data-wrapper">
+				<div>wins: {{ user.wins }}</div>
+			</div>
+			<div class="user-data-wrapper">
+				<div>losses: {{ user.losses }}</div>
+			</div>
+			<div class="user-data-wrapper">
+				<div>achievements:</div>
 			</div>
 			<div class="user-data-wrapper">
 				<div>2-factor-authentication:</div>
@@ -41,7 +49,8 @@ export default defineComponent({
 	
 	data () {
 		return {
-			user: {} as IUser
+			user: {} as IUser,
+			memberSince: {} as string
 		}
 	},
 
@@ -56,11 +65,15 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
-		}
+		},
+		formatDate() {
+			this.memberSince = new Intl.DateTimeFormat('en-us').format(this.user.created);
+		},
 	},
 
 	mounted () {
 		this.retrieveCurrentUser();
+		this.formatDate();
 	}
 })
 </script>
@@ -116,3 +129,5 @@ button {
 	border-radius: 10%;
 }
 </style>
+
+<!-- member since, avatar auswahl, wins, losses, user status, achievements-->

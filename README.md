@@ -32,8 +32,10 @@ Achievements:
 | Get | auth | return | return route for 42 API |
 | Get | auth | login | login route directs to 42 API |
 | Get | auth | status | shows whether you are authenticated or not |
-| Get | chat | list/chats/:userid? | lists all available visible chats (public/protected) (where userid is joined if specified - if userid specified only for displaying their own) |
+| Get | chat | list/chats/ | lists all available visible chats (public/protected) |
+| Get | chat | list/userchats | list chats where logged in user is joined |
 | Get | chat | join/:chatid?/:pw? | creates a chat with first user as admin if nothing is specified or joins chatid with/without pw - checks for banned status |
+| Post | chat | create | creates a chat with information in JSON object { type: number; chatid: number; chat_name: string; password: string; } |
 | Get | chat | leave/:chatid | leaves chatid and deletes it with all messages if last one leaves |
 | Get | chat | list/users/:chatid | lists all users in chatid |
 | Post | chat | message | sends the chatmessage as json object to the backend { userid: string; chatid: number; message: string; }|
@@ -47,3 +49,10 @@ Achievements:
 | Get | users | all | shows all users in the database |
 | Get | users | :userid | shows the properties of userid |
 | Get | users | :userid/:field/:new | changes the properties of userid (fields: username (string), user_status (number), twofa (not implemented), avatar (number)) |
+| Get | match | list | lists all matches |
+| Get | match | open/:opponent? | start game and wait for opponent or challenge an opponent if they exist and are not in an open game |
+| Get | match | accept | accept challenge |
+| Get | match | delete | delete / cancel challenge / queue |
+| Get | 2fa | generate | generates QR code for google authenticator
+| Get | 2fa | turn-on/:secret | turns 2fa on if secret is a valid code
+| Get | 2fa | authenticate/:secret | checks if secret is a valid code

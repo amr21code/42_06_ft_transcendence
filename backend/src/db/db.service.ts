@@ -1,4 +1,4 @@
-import { Global, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 
@@ -23,6 +23,5 @@ export class DbService extends PrismaClient {
 		this.user_match.deleteMany();
 		this.users.deleteMany();
 		this.users_achievements.deleteMany();
-		this.userstats.deleteMany();
 	}
 }

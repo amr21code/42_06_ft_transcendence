@@ -1,45 +1,44 @@
 <template>
-  <div class="app">
-	<div class="content-wrap">
-
-		<header>
-			<div class="title">
-				<h1>The Pong Game</h1>
-			</div>
-			<div class="top-nav">
-				<a @click="handleClick('play')">Play</a>
-				<a @click="handleClick('watch')">Watch</a>
-				<a @click="handleClick('chat')">Chat</a>
-				<a @click="handleClick('leaderboard')">Leaderboard</a>
-				<div class="logged-photo" @click="toggleUserDataPopup()">
-					<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+	<div class="app">
+		<div class="content-wrap">
+			<header>
+				<div class="title">
+					<h1>The Pong Game</h1>
 				</div>
+				<div class="top-nav">
+					<a @click="handleClick('play')">Play</a>
+					<a @click="handleClick('watch')">Watch</a>
+					<a @click="handleClick('chat')">Chat</a>
+					<a @click="handleClick('leaderboard')">Leaderboard</a>
+					<a @click="handleClick('friendlist')">Friends</a>
+					<div class="logged-photo" @click="toggleUserDataPopup()">
+						<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+					</div>
+				</div>
+			</header>
+			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
+				<!-- make Game stop while loggedIn === false -->
+			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
+			<div v-if="selected !== 'play' && selected !== 'watch'" class="game-part-screen">
+				<MatchCourt ref="matchCourtRef2"/>
+				<SideWindow :selected="selected"/>
 			</div>
-		</header>
-	<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
-		<!-- make Game stop while loggedIn === false -->
-	<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
-	<div v-if="selected !== 'play' && selected !== 'watch'" class="grid-container">
-		<MatchCourt />
-		<SideWindow :selected="selected"/>
+			<!-- BEGIN ONLY TEMPORARY, should be implemented above -->
+			<div class="game-full-screen" v-if="selected === 'play' || selected === 'watch'">
+				<MatchCourt ref="matchCourtRef1"/>
+			</div>
+			<!-- ONLY TEMPORARY, should be implemented above END -->
+			<footer>
+				Made with ❤️ by anruland, djedasch, jtomala and raweber
+			</footer>
+		</div>
 	</div>
-	<!-- BEGIN ONLY TEMPORARY, should be implemented above -->
-	<div class="game-full-screen" v-if="selected === 'play' || selected === 'watch'">
-		<MatchCourt />
-	</div>
-	<!-- ONLY TEMPORARY, should be implemented above END -->
-	<footer>
-		Made with ❤️ by anruland, djedasch, jtomala and raweber
-	</footer>
-</div>
-</div>
 </template>
 
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from 'vue'
 import type { SelectedSideWindow } from './types/SelectedSideWindow'
-import JobList from './components/JobList.vue'
 import MatchCourt from './components/MatchCourt.vue'
 import SideWindow from './components/SideWindow.vue'
 import LoginPopup from './components/LoginPopup.vue'
@@ -49,6 +48,7 @@ import LoggingService from './services/LoggingService'
 export default defineComponent({
 	
 	name: 'App',
+	el: "#app",
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
 	setup() {
 
@@ -76,22 +76,36 @@ export default defineComponent({
 		const toggleUserDataPopup = () => {
 			userDataPopupTrigger.value = !userDataPopupTrigger.value;
 		}
-		
-		// for side window
-		const selected = ref<SelectedSideWindow>('play'); // new default: no side window
+		// for side window selection
+		const selected = ref<SelectedSideWindow>('play');
 		const handleClick = (term: SelectedSideWindow) => {
 			selected.value = term;
 		};
 
 		return { loggedIn, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
-	methods: {}
+	// mounted() {
+	// 	// pause game, if "SPACE" is clicked
+	// 	this.$el.querySelector('game-part-screen').addEventListener('keydown', (e: any) => {
+	// 		var key = e.code;
+	// 		if (["Space"].indexOf(e.code) > -1 || ["KeyP"].indexOf(e.code) > -1 )// p key
+	// 		{
+	// 			this.$refs.matchCourtRef1.game.togglePause(); // HOW?
+	// 			console.log("called toggle");
+	// 		}
+	// 	});
+	// }
 });
 </script>
 
 
 
 <style scoped>
+
+	#app { /*TEMP*/
+		height: 100%;
+		max-height: 100%;
+	}
 
 	header {
 		text-align: center;
@@ -141,20 +155,23 @@ export default defineComponent({
 		opacity: 50%;
 	}
 
-	.grid-container {
+	.game-part-screen {
 		display: grid;
 		grid-template-columns: 2fr 1fr;
 		margin: 20px;
 		gap: 20px;
 	}
 
-	.grid-container MatchCourt {
+	.game-part-screen MatchCourt {
 		min-width: 66%;
 	}
 
 	.game-full-screen {
-		margin: 20px;
+		max-height: 70vh; /*find something more elegant*/
+		aspect-ratio: 5/3;
+		margin: 40px auto;
 		gap: 20px;
+		/* outline: 10px solid purple; */
 	}
 
 	footer {
