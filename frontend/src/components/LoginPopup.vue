@@ -40,7 +40,7 @@ export default defineComponent({
 			// LoginService.login();
 			LoginService.login()
 			.then((response: ResponseData)=> {
-				console.log(response.data);
+				// console.log(response.data);
 			})
 			.catch((e: Error) => console.log("Error in login process", e));
 			// this.toggleLoginPopup();

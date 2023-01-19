@@ -50,7 +50,6 @@ export default defineComponent({
 			DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
-				console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -60,7 +59,6 @@ export default defineComponent({
 			DataService.getFriends()
 			.then((response: ResponseData) => {
 				this.friends = response.data;
-				console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);

@@ -110,6 +110,9 @@ export default defineComponent({
 });
 </script>
 
+<!-- if session cookie-> /auth/status -> 'authenticated' -> popup weg-->
+<!-- 'not authenticated' ->cookie löschen-->
+<!-- if not cookie-> popup -->
 
 
 <style scoped>

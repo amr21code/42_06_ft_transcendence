@@ -28,7 +28,7 @@ export default defineComponent({
 				this.playerScore1 = Game.playerScore1;
 				this.playerScore2 = Game.playerScore2;
 			}
-			console.log("player one has ", this.playerScore1);
+			// console.log("player one has ", this.playerScore1);
 			requestAnimationFrame(this.gameLoop);
 		}
 	},
