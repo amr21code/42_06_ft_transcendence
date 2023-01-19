@@ -96,7 +96,7 @@ export default defineComponent({
 		checkAuthStatus() {
 			DataService.getAuthStatus()
 			.then((authStatus: any) => {
-				if (authStatus.data.msg !== 'authenticated') {
+				if (authStatus.data.msg !== 'authenticated') { // HERE COMES SESSIONID LATER
 					this.loggedIn = false;
 				}
 				else {
