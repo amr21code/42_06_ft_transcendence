@@ -45,7 +45,7 @@ import LoginPopup from './components/LoginPopup.vue'
 import UserDataPopup from './components/UserDataPopup.vue'
 import LoggingService from './services/LoggingService'
 
-import SocketioService from '../services/SocketioService.js';
+import SocketioService from './services/SocketioService.js'
 
 export default defineComponent({
 	
