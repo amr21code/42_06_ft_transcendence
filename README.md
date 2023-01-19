@@ -3,6 +3,8 @@
 in backend folder to install all the necessary modules
 npm i @nestjs/common @nestjs/passport @nestjs/config express passport passport-42 prisma @prisma/client
 
+npm i --save @nestjs/websockets @nestjs/platform-socket.io
+
 for 2fa
 npm install otplib qrcode
 
