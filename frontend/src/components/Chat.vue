@@ -11,42 +11,26 @@
 		<div v-if="selected === 'overview'">
 			<h2>Chat overview</h2>
 			 <div class="chat-overview">
-			<!--<a @click="handleClick('chatwindow')">
-				<div class="chat-message-view">
-					<img src="../assets/jorit_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
-					<p class="chat-person-text">Jorit</p>
-					<p class="chat-person-message">This is a sample message</p>
-				</div>
-			</a>
-			<a @click="handleClick('chatwindow')">
-				<div class="chat-message-view">
-					<img src="../assets/ralf_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
-					<p class="chat-person-text">Ralf</p>
-					<p class="chat-person-message">This is a sample message</p>
-				</div>
-			</a>
-			<a @click="handleClick('chatwindow')">
-				<div class="chat-message-view">
-					<img src="../assets/andi_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
-					<p class="chat-person-text">Andi</p>
-					<p class="chat-person-message">This is a sample message</p>
-				</div>
-			</a>
-			<a @click="handleClick('chatwindow')">
-				<div class="chat-message-view">
-					<img src="../assets/desiree_profile.png" class="user-photo" alt="user-photo" width="40" height="40">
-					<p class="chat-person-text">Desiree</p>
-					<p class="chat-person-message">This is a sample message</p>
-				</div>
-			</a> -->
+
 
 			<!-- <strong class="">{{ chats }}</strong>  -->
 			<div class="chat-message-view" v-for="chat in chats" :key="chat">
-				<a @click="handleClick('chatwindow', chat)"> <!--need to pass the chatid here?-->
-					<div class="">
+				<a @click="handleClick('chatwindow', chat)" v-if="type === 'groups'">
+					<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-							<a class="chat-typename">{{ chat.typename }}</a>
+							<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
+							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+					</div>
+				</a>
+				<a @click="handleClick('chatwindow', chat)" v-if="type === 'dms'"> <!--need a function for getting the dms-->
+					<div class="">
+						<div class="" >
+							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+							<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
+							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+					</div>
 					</div>
 				</a>
 			</div>
@@ -57,19 +41,26 @@
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
-				<!-- <a @click="handleClick('chatwindow')"> -->
+				<a @click="handleClick('overview', '0'), changeType('dms')">
 					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
-				<!-- </a> -->
-				<a @click="handleClick('overview', '0')">
+				</a>
+				<a @click="handleClick('overview', '0'), changeType('groups')">
 					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<!--popup for a new chat-->
 				<a @click="togglePopup()">
 					<img src="../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
 				</a>
+				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'">
+					<img src="../assets/blackcross.png" alt="user-photo" width="35" height="40">
+				</a>
+				<!-- <a  v-if="selected === 'chatwindow'">
+					<img src="../assets/info-icon.png" alt="user-photo" width="40" height="40">
+				</a> -->
 			</div>
 
 			<NewMessagePopup id="NewMessagePopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
+			<LeaveChatPopup id="LeaveChatPopup" v-if="LeaveChatTrigger === true" :LeaveChattogglePopup="() => LeaveChattogglePopup()" :curr_chat="sel_chat" :selectedWindow="selected"/>
 
 
 		</div>
@@ -79,8 +70,8 @@
 
 <script lang="ts">
 import ChatWindow from './ChatWindow.vue'
-import Overview from './ChatOverview.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
+import LeaveChatPopup from './LeaveChat.vue'
 import { defineComponent, ref, onMounted } from 'vue'
 
 //for getting data from the backend
@@ -89,11 +80,14 @@ import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import type { IChats } from '../types/Chats'
 
+//socket.io
+import SocketioService from '../services/SocketioService.js';
+
 type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
 	name: 'chat-module',
-	components: { ChatWindow, Overview, NewMessagePopup },
+	components: { ChatWindow, LeaveChatPopup, NewMessagePopup },
 
 	data () {
 		return {
@@ -101,6 +95,7 @@ export default defineComponent({
 			chats: {} as IChats
 		}
 	},
+
 	methods: {
 		retrieveCurrentUser() {
 			DataService.getUser()
@@ -114,10 +109,37 @@ export default defineComponent({
 		},
 
 		retrieveCurrentChats() {
-			DataService.getChats()
+			// console.log("type:", this.type);
+			if (this.type == 'groups')
+			{
+				DataService.getChats()
+				.then((response: ResponseData) => {
+				this.chats = response.data;
+				// console.log(response.data);
+				})
+				.catch((e: Error) => {
+					console.log(e);
+			})
+			}
+			else if (this.type == 'dms') //not sure if that works like this
+			{
+				DataService.getDms()
+				.then((response: ResponseData) => {
+					this.chats = response.data;
+					// console.log(response.data);
+				})
+				.catch((e: Error) => {
+					console.log(e);
+				})
+			}
+		},
+
+		retrieveCurrentDms() {
+			console.log("Recieve Dms");
+			DataService.getDms()
 			.then((response: ResponseData) => {
 				this.chats = response.data;
-				console.log(response.data);
+				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -127,7 +149,11 @@ export default defineComponent({
 
 	mounted () {
 		this.retrieveCurrentUser();
-		this.retrieveCurrentChats();
+
+		//checks for new chats every second; change to getting messages when a change is in the db
+		// window.setInterval(() => {
+		// 	this.retrieveCurrentChats();
+		// }, 1000)
 	},
 
 	setup(){
@@ -139,9 +165,19 @@ export default defineComponent({
 			popupTrigger.value = !popupTrigger.value;
 		}
 
+		const LeaveChatTrigger = ref(false);
+		const LeaveChattogglePopup = () => {
+			console.log("togglePopup(LeaveChat) got triggert")
+			LeaveChatTrigger.value = !LeaveChatTrigger.value;
+		}
+
 		onMounted(() => {
 	
 		});
+		const type = ref<String>('groups');
+		const changeType = (term: String) => {
+			type.value = term;
+		}
 
 		const selected = ref<SelectedChat>('overview');
 		const sel_chat = ref('');
@@ -151,7 +187,7 @@ export default defineComponent({
 			console.log("handleClick", selected.value, sel_chat.value);
 		}
 
-		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat }
+		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger, changeType, type }
 	} //end of setup
 }) //end of defineComponent
 </script>
@@ -171,8 +207,12 @@ export default defineComponent({
 	padding-left: 20%;
 }
 
-.chat-typename {
+.chat-typename-green {
 	color: green;
+}
+
+.chat-typename-red {
+	color: red;
 }
 
 .chat-overview {
@@ -180,8 +220,8 @@ export default defineComponent({
 		overflow-y: scroll;
 		scrollbar-color: rebeccapurple green;
 		scrollbar-width: thin;
-		display: flex;
-		flex-direction: column-reverse;
+		/* display: flex;
+		flex-direction: column-reverse; */
 	}
 
 	.user-photo {
