@@ -1,11 +1,35 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Session } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as session from 'express-session';
 import * as passport from 'passport';
+import { sessionMiddleware, wrap } from './middleware/middleware';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import * as express from 'express';
+
+declare module "http" {
+	interface IncomingMessage {
+		session: Record<string, any> & {
+			passport: {
+				user: {
+					userid: string,
+				}
+			}
+		};
+	}
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const app2 = express();
+  const httpServ = createServer(app2);
+  const io = new Server(httpServ, {
+	cors: {
+		origin: 'http://192.168.56.2:5173',
+		methods: ["GET", "POST"],
+		credentials: true,
+	}
+  })
 	app.useGlobalPipes(
 		new ValidationPipe({
 	  		whitelist: true,
@@ -22,19 +46,37 @@ async function bootstrap() {
 		methods: ["GET", "POST"],
 		credentials: true,
 	});
-	app.use(
-		session({
-			name: 'ft_pong',
-			secret: "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0",
-			resave: true,
-			saveUninitialized: false,
-			httpOnly: true,
-			cookie: {
-				// maxAge: 360000,
-			}
-		})
-	);
-	
+	app.use(sessionMiddleware);
+	io.use(wrap(sessionMiddleware));
+	io.use(wrap(passport.initialize()));
+	io.use(wrap(passport.session()));
+	io.listen(3002);
+	// io.use((socket, next) => {
+	// 	sessionMiddleware(socket.request as Record<string, any>, {} as Response, next as express.NextFunction);
+	// });
+	io.use((socket, next) => {
+		if (socket.request) {
+			next();
+		} else {
+			console.log("nothing");
+		}
+	});
+
+	io.on("connect", socket => {
+		if (socket.request.session.passport)
+			console.log('test', socket.request.session.passport.user);
+	});
+
+	io.on("disconnect", socket => {
+		console.log("ende?");
+		if (socket.request.session.passport) {
+			const sessionID = socket.request.sessionID;
+			socket.request.session.destroy(() => {
+				io.to(sessionID).disconnectSockets();
+			});
+			console.log('session end', sessionID);
+		}
+	});
 	app.use(passport.initialize());
 	app.use(passport.session());
   	await app.listen(3000);
