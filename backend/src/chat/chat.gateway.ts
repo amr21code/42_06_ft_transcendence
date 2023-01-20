@@ -11,8 +11,8 @@ import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices
 import { NextFunction } from 'express';
 
 
-@WebSocketGateway(3003, { cors: {
-	origin: 'http://192.168.56.2:5173',
+@WebSocketGateway(3002, {cors: {
+	origin: ['http://192.168.56.2:5173','http://localhost:5173'],
 	methods: ["GET", "POST"],
 	credentials: true,
 }
@@ -20,19 +20,22 @@ import { NextFunction } from 'express';
 @UseGuards(AuthenticatedGuard)
 export class ChatGateway {
 	constructor() {
-			// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
-
+			 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 	}
 
   @SubscribeMessage('message')
-  handleConnection(@Session() session: Record<string, any>, client: any): string {
+//  handleConnection(@Session() session: Record<string, any>, client: any): string {
+	handleConnection( client: any, payload: any): string {
 	// const cookieParser = require('cookie-parser');
-	var cookie = parse(session.handshake.headers.cookie);
-	var unsigned_cookie = cookieParser.signedCookie(cookie.ft_pong, "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0");
-	console.log(cookie);
+	//var cookie = parse(session.handshake.headers.cookie);
+	//var unsigned_cookie = cookieParser.signedCookie(cookie.ft_pong, "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0");
+	//console.log(cookie);
 	console.log("jop");
-	console.log(unsigned_cookie);
-	console.log(client);
+	console.log(payload);
+	//console.log(unsigned_cookie);
+	console.log(client.username);
+	console.log('socketio', client.request.user);
+	
 
 	// console.log(cookieParser.signedCookie(cookie, "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0"));
 	// console.log(session);

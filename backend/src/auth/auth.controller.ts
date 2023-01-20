@@ -40,7 +40,7 @@ export class AuthController {
 	@Get('status')
 	// @UseGuards(AuthenticatedGuard)
 	user(@Req() request: Request) {
-		console.log(request.user);
+		//console.log(request.user);
 		if (request.user)
 			return { msg: "authenticated" };
 		else 
