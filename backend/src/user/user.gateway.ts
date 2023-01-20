@@ -38,8 +38,6 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		}
 	}
 
-
-
   handleMessage(client: any, payload: any): string {
     return 'Hello world!';
   }

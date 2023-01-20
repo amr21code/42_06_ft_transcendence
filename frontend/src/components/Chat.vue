@@ -150,7 +150,7 @@ export default defineComponent({
 	mounted () {
 		this.retrieveCurrentUser();
 
-		//checks for new chats every second; change to getting messages when a change is in the db
+		// checks for new chats every second; change to getting messages when a change is in the db
 		// window.setInterval(() => {
 		// 	this.retrieveCurrentChats();
 		// }, 1000)

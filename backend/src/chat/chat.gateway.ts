@@ -18,6 +18,8 @@ export class ChatGateway {
 
 	@SubscribeMessage('chat')
 	handleMessage(client: any, payload: string) : string{
+		console.log(client);
+		console.log(payload);
 		return payload;
 	}
 
