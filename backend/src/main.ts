@@ -10,17 +10,17 @@ import { UserService } from './user/user.service';
 import { SessionAdapter } from './session.adapter';
 import * as session from 'express-session';
 
-declare module "http" {
-	interface IncomingMessage {
-		session: Record<string, any> & {
-			passport: {
-				user: {
-					userid: string,
-				}
-			}
-		};
-	}
-}
+// declare module "http" {
+// 	interface IncomingMessage {
+// 		session: Record<string, any> & {
+// 			passport: {
+// 				user: {
+// 					userid: string,
+// 				}
+// 			}
+// 		};
+// 	}
+// }
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -88,6 +88,7 @@ async function bootstrap() {
 	app.use(passport.initialize());
 	app.use(passport.session());
 	app.useWebSocketAdapter(new SessionAdapter(sessionMiddleware, app))
+	// app.useWebSocketAdapter(new SessionAdapter(app))
   	await app.listen(3000);
 }
 bootstrap();

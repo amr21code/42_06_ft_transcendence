@@ -11,35 +11,36 @@ import { UserService } from 'src/user/user.service';
 }
 })
 @UseGuards(AuthenticatedGuard)
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect{
+export class ChatGateway {
 	constructor(private readonly userService: UserService) {
 			// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 	}
 
-	@SubscribeMessage('message')
+	@SubscribeMessage('chat')
 	handleMessage(client: any, payload: string) : string{
 		return payload;
 	}
 
-  @SubscribeMessage('message')
-//  handleConnection(@Session() session: Record<string, any>, client: any): string {
-	handleConnection( client: any): string {
-	console.log("jop");
-	const user = client.request.user;
-	//console.log(client);
-	console.log(client.id);
-	if (user){
-		this.userService.changeUserData(user.userid, "user_status", 1);
-		//todo save client.id
-	}
-    return 'Hello world!';
-  }
+//   @SubscribeMessage('message')
+// //  handleConnection(@Session() session: Record<string, any>, client: any): string {
+// 	handleConnection( client: any): string {
+// 	console.log("login");
+// 	// const user = client.request.user;
+// 	// console.log(client.data.user);
+// 	// console.log(client.id);
+// 	// if (user) {
+// 	// 	this.userService.changeUserData(user.userid, "user_status", 1);
+// 	// 	this.userService.changeUserData(user.userid, "socket_token", client.id);
+// 	// }
 
-  handleDisconnect(client: any): string {
-	console.log("log out");
-	console.log(client.id);
-	//console.log(client);
-	//todo change user_status to 0 for user with clientid = client.id
-    return 'Hello world!';
-  }
+//     return 'Hello world!';
+//   }
+
+//   handleDisconnect(client: any): string {
+// 	console.log("log out");
+// 	console.log(client.id);
+// 	// console.log(client);
+// 	//todo change user_status to 0 for user with clientid = client.id
+//     return 'Hello world!';
+//   }
 }
