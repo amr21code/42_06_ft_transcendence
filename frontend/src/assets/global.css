@@ -3,6 +3,9 @@
 	--second-bg-color: #444040;
 	--main-font-color: white;
 	--first-highlight-color: rgb(172, 64, 24);
+	--leftofgame_fr: 0.2fr;
+	--game_fr: 1fr;
+	--sidewindow_fr: 0.2fr;
 }
 
 body {

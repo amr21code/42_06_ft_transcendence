@@ -19,14 +19,16 @@
 			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
 				<!-- make Game stop while loggedIn === false -->
 			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
-			<div v-if="selected !== 'play' && selected !== 'watch'" class="game-part-screen">
+			<!-- <div v-if="selected !== 'play' && selected !== 'watch'" class="game-part-screen"> -->
+			<div class="game-part-screen">
+				<div class="placeholder"></div>
 				<MatchCourt ref="matchCourtRef2"/>
 				<SideWindow :selected="selected"/>
 			</div>
 			<!-- BEGIN ONLY TEMPORARY, should be implemented above -->
-			<div class="game-full-screen" v-if="selected === 'play' || selected === 'watch'">
-				<MatchCourt ref="matchCourtRef1"/>
-			</div>
+			<!-- <div class="game-full-screen" v-if="selected === 'play' || selected === 'watch'"> -->
+				<!-- <MatchCourt ref="matchCourtRef1"/> -->
+			<!-- </div> -->
 			<!-- ONLY TEMPORARY, should be implemented above END -->
 			<footer>
 				Made with ❤️ by anruland, djedasch, jtomala and raweber
@@ -62,21 +64,9 @@ export default defineComponent({
 	},
 	
 	setup() {
-		// fetch('https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6627b6e06635604efe0143bdaabec14c22c6f69d741ae654619148e7d2dea5be&redirect_uri=http%3A%2F%2F192.168.56.2%3A3000%2Fauth%2Freturn&response_type=code')
-		// .then(response => response.json())
-		// .then(function(response) {
-		// 	console.log("test", response);
-		// });
-		// LoggingService.getLog()
-		// .then((response: Response)=> {
-		// 		console.log(response);
-		// 		// console.log(response); 
-		// 	})
-		// 	.catch((e: Error) => console.log("Error occured"));
-		// for login popup (42 login)
-		const loggedIn = ref(false); // make 'false' for not showing login screen
+		const loggedIn = ref(false);
 		const toggleLoginPopup = () => {
-			loggedIn.value = !loggedIn.value; // make this read the session
+			loggedIn.value = !loggedIn.value;
 		}
 		// for user data popup (user data)
 		const userDataPopupTrigger = ref(false);
@@ -87,8 +77,19 @@ export default defineComponent({
 		const selected = ref<SelectedSideWindow>('play');
 		const handleClick = (term: SelectedSideWindow) => {
 			selected.value = term;
+			if (selected.value === 'play' || selected.value === 'watch') {
+				document.documentElement.style.setProperty("--leftofgame_fr", "0.2fr");
+				document.documentElement.style.setProperty("--game_fr", "1fr");
+				document.documentElement.style.setProperty("--sidewindow_fr", "0.2fr");
+			}
+			else {
+				document.documentElement.style.setProperty("--leftofgame_fr", "0fr");
+				document.documentElement.style.setProperty("--game_fr", "2fr");
+				document.documentElement.style.setProperty("--sidewindow_fr", "1fr");
+			}
+			// console.log("game fr value: ", document.documentElement.style.getPropertyValue("--game_fr"));
+			// console.log("sidewindow fr value: ", document.documentElement.style.getPropertyValue("--sidewindow_fr"));
 		};
-
 		return { loggedIn, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
 	
@@ -178,22 +179,24 @@ export default defineComponent({
 
 	.game-part-screen {
 		display: grid;
-		grid-template-columns: 2fr 1fr;
+		/* grid-template-columns: 0.2fr 1fr 0.2fr; */
+		grid-template-columns:  var(--leftofgame_fr) var(--game_fr) var(--sidewindow_fr);
 		margin: 20px;
 		gap: 20px;
+		max-height: 70vh;
 	}
-
+	
 	.game-part-screen MatchCourt {
+		aspect-ratio: 5/3;
 		min-width: 66%;
 	}
 
-	.game-full-screen {
-		max-height: 70vh; /*find something more elegant*/
-		aspect-ratio: 5/3;
+	/*.game-full-screen {
+		max-height: 70vh; find something more elegant
 		margin: 40px auto;
 		gap: 20px;
-		/* outline: 10px solid purple; */
-	}
+		outline: 10px solid purple;
+	} */
 
 	footer {
 		text-align: center;
