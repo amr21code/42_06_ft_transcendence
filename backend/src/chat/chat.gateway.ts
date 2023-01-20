@@ -9,6 +9,7 @@ import * as cookieParser from 'cookie-parser';
 import { sessionMiddleware, wrap } from '../middleware/middleware';
 import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices/nest-microservice-options.interface';
 import { NextFunction } from 'express';
+import { UserService } from 'src/user/user.service';
 
 
 @WebSocketGateway(3002, {cors: {
@@ -19,8 +20,8 @@ import { NextFunction } from 'express';
 })
 @UseGuards(AuthenticatedGuard)
 export class ChatGateway {
-	constructor() {
-			 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+	constructor(private readonly userService: UserService) {
+			// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 	}
 
   @SubscribeMessage('message')
@@ -35,7 +36,11 @@ export class ChatGateway {
 	//console.log(unsigned_cookie);
 	console.log(client.username);
 	console.log('socketio', client.request.user);
-	
+	const user = client.request.user;
+	if (user)
+		this.userService.changeUserData(user.userid, "user_status", 1);
+
+
 
 	// console.log(cookieParser.signedCookie(cookie, "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0"));
 	// console.log(session);
@@ -46,6 +51,8 @@ export class ChatGateway {
 
   handleDisconnect(client: any, payload: any): string {
 	console.log("jop");
+	const user = client.request.user;
+	//this.userService.changeUserData(user.userid, "user_status", 0);
     return 'Hello world!';
   }
 }
