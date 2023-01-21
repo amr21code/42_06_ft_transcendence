@@ -29,7 +29,7 @@ class DataService {
 		return apiInstance.get('/chat/leave/' + chatid)
 	}
 
-	sendMessage (userid : number, chatid : number, message : string) {
+	sendMessage (userid : number, chatid : number, message : String) {
 		// console.log("sendMessage function got triggered with", userid, chatid, message);
 		return apiInstance.post('/chat/message', JSON.stringify({
 			userid: userid,

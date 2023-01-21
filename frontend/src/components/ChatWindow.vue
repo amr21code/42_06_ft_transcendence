@@ -25,13 +25,9 @@
 
 		<div class="chat-message-view">
 
-			messsages: {{ messages }}
-			<div class="messages-wrapper" v-for="message in messages" :key="message">
-				<a>{{ message }}</a>
-			</div>
-			
+
+	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 			<div class="messages-wrapper" v-for="chat in chats" :key="chat">
-				<!-- message sent -->
 				<div class="message-sent" v-if="user[0].username == chat.username">
 					<div class="message-username">
 						<strong >{{ chat.username }}</strong>
@@ -43,10 +39,33 @@
 				<!--message recv-->
 				<div class="message-recv" v-else>
 					<div class="message-username">
-						<strong >{{ chat.username }}</strong>
+						<strong >{{ chat.userid }}</strong>
+					</div>
+					<div class="message-text">
+						<a >{{ chat.userid }}</a>
+					</div>
+				</div>
+			</div>
+
+	<!-----------NEW MESSAGES FROM SOCKET----------------------------------------------------->
+
+			<div class="messages-wrapper" v-for="chat in messages" :key="chat">
+				<!-- message sent -->
+				<div class="message-sent" v-if="user[0].userid == chat.userid">
+					<div class="message-username">
+						<strong >{{ chat.userid }}</strong>
 					</div>
 					<div class="message-text">
 						<a >{{ chat.message }}</a>
+					</div>
+				</div>
+				<!--message recv-->
+				<div class="message-recv" v-else>
+					<div class="message-username">
+						<strong >{{ chat.userid }}</strong>
+					</div>
+					<div class="message-text">
+						<a >{{ chat.userid }}</a>
 					</div>
 				</div>
 			</div>
@@ -88,12 +107,13 @@ export default defineComponent({
 			chats: {} as IChats,
 			message: '' as String,
 			messages: [] as any,
-			socket: io('http://localhost:3000'),
+			socket: SocketioService.setupSocketConnection(),
 		}
 	},
 
 	created () {
 		this.socket.on('chat-message', (data: any) => {
+			console.log("ChatWindow.vue: ", data);
 			this.messages.push(data);
 		});
 	},
@@ -119,18 +139,19 @@ export default defineComponent({
 
 		retrieveCurrentMessages(chatid : String) {
 			// this.messages.push(SocketioService.getMessages(chatid));
-			// DataService.getMessages(chatid)
-			// .then((response: ResponseData) => {
-			// 	this.chats = response.data;
-			// 	// console.log(response.data);
-			// })
-			// .catch((e: Error) => {
-			// 	console.log(e);
-			// });
+			DataService.getMessages(chatid)
+			.then((response: ResponseData) => {
+				this.chats = response.data;
+				// console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 		},
 
-		sendMessage (userid : number, chatid : String, message : string) {
-			SocketioService.sendMessage(chatid, message);
+		sendMessage (userid : String, chatid : String, message : String) {
+			// console.log('send message', userid, chatid, message);
+			SocketioService.sendMessage(userid, chatid, message);
 			DataService.sendMessage(userid, chatid, message)
 			.then((response: ResponseData) => {
 				message = '';
@@ -159,12 +180,6 @@ export default defineComponent({
 		this.retrieveCurrentUser();
 		this.retrieveCurrentMessages(this.curr_chat.chatid)
 		
-
-
-		//checks for new messages every second; change to getting messages when a change is in the db
-		// window.setInterval(() => {
-		// 	this.messages = SocketioService.getMessages();
-		// }, 1000)
 	},
 
 	setup() {

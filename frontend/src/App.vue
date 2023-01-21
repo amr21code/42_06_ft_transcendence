@@ -57,7 +57,10 @@ export default defineComponent({
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
 	created () {
 		console.log('connecting to socket.io');
-		SocketioService.setupSocketConnection();
+		var io = SocketioService.setupSocketConnection();
+		// io.on('chat-message', (data : any) => {
+		// 	console.log('App.vue: ', data);
+		// });
 	},
 	beforeUnmount() {
 		SocketioService.disconnect();

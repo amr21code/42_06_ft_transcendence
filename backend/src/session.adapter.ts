@@ -40,9 +40,9 @@ export class SessionAdapter extends IoAdapter {
 		const wrap = (middleware) => (socket, next) =>
 		middleware(socket.request, {}, next);
 		server.use((socket, next) => {
-			socket.on('send-chat-message', ({chatid, message}) => {
-				console.log("backend:", socket.id, chatid, message);
-				socket.emit('chat-message', {socketid : socket.id, message :message});
+			socket.on('send-chat-message', ({userid, chatid, message}) => {
+				console.log("backend:", userid, chatid, message);
+				socket.emit('chat-message', {userid : userid, chatid : chatid, message :message});
 			});
 
 			socket.on('get messages', ({chatid}) => {
