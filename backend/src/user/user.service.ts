@@ -1,4 +1,4 @@
-import { Injectable, UseGuards } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Profile } from 'passport-42';
 import { DbService } from '../db/db.service';
@@ -126,6 +126,10 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET twofasecret=${newdata} WHERE userid=${userid}`
 				);
+		}else if (field == 'socket_token') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET socket_token=${newdata} WHERE userid=${userid}`
+				);
 		}
 	}
 
@@ -159,6 +163,10 @@ export class UserService {
 		}else if (field == 'twofasecret') {
 			status = await this.db.$queryRaw(
 				Prisma.sql`SELECT twofasecret FROM public.users WHERE userid=${userid}`
+				);
+		}else if (field == 'socket_token') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT socket_token FROM public.users WHERE userid=${userid}`
 				);
 		}
 		return status;

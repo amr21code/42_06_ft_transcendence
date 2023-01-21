@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
 export class UserController {
-	constructor( private readonly userService: UserService){}
+	constructor(private readonly userService: UserService){}
 
 	@Get('me')
 	async getMe(@Req() request: Request) {

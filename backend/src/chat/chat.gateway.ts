@@ -1,14 +1,6 @@
-import { Injectable, NestMiddleware, Session, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { SessionSerializer } from '../auth/serializer'
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
-import { PassportSerializer } from '@nestjs/passport';
-import { parse } from 'cookie';
-import { Server } from 'http';
-import * as cookieParser from 'cookie-parser';
-import { sessionMiddleware, wrap } from '../middleware/middleware';
-import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices/nest-microservice-options.interface';
-import { NextFunction } from 'express';
 import { UserService } from 'src/user/user.service';
 
 
@@ -24,35 +16,34 @@ export class ChatGateway {
 			// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 	}
 
-  @SubscribeMessage('message')
-//  handleConnection(@Session() session: Record<string, any>, client: any): string {
-	handleConnection( client: any, payload: any): string {
-	// const cookieParser = require('cookie-parser');
-	//var cookie = parse(session.handshake.headers.cookie);
-	//var unsigned_cookie = cookieParser.signedCookie(cookie.ft_pong, "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0");
-	//console.log(cookie);
-	console.log("jop");
-	console.log(payload);
-	//console.log(unsigned_cookie);
-	console.log(client.username);
-	console.log('socketio', client.request.user);
-	const user = client.request.user;
-	if (user)
-		this.userService.changeUserData(user.userid, "user_status", 1);
+	@SubscribeMessage('chat message')
+	async handleMessage(chatid : String, message : String) {
+		console.log("handleMessage()");
+		console.log(chatid);
+		console.log(message);
+		return "message received";
+	}
 
+//   @SubscribeMessage('message')
+// //  handleConnection(@Session() session: Record<string, any>, client: any): string {
+// 	handleConnection( client: any): string {
+// 	console.log("login");
+// 	// const user = client.request.user;
+// 	// console.log(client.data.user);
+// 	// console.log(client.id);
+// 	// if (user) {
+// 	// 	this.userService.changeUserData(user.userid, "user_status", 1);
+// 	// 	this.userService.changeUserData(user.userid, "socket_token", client.id);
+// 	// }
 
+//     return 'Hello world!';
+//   }
 
-	// console.log(cookieParser.signedCookie(cookie, "390qofjsliufmpc90a3wrpoa938wmrcpaw3098rmcpa0"));
-	// console.log(session);
-	// this.serializer.deserializeUser(session.handshake.headers.cookie.substr(8));
-	// console.log(session.passport.user.userid);
-    return 'Hello world!';
-  }
-
-  handleDisconnect(client: any, payload: any): string {
-	console.log("jop");
-	const user = client.request.user;
-	//this.userService.changeUserData(user.userid, "user_status", 0);
-    return 'Hello world!';
-  }
+//   handleDisconnect(client: any): string {
+// 	console.log("log out");
+// 	console.log(client.id);
+// 	// console.log(client);
+// 	//todo change user_status to 0 for user with clientid = client.id
+//     return 'Hello world!';
+//   }
 }
