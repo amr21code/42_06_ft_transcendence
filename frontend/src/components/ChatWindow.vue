@@ -28,6 +28,7 @@
 
 	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 			<div class="messages-wrapper" v-for="chat in chats" :key="chat">
+				<!-- message sent -->
 				<div class="message-sent" v-if="user[0].username == chat.username">
 					<div class="message-username">
 						<strong >{{ chat.username }}</strong>
@@ -51,7 +52,7 @@
 
 			<div class="messages-wrapper" v-for="chat in messages" :key="chat">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user[0].userid == chat.userid">
+				<div class="message-sent" v-if="user[0].userid == chat.userid && curr_chat.chatid == chat.chatid">
 					<div class="message-username">
 						<strong >{{ chat.userid }}</strong>
 					</div>
@@ -60,7 +61,7 @@
 					</div>
 				</div>
 				<!--message recv-->
-				<div class="message-recv" v-else>
+				<div class="message-recv" v-else-if="user[0].userid != chat.userid && curr_chat.chatid == chat.chatid">
 					<div class="message-username">
 						<strong >{{ chat.userid }}</strong>
 					</div>
