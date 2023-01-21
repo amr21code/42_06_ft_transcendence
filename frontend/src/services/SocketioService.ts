@@ -6,11 +6,20 @@ class SocketioService {
 
   setupSocketConnection() {
     this.socket = io('localhost:3002', { withCredentials: true });
-    this.socket.emit('my message', 'Hello there from Vue.');
+    console.log('Socket connected');
 
-    this.socket.on('my broadcast', (data : String) => {
-      console.log(data);
+    this.socket.on('chat message', (message : String) => {
+      this.socket.emit('chat message', message);
+      console.log(message);
     });
+    console.log(this.socket);
+    return (this.socket);
+  }
+
+  // send a message to the server
+  sendMessage(chatid : String, message : String) {
+    console.log("Sending message");
+    this.socket.emit('chat message', {chatid, message });  //this.socket is undefined
   }
 
   disconnect() {

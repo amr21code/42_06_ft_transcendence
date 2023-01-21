@@ -70,6 +70,7 @@ import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import type { IChats } from '../types/Chats'
+import SocketioService from '../services/SocketioService'
 
 
 
@@ -95,33 +96,34 @@ export default defineComponent({
 			DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
-				console.log(response.data);
+				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
 		},
 
-		retrieveCurrentMessages(chatid : string) {
+		retrieveCurrentMessages(chatid : number) {
 			DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
 				this.chats = response.data;
-				console.log(response.data);
+				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
 		},
 
-		sendMessage (userid : string, chatid : number, message : string) {
-			DataService.sendMessage(userid, chatid, message)
-			.then((response: ResponseData) => {
-				message = '';
-				console.log(response.data);
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+		sendMessage (chatid : String, message : string) {
+			SocketioService.sendMessage(chatid, message);
+			// DataService.sendMessage(userid, chatid, message)
+			// .then((response: ResponseData) => {
+			// 	message = '';
+			// 	console.log(response.data);
+			// })
+			// .catch((e: Error) => {
+			// 	console.log(e);
+			// });
 		},
 
 		changeChatName (type : String, chatid : number, chatname : String, password : String) {

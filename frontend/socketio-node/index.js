@@ -26,12 +26,12 @@ io.on('connection', (socket) => {
         console.log('user disconnected with', socket.id);
     });
 
-    socket.on('my message', (msg) => {
+    socket.on('chat message', (msg) => {
         console.log('message: ' + msg);
         io.emit('my broadcast', `server: ${msg}`);
     });
 });
 
-http.listen(3123, () => {
-    console.log('listening on *:3123');
+http.listen(3002, () => {
+    console.log('listening on *:3002');
 });
