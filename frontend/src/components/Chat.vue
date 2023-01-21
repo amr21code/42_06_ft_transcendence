@@ -82,6 +82,7 @@ import type { IChats } from '../types/Chats'
 
 //socket.io
 import SocketioService from '../services/SocketioService.js';
+import { io } from 'socket.io-client';
 
 type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 

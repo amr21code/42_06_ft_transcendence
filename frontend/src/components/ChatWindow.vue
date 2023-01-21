@@ -76,6 +76,7 @@ import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
+import { io } from 'socket.io-client';
 
 
 
@@ -87,7 +88,14 @@ export default defineComponent({
 			chats: {} as IChats,
 			message: '' as String,
 			messages: [] as any,
+			socket: io('http://localhost:3000'),
 		}
+	},
+
+	created () {
+		this.socket.on('chat-message', (data: any) => {
+			this.messages.push(data);
+		});
 	},
 
 	props: {
@@ -154,9 +162,9 @@ export default defineComponent({
 
 
 		//checks for new messages every second; change to getting messages when a change is in the db
-		window.setInterval(() => {
-			this.messages = SocketioService.getMessages();
-		}, 1000)
+		// window.setInterval(() => {
+		// 	this.messages = SocketioService.getMessages();
+		// }, 1000)
 	},
 
 	setup() {
