@@ -24,6 +24,11 @@
 <!--------------BODY------------------------------------------------------------------------------------>
 
 		<div class="chat-message-view">
+
+			messsages: {{ messages }}
+			<div class="messages-wrapper" v-for="message in messages" :key="message">
+				<a>{{ message }}</a>
+			</div>
 			
 			<div class="messages-wrapper" v-for="chat in chats" :key="chat">
 				<!-- message sent -->
@@ -52,7 +57,7 @@
 			
 			<div class="chat-write-and-send">
 				<!-- <form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')"> -->
-				<form @submit.prevent="sendMessage( curr_chat.chatid, message), submit()" >
+				<form @submit.prevent="sendMessage(user[0].userid, curr_chat.chatid, message), submit()" >
 					<input placeholder="Write message here" v-model="message">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
@@ -80,7 +85,8 @@ export default defineComponent({
 		return {
 			user: {} as IUser,
 			chats: {} as IChats,
-			message: '' as String
+			message: '' as String,
+			messages: [] as any,
 		}
 	},
 
@@ -103,27 +109,28 @@ export default defineComponent({
 			});
 		},
 
-		retrieveCurrentMessages(chatid : number) {
-			DataService.getMessages(chatid)
-			.then((response: ResponseData) => {
-				this.chats = response.data;
-				// console.log(response.data);
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		},
-
-		sendMessage (chatid : String, message : string) {
-			SocketioService.sendMessage(chatid, message);
-			// DataService.sendMessage(userid, chatid, message)
+		retrieveCurrentMessages(chatid : String) {
+			// this.messages.push(SocketioService.getMessages(chatid));
+			// DataService.getMessages(chatid)
 			// .then((response: ResponseData) => {
-			// 	message = '';
-			// 	console.log(response.data);
+			// 	this.chats = response.data;
+			// 	// console.log(response.data);
 			// })
 			// .catch((e: Error) => {
 			// 	console.log(e);
 			// });
+		},
+
+		sendMessage (userid : number, chatid : String, message : string) {
+			SocketioService.sendMessage(chatid, message);
+			DataService.sendMessage(userid, chatid, message)
+			.then((response: ResponseData) => {
+				message = '';
+				console.log(response.data);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 		},
 
 		changeChatName (type : String, chatid : number, chatname : String, password : String) {
@@ -142,10 +149,13 @@ export default defineComponent({
 
 	mounted () {
 		this.retrieveCurrentUser();
+		this.retrieveCurrentMessages(this.curr_chat.chatid)
+		
+
 
 		//checks for new messages every second; change to getting messages when a change is in the db
 		window.setInterval(() => {
-			this.retrieveCurrentMessages(this.curr_chat.chatid)
+			this.messages = SocketioService.getMessages();
 		}, 1000)
 	},
 
