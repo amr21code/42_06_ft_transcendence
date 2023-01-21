@@ -16,13 +16,13 @@ export class ChatGateway {
 			// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 	}
 
-	@SubscribeMessage('chat message')
-	async handleMessage(chatid : String, message : String) {
-		console.log("handleMessage()");
-		console.log(chatid);
-		console.log(message);
-		return "message received";
-	}
+@SubscribeMessage('chat message')
+async handleMessage(chatid : String, message : String) {
+	console.log("handleMessage()");
+	console.log(chatid);
+	console.log(message);
+	return "message received";
+}
 
 //   @SubscribeMessage('message')
 // //  handleConnection(@Session() session: Record<string, any>, client: any): string {

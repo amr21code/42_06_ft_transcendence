@@ -52,7 +52,7 @@
 			
 			<div class="chat-write-and-send">
 				<!-- <form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')"> -->
-				<form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, message), submit()" >
+				<form @submit.prevent="sendMessage( curr_chat.chatid, message), submit()" >
 					<input placeholder="Write message here" v-model="message">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>

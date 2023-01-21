@@ -40,10 +40,22 @@ export class SessionAdapter extends IoAdapter {
 		const wrap = (middleware) => (socket, next) =>
 		middleware(socket.request, {}, next);
 		server.use((socket, next) => {
-			//   socket.data.username = 'test'; //passing random property to see if use method is working
-			// console.log("create");
+			socket.on('chat message', ({chatid, message}) => {
+				console.log(socket.id, chatid, message);
+				socket.broadcast.to(chatid).emit('chat message', {chatid, message});
+			});
 		next();
     });
+
+	// server.use((socket, next) => {
+	// 	// console.log("created: ", socket.id);
+	// 	socket.on('chat message', ({chatid, message}) => {
+	// 		console.log(socket.id, chatid, message);
+	// 		socket.broadcast.to(chatid).emit('chat message', {chatid, message});
+	// 	});
+	// 	next();
+	// });
+
 
 	// server.on("connect", socket => {
 	// 	if (socket.request.session.passport) {
