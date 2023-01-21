@@ -13,10 +13,12 @@ export default class Game {
 	private computerPlayer: ComputerPaddle;
 	private ball: Ball;
 
-	constructor(){
+	constructor(savedScore1: number, savedScore2: number){
 		this.paused = false;
 		this.gameCanvas = document.getElementById("match-court");
 		this.gameContext = this.gameCanvas.getContext("2d");
+		Game.playerScore1 = savedScore1;
+		Game.playerScore2 = savedScore2;
 
 		// REMOVE BLURRINESS ---------------------------------------------------
 		let dpi = window.devicePixelRatio;
@@ -88,8 +90,8 @@ export default class Game {
 		this.gameContext.fillStyle = "#444040";
 		this.gameContext.textalign = "center";
 	
-		this.gameContext.fillText(Game.playerScore1, (this.gameCanvas.width / 5), this.gameCanvas.height / 4);
-		this.gameContext.fillText(Game.playerScore2,  this.gameCanvas.width - (this.gameCanvas.width / 5) - this.gameContext.measureText(Game.playerScore2).width , this.gameCanvas.height / 4);
+		this.gameContext.fillText(Game.playerScore1, (this.gameCanvas.width / 5), this.gameCanvas.height / 2 + ((this.gameContext.measureText(Game.playerScore2).actualBoundingBoxAscent + this.gameContext.measureText(Game.playerScore2).actualBoundingBoxDescent) / 2));
+		this.gameContext.fillText(Game.playerScore2,  this.gameCanvas.width - (this.gameCanvas.width / 5) - this.gameContext.measureText(Game.playerScore2).width , this.gameCanvas.height / 2 + ((this.gameContext.measureText(Game.playerScore2).actualBoundingBoxAscent + this.gameContext.measureText(Game.playerScore2).actualBoundingBoxDescent) / 2));
 	}
 
 	update(){

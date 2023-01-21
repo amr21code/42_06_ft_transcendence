@@ -32,14 +32,18 @@ export default defineComponent({
 			requestAnimationFrame(this.gameLoop);
 		}
 	},
-
-	mounted () {
-		this.game = new Game();
-		// COMMENT BELOW OUT TO NOT SHOW THE GAME
-		requestAnimationFrame(this.gameLoop);
-		
+	created () {
+		this.playerScore1 = 0;
+		this.playerScore2 = 0;
+		console.log("beforeMount called");
 	},
 
+	mounted () {
+		this.game = new Game(this.playerScore1, this.playerScore2);
+		// COMMENT BELOW OUT TO NOT SHOW THE GAME
+		console.log("mounted called");
+		requestAnimationFrame(this.gameLoop);
+	},
 })
 </script>
 
