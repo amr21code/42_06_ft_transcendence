@@ -29,18 +29,18 @@ class DataService {
 		return apiInstance.get('/chat/leave/' + chatid)
 	}
 
-	sendMessage (userid : number, chatid : number, message : String) {
+	// sendMessage (userid : number, chatid : number, message : String) {
 		// console.log("sendMessage function got triggered with", userid, chatid, message);
-		return apiInstance.post('/chat/message', JSON.stringify({
-			userid: userid,
-			chatid: chatid,
-			message: message
-		}), 
-		{
-			method: 'POST',
-			headers: {'Content-Type': 'application/json'}
-		})
-	}
+		// return apiInstance.post('/chat/message', JSON.stringify({
+		// 	userid: userid,
+		// 	chatid: chatid,
+		// 	message: message
+		// }), 
+		// {
+		// 	method: 'POST',
+		// 	headers: {'Content-Type': 'application/json'}
+		// })
+	// }
 
 	changeChatName (type : String, chatid : number, chat_name : String, password : String) {
 		// console.log(type, chatid, chat_name, password);
