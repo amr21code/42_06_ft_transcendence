@@ -57,7 +57,7 @@
 						<strong >{{ message.username }}</strong>
 					</div>
 					<div class="message-text">
-						<a >{{ message }}</a>
+						<a >{{ message.message }}</a>
 					</div>
 				</div>
 				<!--message recv-->
@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, onMounted } from 'vue'
+import { computed, defineComponent, ref, onMounted, type PropType } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -122,7 +122,7 @@ export default defineComponent({
 	props: {
 		curr_chat: {
 			required: true,
-			type: Object
+			type: Object as PropType<IChats>,
 		},
 	},
 
@@ -149,7 +149,7 @@ export default defineComponent({
 			});
 		},
 
-		sendMessage (chatid : String, message : String) {
+		sendMessage (chatid : number, message : String) {
 			// console.log('send message', userid, chatid, message);
 			// console.log("test", this.user[0].username);
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
@@ -163,7 +163,7 @@ export default defineComponent({
 			// });
 		},
 
-		changeChatName (type : String, chatid : number, chatname : String, password : String) {
+		changeChatName (type : String, chatid : number, chatname : string, password : String) {
 			console.log(type, chatid, chatname, password);
 			DataService.changeChatName(type, chatid, chatname, password)
 			.then((response: ResponseData) => {

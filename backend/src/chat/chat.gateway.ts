@@ -22,12 +22,26 @@ async handleMessage(client: Socket, message: ChatMessageDto) {
 	try {
 		console.log("handleMessage()");
 		console.log(message);
-		this.chatService.addMessage(message);
+		await this.chatService.addMessage(message);
 		console.log(message.username);
-		client.broadcast.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
+		client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
 	} catch (error) {
 		throw new ForbiddenException('add message in socketIO message-handler failed');
 	}
+}
+
+@SubscribeMessage('send-chat-refresh')
+async refreshChat(client: Socket) {
+	// console.log("backend: got send-chat-refresh");
+	client.emit('refresh-chat');
+}
+
+
+@SubscribeMessage('send-chat-leave')
+async deleteChat(client: Socket) {
+	// muss in DB geleavt werden
+	client.emit('refresh-chat');
+	client.emit('chat-leave');
 }
 
 //   @SubscribeMessage('message')

@@ -3,7 +3,8 @@ interface IChats {
 	chatid: number,
 	chat_name: string,
 	typename: string,
-	status: number
+	status: number,
+	password: string,
 }
 
 export type { IChats }

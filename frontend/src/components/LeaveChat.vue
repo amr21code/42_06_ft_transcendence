@@ -7,7 +7,7 @@
                 <input class="submit-button" type="submit" @click="leaveChat(curr_chat.chatid), setSelectedWindow('overview')">
             </button>
 
-            <button class="close-button" @click="LeaveChattogglePopup">Close</button>
+            <button class="close-button" @click="{() => this.LeaveChattogglePopup()}">Close</button>
         </div>
     </div>
 </template>
@@ -38,7 +38,7 @@ export default defineComponent({
 			required: true,
 			type: String
 		},
-        ['LeaveChattogglePopup'] : String
+        ['LeaveChattogglePopup'] : Boolean
 	},
 
     data () {
@@ -59,15 +59,15 @@ export default defineComponent({
 		},
 
         leaveChat(chatid : number) {
-            DataService.leaveChat(chatid)
-            .then((response: ResponseData) => {
-				// console.log("leave chat with the id", chatid);
-				SocketioService.refreshChats();
-				SocketioService.chatDeleted();
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+			SocketioService.chatLeave();
+			// SocketioService.refreshChats();
+            // DataService.leaveChat(chatid)
+            // .then((response: ResponseData) => {
+			// 	// console.log("leave chat with the id", chatid);
+			// })
+			// .catch((e: Error) => {
+			// 	console.log(e);
+			// });
         },
 
         setSelectedWindow(selectedWindow : String){

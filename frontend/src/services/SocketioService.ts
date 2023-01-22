@@ -24,13 +24,13 @@ class SocketioService {
   }
 
   // sends a message to the server
-  sendMessage(username: String, userid : String, chatid : String, message : String) {
+  sendMessage(username: String, userid : String, chatid : number, message : String) {
     // console.log("Sending message", userid, chatid, message);
     this.socket.emit('send-chat-message', {username, userid, chatid, message });
   }
 
-  chatDeleted() {
-    this.socket.emit('send-chat-deleted');
+  chatLeave() {
+    this.socket.emit('send-chat-leave');
   }
 
   // new chat got created
