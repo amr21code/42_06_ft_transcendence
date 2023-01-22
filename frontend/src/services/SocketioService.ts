@@ -6,7 +6,7 @@ class SocketioService {
   constructor() {}
 
   setupSocketConnection() {
-    this.socket = io('http://localhost:3002', { withCredentials: true });
+    this.socket = io('http://192.168.56.2:3002', { withCredentials: true });
     if (this.socket)
       console.log('Socket connected: ', this.socket.id);
     // this.socket.on('chat-message', (data: any) => {
@@ -24,9 +24,9 @@ class SocketioService {
   }
 
   // sends a message to the server
-  sendMessage(userid : String, chatid : String, message : String) {
+  sendMessage(username: String, userid : String, chatid : String, message : String) {
     // console.log("Sending message", userid, chatid, message);
-    this.socket.emit('send-chat-message', {userid, chatid, message });
+    this.socket.emit('send-chat-message', {username, userid, chatid, message });
   }
 
   chatDeleted() {
