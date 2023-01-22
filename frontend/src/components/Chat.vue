@@ -16,6 +16,7 @@
 			<!-- <strong class="">{{ chats }}</strong>  -->
 			<div class="chat-message-view" v-for="chat in chats" :key="chat">
 				<a @click="handleClick('chatwindow', chat)" v-if="type === 'groups'">
+					<!-- {{ chat }} -->
 					<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
