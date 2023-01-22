@@ -29,6 +29,10 @@ class SocketioService {
     this.socket.emit('send-chat-message', {userid, chatid, message });
   }
 
+  chatDeleted() {
+    this.socket.emit('send-chat-deleted');
+  }
+
   // new chat got created
   refreshChats() {
     // console.log("send signal for refresh");

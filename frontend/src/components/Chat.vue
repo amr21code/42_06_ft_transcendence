@@ -100,8 +100,13 @@ export default defineComponent({
 
 	created () {
 		this.socket.on('refresh-chat', () => {
-			console.log('refreshing chat');
+			// console.log('refreshing chat');
 			this.retrieveCurrentChats();
+		});
+
+		this.socket.on('chat-deleted', () => {
+			// console.log('switch to overview');
+			this.handleClick('overview', '0');
 		});
 	},
 

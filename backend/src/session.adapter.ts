@@ -50,6 +50,11 @@ export class SessionAdapter extends IoAdapter {
 				socket.emit('refresh-chat');
 			});
 
+			socket.on('send-chat-deleted', () => {
+				// console.log("backend: got send-chat-deleted");
+				socket.emit('chat-deleted');
+			})
+
 			// socket.on('get messages', ({chatid}) => {
 			// 	console.log(socket.id, chatid);
 			// 	socket.emit('get messages', {chatid});

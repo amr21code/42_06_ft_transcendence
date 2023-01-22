@@ -64,6 +64,7 @@ export default defineComponent({
             .then((response: ResponseData) => {
 				// console.log("leave chat with the id", chatid);
 				SocketioService.refreshChats();
+				SocketioService.chatDeleted();
 			})
 			.catch((e: Error) => {
 				console.log(e);
