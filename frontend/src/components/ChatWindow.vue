@@ -29,7 +29,7 @@
 	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 			<div class="messages-wrapper" v-for="chat in chats" :key="chat">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user[0].username == chat.username">
+				<div class="message-sent" v-if="user.username == chats.username">
 					<div class="message-username">
 						<strong >{{ chat.username }}</strong>
 					</div>
@@ -52,7 +52,7 @@
 
 			<div class="messages-wrapper" v-for="chat in messages" :key="chat">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user[0].userid == chat.userid && curr_chat.chatid == chat.chatid">
+				<div class="message-sent" v-if="user.userid == chat.userid && curr_chat.chatid == chat.chatid">
 					<div class="message-username">
 						<strong >{{ chat.userid }}</strong>
 					</div>
@@ -61,7 +61,7 @@
 					</div>
 				</div>
 				<!--message recv-->
-				<div class="message-recv" v-else-if="user[0].userid != chat.userid && curr_chat.chatid == chat.chatid">
+				<div class="message-recv" v-else-if="user.userid != chat.userid && curr_chat.chatid == chat.chatid">
 					<div class="message-username">
 						<strong >{{ chat.userid }}</strong>
 					</div>
@@ -77,7 +77,7 @@
 			
 			<div class="chat-write-and-send">
 				<!-- <form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')"> -->
-				<form @submit.prevent="sendMessage(user[0].userid, curr_chat.chatid, message), submit()" >
+				<form @submit.prevent="sendMessage(user.userid, curr_chat.chatid, message), submit()" >
 					<input placeholder="Write message here" v-model="message">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
@@ -137,7 +137,7 @@ export default defineComponent({
 			});
 		},
 
-		retrieveCurrentMessages(chatid : String) {
+		retrieveCurrentMessages(chatid : number) {
 			DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
 				this.chats = response.data;
@@ -151,14 +151,14 @@ export default defineComponent({
 		sendMessage (userid : String, chatid : String, message : String) {
 			// console.log('send message', userid, chatid, message);
 			SocketioService.sendMessage(userid, chatid, message);
-			DataService.sendMessage(userid, chatid, message)
-			.then((response: ResponseData) => {
-				message = '';
-				console.log(response.data);
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+			// DataService.sendMessage(userid, chatid, message)
+			// .then((response: ResponseData) => {
+			// 	message = '';
+			// 	console.log(response.data);
+			// })
+			// .catch((e: Error) => {
+			// 	console.log(e);
+			// });
 		},
 
 		changeChatName (type : String, chatid : number, chatname : String, password : String) {

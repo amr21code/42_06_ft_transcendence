@@ -1,7 +1,9 @@
-import { UseGuards } from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { AuthenticatedGuard } from 'src/auth/guards/guards';
+import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
+import { ChatService } from 'src/chat/chat.service';
+import { ChatMessageDto } from './dto';
 
 
 @WebSocketGateway(3002, {cors: {
@@ -10,18 +12,20 @@ import { UserService } from 'src/user/user.service';
 	credentials: true,
 }
 })
-@UseGuards(AuthenticatedGuard)
 export class ChatGateway {
-	constructor(private readonly userService: UserService) {
+	constructor(private readonly userService: UserService, private readonly chatService: ChatService) {
 			// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 	}
 
-@SubscribeMessage('chat message')
-async handleMessage(chatid : String, message : String) {
-	console.log("handleMessage()");
-	console.log(chatid);
-	console.log(message);
-	return "message received";
+@SubscribeMessage('send-chat-message')
+async handleMessage(client: Socket, message: ChatMessageDto) {
+	try {
+		console.log("handleMessage()");
+		this.chatService.addMessage(message);
+		client.broadcast.emit('chat-message', {userid: message.userid, chatid: message.chatid, message: message.message});
+	} catch (error) {
+		throw new ForbiddenException('add message in socketIO message-handler failed');
+	}
 }
 
 //   @SubscribeMessage('message')

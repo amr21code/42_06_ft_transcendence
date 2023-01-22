@@ -6,7 +6,7 @@ class SocketioService {
   constructor() {}
 
   setupSocketConnection() {
-    this.socket = io('localhost:3002', { withCredentials: true });
+    this.socket = io('192.168.56.2:3002', { withCredentials: true });
     if (this.socket)
       console.log('Socket connected: ', this.socket.id);
     // this.socket.on('chat-message', (data: any) => {
