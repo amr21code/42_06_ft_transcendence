@@ -24,6 +24,7 @@ import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import type { IChats } from '../types/Chats'
+import SocketioService from '../services/SocketioService'
 
 
 export default defineComponent({
@@ -61,7 +62,8 @@ export default defineComponent({
         leaveChat(chatid : number) {
             DataService.leaveChat(chatid)
             .then((response: ResponseData) => {
-				console.log("leave chat with the id", chatid);
+				// console.log("leave chat with the id", chatid);
+				SocketioService.refreshChats();
 			})
 			.catch((e: Error) => {
 				console.log(e);

@@ -23,16 +23,16 @@ class SocketioService {
     return (this.socket);
   }
 
-  //returns the messages
-  getMessages() {
-    // console.log('getMessages', this.messages);  
-    return this.messages;
-  }
-
   // sends a message to the server
   sendMessage(userid : String, chatid : String, message : String) {
-    console.log("Sending message");
+    // console.log("Sending message");
     this.socket.emit('send-chat-message', {userid, chatid, message });
+  }
+
+  // new chat got created
+  refreshChats() {
+    // console.log("send signal for refresh");
+    this.socket.emit('send-chat-refresh');
   }
 
   disconnect() {

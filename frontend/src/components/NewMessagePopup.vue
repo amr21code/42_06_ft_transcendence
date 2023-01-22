@@ -34,6 +34,7 @@ import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import type { IChats } from '../types/Chats'
+import SocketioService from '../services/SocketioService'
 
 
 export default defineComponent({
@@ -43,7 +44,8 @@ export default defineComponent({
     data () {
 		return {
 			user: {} as IUser,
-			chats: {} as IChats
+			chats: {} as IChats,
+            socket: SocketioService.socket,
 		}
 	},
 	methods: {
@@ -58,11 +60,11 @@ export default defineComponent({
 			});
 		},
 
-        //needs to take the chatname and chatid in order to pass it to the backend
         createNewChat() {
             DataService.createChat()
             .then((response: ResponseData) => {
-				console.log("chat got created with id ", response.data);
+                // console.log("chat got created with id ", response.data);
+                SocketioService.refreshChats();
 			})
 			.catch((e: Error) => {
 				console.log(e);

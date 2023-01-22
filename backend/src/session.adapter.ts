@@ -41,14 +41,19 @@ export class SessionAdapter extends IoAdapter {
 		middleware(socket.request, {}, next);
 		server.use((socket, next) => {
 			socket.on('send-chat-message', ({userid, chatid, message}) => {
-				console.log("backend:", userid, chatid, message);
+				// console.log("backend:", userid, chatid, message);
 				socket.emit('chat-message', {userid : userid, chatid : chatid, message :message});
 			});
 
-			socket.on('get messages', ({chatid}) => {
-				console.log(socket.id, chatid);
-				socket.emit('get messages', {chatid});
+			socket.on('send-chat-refresh', () => {
+				// console.log("backend: got send-chat-refresh");
+				socket.emit('refresh-chat');
 			});
+
+			// socket.on('get messages', ({chatid}) => {
+			// 	console.log(socket.id, chatid);
+			// 	socket.emit('get messages', {chatid});
+			// });
 		next();
     });
 

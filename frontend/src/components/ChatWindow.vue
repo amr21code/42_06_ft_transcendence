@@ -96,7 +96,6 @@ import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
-import { io } from 'socket.io-client';
 
 
 
@@ -108,7 +107,7 @@ export default defineComponent({
 			chats: {} as IChats,
 			message: '' as String,
 			messages: [] as any,
-			socket: SocketioService.setupSocketConnection(),
+			socket: SocketioService.socket,
 		}
 	},
 
@@ -139,7 +138,6 @@ export default defineComponent({
 		},
 
 		retrieveCurrentMessages(chatid : String) {
-			// this.messages.push(SocketioService.getMessages(chatid));
 			DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
 				this.chats = response.data;

@@ -93,9 +93,18 @@ export default defineComponent({
 	data () {
 		return {
 			user: {} as IUser,
-			chats: {} as IChats
+			chats: {} as IChats,
+			socket: SocketioService.socket,
 		}
 	},
+
+	created () {
+		this.socket.on('refresh-chat', () => {
+			console.log('refreshing chat');
+			this.retrieveCurrentChats();
+		});
+	},
+
 
 	methods: {
 		retrieveCurrentUser() {
@@ -135,17 +144,17 @@ export default defineComponent({
 			}
 		},
 
-		retrieveCurrentDms() {
-			console.log("Recieve Dms");
-			DataService.getDms()
-			.then((response: ResponseData) => {
-				this.chats = response.data;
-				// console.log(response.data);
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		}
+		// retrieveCurrentDms() {
+		// 	console.log("Recieve Dms");
+		// 	DataService.getDms()
+		// 	.then((response: ResponseData) => {
+		// 		this.chats = response.data;
+		// 		// console.log(response.data);
+		// 	})
+		// 	.catch((e: Error) => {
+		// 		console.log(e);
+		// 	});
+		// }
 	},
 
 	mounted () {
@@ -162,13 +171,13 @@ export default defineComponent({
 
 		const popupTrigger = ref(false);
 		const togglePopup = () => {
-			console.log("togglePopup(NewMessagesPopup) got triggert")
+			// console.log("togglePopup(NewMessagesPopup) got triggert")
 			popupTrigger.value = !popupTrigger.value;
 		}
 
 		const LeaveChatTrigger = ref(false);
 		const LeaveChattogglePopup = () => {
-			console.log("togglePopup(LeaveChat) got triggert")
+			// console.log("togglePopup(LeaveChat) got triggert")
 			LeaveChatTrigger.value = !LeaveChatTrigger.value;
 		}
 
@@ -185,7 +194,7 @@ export default defineComponent({
 		const handleClick = (term: SelectedChat, selected_chat: string) => {
 			sel_chat.value = selected_chat;
 			selected.value = term;
-			console.log("handleClick", selected.value, sel_chat.value);
+			// console.log("handleClick", selected.value, sel_chat.value);
 		}
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger, changeType, type }
