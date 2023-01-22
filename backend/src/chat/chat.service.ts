@@ -144,6 +144,7 @@ export class ChatService {
 			Prisma.sql`SELECT status FROM user_chat
 			WHERE userid=${message.userid}`
 		);
+		//user seems to be empty
 		if (user[0].status >= 2)
 			throw new ForbiddenException();
 		const msg = await this.db.$queryRaw(

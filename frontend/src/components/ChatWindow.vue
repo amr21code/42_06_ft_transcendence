@@ -27,46 +27,47 @@
 
 
 	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
-			<div class="messages-wrapper" v-for="chat in chats" :key="chat">
+			<div class="messages-wrapper" v-for="message in db_messages" :key="message.message">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user.username == chats.username">
+				<div class="message-sent" v-if="user.userid == message.username"> <!-- user.userid == message.userid -->
 					<div class="message-username">
-						<strong >{{ chat.username }}</strong>
+						<strong >{{ message.username }}</strong>
 					</div>
 					<div class="message-text">
-						<a >{{ chat.message }}</a>
+						<a >{{ message.message }}</a>
 					</div>
 				</div>
 				<!--message recv-->
 				<div class="message-recv" v-else>
 					<div class="message-username">
-						<strong >{{ chat.userid }}</strong>
+						<strong >{{ message.username }}</strong>
 					</div>
 					<div class="message-text">
-						<a >{{ chat.userid }}</a>
+						<a >{{ message.message }}</a>
 					</div>
 				</div>
 			</div>
 
 	<!-----------NEW MESSAGES FROM SOCKET----------------------------------------------------->
 
-			<div class="messages-wrapper" v-for="chat in messages" :key="chat">
+			<div class="messages-wrapper" v-for="message in messages" :key="message.message">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user.userid == chat.userid && curr_chat.chatid == chat.chatid">
+				<div class="message-sent" v-if="user.username == message.username && curr_chat.chatid == message.chatid">
+					{{ message }}
 					<div class="message-username">
-						<strong >{{ chat.userid }}</strong>
+						<strong >{{ message.userid }}</strong>
 					</div>
 					<div class="message-text">
-						<a >{{ chat.message }}</a>
+						<a >{{ message.message }}</a>
 					</div>
 				</div>
 				<!--message recv-->
-				<div class="message-recv" v-else-if="user.userid != chat.userid && curr_chat.chatid == chat.chatid">
+				<div class="message-recv" v-else-if="user.userid != message.userid && curr_chat.chatid == message.chatid">
 					<div class="message-username">
-						<strong >{{ chat.userid }}</strong>
+						<strong >{{ message.userid }}</strong>
 					</div>
 					<div class="message-text">
-						<a >{{ chat.userid }}</a>
+						<a >{{ message.message }}</a>
 					</div>
 				</div>
 			</div>
@@ -94,6 +95,7 @@ import { computed, defineComponent, ref, onMounted } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
+import type { IMessages } from '../types/IMessages'
 import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
 
@@ -104,9 +106,9 @@ export default defineComponent({
 	data () {
 		return {
 			user: {} as IUser,
-			chats: {} as IChats,
+			db_messages: [] as IMessages[],
 			message: '' as String,
-			messages: [] as any,
+			messages: [] as IMessages[],
 			socket: SocketioService.socket,
 		}
 	},
@@ -140,7 +142,7 @@ export default defineComponent({
 		retrieveCurrentMessages(chatid : number) {
 			DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
-				this.chats = response.data;
+				this.db_messages = response.data;
 				// console.log(response.data);
 			})
 			.catch((e: Error) => {

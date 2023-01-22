@@ -32,7 +32,7 @@ export default defineComponent({
     props: {
 		curr_chat: {
 			required: true,
-			type: String
+			type: Object
 		},
         selectedWindow: {
 			required: true,
@@ -43,8 +43,7 @@ export default defineComponent({
 
     data () {
 		return {
-			user: {} as IUser,
-			chats: {} as IChats
+			user: [] as IUser[],
 		}
 	},
 	methods: {

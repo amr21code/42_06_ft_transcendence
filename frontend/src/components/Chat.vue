@@ -13,8 +13,7 @@
 			 <div class="chat-overview">
 
 
-			<!-- <strong class="">{{ chats }}</strong>  -->
-			<div class="chat-message-view" v-for="chat in chats" :key="chat">
+			<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
 				<a @click="handleClick('chatwindow', chat)" v-if="type === 'groups'">
 					<!-- {{ chat }} -->
 					<div class="" >
@@ -93,8 +92,8 @@ export default defineComponent({
 
 	data () {
 		return {
-			user: {} as IUser,
-			chats: {} as IChats,
+			user: [] as IUser[],
+			chats: [] as IChats[],
 			socket: SocketioService.socket,
 		}
 	},
@@ -107,7 +106,7 @@ export default defineComponent({
 
 		this.socket.on('chat-deleted', () => {
 			// console.log('switch to overview');
-			this.handleClick('overview', '0');
+			this.handleClick('overview', 0);
 		});
 	},
 
@@ -196,8 +195,8 @@ export default defineComponent({
 		}
 
 		const selected = ref<SelectedChat>('overview');
-		const sel_chat = ref('');
-		const handleClick = (term: SelectedChat, selected_chat: string) => {
+		const sel_chat = ref<IChats>();
+		const handleClick = (term: SelectedChat, selected_chat: IChats) => {
 			sel_chat.value = selected_chat;
 			selected.value = term;
 			// console.log("handleClick", selected.value, sel_chat.value);

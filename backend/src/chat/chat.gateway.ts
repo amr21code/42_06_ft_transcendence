@@ -21,6 +21,7 @@ export class ChatGateway {
 async handleMessage(client: Socket, message: ChatMessageDto) {
 	try {
 		console.log("handleMessage()");
+		console.log(message); //userid is missing
 		this.chatService.addMessage(message);
 		client.broadcast.emit('chat-message', {userid: message.userid, chatid: message.chatid, message: message.message});
 	} catch (error) {
