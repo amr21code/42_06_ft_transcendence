@@ -41,10 +41,10 @@
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
-				<a @click="handleClick('overview', '0'), changeType('dms')">
+				<a @click="handleClick('overview', 0), changeType('dms')">
 					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
 				</a>
-				<a @click="handleClick('overview', '0'), changeType('groups')">
+				<a @click="handleClick('overview', 0), changeType('groups')">
 					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<!--popup for a new chat-->

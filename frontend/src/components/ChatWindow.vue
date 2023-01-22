@@ -53,7 +53,6 @@
 			<div class="messages-wrapper" v-for="message in messages" :key="message.message">
 				<!-- message sent -->
 				<div class="message-sent" v-if="user.username == message.username && curr_chat.chatid == message.chatid">
-					{{ message }}
 					<div class="message-username">
 						<strong >{{ message.userid }}</strong>
 					</div>
