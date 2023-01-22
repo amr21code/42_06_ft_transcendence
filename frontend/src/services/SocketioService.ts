@@ -25,7 +25,7 @@ class SocketioService {
 
   // sends a message to the server
   sendMessage(userid : String, chatid : String, message : String) {
-    // console.log("Sending message");
+    // console.log("Sending message", userid, chatid, message);
     this.socket.emit('send-chat-message', {userid, chatid, message });
   }
 
