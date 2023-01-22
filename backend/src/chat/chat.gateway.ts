@@ -21,9 +21,10 @@ export class ChatGateway {
 async handleMessage(client: Socket, message: ChatMessageDto) {
 	try {
 		console.log("handleMessage()");
-		console.log(message); //userid is missing
+		console.log(message);
 		this.chatService.addMessage(message);
-		client.broadcast.emit('chat-message', {userid: message.userid, chatid: message.chatid, message: message.message});
+		console.log(message.username);
+		client.broadcast.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
 	} catch (error) {
 		throw new ForbiddenException('add message in socketIO message-handler failed');
 	}

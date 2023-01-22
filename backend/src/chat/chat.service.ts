@@ -157,7 +157,7 @@ export class ChatService {
 
 	async listMessages(userid: string, chatid: string) {
 		const list = await this.db.$queryRaw(
-			Prisma.sql`SELECT u.username, cm.chatid, cm.message, cm.time, fl.statuscode
+			Prisma.sql`SELECT u.userid, u.username, cm.chatid, cm.message, cm.time, fl.statuscode
 			FROM public.chat_messages AS cm
 			LEFT JOIN public.users as u ON u.userid=cm.userid
 			LEFT JOIN public.friends as fl ON cm.userid=fl.addresseeid AND fl.requesterid=${userid}
