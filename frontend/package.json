@@ -13,6 +13,8 @@
   "dependencies": {
     "@jridgewell/sourcemap-codec": "^1.4.14",
     "axios": "^1.2.2",
+    "express": "^4.18.2",
+    "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4",
     "vue": "^3.2.45",
     "vue-axios": "^3.5.2"

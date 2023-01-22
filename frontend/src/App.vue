@@ -67,7 +67,7 @@ export default defineComponent({
 	},
 	
 	setup() {
-		const loggedIn = ref(false);
+		const loggedIn = ref(true); // CHANGE THIS BACK TO FALSE
 		const toggleLoginPopup = () => {
 			loggedIn.value = !loggedIn.value;
 		}
