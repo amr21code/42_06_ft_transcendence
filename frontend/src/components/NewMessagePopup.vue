@@ -9,15 +9,16 @@
                 Group<input class="radio" type="checkbox">
             </label> -->
             <a>Enter the name of the chat and optional the password</a><br>
-            <button>Groupchat</button>
-            <button>Privatechat</button>
+            <button @click="(changeShowInput(false))">Groupchat</button>
+            <button @click="(changeShowInput(true))">Privatechat</button>
             <br>
-            <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname">
+            <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === false">
+            <input class="popup-textfield" type="text" placeholder="Name of the user" v-model="chatname" v-if="showinput === true">
             <br>
-            <input class="popup-textfield" type="text" placeholder="password" v-model="password">
+            <input class="popup-textfield" type="text" placeholder="password" v-model="password" v-if="showinput === false">
             <br>
             <button class="submit-button" name="submit">
-                <input class="submit-button" type="submit" @click="createNewChat(chatname, password)">
+                <input class="submit-button" type="submit" @click="createNewChat(chatname, password, showinput)">
             </button>
 
             <button class="popup-close" @click="togglePopup">Close</button>
@@ -30,7 +31,7 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -65,8 +66,8 @@ export default defineComponent({
 			});
 		},
 
-        createNewChat(chatname : string, password : string) {
-            DataService.createChat(chatname, password)
+        createNewChat(chatname : string, password : string, type : Boolean) {
+            DataService.createChat(chatname, password, type)
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
             })
@@ -78,6 +79,12 @@ export default defineComponent({
 	},
     setup () {
 
+        const showinput = ref();
+		const changeShowInput = (type : Boolean) => {
+			showinput.value = type;
+		}
+
+		return { showinput, changeShowInput }
     }  
 
 })
