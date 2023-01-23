@@ -13,7 +13,12 @@ import MatchWaitPopup from './MatchWaitPopup.vue';
 
 export default defineComponent({
     setup() {
+		// toggle Popup when opponent arrives
 		const opponentArrived = ref(false);
+		const toggleMatchWaitPopup = () => {
+			opponentArrived.value = !opponentArrived.value;
+		}
+	
         let canvas: any, ctx: any;
         // ---------- SOCKETIO: OUTSOURCE TO SERVICE
         const handleInit = (msg: any) => {
@@ -23,10 +28,11 @@ export default defineComponent({
         //     gameState = JSON.parse(gameState);
         //     requestAnimationFrame(() => paintGame(gameState));
         // };
-        const socket = io("http://localhost:3003");
+        const socket = SocketioService.socket;
         socket.on("init", handleInit);
-        // socket.on("gameState", handleGameState);
-        // ---------- SOCKETIO: OUTSOURCE TO SERVICE END
+        socket.on("opponent-status", toggleMatchWaitPopup);
+
+		// ---------- SOCKETIO: OUTSOURCE TO SERVICE END
         const init = () => {
             canvas = document.getElementById("match-court");
             ctx = canvas.getContext("2d");
@@ -71,10 +77,19 @@ export default defineComponent({
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
         };
-        return { opponentArrived, init, paintGame };
+        return { opponentArrived, toggleMatchWaitPopup, init, paintGame };
     },
+
+	methods: {
+		checkOpponentStatus() {
+			SocketioService.getOpponentStatus()
+		},
+	},
+
+
     mounted() {
-        this.init();
+        this.checkOpponentStatus();
+		this.init();
         // this.paintGame(this.gameState);
     },
     components: { MatchWaitPopup }
