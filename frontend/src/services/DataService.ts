@@ -19,8 +19,10 @@ class DataService {
 	getDms() : Promise<any> {
 		return apiInstance.get("/chat/list/chats");
 	}
-	createChat(chatname: string, password: string) : Promise<any> {
-		console.log(chatname, password);
+	createChat(chatname: string, password: string, dm : Boolean) : Promise<any> {
+		console.log(chatname, password, dm);
+		if (dm == true)
+			return apiInstance.post('/chat/open/pm/' + chatname)
 		if (chatname == '' && password == '')
 			return apiInstance.get('/chat/join');
 		else {

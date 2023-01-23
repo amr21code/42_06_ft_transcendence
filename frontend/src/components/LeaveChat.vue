@@ -4,7 +4,7 @@
             <h2>Leave chat</h2>
             <a>Are you sure that you want to leave the chat?</a><br>
             <button class="" @click="{LeaveChattogglePopup}">
-                <input class="submit-button" type="submit" @click="leaveChat(curr_chat.chatid), setSelectedWindow('overview')">
+                <input class="submit-button" type="submit" @click="leaveChat(curr_chat.chatid), setSelectedWindow('overview'), (LeaveChattogglePopup)">
             </button>
 
             <button class="close-button" @click="(LeaveChattogglePopup)">Close</button>
@@ -17,7 +17,7 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -47,6 +47,7 @@ export default defineComponent({
     data () {
 		return {
 			user: [] as IUser[],
+			socket: SocketioService.socket,
 		}
 	},
 	methods: {
