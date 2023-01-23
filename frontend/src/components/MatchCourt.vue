@@ -18,7 +18,6 @@ export default defineComponent({
 		const toggleMatchWaitPopup = (isArrived: boolean) => {
 			opponentArrived.value = isArrived;
 		}
-	
         let canvas: any, ctx: any;
         // ---------- SOCKETIO: OUTSOURCE TO SERVICE
         // const handleInit = (msg: any) => {
@@ -44,24 +43,18 @@ export default defineComponent({
             fix_dpi();
             // REMOVE BLURRINESS END ---------------------------------------------------
 
-			// TEMP##############################
-
-			// const gameState = createGameState();
-
-            // gameState = createGameState();
-            gameState.paddleWidth = canvas.width / 25;
-            gameState.paddleHeight = canvas.height / 4;
-            gameState.ballSize = canvas.width / 25;
-            gameState.wallOffset = canvas.width / 25;
-            gameState.player1.pos.x = gameState.wallOffset;
-            gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-            gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
-            gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-            gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
-            gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2;
-            gameState.canvasHeight = canvas.height;
-            gameState.canvasWidth = canvas.width;
-			// TEMP##############################
+			gameState.paddleWidth = canvas.width / 25;
+			gameState.paddleHeight = canvas.height / 4;
+			gameState.ballSize = canvas.width / 25;
+			gameState.wallOffset = canvas.width / 25;
+			gameState.player1.pos.x = gameState.wallOffset;
+			gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
+			gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
+			gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
+			gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
+			gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2;
+			gameState.canvasHeight = canvas.height;
+			gameState.canvasWidth = canvas.width;
 
             ctx.fillStyle = "#fff";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -102,6 +95,7 @@ export default defineComponent({
 				canvasWidth: 0,
 			}
 		}
+
 		
         const keydown = (e: any) => {
 			console.log(e.keyCode);
@@ -112,12 +106,20 @@ export default defineComponent({
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             paintPlayers(state);
         };
+
         const paintPlayers = (state: any) => {
             ctx.fillStyle = "#AC4018";
             ctx.fillRect(state.player1.pos.x, state.player1.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
         };
+		
+		// TEMP##############################
+
+		const gameState = createGameState();
+
+		
+		// TEMP##############################
 
 		//############# SOCKETIO ##############
 		const socket = SocketioService.socket;
@@ -125,9 +127,6 @@ export default defineComponent({
 		socket.on("opponent-status", (data: any) => {
 			toggleMatchWaitPopup(data);
 			console.log(data.data);
-			if (data.data === true) {
-				init();
-			}
 		});
 		socket.on('gameState', handleGameState);
 		////############# SOCKETIO #############
@@ -143,10 +142,11 @@ export default defineComponent({
 	
 
     mounted() {
-        while (this.opponentArrived === false) {
-			this.checkOpponentStatus();
-		}
-        this.paintGame(this.gam);
+        // while (this.opponentArrived === false) {
+		this.checkOpponentStatus(); // SET CONDITION TO STOP STUFF
+		// }
+		this.init();
+        this.paintGame(this.gameState);
     },
     components: { MatchWaitPopup }
 });

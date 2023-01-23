@@ -21,7 +21,7 @@ export class MatchGateway {
 
   @SubscribeMessage('send-opponent-status')
 	async refreshChat(client: Socket, payload: any) {
-    const status = this.matchService.getOpponentStatus(payload.matchid, payload.userid);
+    // const status = this.matchService.getOpponentStatus(payload.matchid, payload.userid);
 	//client.emit('opponent-status', {data: status});
     client.emit('opponent-status', {data: true});
     return true;
