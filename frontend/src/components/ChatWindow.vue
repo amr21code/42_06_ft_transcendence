@@ -8,7 +8,6 @@
 		<!--have a info button on the right to show all the users in the chat-->
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
-			<!-- {{ curr_chat }} -->
 			<!-- <img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40"> -->
 			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
 			<a @click="showChangeNameField()" class="chat-chatname" v-if="showinput === false">{{ curr_chat.chat_name }}</a>
@@ -29,7 +28,7 @@
 	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 			<div class="messages-wrapper" v-for="message in db_messages" :key="message.message">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user.userid == message.username"> <!-- user.userid == message.userid -->
+				<div class="message-sent" v-if="user[0].userid == message.userid"> <!-- user.userid == message.userid -->
 					<div class="message-username">
 						<strong >{{ message.username }}</strong>
 					</div>
@@ -52,18 +51,18 @@
 
 			<div class="messages-wrapper" v-for="message in messages" :key="message.message">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user.username == message.username && curr_chat.chatid == message.chatid">
+				<div class="message-sent" v-if="user[0].userid == message.userid && curr_chat.chatid == message.chatid">
 					<div class="message-username">
-						<strong >{{ message.userid }}</strong>
+						<strong >{{ message.username }}</strong>
 					</div>
 					<div class="message-text">
 						<a >{{ message.message }}</a>
 					</div>
 				</div>
 				<!--message recv-->
-				<div class="message-recv" v-else-if="user.userid != message.userid && curr_chat.chatid == message.chatid">
+				<div class="message-recv" v-else-if="user[0].userid != message.userid && curr_chat.chatid == message.chatid">
 					<div class="message-username">
-						<strong >{{ message.userid }}</strong>
+						<strong >{{ message.username }}</strong>
 					</div>
 					<div class="message-text">
 						<a >{{ message.message }}</a>
@@ -77,7 +76,7 @@
 			
 			<div class="chat-write-and-send">
 				<!-- <form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')"> -->
-				<form @submit.prevent="sendMessage(user[0].userid, curr_chat.chatid, message), submit()" >
+				<form @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
 					<input placeholder="Write message here" v-model="message">
 					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
@@ -88,7 +87,6 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, onMounted } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -99,6 +97,8 @@ import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
 
 
+import { computed, defineComponent, ref, onMounted } from 'vue'
+import type { PropType } from 'vue'
 
 export default defineComponent({
 	name: 'ChatWindow',
@@ -113,8 +113,8 @@ export default defineComponent({
 	},
 
 	created () {
-		this.socket.on('chat-message', (data: any) => {
-			console.log("ChatWindow.vue: ", data);
+		this.socket.on('chat-message', (data: IMessages) => {
+			// console.log("ChatWindow.vue: ", data);
 			this.messages.push(data);
 		});
 	},
@@ -122,7 +122,8 @@ export default defineComponent({
 	props: {
 		curr_chat: {
 			required: true,
-			type: Object
+			type: Object as PropType<IChats>,
+			default: () => ({} as IChats)
 		},
 	},
 
@@ -149,9 +150,10 @@ export default defineComponent({
 			});
 		},
 
-		sendMessage (userid : String, chatid : String, message : String) {
+		sendMessage (chatid : number, message : String) {
 			// console.log('send message', userid, chatid, message);
-			SocketioService.sendMessage(userid, chatid, message);
+			// console.log("test", this.user[0].username);
+			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
 			// DataService.sendMessage(userid, chatid, message)
 			// .then((response: ResponseData) => {
 			// 	message = '';
@@ -162,7 +164,7 @@ export default defineComponent({
 			// });
 		},
 
-		changeChatName (type : String, chatid : number, chatname : String, password : String) {
+		changeChatName (type : String, chatid : number, chatname : string, password : String) {
 			console.log(type, chatid, chatname, password);
 			DataService.changeChatName(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
@@ -195,6 +197,7 @@ export default defineComponent({
 		const showChangeNameField = () => {
 			showinput.value = !showinput.value;
 		}
+
 
 		return { message, submit, showChangeNameField, showinput, newName }
 	}

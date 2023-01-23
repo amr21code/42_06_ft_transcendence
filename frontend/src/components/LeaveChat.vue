@@ -1,13 +1,13 @@
 <template>
-    <div class="popup" @keyup.esc="LeaveChattogglePopup" tabindex="0">
+    <div class="popup" @keyup.esc="(LeaveChattogglePopup)" tabindex="0">
         <div class="popup-inner">
             <h2>Leave chat</h2>
             <a>Are you sure that you want to leave the chat?</a><br>
-            <button class="" @click="LeaveChattogglePopup">
-                <input class="submit-button" type="submit" @click="leaveChat(curr_chat.chatid), setSelectedWindow('overview')">
+            <button class="" @click="{LeaveChattogglePopup}">
+                <input class="submit-button" type="submit" @click="leaveChat(curr_chat.chatid), setSelectedWindow('overview'), (LeaveChattogglePopup)">
             </button>
 
-            <button class="close-button" @click="LeaveChattogglePopup">Close</button>
+            <button class="close-button" @click="(LeaveChattogglePopup)">Close</button>
         </div>
     </div>
 </template>
@@ -17,7 +17,7 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -38,12 +38,16 @@ export default defineComponent({
 			required: true,
 			type: String
 		},
-        ['LeaveChattogglePopup'] : String
+        ['LeaveChattogglePopup'] : {
+			required: true,
+			type: Function
+		}
 	},
 
     data () {
 		return {
 			user: [] as IUser[],
+			socket: SocketioService.socket,
 		}
 	},
 	methods: {
@@ -59,15 +63,15 @@ export default defineComponent({
 		},
 
         leaveChat(chatid : number) {
-            DataService.leaveChat(chatid)
-            .then((response: ResponseData) => {
-				// console.log("leave chat with the id", chatid);
-				SocketioService.refreshChats();
-				SocketioService.chatDeleted();
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+			SocketioService.chatLeave(chatid);
+			// SocketioService.refreshChats();
+            // DataService.leaveChat(chatid)
+            // .then((response: ResponseData) => {
+			// 	// console.log("leave chat with the id", chatid);
+			// })
+			// .catch((e: Error) => {
+			// 	console.log(e);
+			// });
         },
 
         setSelectedWindow(selectedWindow : String){

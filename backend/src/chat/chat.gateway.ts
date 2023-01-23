@@ -17,38 +17,32 @@ export class ChatGateway {
 			// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 	}
 
-@SubscribeMessage('send-chat-message')
-async handleMessage(client: Socket, message: ChatMessageDto) {
-	try {
-		console.log("handleMessage()");
-		console.log(message); //userid is missing
-		this.chatService.addMessage(message);
-		client.broadcast.emit('chat-message', {userid: message.userid, chatid: message.chatid, message: message.message});
-	} catch (error) {
-		throw new ForbiddenException('add message in socketIO message-handler failed');
+	@SubscribeMessage('send-chat-message')
+	async handleMessage(client: Socket, message: ChatMessageDto) {
+		try {
+			console.log("handleMessage()");
+			console.log(message);
+			await this.chatService.addMessage(message);
+			console.log(message.username);
+			client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
+		} catch (error) {
+			throw new ForbiddenException('add message in socketIO message-handler failed');
+		}
 	}
-}
 
-//   @SubscribeMessage('message')
-// //  handleConnection(@Session() session: Record<string, any>, client: any): string {
-// 	handleConnection( client: any): string {
-// 	console.log("login");
-// 	// const user = client.request.user;
-// 	// console.log(client.data.user);
-// 	// console.log(client.id);
-// 	// if (user) {
-// 	// 	this.userService.changeUserData(user.userid, "user_status", 1);
-// 	// 	this.userService.changeUserData(user.userid, "socket_token", client.id);
-// 	// }
+	@SubscribeMessage('send-chat-refresh')
+	async refreshChat(client: Socket) {
+		// console.log("backend: got send-chat-refresh");
+		client.emit('refresh-chat');
+	}
 
-//     return 'Hello world!';
-//   }
 
-//   handleDisconnect(client: any): string {
-// 	console.log("log out");
-// 	console.log(client.id);
-// 	// console.log(client);
-// 	//todo change user_status to 0 for user with clientid = client.id
-//     return 'Hello world!';
-//   }
+	@SubscribeMessage('send-chat-leave')
+	async leaveChat(client: Socket, message: Record<string, number>) {
+		// console.log(message.chatid);
+		this.chatService.leaveChat(client.request.session.passport.user.userid, message.chatid);
+		client.emit('refresh-chat');
+		client.emit('chat-leave');
+	}
+
 }

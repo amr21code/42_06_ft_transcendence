@@ -14,13 +14,26 @@ class DataService {
 		return apiInstance.get("/fl/show");
 	}
 	getChats() : Promise<any> {
-		return apiInstance.get("/chat/list/chats");
+		return apiInstance.get("/chat/list/userchats");
 	}
 	getDms() : Promise<any> {
 		return apiInstance.get("/chat/list/chats");
 	}
-	createChat() : Promise<any> {
-		return apiInstance.get('/chat/join');
+	createChat(chatname_id: string, password: string, type : String) : Promise<any> {
+		console.log(chatname_id, password, type);
+		if (type == 'dm')
+			return apiInstance.get('/chat/open/pm/' + chatname_id)
+		if (type == 'join') //change that you pass the chatid and optional password in order to join an existing chat
+			return apiInstance.get('/chat/join/' + chatname_id);
+		else {
+			// { type: number; chatid: number; chat_name: string; password: string; }
+			return apiInstance.post('/chat/create', JSON.stringify({
+				type : 0,
+				chatid: 0,
+				chat_name: chatname_id,
+				password: password
+			}));
+		}
 	}
 	async getMessages(chatid : number) : Promise<any> {
 		return apiInstance.get('/chat/list/messages/' + chatid);

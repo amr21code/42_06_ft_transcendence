@@ -19,7 +19,7 @@
 					<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-							<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
+							<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
 							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
 					</div>
 				</a>
@@ -103,8 +103,8 @@ export default defineComponent({
 			// console.log('refreshing chat');
 			this.retrieveCurrentChats();
 		});
-
-		this.socket.on('chat-deleted', () => {
+		
+		this.socket.on('chat-leave', () => {
 			// console.log('switch to overview');
 			this.handleClick('overview', 0);
 		});
@@ -184,6 +184,7 @@ export default defineComponent({
 		const LeaveChattogglePopup = () => {
 			// console.log("togglePopup(LeaveChat) got triggert")
 			LeaveChatTrigger.value = !LeaveChatTrigger.value;
+			return LeaveChatTrigger.value;
 		}
 
 		onMounted(() => {
@@ -195,12 +196,16 @@ export default defineComponent({
 		}
 
 		const selected = ref<SelectedChat>('overview');
-		const sel_chat = ref<IChats>();
-		const handleClick = (term: SelectedChat, selected_chat: IChats) => {
-			sel_chat.value = selected_chat;
-			selected.value = term;
-			// console.log("handleClick", selected.value, sel_chat.value);
-		}
+        const NULL_CHAT = JSON.stringify( {chatid: 0,    chat_name: "no chat", typename: "no chat", status: 0 });
+        const sel_chat = ref<IChats>(JSON.parse(NULL_CHAT));
+        const handleClick = (term: SelectedChat, selected_chat: any) => {
+            sel_chat.value = selected_chat;
+            if (selected_chat === 0) {
+                const NULL_CHAT = JSON.stringify( {chatid: 0,    chat_name: "no chat", typename: "no chat", status: 0 });
+                sel_chat.value = JSON.parse(NULL_CHAT);
+            }
+            selected.value = term;
+        }
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger, changeType, type }
 	} //end of setup

@@ -157,7 +157,7 @@ export class ChatService {
 
 	async listMessages(userid: string, chatid: string) {
 		const list = await this.db.$queryRaw(
-			Prisma.sql`SELECT u.username, cm.chatid, cm.message, cm.time, fl.statuscode
+			Prisma.sql`SELECT u.userid, u.username, cm.chatid, cm.message, cm.time, fl.statuscode
 			FROM public.chat_messages AS cm
 			LEFT JOIN public.users as u ON u.userid=cm.userid
 			LEFT JOIN public.friends as fl ON cm.userid=fl.addresseeid AND fl.requesterid=${userid}
@@ -220,5 +220,21 @@ export class ChatService {
 		});
 		var ret = JSON.parse(details) as ChatUserStatusDto;
 		return ret;
+	}
+
+	async checkPMChat(user1id: string, user2id: string) {
+		const check = await this.db.$queryRaw(
+			Prisma.sql`SELECT c.chatid, COUNT(*)
+				FROM public.chat AS c
+				LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
+				LEFT JOIN public.user_chat as uc ON uc.chatid=c.chatid
+				WHERE c.type=3 AND (uc.userid=${user1id} OR uc.userid=${user2id})
+				GROUP BY c.chatid
+				HAVING COUNT(*)>1;`
+		);
+		if (Object.keys(check).length == 1) {
+			throw new ForbiddenException('direct chat already open');
+		}
+
 	}
 }
