@@ -19,7 +19,7 @@
 					<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-							<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
+							<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
 							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
 					</div>
 				</a>
@@ -205,7 +205,6 @@ export default defineComponent({
                 sel_chat.value = JSON.parse(NULL_CHAT);
             }
             selected.value = term;
-            // console.log("handleClick", selected.value, sel_chat);
         }
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger, changeType, type }

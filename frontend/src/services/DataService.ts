@@ -14,7 +14,7 @@ class DataService {
 		return apiInstance.get("/fl/show");
 	}
 	getChats() : Promise<any> {
-		return apiInstance.get("/chat/list/chats");
+		return apiInstance.get("/chat/list/userchats");
 	}
 	getDms() : Promise<any> {
 		return apiInstance.get("/chat/list/chats");

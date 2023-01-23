@@ -114,7 +114,7 @@ export default defineComponent({
 
 	created () {
 		this.socket.on('chat-message', (data: IMessages) => {
-			console.log("ChatWindow.vue: ", data);
+			// console.log("ChatWindow.vue: ", data);
 			this.messages.push(data);
 		});
 	},
@@ -122,8 +122,8 @@ export default defineComponent({
 	props: {
 		curr_chat: {
 			required: true,
-			type: Object //Object as PropType<IChats>,
-			// default: () => ({} as IChats)
+			type: Object as PropType<IChats>,
+			default: () => ({} as IChats)
 		},
 	},
 
