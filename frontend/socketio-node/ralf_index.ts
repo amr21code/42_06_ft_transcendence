@@ -1,6 +1,8 @@
 // RALFS IMPLEMENTATION AS BY THIS TUTORIAL: https://www.youtube.com/watch?v=ppcBIHv_ZPs
 
 const app = require('express')();
+// import * as app from 'express';
+
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
 	cors: {
@@ -8,9 +10,9 @@ const io = require('socket.io')(http, {
 	}
 });
 
-const { createGameState, gameLoop } = require('./ralf_game')
+// const { createGameState, gameLoop } = require('./ralf_game')
 const FRAME_RATE = 10;
-// import createGameState from './ralf_game';
+import { createGameState, gameLoop } from './ralf_game';
 
 io.on('connection', (client) => {
 	const state = createGameState();

@@ -13,6 +13,12 @@
     "socketio": "^1.0.0"
   },
   "devDependencies": {
+    "@types/node": "^18.11.18",
     "@types/socket.io": "^3.0.2"
+  },
+  "compilerOptions": {
+    "types": [
+      "node"
+    ]
   }
 }

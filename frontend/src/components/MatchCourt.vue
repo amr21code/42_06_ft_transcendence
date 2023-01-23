@@ -27,8 +27,6 @@ export default defineComponent({
 		socket.on('init', handleInit);
 		socket.on('gameState', handleGameState);
 		// ---------- SOCKETIO: OUTSOURCE TO SERVICE END
-		
-
 
 		const init = () => {
 			canvas = document.getElementById('match-court');
@@ -44,7 +42,7 @@ export default defineComponent({
 			}
 			fix_dpi();
 			// REMOVE BLURRINESS END ---------------------------------------------------
-
+			gameState = createGameState();
 			gameState.paddleWidth = canvas.width/25;
 			gameState.paddleHeight = canvas.height/4;
 			gameState.ballSize = canvas.width/25;
@@ -55,6 +53,8 @@ export default defineComponent({
 			gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
 			gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
 			gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2;
+			gameState.canvasHeight = canvas.height;
+			gameState.canvasWidth = canvas.width;
 
 			ctx.fillStyle = "#fff";
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
