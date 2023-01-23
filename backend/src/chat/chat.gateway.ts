@@ -14,7 +14,6 @@ import { ChatMessageDto } from './dto';
 })
 export class ChatGateway {
 	constructor(private readonly userService: UserService, private readonly chatService: ChatService) {
-			// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 	}
 
 	@SubscribeMessage('send-chat-message')
@@ -32,14 +31,12 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-refresh')
 	async refreshChat(client: Socket) {
-		// console.log("backend: got send-chat-refresh");
 		client.emit('refresh-chat');
 	}
 
 
 	@SubscribeMessage('send-chat-leave')
 	async leaveChat(client: Socket, message: Record<string, number>) {
-		// console.log(message.chatid);
 		this.chatService.leaveChat(client.request.session.passport.user.userid, message.chatid);
 		client.emit('refresh-chat');
 		client.emit('chat-leave');

@@ -14,7 +14,6 @@ export class FriendlistController {
 		if (!userid)
 			userid = session.passport.user.userid;
 		const fl = await this.flservice.showFL(userid);
-		// console.log(fl);
 		return fl;
 	}
 	
@@ -22,7 +21,6 @@ export class FriendlistController {
 	async changeStatus(@Req() request: Request, @Param('userid') userid_other, @Param('action') action)
 	{
 		const user = await this.userService.getMe(request.user);
-		// console.log('changestatus user', user[0].userid, 'other', userid_other, 'action', action);
 		try {
 			if (user[0].userid === userid_other)
 				throw new ForbiddenException();
