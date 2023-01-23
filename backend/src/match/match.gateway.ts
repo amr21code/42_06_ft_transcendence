@@ -1,7 +1,7 @@
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 
 @WebSocketGateway(3002, { cors: {
-	origin: ['http://192.168.56.2:5173','http://localhost:5173'],
+	origin: `${process.env.FRONTEND_URL}`,
 	methods: ["GET", "POST"],
 	credentials: true,
 }

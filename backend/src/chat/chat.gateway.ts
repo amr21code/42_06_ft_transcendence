@@ -4,10 +4,11 @@ import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from 'src/chat/chat.service';
 import { ChatMessageDto } from './dto';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 
 @WebSocketGateway(3002, {cors: {
-	origin: ['http://192.168.56.2:5173','http://localhost:5173', 'http://frontend:5173'],
+	origin: `${process.env.FRONTEND_URL}`,
 	methods: ["GET", "POST"],
 	credentials: true,
 }
@@ -18,15 +19,15 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-message')
 	async handleMessage(client: Socket, message: ChatMessageDto) {
-		try {
+		// try {
 			console.log("handleMessage()");
 			console.log(message);
 			await this.chatService.addMessage(message);
 			console.log(message.username);
 			client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
-		} catch (error) {
-			throw new ForbiddenException('add message in socketIO message-handler failed');
-		}
+		// } catch (error) {
+		// 	throw new ForbiddenException('add message in socketIO message-handler failed');
+		// }
 	}
 
 	@SubscribeMessage('send-chat-refresh')

@@ -13,15 +13,7 @@ async function bootstrap() {
 		})
 	);
 	app.enableCors({
-		origin: [
-			'http://localhost:5173',
-			'http://192.168.56.2:5173',
-			'http://frontend:5173',
-			'http://192.168.56.2:3000',
-			'http://localhost:8080',
-			'http://192.168.56.2:3002',
-			'http://frontend:3002',
-		],
+		origin: `${process.env.FRONTEND_URL}`,
 		methods: ["GET", "POST"],
 		credentials: true,
 	});

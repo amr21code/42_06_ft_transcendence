@@ -137,9 +137,9 @@ export class ChatService {
 	async addMessage(message: ChatMessageDto) {
 		const user = await this.db.$queryRaw(
 			Prisma.sql`SELECT status FROM user_chat
-			WHERE userid=${message.userid}`
+			WHERE userid=${message.userid} AND chatid=${message.chatid} AND (status < 2 OR bantime > CURRENT_TIMESTAMP`
 		);
-		if (user[0].status >= 2)
+		if (Object.keys(user).length > 0)
 			throw new ForbiddenException();
 		const msg = await this.db.$queryRaw(
 			Prisma.sql`INSERT INTO public.chat_messages(
