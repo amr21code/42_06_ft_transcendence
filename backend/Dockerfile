@@ -1,7 +1,7 @@
 FROM 	node:current-bullseye-slim
 
 WORKDIR /usr/src/app
-COPY ./package*.json ./
+COPY . .
 
 RUN npm install
 
