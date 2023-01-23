@@ -21,22 +21,17 @@ export default defineComponent({
 	
         let canvas: any, ctx: any;
         // ---------- SOCKETIO: OUTSOURCE TO SERVICE
-        const handleInit = (msg: any) => {
-            console.log(msg);
-        };
-        // const handleGameState = (gameState: any) => {
-        //     gameState = JSON.parse(gameState);
-        //     requestAnimationFrame(() => paintGame(gameState));
+        // const handleInit = (msg: any) => {
+        //     console.log(msg);
         // };
-        const socket = SocketioService.socket;
-        socket.on("init", handleInit);
-        socket.on("opponent-status", (data: any) => {
-			toggleMatchWaitPopup(data);
-		});
-
+        const handleGameState = (gameState: any) => {
+            gameState = JSON.parse(gameState);
+            requestAnimationFrame(() => paintGame(gameState));
+        };
+		
 		// ---------- SOCKETIO: OUTSOURCE TO SERVICE END
         const init = () => {
-            canvas = document.getElementById("match-court");
+			canvas = document.getElementById("match-court");
             ctx = canvas.getContext("2d");
             // REMOVE BLURRINESS ---------------------------------------------------
             let dpi = window.devicePixelRatio;
@@ -48,26 +43,70 @@ export default defineComponent({
             };
             fix_dpi();
             // REMOVE BLURRINESS END ---------------------------------------------------
+
+			// TEMP##############################
+
+			// const gameState = createGameState();
+
             // gameState = createGameState();
-            // gameState.paddleWidth = canvas.width / 25;
-            // gameState.paddleHeight = canvas.height / 4;
-            // gameState.ballSize = canvas.width / 25;
-            // gameState.wallOffset = canvas.width / 25;
-            // gameState.player1.pos.x = gameState.wallOffset;
-            // gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-            // gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
-            // gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-            // gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
-            // gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2;
-            // gameState.canvasHeight = canvas.height;
-            // gameState.canvasWidth = canvas.width;
+            gameState.paddleWidth = canvas.width / 25;
+            gameState.paddleHeight = canvas.height / 4;
+            gameState.ballSize = canvas.width / 25;
+            gameState.wallOffset = canvas.width / 25;
+            gameState.player1.pos.x = gameState.wallOffset;
+            gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
+            gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
+            gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
+            gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
+            gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2;
+            gameState.canvasHeight = canvas.height;
+            gameState.canvasWidth = canvas.width;
+			// TEMP##############################
+
             ctx.fillStyle = "#fff";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
         };
+
+		function createGameState() {
+			return {
+				player1: {
+					pos: {
+						x: 0,
+						y: 0,
+					},
+					y_vel: 0,
+				},
+				player2: {
+					pos: {
+						x: 0,
+						y: 0,
+					},
+					y_vel: 0,
+				},
+				ball: {
+					pos: {
+						x: 0,
+						y: 0,
+					},
+					vel: {
+						x: 0,
+						y: 0,
+					}
+				},
+				paddleWidth: 0,
+				paddleHeight: 0,
+				ballSize: 0,
+				wallOffset: 0,
+				canvasHeight: 0,
+				canvasWidth: 0,
+			}
+		}
+		
         const keydown = (e: any) => {
-            console.log(e.keyCode);
+			console.log(e.keyCode);
         };
+		
         const paintGame = (state: any) => {
             ctx.fillStyle = "#fff"; // CHANGE BACK TO GAME COLOR
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -79,7 +118,21 @@ export default defineComponent({
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
         };
-        return { opponentArrived, toggleMatchWaitPopup, init, paintGame };
+
+		//############# SOCKETIO ##############
+		const socket = SocketioService.socket;
+		// socket.on("init", handleInit);
+		socket.on("opponent-status", (data: any) => {
+			toggleMatchWaitPopup(data);
+			console.log(data.data);
+			if (data.data === true) {
+				init();
+			}
+		});
+		socket.on('gameState', handleGameState);
+		////############# SOCKETIO #############
+		
+        return { opponentArrived, gameState, toggleMatchWaitPopup, init, paintGame };
     },
 
 	methods: {
@@ -87,12 +140,13 @@ export default defineComponent({
 			SocketioService.getOpponentStatus()
 		},
 	},
-
+	
 
     mounted() {
-        this.checkOpponentStatus();
-		this.init();
-        // this.paintGame(this.gameState);
+        while (this.opponentArrived === false) {
+			this.checkOpponentStatus();
+		}
+        this.paintGame(this.gam);
     },
     components: { MatchWaitPopup }
 });
