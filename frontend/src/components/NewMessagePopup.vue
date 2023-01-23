@@ -14,7 +14,7 @@
             <button @click="(changeShowInput('dm'))">Privatechat</button>
             <button @click="(changeShowInput('join'))">Join</button>
             <br>
-            <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'">(optional)</a>
+            <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><!--<a v-if="showinput === 'group'">(optional)</a>-->
             <input class="popup-textfield" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'">
             <input class="popup-textfield" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'">
             <br>
