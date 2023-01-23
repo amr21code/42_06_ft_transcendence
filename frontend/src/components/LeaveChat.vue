@@ -47,6 +47,7 @@ export default defineComponent({
     data () {
 		return {
 			user: [] as IUser[],
+			socket: SocketioService.socket,
 		}
 	},
 	methods: {

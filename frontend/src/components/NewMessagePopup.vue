@@ -15,7 +15,7 @@
             <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === false">
             <input class="popup-textfield" type="text" placeholder="Name of the user" v-model="chatname" v-if="showinput === true">
             <br>
-            <input class="popup-textfield" type="text" placeholder="password" v-model="password" v-if="showinput === false">
+            <input class="popup-textfield" type="password" placeholder="password" v-model="password" v-if="showinput === false">
             <br>
             <button class="submit-button" name="submit">
                 <input class="submit-button" type="submit" @click="createNewChat(chatname, password, showinput)">
