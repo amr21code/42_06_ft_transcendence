@@ -221,4 +221,20 @@ export class ChatService {
 		var ret = JSON.parse(details) as ChatUserStatusDto;
 		return ret;
 	}
+
+	async checkPMChat(user1id: string, user2id: string) {
+		const check = await this.db.$queryRaw(
+			Prisma.sql`SELECT c.chatid, COUNT(*)
+				FROM public.chat AS c
+				LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
+				LEFT JOIN public.user_chat as uc ON uc.chatid=c.chatid
+				WHERE c.type=3 AND (uc.userid=${user1id} OR uc.userid=${user2id})
+				GROUP BY c.chatid
+				HAVING COUNT(*)>1;`
+		);
+		if (Object.keys(check).length == 1) {
+			throw new ForbiddenException('direct chat already open');
+		}
+
+	}
 }

@@ -62,7 +62,7 @@ export default defineComponent({
 		},
 
         leaveChat(chatid : number) {
-			SocketioService.chatLeave();
+			SocketioService.chatLeave(chatid);
 			// SocketioService.refreshChats();
             // DataService.leaveChat(chatid)
             // .then((response: ResponseData) => {
