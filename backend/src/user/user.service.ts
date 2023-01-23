@@ -18,26 +18,10 @@ export class UserService {
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid`
 			);
-		// const user = await this.db.users.findMany({
-		// 	select: {
-		// 		userid: true,
-		// 		username: true,
-		// 		avatar: true,
-		// 		// twofa: true,
-		// 		online_status: {
-		// 			select: {
-		// 				statusname: true,
-		// 			}
-		// 		},
-		// 		created: true,
-		// 	}
-		// });
-		// console.log(user);
 		return (user);
 	}
 
 	async getMe(user: any) {
-		// console.log("getme", user);
 		const meuser = await this.db.$queryRaw(
 			Prisma.sql`SELECT userid, username, 
 			CASE
@@ -50,24 +34,6 @@ export class UserService {
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
 			WHERE userid=${user.userid}`
 			);
-		// const resuser = await this.db.users.findUnique({
-		// 	where: {
-		// 		userid: user.userid,
-		// 	},
-		// 	select: {
-		// 		userid: true,
-		// 		username: true,
-		// 		avatar: true,
-		// 		twofa: true,
-		// 		created: true,
-		// 		online_status: {
-		// 			select: {
-		// 				statusname: true,
-		// 			}
-		// 		}
-		// 	}
-		// });
-		// console.log(meuser);
 		return (meuser);
 	}
 

@@ -56,7 +56,6 @@ export class FriendlistService {
 					requesterid, addresseeid, statuscode)
 					VALUES (${userid}, ${userid_other}, 0);`
 			);
-			// console.log(request);
 			return request;
 		} else if (action === 'confirm') {
 			if (count[0].count == 0) {
@@ -67,10 +66,8 @@ export class FriendlistService {
 				SET statuscode=1
 				WHERE (requesterid=${userid_other} AND addresseeid=${userid});`
 				);
-			// console.log(request);
 			return request;
 		} else if (action === 'block') {
-			// console.log('count', count[0].count);
 			if (count[0].count > 0) {
 				throw new ForbiddenException();
 			}
@@ -79,10 +76,8 @@ export class FriendlistService {
 					requesterid, addresseeid, statuscode)
 					VALUES (${userid}, ${userid_other}, 2);`
 			);
-			// console.log(request);
 			return request;
 		} else if (action === 'unblock') {
-			// console.log('count unblock', count[0].count);
 			if (count[0].count == 0) {
 				throw new ForbiddenException();
 			}
@@ -90,10 +85,8 @@ export class FriendlistService {
 				Prisma.sql`DELETE FROM public.friends
 				WHERE requesterid=${userid} AND addresseeid=${userid_other} AND statuscode='2';`
 			);
-			// console.log(request);
 			return request;
 		} else if (action === 'remove') {
-			// console.log('count remove', count[0].count);
 			if (count[0].count == 0) {
 				throw new ForbiddenException();
 			}
@@ -103,7 +96,6 @@ export class FriendlistService {
 				OR (requesterid=${userid_other} AND addresseeid=${userid})) 
 				AND (statuscode='1' OR statuscode='0');`
 			);
-			// console.log(request);
 			return request;
 		}
 	}

@@ -2,7 +2,7 @@ import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGa
 import { UserService } from './user.service';
 
 @WebSocketGateway(3002, {cors: {
-	origin: ['http://192.168.56.2:5173','http://localhost:5173'],
+	origin: ['http://192.168.56.2:5173','http://localhost:5173', 'http://frontend:5173'],
 	methods: ["GET", "POST"],
 	credentials: true,
 }
@@ -12,9 +12,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	@SubscribeMessage('user')
 	async handleConnection(client: any) {
-		// console.log(client.request.user);
 		if (client.request.user) {
-			// console.log("online");
 			const user = client.request.user;
 			if (user) {
 				await this.userService.changeUserData(user.userid, "user_status", 1);
@@ -25,11 +23,8 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 	
 	async handleDisconnect(client: any) {
-		// console.log(client.request.user);
 		if (client.request.user) {
-			// console.log("offline");
 			const user = client.request.user;
-			// console.log("handle offline", user, user.userid);
 			if (user) {
 				await this.userService.changeUserData(user.userid, "user_status", 0);
 				await this.userService.changeUserData(user.userid, "socket_token", "");

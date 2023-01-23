@@ -15,13 +15,26 @@ services:
     env_file:
     - .env
 
-  node:
-    container_name: node
+  backend:
+    container_name: backend
     build: ./backend
     networks:
     - external
     ports:
     - 3000:3000
+    restart: unless-stopped
+    volumes:
+    - web:/var/www/html
+    depends_on:
+      - db
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    networks:
+    - external
+    ports:
+    - 5173:5173
     restart: unless-stopped
     volumes:
     - web:/var/www/html

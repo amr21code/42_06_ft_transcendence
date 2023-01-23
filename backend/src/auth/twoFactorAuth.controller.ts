@@ -55,11 +55,6 @@ export class TwoFactorAuthenticationController {
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
- 
-    //const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(request.user.id, true);
- 
-    //request.res.setHeader('Set-Cookie', [accessTokenCookie]);
- 
     return request.user;
   }
 }
