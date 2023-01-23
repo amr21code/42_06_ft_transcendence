@@ -22,8 +22,8 @@ class DataService {
 	createChat(chatname: string, password: string, dm : Boolean) : Promise<any> {
 		console.log(chatname, password, dm);
 		if (dm == true)
-			return apiInstance.post('/chat/open/pm/' + chatname)
-		if (chatname == '' && password == '')
+			return apiInstance.get('/chat/open/pm/' + chatname)
+		if (chatname == '' && password == '') //change that you pass the chatid and optional password in order to join an existing chat
 			return apiInstance.get('/chat/join');
 		else {
 			// { type: number; chatid: number; chat_name: string; password: string; }
