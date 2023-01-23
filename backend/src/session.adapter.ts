@@ -2,12 +2,8 @@ import { IoAdapter } from "@nestjs/platform-socket.io";
 import { Server, ServerOptions } from "socket.io";
 import * as express from 'express';
 import * as passport from "passport";
-import { INestApplicationContext, Injectable, Module } from "@nestjs/common";
-import { sessionMiddleware } from "./middleware";
-import { PassportModule } from "@nestjs/passport";
+import { INestApplicationContext } from "@nestjs/common";
 import { UserService } from "./user/user.service";
-import { UserModule } from "./user/user.module";
-import { DbService } from "./db/db.service";
 
 declare module "http" {
 	interface IncomingMessage {

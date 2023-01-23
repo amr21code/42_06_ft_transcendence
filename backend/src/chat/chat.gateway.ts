@@ -7,7 +7,7 @@ import { ChatMessageDto } from './dto';
 
 
 @WebSocketGateway(3002, {cors: {
-	origin: ['http://192.168.56.2:5173','http://localhost:5173'],
+	origin: ['http://192.168.56.2:5173','http://localhost:5173', 'http://frontend:5173'],
 	methods: ["GET", "POST"],
 	credentials: true,
 }
