@@ -45,6 +45,14 @@ class SocketioService {
     }
   }
 
+  //----------GAME STUFF----------------------
+  getOpponentStatus() {
+	this.socket.emit('send-opponent-status');
+  }
+
+
+  //----------GAME STUFF END----------------------
+
 }
 
 export default new SocketioService();

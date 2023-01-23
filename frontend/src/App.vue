@@ -51,7 +51,7 @@ import SocketioService from './services/SocketioService.js'
 import DataService from './services/DataService'
 
 export default defineComponent({
-	
+
 	name: 'App',
 	el: "#app",
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
