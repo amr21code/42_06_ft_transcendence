@@ -1,5 +1,5 @@
-import { Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthenticatedGuard, FtAuthGuard } from '../auth/guards/guards';
+import { Controller, ForbiddenException, Get, Param,  Req, UseGuards } from '@nestjs/common';
+import { AuthenticatedGuard} from '../auth/guards/guards';
 import { Request } from 'express';
 import { UserService } from './user.service';
 

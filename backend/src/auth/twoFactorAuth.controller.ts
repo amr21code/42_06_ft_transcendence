@@ -1,10 +1,9 @@
-import {  ClassSerializerInterceptor, Controller, Header, Post, Get, UseInterceptors, Res, UseGuards, Req, HttpCode, Body, UnauthorizedException, Param} from '@nestjs/common';
+import {  ClassSerializerInterceptor, Controller, Get, UseInterceptors, Res, UseGuards, Req, UnauthorizedException, Param} from '@nestjs/common';
 import { TwoFactorAuthenticationService } from './twoFactorAuth.service';
 import { Response } from 'express';
 import { Request } from 'express';
 import { AuthenticatedGuard } from './guards/guards';
 import { UserService } from 'src/user/user.service';
-import { TwoFaDto } from './dto/twofa.dto';
  
 @Controller('2fa')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -23,13 +22,10 @@ export class TwoFactorAuthenticationController {
   }
 
   @Get('turn-on/:secret')
-  //@HttpCode(200)
   @UseGuards(AuthenticatedGuard)
   async turnOnTwoFactorAuthentication(
     @Req() request: Request, @Param('secret') secret: string
-    //@Body() { twoFactorAuthenticationCode } : TwoFaDto
   ) {
-    //console.log("turn on");
     const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthenticationCodeValid(
       secret, request.user
     );
@@ -41,11 +37,9 @@ export class TwoFactorAuthenticationController {
   }
 
 @Get('authenticate/:secret')
-  //@HttpCode(200)
   @UseGuards(AuthenticatedGuard)
   async authenticate(
     @Req() request: Request, @Param('secret') secret: string
-    //@Body() { twoFactorAuthenticationCode } : TwoFaDto
   ) {
     const user = await this.userService.getMe(request.user);
     const twofasecret = await this.userService.getUserData(user[0].userid, 'twofasecret')
