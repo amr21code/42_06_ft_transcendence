@@ -15,7 +15,7 @@ export class ChatController {
 	@Get('list/chats')
 	async listChats(@Session() session: Record<string, any>) {
 		try {
-			const user = request.session.passport.user.userid;
+			const user = session.passport.user.userid;
 			const list = await this.chatService.listChats(user);
 			return list;
 		} catch (error) {
@@ -26,7 +26,7 @@ export class ChatController {
 	@Get('list/userchats')
 	async listUserChats(@Session() session: Record<string, any>) {
 		try {
-			const user = request.session.passport.user.userid;
+			const user = session.passport.user.userid;
 			const list = await this.chatService.listUserChats(user);
 			return list;
 		} catch (error) {
@@ -51,7 +51,7 @@ export class ChatController {
 	@Post('create')
 	async createChat(@Body() details: ChatDto, @Session() session: Record<string, any>) {
 		try {
-			const user = request.session.passport.user.userid;
+			const user = session.passport.user.userid;
 			if (details.password != "" && details.type == 0)
 				details.type = 1;
 			else if (details.password == "" && details.type == 1)

@@ -17,7 +17,7 @@ services:
 
   node:
     container_name: node
-    build: ./docker/node
+    build: ./backend
     networks:
     - external
     ports:
