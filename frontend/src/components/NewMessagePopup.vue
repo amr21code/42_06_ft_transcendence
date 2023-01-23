@@ -9,12 +9,12 @@
                 Group<input class="radio" type="checkbox">
             </label> -->
             <br>
-            <input class="popup-textfield" type="text" placeholder="Name of the chat">
+            <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname">
             <br>
-            <input class="popup-textfield" type="text" placeholder="password">
+            <input class="popup-textfield" type="text" placeholder="password" v-model="password">
             <br>
             <button class="submit-button" name="submit">
-                <input class="submit-button" type="submit" @click="createNewChat">
+                <input class="submit-button" type="submit" @click="createNewChat(chatname, password)">
             </button>
 
             <button class="popup-close" @click="togglePopup">Close</button>
@@ -46,6 +46,8 @@ export default defineComponent({
 			user: {} as IUser,
 			chats: {} as IChats,
             socket: SocketioService.socket,
+            chatname: '',
+            password: '',
 		}
 	},
 	methods: {
@@ -60,15 +62,14 @@ export default defineComponent({
 			});
 		},
 
-        createNewChat() {
-            DataService.createChat()
+        createNewChat(chatname : string, password : string) {
+            DataService.createChat(chatname, password)
             .then((response: ResponseData) => {
-                // console.log("chat got created with id ", response.data);
                 SocketioService.refreshChats();
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+            })
+            .catch((e: Error) => {
+                console.log(e);
+            });
         }
         
 	},
