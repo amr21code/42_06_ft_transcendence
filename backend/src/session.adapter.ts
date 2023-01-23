@@ -2,7 +2,7 @@ import { IoAdapter } from "@nestjs/platform-socket.io";
 import { Server, ServerOptions } from "socket.io";
 import * as express from 'express';
 import * as passport from "passport";
-import { INestApplicationContext} from "@nestjs/common";
+import { INestApplicationContext } from "@nestjs/common";
 import { UserService } from "./user/user.service";
 
 declare module "http" {

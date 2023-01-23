@@ -27,7 +27,7 @@ eval:
 clean: stop contrm
 	-docker system prune -f
 
-fclean: stop contrm imagerm volrm netrm
+fclean: stop contrm volrm netrm imagerm
 	-docker system prune -f
 
 stop:
