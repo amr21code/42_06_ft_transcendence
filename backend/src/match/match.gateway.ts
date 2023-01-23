@@ -16,11 +16,11 @@ export class MatchGateway {
 		return "test";
   }
 
-  @SubscribeMessage('send-copponent-status')
+  @SubscribeMessage('send-opponent-status')
 	async refreshChat(client: Socket) {
 		// console.log("backend: got send-chat-refresh");
-		client.emit('opponent-status');
-    return true;
+		client.emit('opponent-status', {data: true});
+    // return true;
 	}
 
 }
