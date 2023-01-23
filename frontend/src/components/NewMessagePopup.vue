@@ -8,6 +8,9 @@
             <label>
                 Group<input class="radio" type="checkbox">
             </label> -->
+            <a>Enter the name of the chat and optional the password</a><br>
+            <button>Groupchat</button>
+            <button>Privatechat</button>
             <br>
             <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname">
             <br>

@@ -38,7 +38,10 @@ export default defineComponent({
 			required: true,
 			type: String
 		},
-        ['LeaveChattogglePopup'] : Boolean
+        ['LeaveChattogglePopup'] : {
+			required: true,
+			type: Function
+		}
 	},
 
     data () {
