@@ -32,7 +32,7 @@ export class ChatController {
 		}
 	}
 
-	@Get('join/:chatid?/:pw?')
+	@Get('join/:chatid/:pw?')
 	async joinChat(@Req() request: Request, @Param('chatid') chatid, @Param('pw') pw?) {
 		if (!pw)
 			pw = '';
@@ -139,14 +139,15 @@ export class ChatController {
 	@Get('open/pm/:userid')
 	async openPM(@Req() request: Request, @Param('userid') userid) {
 		try {
-			const user = await this.userService.getMe(request.user);
-			await this.chatService.checkPMChat(user[0].userid, userid);
-			const joinresult = await this.chatService.joinChat(user[0].userid);
-			const chatdetails = await this.chatService.createPMChatDto(user[0].userid, userid, joinresult);
+			const user1 = request.session.passport.user.userid;
+			const user2 = await this.userService.getOne(userid)[0].userid;
+			await this.chatService.checkPMChat(user1, user2);
+			const joinresult = await this.chatService.joinChat(user1);
+			const chatdetails = await this.chatService.createPMChatDto(user1, user2, joinresult);
 			const modchat = await this.chatService.changeChatDetails(chatdetails);
-			var details = await this.chatService.createPMUserDto(user[0].userid, joinresult);
+			var details = await this.chatService.createPMUserDto(user1, joinresult);
 			var moduser = await this.chatService.changeUserStatus(details);
-			details.userid = userid;
+			details.userid = user2;
 			moduser = await this.chatService.changeUserStatus(details);
 		} catch (error) {
 			throw new ForbiddenException();

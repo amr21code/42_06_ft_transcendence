@@ -21,7 +21,7 @@ services:
     networks:
     - external
     ports:
-    - 5000:5000
+    - 3000:8081
     restart: unless-stopped
     volumes:
     - web:/var/www/html

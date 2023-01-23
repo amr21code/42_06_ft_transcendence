@@ -1,10 +1,10 @@
 FROM 	node:current-bullseye-slim
 
 WORKDIR /usr/src/app
-COPY package*.json main.js ./
+COPY ../../backend/package*.json ./
 
 RUN npm install
 
-EXPOSE 5000
+EXPOSE 3000
 
-CMD ["node", "main.js"]
+CMD ["node", "main.ts"]
