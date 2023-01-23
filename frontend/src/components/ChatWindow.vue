@@ -8,7 +8,6 @@
 		<!--have a info button on the right to show all the users in the chat-->
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
-			{{ curr_chat }}
 			<!-- <img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40"> -->
 			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
 			<a @click="showChangeNameField()" class="chat-chatname" v-if="showinput === false">{{ curr_chat.chat_name }}</a>

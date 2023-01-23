@@ -196,17 +196,17 @@ export default defineComponent({
 		}
 
 		const selected = ref<SelectedChat>('overview');
-		var sel_chat: IChats;
-		const NULL_CHAT = JSON.stringify( {chatid: 0,	chat_name: "no chat", typename: "no chat", status: 0 });
-		sel_chat = JSON.parse(NULL_CHAT);
-		const handleClick = (term: SelectedChat, selected_chat: any) => {
-			sel_chat = selected_chat;
-			if (selected_chat === 0) {
-				const NULL_CHAT = JSON.stringify( {chatid: 0,	chat_name: "no chat", typename: "no chat", status: 0 });
-				sel_chat = JSON.parse(NULL_CHAT);
-			}
-			selected.value = term;
-		}
+        const NULL_CHAT = JSON.stringify( {chatid: 0,    chat_name: "no chat", typename: "no chat", status: 0 });
+        const sel_chat = ref<IChats>(JSON.parse(NULL_CHAT));
+        const handleClick = (term: SelectedChat, selected_chat: any) => {
+            sel_chat.value = selected_chat;
+            if (selected_chat === 0) {
+                const NULL_CHAT = JSON.stringify( {chatid: 0,    chat_name: "no chat", typename: "no chat", status: 0 });
+                sel_chat.value = JSON.parse(NULL_CHAT);
+            }
+            selected.value = term;
+            // console.log("handleClick", selected.value, sel_chat);
+        }
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger, changeType, type }
 	} //end of setup
