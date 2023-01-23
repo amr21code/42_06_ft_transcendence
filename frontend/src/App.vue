@@ -95,7 +95,7 @@ export default defineComponent({
 		};
 		return { loggedIn, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
-	
+
 	methods: {
 		checkAuthStatus() {
 			DataService.getAuthStatus()

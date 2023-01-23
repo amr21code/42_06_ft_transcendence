@@ -15,8 +15,8 @@ export default defineComponent({
     setup() {
 		// toggle Popup when opponent arrives
 		const opponentArrived = ref(false);
-		const toggleMatchWaitPopup = () => {
-			opponentArrived.value = !opponentArrived.value;
+		const toggleMatchWaitPopup = (isArrived: boolean) => {
+			opponentArrived.value = isArrived;
 		}
 	
         let canvas: any, ctx: any;
@@ -30,7 +30,9 @@ export default defineComponent({
         // };
         const socket = SocketioService.socket;
         socket.on("init", handleInit);
-        socket.on("opponent-status", toggleMatchWaitPopup);
+        socket.on("opponent-status", (data: any) => {
+			toggleMatchWaitPopup(data);
+		});
 
 		// ---------- SOCKETIO: OUTSOURCE TO SERVICE END
         const init = () => {
