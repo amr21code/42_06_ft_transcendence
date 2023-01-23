@@ -154,6 +154,7 @@ export default defineComponent({
 			// console.log('send message', userid, chatid, message);
 			// console.log("test", this.user[0].username);
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
+			
 			// DataService.sendMessage(userid, chatid, message)
 			// .then((response: ResponseData) => {
 			// 	message = '';
@@ -168,7 +169,8 @@ export default defineComponent({
 			console.log(type, chatid, chatname, password);
 			DataService.changeChatName(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
-				console.log(response.data);
+				SocketioService.refreshChats();
+				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
