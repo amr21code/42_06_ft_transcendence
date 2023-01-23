@@ -143,4 +143,14 @@ export class MatchService {
 			WHERE matchid=(SELECT matchid FROM public.user_match WHERE userid=${userid} AND challenge!=3);`
 		);
 	}
+	async getOpponentStatus(matchid: number, userid: string){
+		const accept = await this.db.$queryRaw(
+			Prisma.sql`SELECT challenge FROM public.user_match
+			WHERE matchid=${matchid} AND userid!=${userid};`
+		);
+		if (accept && accept[0].challenge == 1)
+			return true;
+		else 
+			return false;
+	}
 }

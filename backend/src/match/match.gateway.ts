@@ -1,5 +1,7 @@
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
+import { UserService } from 'src/user/user.service';
+import { MatchService } from './match.service';
 
 @WebSocketGateway(3002, { cors: {
 	origin: ['http://192.168.56.2:5173','http://localhost:5173'],
@@ -8,7 +10,8 @@ import { Socket } from 'socket.io';
 }
 })
 export class MatchGateway {
-	constructor() {}
+  constructor(private readonly userService: UserService, private readonly matchService: MatchService) {
+	}
 
   	@SubscribeMessage('message')
   	handleMessage(client: any, payload: any): string {
@@ -17,10 +20,11 @@ export class MatchGateway {
   }
 
   @SubscribeMessage('send-opponent-status')
-	async refreshChat(client: Socket) {
-		// console.log("backend: got send-chat-refresh");
-		client.emit('opponent-status', {data: true});
-    // return true;
+	async refreshChat(client: Socket, payload: any) {
+    const status = this.matchService.getOpponentStatus(payload.matchid, payload.userid);
+	//client.emit('opponent-status', {data: status});
+    client.emit('opponent-status', {data: true});
+    return true;
 	}
 
 }
