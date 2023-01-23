@@ -8,7 +8,7 @@
 		<!--have a info button on the right to show all the users in the chat-->
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
-			<!-- {{ curr_chat }} -->
+			{{ curr_chat }}
 			<!-- <img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40"> -->
 			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
 			<a @click="showChangeNameField()" class="chat-chatname" v-if="showinput === false">{{ curr_chat.chat_name }}</a>
@@ -88,7 +88,6 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, onMounted, type PropType } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -99,6 +98,8 @@ import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
 
 
+import { computed, defineComponent, ref, onMounted } from 'vue'
+import type { PropType } from 'vue'
 
 export default defineComponent({
 	name: 'ChatWindow',
@@ -122,7 +123,8 @@ export default defineComponent({
 	props: {
 		curr_chat: {
 			required: true,
-			type: Object as PropType<IChats>,
+			type: Object //Object as PropType<IChats>,
+			// default: () => ({} as IChats)
 		},
 	},
 
