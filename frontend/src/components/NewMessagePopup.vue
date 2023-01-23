@@ -1,23 +1,26 @@
 <template>
     <div class="popup" @keyup.esc="togglePopup" tabindex="0">
         <div class="popup-inner">
-            <h2>Create a new chat</h2>
+            <h2>Create or join a chat</h2>
             <!-- <label>
                 Privat<input class="radio" type="checkbox">
             </label>
             <label>
                 Group<input class="radio" type="checkbox">
             </label> -->
-            <a>Enter the name of the chat and optional the password</a><br>
-            <button @click="(changeShowInput(false))">Groupchat</button>
-            <button @click="(changeShowInput(true))">Privatechat</button>
+            <a class="info-text">Enter the chatid that you want to join, create a new chat with (public) or without
+                (protected) a password or enter a userid in order to create a direct chat.</a><br><br>
+            <button @click="(changeShowInput('group'))">Groupchat</button>
+            <button @click="(changeShowInput('dm'))">Privatechat</button>
+            <button @click="(changeShowInput('join'))">Join</button>
             <br>
-            <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === false">
-            <input class="popup-textfield" type="text" placeholder="Name of the user" v-model="chatname" v-if="showinput === true">
+            <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'">(optional)</a>
+            <input class="popup-textfield" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'">
+            <input class="popup-textfield" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'">
             <br>
-            <input class="popup-textfield" type="password" placeholder="password" v-model="password" v-if="showinput === false">
+            <input class="popup-textfield" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join'"><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
             <br>
-            <button class="submit-button" name="submit" v-if="showinput === true || showinput === false">
+            <button class="submit-button" name="submit" v-if="showinput">
                 <input class="submit-button" type="submit" @click="createNewChat(chatname, password, showinput)">
             </button>
 
@@ -66,8 +69,8 @@ export default defineComponent({
 			});
 		},
 
-        createNewChat(chatname : string, password : string, type : Boolean) {
-            DataService.createChat(chatname, password, type)
+        createNewChat(chatname_id : string, password : string, type : string) {
+            DataService.createChat(chatname_id, password, type)
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
             })
@@ -80,7 +83,7 @@ export default defineComponent({
     setup () {
 
         const showinput = ref();
-		const changeShowInput = (type : Boolean) => {
+		const changeShowInput = (type : String) => {
 			showinput.value = type;
 		}
 
@@ -96,6 +99,10 @@ export default defineComponent({
 
 <style scoped>
 
+.info-text {
+    border-bottom: 1% solid black;
+}
+
 .submit-button {
   background-color: blue;
   border: none;
@@ -107,7 +114,7 @@ export default defineComponent({
   font-size: 10px;
 }
 .popup {
-	text-align: left;
+	/* text-align: left; */
 	background-color: rgba(0,0,0,0.8);
 	position: fixed;
 	top: 0;
@@ -123,6 +130,7 @@ export default defineComponent({
 	background-color: var(--second-bg-color);
 	padding: 10px 26px;
 	border-radius: 10%;
+    max-width: 300px;
 }
 
 .popup-inner h2 {
