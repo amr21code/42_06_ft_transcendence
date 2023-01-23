@@ -42,7 +42,6 @@ export function gameLoop (state: any) {
 	const playerOne = state.player1;
 	playerOne.pos.y += playerOne.y_vel;
 
-	
 	if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20?
 		playerOne.yVel = 0;
 	}

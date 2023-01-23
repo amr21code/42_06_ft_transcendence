@@ -25,7 +25,7 @@ io.on('connection', (socket: Socket) => {
 	const state = createGameState();
 
 	startGameInterval(socket, state);
-})
+});
 
 function startGameInterval(client: any, state: any) {
 	const intervalId = setInterval(() => {
