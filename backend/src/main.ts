@@ -1,8 +1,8 @@
-import { ValidationPipe, Session } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as passport from 'passport';
-import { sessionMiddleware, wrap } from './middleware/middleware';
+import { sessionMiddleware } from './middleware/middleware';
 import { SessionAdapter } from './session.adapter';
 
 async function bootstrap() {

@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from "../auth.service";
-import { TwoFactorAuthenticationService } from "../twoFactorAuth.service";
 
 @Injectable()
 export class FtAuthGuard extends AuthGuard('42') {

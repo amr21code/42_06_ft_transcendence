@@ -7,9 +7,7 @@ export const sessionMiddleware = session({
 	resave: true,
 	saveUninitialized: false,
 	httpOnly: true,
-	cookie: {
-		// maxAge: 360000,
-	}
+	cookie: {}
 });
 
 export const wrap = nestMiddleware => (socket, next) => nestMiddleware(socket.request, {}, next);
