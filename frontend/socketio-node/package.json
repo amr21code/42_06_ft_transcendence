@@ -13,12 +13,16 @@
     "socketio": "^1.0.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.15",
     "@types/node": "^18.11.18",
     "@types/socket.io": "^3.0.2"
   },
   "compilerOptions": {
     "types": [
       "node"
-    ]
-  }
+    ],
+	"esModuleInterop": true
+  },
+  "type":"module",
+  "module": "es2015"
 }

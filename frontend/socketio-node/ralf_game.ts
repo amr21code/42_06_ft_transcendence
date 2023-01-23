@@ -44,7 +44,7 @@ export function gameLoop (state: any) {
 
 	
 	if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20?
-		this.yVel = 0
+		playerOne.yVel = 0;
 	}
 
 	// LOGIC FOR SCORED GOAL HERE
@@ -68,4 +68,4 @@ export function gameLoop (state: any) {
 	return false; // game is still running
 }
 
-// export default { createGameState, gameLoop };
+export default { createGameState, gameLoop };
