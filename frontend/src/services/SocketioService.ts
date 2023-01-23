@@ -6,7 +6,7 @@ class SocketioService {
   constructor() {}
 
   setupSocketConnection() {
-    this.socket = io('http://localhost:3002', { withCredentials: true });
+    this.socket = io('http://192.168.56.2:3002', { withCredentials: true });
     if (this.socket)
       console.log('Socket connected: ', this.socket.id);
     // this.socket.on('chat-message', (data: any) => {
@@ -29,8 +29,8 @@ class SocketioService {
     this.socket.emit('send-chat-message', {username, userid, chatid, message });
   }
 
-  chatLeave() {
-    this.socket.emit('send-chat-leave');
+  chatLeave(chatid: number) {
+    this.socket.emit('send-chat-leave', { chatid });
   }
 
   // new chat got created

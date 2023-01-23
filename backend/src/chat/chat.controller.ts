@@ -140,6 +140,7 @@ export class ChatController {
 	async openPM(@Req() request: Request, @Param('userid') userid) {
 		try {
 			const user = await this.userService.getMe(request.user);
+			await this.chatService.checkPMChat(user[0].userid, userid);
 			const joinresult = await this.chatService.joinChat(user[0].userid);
 			const chatdetails = await this.chatService.createPMChatDto(user[0].userid, userid, joinresult);
 			const modchat = await this.chatService.changeChatDetails(chatdetails);
