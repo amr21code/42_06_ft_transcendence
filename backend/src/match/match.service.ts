@@ -55,9 +55,6 @@ export class MatchService {
 					VALUES (2)
 					RETURNING matchid;`
 				);
-				// console.log("new matchid", open[0].matchid);
-				// var timeout = (Date.now() / 1000) + 60;
-				// console.log("settimeout", timeout);
 				if (open[0].matchid) {
 					const join = await this.db.$queryRaw(
 						Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)

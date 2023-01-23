@@ -84,10 +84,8 @@ export class ChatService {
 				throw new ForbiddenException();
 			}
 		}
-		// console.log(result)
 		try {
 			if (result[0].chatid == chatid && pw == result[0].password) {
-				// console.log("chat exists, password is correct, joining");
 				const join = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_chat(
 						userid, chatid, status)
@@ -98,9 +96,7 @@ export class ChatService {
 				throw new ForbiddenException();
 			}
 		} catch (error) {
-			// console.log("chat does not exist or pw is wrong");
 			try {
-				// console.log("chat does not exist, creating a new one and joining");
 				var chatname = 'public chat by ' + userid;
 				const create = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.chat(type, chat_name, password)
@@ -114,7 +110,6 @@ export class ChatService {
 				);
 				return (create[0].chatid);
 			} catch (error) {
-				// console.log("error: wrong pw");
 				throw new ForbiddenException();
 			}
 		}
@@ -144,7 +139,6 @@ export class ChatService {
 			Prisma.sql`SELECT status FROM user_chat
 			WHERE userid=${message.userid}`
 		);
-		//user seems to be empty
 		if (user[0].status >= 2)
 			throw new ForbiddenException();
 		const msg = await this.db.$queryRaw(
@@ -179,15 +173,12 @@ export class ChatService {
 	async changeUserStatus(details: ChatUserStatusDto) {
 		if (details.bantime > 0)
 			var newtime = (Date.now() / 1000) + details.bantime * 60;
-		// console.log("bantime", newtime);
 		try {
-			// console.log("user update");
 			const result = await this.db.$executeRaw(
 				Prisma.sql`UPDATE public.user_chat
 				SET status=CAST(${details.status} AS INTEGER), bantime=to_timestamp(${newtime})
 				WHERE chatid=CAST(${details.chatid} AS INTEGER) AND userid=${details.userid};`
 			);
-			// console.log(result);
 			if (result == 0) {
 				const result_insert = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_chat

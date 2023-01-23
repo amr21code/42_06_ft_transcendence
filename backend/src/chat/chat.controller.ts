@@ -43,7 +43,6 @@ export class ChatController {
 			const join = await this.chatService.joinChat(user, chatid, pw);
 			return join;
 		} catch (error) {
-			// console.log("error joining chat");
 			throw new ForbiddenException();
 		}
 	}

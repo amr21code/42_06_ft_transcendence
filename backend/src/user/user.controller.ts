@@ -10,14 +10,12 @@ export class UserController {
 
 	@Get('me')
 	async getMe(@Req() request: Request) {
-		// console.log(request);
 		const user = await this.userService.getMe(request.user);
 		return user;
 	}
 
 	@Get('all')
 	async getAll(@Req() request: Request) {
-		// console.log(request);
 		const users = await this.userService.getAll();
 		return users;
 	}
