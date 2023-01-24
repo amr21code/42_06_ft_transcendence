@@ -1,5 +1,5 @@
 import { ForbiddenException, } from '@nestjs/common';
-import {  SubscribeMessage, WebSocketGateway} from '@nestjs/websockets';
+import {  SubscribeMessage, WebSocketGateway, WsException} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from 'src/chat/chat.service';
@@ -23,7 +23,7 @@ export class ChatGateway {
 			await this.chatService.addMessage(message);
 			client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
 		} catch (error) {
-			throw new ForbiddenException('add message in socketIO message-handler failed');
+			throw new WsException('add message in socketIO message-handler failed');
 		}
 	}
 
@@ -40,7 +40,7 @@ export class ChatGateway {
 			client.emit('refresh-chat');
 			client.emit('chat-leave');
 		} catch (error) {
-			throw new ForbiddenException('leave chat in socketIO message-handler failed');
+			throw new WsException('leave chat in socketIO message-handler failed');
 		}
 	}
 
