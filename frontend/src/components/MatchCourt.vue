@@ -102,7 +102,7 @@ export default defineComponent({
         };
 		
         const paintGame = (state: any) => {
-            ctx.fillStyle = "#444040";
+            ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 			ctx.strokeStyle = "#fff";
