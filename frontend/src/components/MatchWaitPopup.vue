@@ -40,7 +40,8 @@ export default defineComponent({
 .popup-inner {
 	background-color: var(--second-bg-color);
 	padding: 10px 26px;
-	border-radius: 10%;
+	/* border-radius: 10%; */
+	border-radius: 2px;
 	width: 50%;
 	height: 50%;
 }
