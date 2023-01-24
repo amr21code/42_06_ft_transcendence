@@ -20,7 +20,7 @@
 			</a>
 		</div>
 
-		<ChatInfoPopup id="ChatInfoPopup" v-if="ChatInfoTrigger === true" :ChatInfotogglePopup="() => ChatInfotogglePopup()" :curr_chat="curr_chat" />
+		<ChatInfoPopup id="ChatInfoPopup" v-if="ChatInfoTrigger === true" :ChatInfotogglePopup="() => ChatInfotogglePopup()" :chat="curr_chat" />
 
 <!--------------BODY------------------------------------------------------------------------------------>
 
@@ -208,7 +208,7 @@ export default defineComponent({
 
 		const ChatInfoTrigger = ref(false);
 		const ChatInfotogglePopup = () => {
-			// console.log("togglePopup(LeaveChat) got triggert")
+			// console.log("ChatInfotogglePopup")
 			ChatInfoTrigger.value = !ChatInfoTrigger.value;
 			return ChatInfoTrigger.value;
 		}
