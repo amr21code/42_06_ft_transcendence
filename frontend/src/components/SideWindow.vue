@@ -28,7 +28,8 @@ export default defineComponent({
 
 <style scoped>
 	.side-window-wrapper {
-		background-color: white;
+		background: white;
+		/* background-color: var(--second-bg-color); */
 		color: red;
 		border-radius: 2px;
 		padding: 30px;

@@ -17,13 +17,24 @@ const io = new Server(http);
 // });
 
 // const { createGameState, gameLoop } = require('./ralf_game')
-import { createGameState, gameLoop } from './ralf_game.js'; // WHY THE F*CK ist das .js??
+import { createGameState, gameLoop, getUpdatedVelocity } from './ralf_game.js'; // WHY THE F*CK ist das .js??
 const FRAME_RATE = 10;
 // import { createGameState, gameLoop } from './ralf_game';
 
 io.on('connection', (socket: Socket) => {
 	const state = createGameState();
 
+	// LISTEN TO EVENT FROM CLIENT
+	socket.on('keydown', handleKeyDown);
+
+	function handleKeyDown(keyCode: any) { // inline to have access to 'socket'
+		
+		const keyInt = parseInt(keyCode); // maybe put in try/catch?
+		const vel = getUpdatedVelocity(keyInt);
+		if (vel) {
+			state.player1.y_vel = vel;	
+		}
+	}
 	startGameInterval(socket, state);
 });
 

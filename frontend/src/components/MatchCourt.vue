@@ -98,7 +98,7 @@ export default defineComponent({
 
 		
         const keydown = (e: any) => {
-			console.log(e.keyCode);
+			socket.emit('keydown', e.keyCode);
         };
 		
         const paintGame = (state: any) => {
@@ -108,9 +108,14 @@ export default defineComponent({
 			ctx.strokeStyle = "#fff";
 			ctx.font = "200px monspace";
 			ctx.lineWidth = 7;
-			// ctx.centerLineWidth = 5;
-			// ctx.centerLineHeight = 20;
+			ctx.centerLineWidth = 7;
+			ctx.centerLineHeight = canvas.height / 10;
 			ctx.strokeRect(0, 0, canvas.width, canvas.height);
+			//draw center lines
+			for (var i = (canvas.height / 5 / 5); i < canvas.height; i += canvas.height / 5) {
+				ctx.fillStyle = "#444040";
+				ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
+			}
 		
             paintPlayers(state);
         };

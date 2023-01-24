@@ -35,18 +35,29 @@ export function createGameState() {
 }
 
 export function gameLoop (state: any) {
+
 	if (!state) {
 		return;
 	}
 	
 	const playerOne = state.player1;
-	playerOne.pos.y += playerOne.y_vel;
+	const playerTwo = state.player2;
+	const ball = state.ball;
+
+	// if key pressed ->
+	// playerOne.pos.y += playerOne.y_vel; // -> MAKE THIS READ KEYS INSTEAD
+	
+	// LOGIC FOR SCORED GOAL HERE
+	// LOGIC FOR WON/LOST GAME HERE
+	// maybe: logic for player left?
 
 	if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20?
 		playerOne.yVel = 0;
 	}
 
-	// LOGIC FOR SCORED GOAL HERE
+	// make sure paddle is actually moving, before we move it
+	if (playerOne.yvel)
+
 
 	// if (Game.keysPressed[KeyBindings.UP]) {
 	// 	this.yVel = -1;
@@ -67,4 +78,17 @@ export function gameLoop (state: any) {
 	return false; // game is still running
 }
 
-export default { createGameState, gameLoop };
+export function getUpdatedVelocity(keyCode: number) {
+	switch (keyCode) {
+		case 38: { // down
+			return (-1);
+		}
+		case 40: { // up
+			return (1);
+		}
+	}
+}
+
+
+
+export default { createGameState, gameLoop, getUpdatedVelocity };

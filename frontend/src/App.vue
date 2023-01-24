@@ -211,6 +211,6 @@ export default defineComponent({
 		bottom: 0;
 		width: 100%;
 		/* background: blue; */
-		/* height: 2.5rem; */
+		/* height: 1rem; */
 	}
 </style>
