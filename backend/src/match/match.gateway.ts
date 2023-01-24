@@ -2,6 +2,9 @@ import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { MatchService } from './match.service';
 import { createGameState, gameLoop, getUpdatedVelocity  } from './match.engine';
+import { MatchGameStateDto } from './dto/matchgamestate.dto';
+
+//add namespace???
 
 @WebSocketGateway(3002, { cors: {
 	origin: ['http://192.168.56.2:5173','http://localhost:5173'],
@@ -36,10 +39,11 @@ export class MatchGateway {
 			const vel = getUpdatedVelocity(keyInt);
 			if (vel) {
 				state.player1.y_vel = vel;	
+				state.player1.pos.y +=vel;
 			}
 			startGameInterval(client, state);
 		}
-		function startGameInterval(client: any, state: any) {
+		function startGameInterval(client: any, state: MatchGameStateDto) {
 			const intervalId = setInterval(() => {
 				const winner = gameLoop(state);
 				if (!winner) {

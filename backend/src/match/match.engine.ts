@@ -35,7 +35,7 @@ export function createGameState() {
 	}
 }
 
-export function gameLoop (state: any) {
+export function gameLoop (state: MatchGameStateDto) {
 
 	if (!state) {
 		return;
@@ -52,7 +52,7 @@ export function gameLoop (state: any) {
 	// LOGIC FOR WON/LOST GAME HERE
 	// maybe: logic for player left?
 
-	if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20?
+	if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20? Gridsize?
 		playerOne.y_vel = 0;
 	}
 
