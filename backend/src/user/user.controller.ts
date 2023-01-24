@@ -15,14 +15,13 @@ export class UserController {
 	}
 
 	@Get('all')
-	async getAll(@Req() request: Request) {
+	async getAll() {
 		const users = await this.userService.getAll();
 		return users;
 	}
 
 	@Get(':userid')
 	async getOne(@Param('userid') userid) {
-		
 		const users = await this.userService.getOne(userid);
 		return users;
 	}

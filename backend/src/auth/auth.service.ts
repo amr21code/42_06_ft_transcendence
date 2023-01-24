@@ -12,8 +12,8 @@ export class AuthService {
 		var user;
 		user = await this.findUser(profile.username);
 		if (!user)	{
-			console.log('User ', profile.username, ' unknown, creating in DB');
-			this.userService.createUser(profile, accessToken);
+			console.log('User', profile.username, 'unknown, creating in DB');
+			await this.userService.createUser(profile, accessToken);
 			user = await this.findUser(profile.username);
 		} else {
 			await this.db.$queryRaw(
