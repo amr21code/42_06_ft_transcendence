@@ -19,15 +19,12 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-message')
 	async handleMessage(client: Socket, message: ChatMessageDto) {
-		// try {
-			// console.log("handleMessage()");
-			// console.log(message);
+		try {
 			await this.chatService.addMessage(message);
-			// console.log(message.username);
 			client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
-		// } catch (error) {
-		// 	throw new ForbiddenException('add message in socketIO message-handler failed');
-		// }
+		} catch (error) {
+			throw new ForbiddenException('add message in socketIO message-handler failed');
+		}
 	}
 
 	@SubscribeMessage('send-chat-refresh')
@@ -38,9 +35,13 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-leave')
 	async leaveChat(client: Socket, message: Record<string, number>) {
-		this.chatService.leaveChat(client.request.session.passport.user.userid, message.chatid);
-		client.emit('refresh-chat');
-		client.emit('chat-leave');
+		try {
+			this.chatService.leaveChat(client.request.session.passport.user.userid, message.chatid);
+			client.emit('refresh-chat');
+			client.emit('chat-leave');
+		} catch (error) {
+			throw new ForbiddenException('leave chat in socketIO message-handler failed');
+		}
 	}
 
 }
