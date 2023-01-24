@@ -70,18 +70,17 @@ export class MatchGateway {
 	 	//startGameInterval(socket, state);
 	// });
 	
-	 function startGameInterval(client: any, state: any) {
-	 	const intervalId = setInterval(() => {
-	 		const winner = gameLoop(state);
-	 		if (!winner) {
-	 			client.emit('gameState', JSON.stringify(state));
-	 		}
-	 		else {
-	 			client.emit('gameOver');
-	 			clearInterval(intervalId);
-	 		}
-	 	}, 1000 / FRAME_RATE)
-	
-	 }
-
+	function startGameInterval(client: any, state: any) {
+		const intervalId = setInterval(() => {
+			const winner = gameLoop(state);
+			if (!winner) {
+				client.emit('gameState', JSON.stringify(state));
+			}
+			else {
+				client.emit('gameOver');
+				clearInterval(intervalId);
+			}
+		}, 1000 / 30);
+	}
+	}
 }
