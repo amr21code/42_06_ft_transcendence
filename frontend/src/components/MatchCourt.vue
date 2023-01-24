@@ -19,19 +19,33 @@ export default defineComponent({
 			opponentArrived.value = isArrived;
 		}
         let canvas: any, ctx: any;
-        // ---------- SOCKETIO: OUTSOURCE TO SERVICE
-        // const handleInit = (msg: any) => {
-        //     console.log(msg);
-        // };
+
         const handleGameState = (gameState: any) => {
+			// console.log("success");
             gameState = JSON.parse(gameState);
+
+			// gameState.canvasHeight = canvas.height;
+			// gameState.canvasWidth = canvas.width;
+			// gameState.paddleWidth = canvas.width / 25;
+			// gameState.paddleHeight = canvas.height / 4;
+			// gameState.ballSize = canvas.width / 25;
+			// gameState.wallOffset = canvas.width / 25;
+			// gameState.player1.pos.x = gameState.wallOffset;
+			// gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
+			// gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
+			// gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
+			// gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
+			// gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2;
+
+
             requestAnimationFrame(() => paintGame(gameState));
         };
-		
+
 		// ---------- SOCKETIO: OUTSOURCE TO SERVICE END
         const init = () => {
 			canvas = document.getElementById("match-court");
             ctx = canvas.getContext("2d");
+
             // REMOVE BLURRINESS ---------------------------------------------------
             let dpi = window.devicePixelRatio;
             const fix_dpi = () => {
@@ -43,59 +57,12 @@ export default defineComponent({
             fix_dpi();
             // REMOVE BLURRINESS END ---------------------------------------------------
 
-			gameState.paddleWidth = canvas.width / 25;
-			gameState.paddleHeight = canvas.height / 4;
-			gameState.ballSize = canvas.width / 25;
-			gameState.wallOffset = canvas.width / 25;
-			gameState.player1.pos.x = gameState.wallOffset;
-			gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-			gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
-			gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-			gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
-			gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2;
-			gameState.canvasHeight = canvas.height;
-			gameState.canvasWidth = canvas.width;
+			socket.emit('init',  canvas.height, canvas.width );
 
             ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
         };
-
-		function createGameState() {
-			return {
-				player1: {
-					pos: {
-						x: 0,
-						y: 0,
-					},
-					y_vel: 0,
-				},
-				player2: {
-					pos: {
-						x: 0,
-						y: 0,
-					},
-					y_vel: 0,
-				},
-				ball: {
-					pos: {
-						x: 0,
-						y: 0,
-					},
-					vel: {
-						x: 0,
-						y: 0,
-					}
-				},
-				paddleWidth: 0,
-				paddleHeight: 0,
-				ballSize: 0,
-				wallOffset: 0,
-				canvasHeight: 0,
-				canvasWidth: 0,
-			}
-		}
-
 		
         const keydown = (e: any) => {
 			socket.emit('keydown', e.keyCode);
@@ -129,7 +96,6 @@ export default defineComponent({
 
 		// TEMP##############################
 
-		const gameState = createGameState();
 
 		
 		// TEMP##############################
@@ -145,7 +111,7 @@ export default defineComponent({
 
 		////############# SOCKETIO #############
 		
-        return { opponentArrived, gameState, toggleMatchWaitPopup, init, paintGame };
+        return { opponentArrived, toggleMatchWaitPopup, init, paintGame };
     },
 
 	methods: {
@@ -160,7 +126,6 @@ export default defineComponent({
 		this.checkOpponentStatus(); // SET CONDITION TO STOP STUFF
 		// }
 		this.init();
-        this.paintGame(this.gameState);
     },
     components: { MatchWaitPopup }
 });
@@ -181,3 +146,16 @@ export default defineComponent({
 	}
 
 </style>
+
+<!-- gameState.canvasHeight = canvas.height;
+gameState.canvasWidth = canvas.width;
+gameState.paddleWidth = canvas.width / 25;
+gameState.paddleHeight = canvas.height / 4;
+gameState.ballSize = canvas.width / 25;
+gameState.wallOffset = canvas.width / 25;
+gameState.player1.pos.x = gameState.wallOffset;
+gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
+gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
+gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
+gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
+gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2; -->
