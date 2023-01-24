@@ -16,19 +16,19 @@ export class AchievementsService {
 		return achievements;
 	}
 
-	async addAchieve(userid: string, achid: string) {
+	async addAchieve(userid: string, achid: number) {
 		const result = await this.db.$queryRaw(
-			Prisma.sql`SELECT COUNT(id) FROM public.users_achievements
+			Prisma.sql`SELECT * FROM public.users_achievements
 			WHERE userid=${userid} AND achievementid=CAST(${achid} AS INTEGER)`
 			);
-		if (result[0].count == 0) {
+		if (Object.keys(result).length == 0) {
 			const achievements = await this.db.$queryRaw(
 				Prisma.sql`INSERT INTO public.users_achievements(
 					userid, achievementid, count)
 					VALUES (${userid}, CAST(${achid} AS INTEGER), 1);`
 			);
 		}
-		else if (result[0].count == 1)
+		else if (Object.keys(result).length == 1)
 		{
 			var count = await this.db.$queryRaw(
 				Prisma.sql`SELECT count FROM public.users_achievements

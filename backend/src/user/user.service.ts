@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Profile } from 'passport-42';
 import { DbService } from '../db/db.service';
+import { AchievementsService } from 'src/achievements/achievements.service';
 
 @Injectable()
 export class UserService {
-	constructor (private db: DbService) {}
+	constructor (private db: DbService, private readonly achieve: AchievementsService) {}
 
 	async getAll() {
 		const user = await this.db.$queryRaw(
@@ -72,6 +73,9 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET username=${newdata} WHERE userid=${userid}`
 				);
+			if (newdata = 'GuillaumeCalvi') {
+				this.achieve.addAchieve(userid, 2);
+			}
 		} else if (field == 'user_status'){
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET user_status=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`

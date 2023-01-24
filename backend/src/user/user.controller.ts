@@ -29,22 +29,24 @@ export class UserController {
 	
 	@Get(':userid/:field/:new')
 	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Param('new') newdata) {
-		const user = await this.getMe(request);
+		const user = request.session.passport.user.userid;
+		// const user = await this.getMe(request);
 		try {
-				if (userid == user[0].userid)
+				if (userid != user)
 					throw new ForbiddenException();
 				const status = await this.userService.changeUserData(userid, field, newdata);
 					return { msg : "ok" };
 			} catch (error) {
 				throw new ForbiddenException('invalid userstatus');
 			}
-	}
-
-	@Get(':userid/:field')
-	async getUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field) {
-		const user = await this.getMe(request);
+		}
+		
+		@Get(':userid/:field')
+		async getUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field) {
+		const user = request.session.passport.user.userid;
+		// const user = await this.getMe(request);
 		try {
-				if (userid == user[0].userid)
+				if (userid != user)
 					throw new ForbiddenException();
 				const status = await this.userService.getUserData(userid, field);
 					return { msg : "ok" };
