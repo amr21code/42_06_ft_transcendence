@@ -1,8 +1,8 @@
-import { ValidationPipe, Session } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as passport from 'passport';
-import { sessionMiddleware, wrap } from './middleware/middleware';
+import { sessionMiddleware } from './middleware/middleware';
 import { SessionAdapter } from './session.adapter';
 
 async function bootstrap() {
@@ -13,15 +13,7 @@ async function bootstrap() {
 		})
 	);
 	app.enableCors({
-		origin: [
-			'http://localhost:5173',
-			'http://192.168.56.2:5173',
-			'http://frontend:5173',
-			'http://192.168.56.2:3000',
-			'http://localhost:8080',
-			'http://192.168.56.2:3002',
-			'http://frontend:3002',
-		],
+		origin: `${process.env.FRONTEND_URL}`,
 		methods: ["GET", "POST"],
 		credentials: true,
 	});
