@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  db:
+    container_name: db
+    # image: postgres
+    build: ./docker/db
+    restart: unless-stopped
+    networks:
+    - external
+    ports:
+    - 5432:5432
+    volumes:
+    - db:/var/lib/postgresql/data
+    env_file:
+    - .env
+ 
+networks:
+  external:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
+    driver_opts: 
+      type: none
+      o: bind
+      device: ${VOL_DIR}db
+  web:
+    driver: local
+    driver_opts: 
+      type: none
+      o: bind
+      device: ${VOL_DIR}web
