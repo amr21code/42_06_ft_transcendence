@@ -121,7 +121,7 @@ export default defineComponent({
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 99; /*brings to highest front-layer*/
+	z-index: 98; /*brings to highest front-layer*/
 	display: flex;
 	align-items: center;
 	justify-content: center;
