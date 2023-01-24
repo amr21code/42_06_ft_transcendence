@@ -116,7 +116,6 @@ export default defineComponent({
 				ctx.fillStyle = "#444040";
 				ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
 			}
-		
             paintPlayers(state);
         };
 
@@ -127,7 +126,7 @@ export default defineComponent({
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
         };
-		
+
 		// TEMP##############################
 
 		const gameState = createGameState();
@@ -143,6 +142,7 @@ export default defineComponent({
 			console.log(data.data);
 		});
 		socket.on('gameState', handleGameState);
+
 		////############# SOCKETIO #############
 		
         return { opponentArrived, gameState, toggleMatchWaitPopup, init, paintGame };
