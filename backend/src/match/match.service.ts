@@ -153,4 +153,12 @@ export class MatchService {
 		else 
 			return false;
 	}
+
+	//async handleKeyDown(keyCode: any, state: any) { // inline to have access to 'socket'
+	//	const keyInt = parseInt(keyCode); // maybe put in try/catch?
+	//	const vel = getUpdatedVelocity(keyInt);
+	//	if (vel) {
+	//		state.player1.y_vel = vel;	
+	//	}
+	//}
 }

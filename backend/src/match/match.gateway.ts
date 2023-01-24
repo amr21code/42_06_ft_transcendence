@@ -26,43 +26,61 @@ export class MatchGateway {
     client.emit('opponent-status', {data: true});
 	}
 	
-	@SubscribeMessage('gameState')
-	async refreshMatch(client: Socket, payload: any) {
-    // const status = this.matchService.getOpponentStatus(payload.matchid, payload.userid);
-	//client.emit('opponent-status', {data: status});
-	client.emit('gameState', JSON.stringify(state));
+	//@SubscribeMessage('gameState')
+	//async refreshMatch(client: Socket, payload: any) {
+    //// const status = this.matchService.getOpponentStatus(payload.matchid, payload.userid);
+	////client.emit('opponent-status', {data: status});
+	//client.emit('gameState', JSON.stringify(state));
+	//}
+
+
+	async handleConnection(client: any) {
+		const state = createGameState();
+		client.emit('gameState', state);
+		client.on('keydown', handleKeyDown);
+		
+		function handleKeyDown(keyCode: any) { // inline to have access to 'socket'
+		
+		const keyInt = parseInt(keyCode); // maybe put in try/catch?
+		const vel = getUpdatedVelocity(keyInt);
+		if (vel) {
+			state.player1.y_vel = vel;	
+		}
+	
+		startGameInterval(client, state);
 	}
 
+// @SubscribeMessage('keydown')
+//	async keydown(client: Socket, payload: any) {
+//		this.matchService.handleKeyDown(payload.keyCode, payload.state);
+//	}
 
-	// io.on('connection', (socket: Socket) => {
-	// 	const state = createGameState();
+	 	// LISTEN TO EVENT FROM CLIENT
+	 	//socket.on('keydown', handleKeyDown);
 	
-	// 	// LISTEN TO EVENT FROM CLIENT
-	// 	socket.on('keydown', handleKeyDown);
-	
-	// 	function handleKeyDown(keyCode: any) { // inline to have access to 'socket'
+	 	//function handleKeyDown(keyCode: any) { // inline to have access to 'socket'
 			
-	// 		const keyInt = parseInt(keyCode); // maybe put in try/catch?
-	// 		const vel = getUpdatedVelocity(keyInt);
-	// 		if (vel) {
-	// 			state.player1.y_vel = vel;	
-	// 		}
-	// 	}
-	// 	startGameInterval(socket, state);
+	 	//	const keyInt = parseInt(keyCode); // maybe put in try/catch?
+	 	//	const vel = getUpdatedVelocity(keyInt);
+	 	//	if (vel) {
+	 	//		state.player1.y_vel = vel;	
+	 	//	}
+	 	//}
+	 	//startGameInterval(socket, state);
 	// });
 	
-	// function startGameInterval(client: any, state: any) {
-	// 	const intervalId = setInterval(() => {
-	// 		const winner = gameLoop(state);
-	// 		if (!winner) {
-	// 			client.emit('gameState', JSON.stringify(state));
-	// 		}
-	// 		else {
-	// 			client.emit('gameOver');
-	// 			clearInterval(intervalId);
-	// 		}
-	// 	}, 1000 / FRAME_RATE)
+	 function startGameInterval(client: any, state: any) {
+	 	const intervalId = setInterval(() => {
+	 		const winner = gameLoop(state);
+	 		if (!winner) {
+	 			client.emit('gameState', JSON.stringify(state));
+	 		}
+	 		else {
+	 			client.emit('gameOver');
+	 			clearInterval(intervalId);
+	 		}
+	 	}, 1000 / FRAME_RATE)
 	
-	// }
+	 }
 
 }
