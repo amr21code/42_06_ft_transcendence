@@ -1,8 +1,10 @@
 <template>
-    <div class="popup" @keyup.esc="togglePopup" tabindex="0">
+    <div class="popup" @keyup.esc="(ChatInfotogglePopup)" tabindex="0">
         <div class="popup-inner">
             <h2>Info</h2>
             <a>Hier könnte ihre Werbung stehen</a>
+			{{ curr_chat }}
+			<button class="close-button" @click="(ChatInfotogglePopup)">Close</button>
         </div>
     </div>
 </template>
@@ -13,6 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -23,19 +26,23 @@ import SocketioService from '../services/SocketioService'
 
 
 export default defineComponent({
-	name: "NewMessagePopup",
-    props: ['togglePopup'],
+	name: "ChatInfoPopup",
+    props: ['ChatInfotogglePopup'],
+			curr_chat: {
+				required: true,
+				type: Object as PropType<IChats>
+			},
 
     data () {
 		return {
 			user: {} as IUser,
-			chats: {} as IChats,
             socket: SocketioService.socket,
 		}
 	},
 	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
+
+		retrieveCurrentUsersInChat(chatid : number) {
+			DataService.getUsersInChat(chatid)
 			.then((response: ResponseData) => {
 				this.user = response.data;
 				console.log(response.data);
@@ -46,6 +53,11 @@ export default defineComponent({
 		},
         
 	},
+
+	mounted () {
+		this.retrieveCurrentUsersInChat(this.curr_chat.chatid);
+	},
+
     setup () {
 
     }  

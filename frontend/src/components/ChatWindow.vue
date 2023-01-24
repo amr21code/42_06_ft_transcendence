@@ -15,10 +15,12 @@
 			<button class="ok-button" @click="showChangeNameField(), changeChatName(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
 			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
 			<!-- <a class="chat-typename">{{ curr_chat.typename }}</a> -->
-			<a class="info-icon">
+			<a class="info-icon" @click="(ChatInfotogglePopup)">
 				<img src="../assets/info-icon.png" alt="user-photo" width="20" height="20">
 			</a>
 		</div>
+
+		<ChatInfoPopup id="ChatInfoPopup" v-if="ChatInfoTrigger === true" :ChatInfotogglePopup="() => ChatInfotogglePopup()" :curr_chat="curr_chat" />
 
 <!--------------BODY------------------------------------------------------------------------------------>
 
@@ -88,6 +90,8 @@
 
 <script lang="ts">
 
+import ChatInfoPopup from './ChatInfoPopup.vue'
+
 //for getting data from the backend
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
@@ -102,6 +106,8 @@ import type { PropType } from 'vue'
 
 export default defineComponent({
 	name: 'ChatWindow',
+	components: { ChatInfoPopup },
+
 	data () {
 		return {
 			user: [] as IUser[],
@@ -200,8 +206,15 @@ export default defineComponent({
 			showinput.value = !showinput.value;
 		}
 
+		const ChatInfoTrigger = ref(false);
+		const ChatInfotogglePopup = () => {
+			// console.log("togglePopup(LeaveChat) got triggert")
+			ChatInfoTrigger.value = !ChatInfoTrigger.value;
+			return ChatInfoTrigger.value;
+		}
 
-		return { message, submit, showChangeNameField, showinput, newName }
+
+		return { message, submit, showChangeNameField, showinput, newName, ChatInfoTrigger, ChatInfotogglePopup }
 	}
 
 })
