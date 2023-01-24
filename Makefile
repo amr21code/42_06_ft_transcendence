@@ -1,6 +1,6 @@
 NAME =      ft_transcendence
 YML =       ./docker-compose.yml
-YMLDB =       ./docker-compose_db.yml
+YMLDB =     ./docker-compose_db.yml
 
 $(NAME):
 	@echo "Building Transcendence"
