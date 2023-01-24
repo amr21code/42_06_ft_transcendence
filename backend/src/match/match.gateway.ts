@@ -24,7 +24,6 @@ export class MatchGateway {
     // const status = this.matchService.getOpponentStatus(payload.matchid, payload.userid);
 	//client.emit('opponent-status', {data: status});
     client.emit('opponent-status', {data: true});
-    return true;
 	}
 
 }

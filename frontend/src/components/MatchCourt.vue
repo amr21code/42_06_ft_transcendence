@@ -125,7 +125,7 @@ export default defineComponent({
 		const socket = SocketioService.socket;
 		// socket.on("init", handleInit);
 		socket.on("opponent-status", (data: any) => {
-			toggleMatchWaitPopup(data);
+			toggleMatchWaitPopup(data.data);
 			console.log(data.data);
 		});
 		socket.on('gameState', handleGameState);
