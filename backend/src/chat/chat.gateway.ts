@@ -20,10 +20,10 @@ export class ChatGateway {
 	@SubscribeMessage('send-chat-message')
 	async handleMessage(client: Socket, message: ChatMessageDto) {
 		// try {
-			console.log("handleMessage()");
-			console.log(message);
+			// console.log("handleMessage()");
+			// console.log(message);
 			await this.chatService.addMessage(message);
-			console.log(message.username);
+			// console.log(message.username);
 			client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
 		// } catch (error) {
 		// 	throw new ForbiddenException('add message in socketIO message-handler failed');

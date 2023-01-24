@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { TwoFactorAuthenticationService } from './twoFactorAuth.service';
 import { TwoFactorAuthenticationController } from './twoFactorAuth.controller';
+import { AchievementsService } from 'src/achievements/achievements.service';
 
 @Module({
 	imports: [UserModule, PassportModule.register({session: true})],
@@ -18,6 +19,7 @@ import { TwoFactorAuthenticationController } from './twoFactorAuth.controller';
 	TwoFactorAuthenticationService,
 	SessionSerializer,
 	UserService,
+	AchievementsService,
 	],
 })
 export class AuthModule {}
