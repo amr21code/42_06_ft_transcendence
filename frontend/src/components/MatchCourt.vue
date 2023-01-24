@@ -56,7 +56,7 @@ export default defineComponent({
 			gameState.canvasHeight = canvas.height;
 			gameState.canvasWidth = canvas.width;
 
-            ctx.fillStyle = "#fff";
+            ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
         };
@@ -102,13 +102,22 @@ export default defineComponent({
         };
 		
         const paintGame = (state: any) => {
-            ctx.fillStyle = "#fff"; // CHANGE BACK TO GAME COLOR
+            ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			ctx.strokeStyle = "#fff";
+			ctx.font = "200px monspace";
+			ctx.lineWidth = 7;
+			// ctx.centerLineWidth = 5;
+			// ctx.centerLineHeight = 20;
+			ctx.strokeRect(0, 0, canvas.width, canvas.height);
+		
             paintPlayers(state);
         };
 
         const paintPlayers = (state: any) => {
-            ctx.fillStyle = "#AC4018";
+            ctx.fillStyle = "#b04716";
+            // ctx.fillStyle = "#fff";
             ctx.fillRect(state.player1.pos.x, state.player1.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
@@ -156,12 +165,14 @@ export default defineComponent({
 	#match-court {
 		/* max-width: 100%; */
 		/* max-height: 60%; */
-		width: 100%;
+		width: 80%;
 		/* max-height: 100%; */
 		aspect-ratio: 5/3;
-		background-color: green;
+		background-color: white;
 		min-width: 200px; /*FIND DYNAMIC WAY*/
 		/* outline: 10px solid red; */
+		border-radius: 2px;
+		/* margin: 30px; */
 	}
 
 </style>

@@ -30,7 +30,7 @@ export default defineComponent({
 	.side-window-wrapper {
 		background-color: white;
 		color: red;
-		border-radius: 4px;
+		border-radius: 2px;
 		padding: 30px;
 	}
 </style>

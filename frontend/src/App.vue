@@ -127,11 +127,6 @@ export default defineComponent({
 
 <style scoped>
 
-	#app { /*TEMP*/
-		height: 100%;
-		max-height: 100%;
-	}
-
 	header {
 		text-align: center;
 	}
@@ -182,11 +177,15 @@ export default defineComponent({
 
 	.game-part-screen {
 		display: grid;
+		text-align: center;
 		/* grid-template-columns: 0.2fr 1fr 0.2fr; */
 		grid-template-columns:  var(--leftofgame_fr) var(--game_fr) var(--sidewindow_fr);
-		margin: 20px;
-		gap: 20px;
+		/* gap: 20px; */
 		max-height: 70vh;
+		margin: 50px;
+		margin-top: 50px;
+		/* background: red; */
+		align-items:center;
 	}
 	
 	.game-part-screen MatchCourt {
@@ -211,6 +210,7 @@ export default defineComponent({
 		position: fixed;
 		bottom: 0;
 		width: 100%;
+		/* background: blue; */
 		/* height: 2.5rem; */
 	}
 </style>
