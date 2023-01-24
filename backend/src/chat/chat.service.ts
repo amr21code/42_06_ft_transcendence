@@ -36,7 +36,7 @@ export class ChatService {
 			LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
 			LEFT JOIN public.chat as c ON uc.chatid=c.chatid
 			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-			WHERE uc.userid=${userid}
+			WHERE uc.userid=${userid} AND (uc.status < 3 OR uc.bantime < CURRENT_TIMESTAMP)
 			ORDER BY chatid ASC`
 		);
 		return list;
@@ -137,9 +137,16 @@ export class ChatService {
 	async addMessage(message: ChatMessageDto) {
 		const user = await this.db.$queryRaw(
 			Prisma.sql`SELECT status FROM user_chat
-			WHERE userid=${message.userid} AND chatid=${message.chatid} AND (status < 2 OR bantime > CURRENT_TIMESTAMP`
+			WHERE userid=${message.userid} AND chatid=${message.chatid} AND (status < 2 OR bantime < CURRENT_TIMESTAMP)`
 		);
-		if (Object.keys(user).length > 0)
+		console.log(user);
+		if (user[0].status >= 2) {
+			const userDto = await this.createPMUserDto(message.userid, message.chatid);
+			userDto.bantime = 0;
+			userDto.status = 1;
+			await this.changeUserStatus(userDto);
+		}
+		if (Object.keys(user).length == 0)
 			throw new ForbiddenException();
 		const msg = await this.db.$queryRaw(
 			Prisma.sql`INSERT INTO public.chat_messages(
