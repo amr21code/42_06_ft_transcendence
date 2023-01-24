@@ -1,9 +1,6 @@
-import { Injectable } from "@nestjs/common";
 import { MatchGameStateDto } from "./dto/matchgamestate.dto";
 
-@Injectable()
-export class MatchEngine {
-async createGameState() :Promise<MatchGameStateDto>{
+export function createGameState() {
 	return {
 		player1: {
 			pos: {
@@ -38,7 +35,7 @@ async createGameState() :Promise<MatchGameStateDto>{
 	}
 }
 
-async gameLoop (state: MatchGameStateDto) {
+export function gameLoop (state: any) {
 
 	if (!state) {
 		return;
@@ -82,7 +79,7 @@ async gameLoop (state: MatchGameStateDto) {
 	return false; // game is still running
 }
 
-async getUpdatedVelocity(keyCode: number) {
+export function getUpdatedVelocity(keyCode: number) {
 	switch (keyCode) {
 		case 38: { // down
 			return (-1);
@@ -92,5 +89,5 @@ async getUpdatedVelocity(keyCode: number) {
 		}
 	}
 }
-}
-//export default { createGameState, gameLoop, getUpdatedVelocity };
+
+export default { createGameState, gameLoop, getUpdatedVelocity };
