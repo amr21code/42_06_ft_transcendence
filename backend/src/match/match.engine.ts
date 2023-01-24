@@ -1,4 +1,9 @@
-export function createGameState() {
+import { Injectable } from "@nestjs/common";
+import { MatchGameStateDto } from "./dto/matchgamestate.dto";
+
+@Injectable()
+export class MatchEngine {
+async createGameState() :Promise<MatchGameStateDto>{
 	return {
 		player1: {
 			pos: {
@@ -33,7 +38,7 @@ export function createGameState() {
 	}
 }
 
-export function gameLoop (state: any) {
+async gameLoop (state: MatchGameStateDto) {
 
 	if (!state) {
 		return;
@@ -51,7 +56,7 @@ export function gameLoop (state: any) {
 	// maybe: logic for player left?
 
 	if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20?
-		playerOne.yVel = 0;
+		playerOne.y_vel = 0;
 	}
 
 	// make sure paddle is actually moving, before we move it
@@ -77,7 +82,7 @@ export function gameLoop (state: any) {
 	return false; // game is still running
 }
 
-export function getUpdatedVelocity(keyCode: number) {
+async getUpdatedVelocity(keyCode: number) {
 	switch (keyCode) {
 		case 38: { // down
 			return (-1);
@@ -87,5 +92,5 @@ export function getUpdatedVelocity(keyCode: number) {
 		}
 	}
 }
-
-export default { createGameState, gameLoop, getUpdatedVelocity };
+}
+//export default { createGameState, gameLoop, getUpdatedVelocity };
