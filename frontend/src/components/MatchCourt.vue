@@ -19,6 +19,7 @@ export default defineComponent({
 			opponentArrived.value = isArrived;
 		}
         let canvas: any, ctx: any;
+		let canvasHeight: number, canvasWidth: number;
 
         const handleGameState = (gameState: any) => {
 			// console.log("success");
@@ -111,12 +112,12 @@ export default defineComponent({
 
 		////############# SOCKETIO #############
 		
-        return { opponentArrived, toggleMatchWaitPopup, init, paintGame };
+        return { canvas, opponentArrived, toggleMatchWaitPopup, init, paintGame };
     },
 
 	methods: {
 		checkOpponentStatus() {
-			SocketioService.getOpponentStatus()
+			SocketioService.getOpponentStatus(this.canvas.height, this.canvas.width);
 		},
 	},
 	
@@ -124,8 +125,8 @@ export default defineComponent({
     mounted() {
         // while (this.opponentArrived === false) {
 		this.checkOpponentStatus(); // SET CONDITION TO STOP STUFF
-		// }
 		this.init();
+		// }
     },
     components: { MatchWaitPopup }
 });

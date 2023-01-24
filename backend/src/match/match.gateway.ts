@@ -27,12 +27,15 @@ export class MatchGateway {
 		// const status = this.matchService.getOpponentStatus(payload.matchid, payload.userid);
 		//client.emit('opponent-status', {data: status});
 		client.emit('opponent-status', { data: true });
+		// if clause for opponent-status === true hinzufügen!
+		this.handleInit(client, payload);
 	}
 
 	@SubscribeMessage('init')
 	async handleInit(client: any, canvas: any) {
 		console.log(canvas[0]);
 		const gameState = await createGameState();
+
 
 		gameState.canvasHeight = canvas[0];
 		gameState.canvasWidth = canvas[1];
@@ -46,7 +49,6 @@ export class MatchGateway {
 		gameState.player2.pos.y = gameState.canvasHeight / 2 - gameState.paddleHeight / 2;
 		gameState.ball.pos.x = gameState.canvasWidth  / 2 - gameState.ballSize / 2;
 		gameState.ball.pos.y = gameState.canvasHeight / 2 - gameState.ballSize / 2;
-
 
 		client.emit('gameState', gameState);
 		client.on('keydown', handleKeyDown);
