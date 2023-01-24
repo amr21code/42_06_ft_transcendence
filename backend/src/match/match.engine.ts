@@ -55,7 +55,7 @@ export function gameLoop (state: any) {
 	}
 
 	// make sure paddle is actually moving, before we move it
-	if (playerOne.yvel)
+	//if (playerOne.yvel)
 
 
 	// if (Game.keysPressed[KeyBindings.UP]) {
