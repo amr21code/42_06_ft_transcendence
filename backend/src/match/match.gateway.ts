@@ -2,6 +2,7 @@ import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { MatchService } from './match.service';
+import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 
 @WebSocketGateway(3002, { cors: {
 	origin: ['http://192.168.56.2:5173','http://localhost:5173'],
