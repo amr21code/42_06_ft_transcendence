@@ -7,6 +7,9 @@ class DataService {
 	getUser() : Promise<any> {
 		return apiInstance.get("/users/me");
 	}
+	getUsersInChat(chatid: number) : Promise<any> {
+		return apiInstance.get("/chat/list/users/" + chatid);
+	}
 	getAll() : Promise<any> {
 		return apiInstance.get("/users/all");
 	}

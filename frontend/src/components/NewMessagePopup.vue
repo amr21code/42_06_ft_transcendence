@@ -14,17 +14,23 @@
             <button @click="(changeShowInput('dm'))">Privatechat</button>
             <button @click="(changeShowInput('join'))">Join</button>
             <br>
-            <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><!--<a v-if="showinput === 'group'">(optional)</a>-->
-            <input class="popup-textfield" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'">
-            <input class="popup-textfield" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'">
-            <br>
-            <input class="popup-textfield" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join'"><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
-            <br>
-            <button class="submit-button" name="submit" v-if="showinput">
-                <input class="submit-button" type="submit" @click="createNewChat(chatname, password, showinput)">
-            </button>
+            <!-- <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe> -->
 
-            <button class="popup-close" @click="togglePopup">Close</button>
+            <!-- <form action="" id="myForm" name="myForm" > -->
+              
+                <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'">(optional)</a>
+                <input class="popup-textfield" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'" required>
+                <input class="popup-textfield" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'" required>
+                <br>
+                <input class="popup-textfield" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join'"><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
+                <br>
+                <button class="submit-button" name="submit" v-if="showinput">
+                    <input class="submit-button" type="submit" @click="createNewChat(chatname, password, showinput)">
+                </button>
+                <button class="popup-close" @click="togglePopup">Close</button>
+                <a v-if="invalid === true">Error: Could not perfom action</a>
+
+            <!-- </form> -->
         </div>
     </div>
 </template>
@@ -40,7 +46,6 @@ import { defineComponent, ref } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
-import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
 
 
@@ -50,11 +55,11 @@ export default defineComponent({
 
     data () {
 		return {
-			user: {} as IUser,
-			chats: {} as IChats,
+			user: [] as IUser[],
             socket: SocketioService.socket,
             chatname: '',
             password: '',
+            invalid: false,
 		}
 	},
 	methods: {
@@ -62,7 +67,7 @@ export default defineComponent({
 			DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
-				console.log(response.data);
+				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -70,16 +75,29 @@ export default defineComponent({
 		},
 
         createNewChat(chatname_id : string, password : string, type : string) {
+            // console.log(this.user[0].userid);
+            if (chatname_id === '' && type == 'join')
+                return ;
+            if (chatname_id === '' && type == 'dm')
+                return ;
+            if (chatname_id === '' && type == 'group')
+                chatname_id = 'public chat by ' + this.user[0].userid;
             DataService.createChat(chatname_id, password, type)
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
             })
             .catch((e: Error) => {
+                this.invalid = true;
                 console.log(e);
             });
         }
         
 	},
+
+    mounted () {
+        this.retrieveCurrentUser();
+    },
+
     setup () {
 
         const showinput = ref();

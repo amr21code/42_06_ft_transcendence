@@ -5,40 +5,32 @@ class SocketioService {
   messages : Array<String> | undefined;
   constructor() {}
 
+  // sets up the connection
   setupSocketConnection() {
     this.socket = io(import.meta.env.VITE_SOCKETIO_URL, { withCredentials: true });
     if (this.socket)
       console.log('Socket connected: ', this.socket.id);
-    // this.socket.on('chat-message', (data: any) => {
-    //   console.log("chat-message received:", data);
-    //   if (this.messages == undefined)
-    //   {
-    //     this.messages = new Array<String>();
-    //     this.messages.push(data.message);
-    //   }
-    //   else
-    //     this.messages.push(data.message);
-    // });
   
     return (this.socket);
   }
 
   // sends a message to the server
   sendMessage(username: String, userid : String, chatid : number, message : String) {
-    // console.log("Sending message", userid, chatid, message);
+    console.log('SocketIO sendMessage');
     this.socket.emit('send-chat-message', {username, userid, chatid, message });
   }
 
+  // sends a signal that the user left the chat
   chatLeave(chatid: number) {
     this.socket.emit('send-chat-leave', { chatid });
   }
 
-  // new chat got created
+  // sends a signal that the chats need to get refreshed
   refreshChats() {
-    // console.log("send signal for refresh");
     this.socket.emit('send-chat-refresh');
   }
 
+  // user disconnected
   disconnect() {
     if (this.socket) {
         this.socket.disconnect();

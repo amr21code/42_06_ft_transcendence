@@ -1,8 +1,47 @@
 <template>
-    <div class="popup" @keyup.esc="togglePopup" tabindex="0">
+    <div class="popup" @keyup.esc="(ChatInfotogglePopup)" tabindex="0">
         <div class="popup-inner">
             <h2>Info</h2>
-            <a>Hier könnte ihre Werbung stehen</a>
+			<!-- {{ chat }} <br>
+			{{ users }} <br> -->
+			<table id="info-table">
+			<thead id="top-row">
+				<tr>
+					<th>userid</th>
+					<th>username</th>
+					<th>statusname</th>
+					<th>mute</th>
+					<th>block</th>
+					<th>invite</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="info-item" v-for="(user, index) in users" :key="index">
+					<td> <!-- userid -->
+						{{ user.userid }}
+					</td>
+					<td> <!-- username -->
+						{{ user.username }}
+					</td>
+					<td> <!-- statusname -->
+						{{ user.statusname }}
+					</td>
+					<td> <!-- mute -->
+						<button @click="(toggleMute)" v-if="Mute === false">mute</button>
+						<button @click="(toggleMute)" v-if="Mute === true">unmute</button>
+					</td>
+					<td> <!-- block -->
+						<button @click="(toggleBlock)" v-if="Block === false">block</button>
+						<button @click="(toggleBlock)" v-if="Block === true">unblock</button>
+					</td>
+					<td> <!-- invite -->
+						<button @click="(toggleChallenge)" v-if="Challenge === false">challenge</button>
+						<button @click="(toggleChallenge)" v-if="Challenge === true">unchallenge</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
         </div>
     </div>
 </template>
@@ -12,7 +51,8 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import type { PropType } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -23,21 +63,32 @@ import SocketioService from '../services/SocketioService'
 
 
 export default defineComponent({
-	name: "NewMessagePopup",
-    props: ['togglePopup'],
+	name: "ChatInfoPopup",
+    props: {
+			['ChatInfotogglePopup']  : {
+			required: true,
+			type: Function
+			},
+			chat: {
+				required: true,
+				type: Object as PropType<IChats>,
+				default: () => ({} as IChats)
+			}
+	},
 
     data () {
 		return {
-			user: {} as IUser,
-			chats: {} as IChats,
+			users: [] as IUser[],
             socket: SocketioService.socket,
+			// chat: {} as IChats,
 		}
 	},
 	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
+
+		retrieveCurrentUsersInChat(chatid : number) {
+			DataService.getUsersInChat(chatid)
 			.then((response: ResponseData) => {
-				this.user = response.data;
+				this.users = response.data;
 				console.log(response.data);
 			})
 			.catch((e: Error) => {
@@ -46,8 +97,30 @@ export default defineComponent({
 		},
         
 	},
+
+	mounted () {
+		this.retrieveCurrentUsersInChat(this.chat.chatid);
+	},
+
     setup () {
 
+		const Mute = ref(false);
+		const toggleMute = () => {
+			Mute.value = !Mute.value;
+		}
+
+		const Block = ref(false);
+		const toggleBlock = () => {
+			Block.value = !Block.value;
+		}
+
+		const Challenge = ref(false);
+		const toggleChallenge = () => {
+			Challenge.value = !Challenge.value;
+		}
+
+		return { toggleMute, Mute, toggleBlock, Block, toggleChallenge, Challenge}
+			
     }  
 
 })
@@ -59,16 +132,39 @@ export default defineComponent({
 
 <style scoped>
 
-.submit-button {
-  background-color: blue;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 10px;
-}
+#info-table {
+		border-collapse: collapse;
+		overflow: auto;
+		max-height: 500px;
+		/* table-layout: fixed; */
+		display: block;
+		position: relative;
+		scrollbar-gutter: stable both-edges;
+	}
+	
+	th {
+		position: sticky;
+		top: 0;
+		background-color: var(--second-bg-color);
+		color: white;
+	}
+
+	#info-table th, td {
+		padding: 20px 40px;
+		text-align: center;
+	}
+
+	/* hover effect on all but the first line */
+	#info-table tr:hover {
+		background-color: var(--first-highlight-color);
+		color: white;
+		cursor: pointer;
+	}
+
+	.info-item img {
+		max-height: 30px;
+	}
+
 .popup {
 	text-align: left;
 	background-color: rgba(0,0,0,0.8);
@@ -92,11 +188,14 @@ export default defineComponent({
 	text-align: center;
 }
 
-.popup-textfield {
-    border-top: 20%;
+.popup-inner a {
+	text-align: center;
+	color: white;
 }
 
 .popup-close {
     color: black;
+	float: right;
+	border-right: 5%;
 }
 </style>

@@ -3,22 +3,20 @@
 	<div class="wrapper">
 
 <!--------------HEAD----------------------------------------------------------------------------->
-		
-		<!--show current chatid and chatname-->
-		<!--have a info button on the right to show all the users in the chat-->
+
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
-			<!-- <img src="../assets/ralf_profile.png" alt="user-photo" width="40" height="40"> -->
 			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
 			<a @click="showChangeNameField()" class="chat-chatname" v-if="showinput === false">{{ curr_chat.chat_name }}</a>
 			<input v-if="showinput === true" placeholder="enter new name" v-model="newName">
 			<button class="ok-button" @click="showChangeNameField(), changeChatName(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
 			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
-			<!-- <a class="chat-typename">{{ curr_chat.typename }}</a> -->
-			<a class="info-icon">
+			<a class="info-icon" @click="(ChatInfotogglePopup)">
 				<img src="../assets/info-icon.png" alt="user-photo" width="20" height="20">
 			</a>
 		</div>
+
+		<ChatInfoPopup id="ChatInfoPopup" v-if="ChatInfoTrigger === true" :ChatInfotogglePopup="() => ChatInfotogglePopup()" :chat="curr_chat" />
 
 <!--------------BODY------------------------------------------------------------------------------------>
 
@@ -28,7 +26,7 @@
 	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 			<div class="messages-wrapper" v-for="message in db_messages" :key="message.message">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user[0].userid == message.userid"> <!-- user.userid == message.userid -->
+				<div class="message-sent" v-if="user[0].userid == message.userid">
 					<div class="message-username">
 						<strong >{{ message.username }}</strong>
 					</div>
@@ -75,10 +73,9 @@
 <!--------------FOOTER------------------------------------------------------------------------------------>
 			
 			<div class="chat-write-and-send">
-				<!-- <form @submit.prevent="sendMessage( user[0].userid, curr_chat.chatid, 'Grüße aus dem frontend')"> -->
 				<form @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
 					<input placeholder="Write message here" v-model="message">
-					<img src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
+					<img @click="sendMessage(curr_chat.chatid, message), submit()" src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
 			</div>
 
@@ -87,6 +84,8 @@
 </template>
 
 <script lang="ts">
+
+import ChatInfoPopup from './ChatInfoPopup.vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -102,6 +101,8 @@ import type { PropType } from 'vue'
 
 export default defineComponent({
 	name: 'ChatWindow',
+	components: { ChatInfoPopup },
+
 	data () {
 		return {
 			user: [] as IUser[],
@@ -114,7 +115,7 @@ export default defineComponent({
 
 	created () {
 		this.socket.on('chat-message', (data: IMessages) => {
-			// console.log("ChatWindow.vue: ", data);
+			console.log('chat-message signal recieved');
 			this.messages.push(data);
 		});
 	},
@@ -128,49 +129,40 @@ export default defineComponent({
 	},
 
 	methods: {
+
+		// loads the current user who is logged in
 		retrieveCurrentUser() {
 			DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
-				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
 		},
 
+		// loads all the old messages from the db via API
 		retrieveCurrentMessages(chatid : number) {
 			DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
 				this.db_messages = response.data;
-				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
 		},
 
+		// passes the variables to socketio which sends them to the backend in order to send a message
 		sendMessage (chatid : number, message : String) {
-			// console.log('send message', userid, chatid, message);
-			// console.log("test", this.user[0].username);
+			console.log('sendMessage');
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
-			
-			// DataService.sendMessage(userid, chatid, message)
-			// .then((response: ResponseData) => {
-			// 	message = '';
-			// 	console.log(response.data);
-			// })
-			// .catch((e: Error) => {
-			// 	console.log(e);
-			// });
 		},
 
+		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
 		changeChatName (type : String, chatid : number, chatname : string, password : String) {
-			console.log(type, chatid, chatname, password);
 			DataService.changeChatName(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
-				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -191,17 +183,26 @@ export default defineComponent({
 		const message = ref('');
 		const newName = ref('')
 
+		//resets the input
 		const submit = () => {
 			message.value = '';
 		}
 
+		//changes the boolean value in order to show the input for changing the chatname
 		const showinput = ref(false);
 		const showChangeNameField = () => {
 			showinput.value = !showinput.value;
 		}
 
+		//changes the boolean value in order to show the infopopup of a chat
+		const ChatInfoTrigger = ref(false);
+		const ChatInfotogglePopup = () => {
+			ChatInfoTrigger.value = !ChatInfoTrigger.value;
+			return ChatInfoTrigger.value;
+		}
 
-		return { message, submit, showChangeNameField, showinput, newName }
+
+		return { message, submit, showChangeNameField, showinput, newName, ChatInfoTrigger, ChatInfotogglePopup }
 	}
 
 })
