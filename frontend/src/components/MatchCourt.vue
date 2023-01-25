@@ -33,7 +33,7 @@ export default defineComponent({
 		};
 
 		
-		// #################  KEY HANDLER #######################
+		// #################  KEY SIGNALING #######################
 		const keydown = (e: any) => {
 			console.log("key sent to backend: ", e.keyCode);
 			socket.emit('keydown', e.keyCode);

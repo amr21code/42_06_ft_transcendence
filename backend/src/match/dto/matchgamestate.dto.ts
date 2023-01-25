@@ -38,7 +38,9 @@ export class MatchGameStateDto {
 
 	@IsNotEmpty()
 	@IsNumber()
-	stepSize: number;
+	paddleSpeed: number;
 
-
+	@IsNumber()
+	@IsNotEmpty()
+	ballSpeed: number;
 }

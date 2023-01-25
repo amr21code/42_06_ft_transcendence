@@ -33,62 +33,89 @@ export function createGameState() {
 		wallOffset: 0,
 		canvasHeight: 0,
 		canvasWidth: 0,
-		stepSize: 0,
+		paddleSpeed: 0,
+		ballSpeed: 0,
 	}
 }
 
-export function gameLoop (state: MatchGameStateDto) {
+export function gameLoop(state: MatchGameStateDto) {
 
 	if (!state) {
 		return;
 	}
-	
+
 	const playerOne = state.player1;
 	const playerTwo = state.player2;
 	const ball = state.ball;
 
-	// if key pressed ->
-	// playerOne.pos.y += playerOne.y_vel; // -> MAKE THIS READ KEYS INSTEAD
-	
 	// LOGIC FOR SCORED GOAL HERE
 	// LOGIC FOR WON/LOST GAME HERE
 	// maybe: logic for player left?
 
-	// MOVED BELOW INTO KEY
-	if ( state.player1.y_vel === -1 && (state.player1.pos.y <= 20)) {
-		state.player1.y_vel = 0;
+	// ################ MOVE PLAYER ###################################################
+	// Only update position, if player doesn't touch match court boundaries
+	// make sure paddle is actually moving, before we check how to move it
+	if (playerOne.y_vel) {
+
+		if (playerOne.y_vel === -1 && (playerOne.pos.y <= 20)) {
+			playerOne.y_vel = 0;
+		}
+
+		if (playerOne.y_vel === 1 && (playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20)) {
+			playerOne.y_vel = 0;
+		}
+
+		playerOne.pos.y += playerOne.y_vel * state.paddleSpeed;
+		playerOne.y_vel = 0;
 	}
+	// ################ MOVE PLAYER END ###################################################
 
-	if ( state.player1.y_vel === 1 && (state.player1.pos.y + state.paddleHeight >= state.canvasHeight - 20))  {
-		state.player1.y_vel = 0;
+	// ################ MOVE BALL ###################################################
+	// make sure paddle is actually moving, before we check how to move it
+	if (ball.vel.x || ball.vel.y) {
+
+		//check top canvas bounds
+		if (ball.pos.y <= 0) {
+			ball.vel.y = 1;
+		}
+
+		//check bottom canvas bounds
+		if (ball.pos.y + state.ballSize >= state.canvasHeight) {
+			ball.vel.y = -1;
+		}
+
+		//check left canvas bounds
+		if (ball.pos.x <= 0) {
+			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
+			ball.vel.x = 1;
+			// Game.playerTwoScores();
+		}
+
+		//check right canvas bounds
+		if (ball.pos.x + state.ballSize >= state.canvasWidth) {
+			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
+			ball.vel.x = -1;
+			// Game.playerOneScores();
+		}
+
+		//check player collision
+		if (ball.pos.x <= playerOne.pos.x + state.paddleWidth && ball.pos.x > playerOne.pos.x) {
+			if (ball.pos.y >= playerOne.pos.y && ball.pos.y <= playerOne.pos.y + state.paddleHeight) {
+				ball.vel.x = 1;
+			}
+		}
+
+		//check computer collision
+		if (ball.pos.x + state.ballSize >= playerTwo.pos.x && ball.pos.x < playerTwo.pos.x) {
+			if (ball.pos.y >= playerTwo.pos.y && ball.pos.y <= playerTwo.pos.y + state.paddleHeight) {
+				ball.vel.x = -1;
+			}
+		}
+
+		ball.pos.x += ball.vel.x * state.ballSpeed;
+		ball.pos.y += ball.vel.y * state.ballSpeed;
 	}
-	
-	state.player1.pos.y += state.player1.y_vel * state.stepSize;
-	state.player1.y_vel = 0;
-	// else if (state.player1.y_vel == 1 && !(state.player1.pos.y + state.paddleHeight >= state.canvasHeight - 20)) {
-	// 	// state.player1.y_vel = vel;
-	// 	state.player1.pos.y += state.player1.y_vel * state.stepSize;
-	// }
-
-	// make sure paddle is actually moving, before we move it
-	//if (playerOne.yvel)
-
-
-	// if (Game.keysPressed[KeyBindings.UP]) {
-	// 	this.yVel = -1;
-	// 	if (this.y <= 20) {
-	// 		this.yVel = 0
-	// 	}
-	// } else if (Game.keysPressed[KeyBindings.DOWN]) {
-	// 	this.yVel = 1;
-	// 	if (this.y + this.height >= canvas.height - 20){
-	// 		this.yVel = 0;
-	// 	}
-	// } else {
-	// 	this.yVel = 0;
-	// }
-	
-	// this.y += this.yVel * this.speed;
+	// ################ MOVE BALL END ###################################################
 
 	return false; // game is still running
 }

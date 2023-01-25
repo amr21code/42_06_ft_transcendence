@@ -1,4 +1,4 @@
-import { IsNotEmpty} from "class-validator";
+import { IsNotEmpty, IsNumber } from "class-validator";
 import { MatchPosDto } from "./matchpos.dto";
 
 export class MatchBallDto {
@@ -7,5 +7,4 @@ export class MatchBallDto {
 
 	@IsNotEmpty()
 	vel: MatchPosDto;
-
 }

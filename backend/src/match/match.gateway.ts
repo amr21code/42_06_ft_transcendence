@@ -52,7 +52,18 @@ export class MatchGateway {
 		gameState.player2.pos.y = gameState.canvasHeight / 2 - gameState.paddleHeight / 2;
 		gameState.ball.pos.x = gameState.canvasWidth  / 2 - gameState.ballSize / 2;
 		gameState.ball.pos.y = gameState.canvasHeight / 2 - gameState.ballSize / 2;
-		gameState.stepSize = 10;
+		gameState.paddleSpeed = 10;
+		gameState.ballSpeed = 10;
+		// DETERMINE BALL KICKOFF DIRECTION
+		var randomDirection = Math.floor(Math.random() * 2) + 1; 
+		if (randomDirection % 2) {
+			gameState.ball.vel.x = 1;
+		} else {
+			gameState.ball.vel.x = -1;
+		}
+		// ball.vel.x = -1;
+		gameState.ball.vel.y = 1;
+
 
 		client.emit('gameState', gameState);
 		client.on('keydown', handleKeyDown);
@@ -75,7 +86,7 @@ export class MatchGateway {
 				}
 				else {
 					client.emit('gameOver');
-					clearInterval(intervalId);
+					clearInterval(intervalId); // was macht das?
 				}
 			}, 1000 / 10); //todo change to FRAME_RATE
 		}
