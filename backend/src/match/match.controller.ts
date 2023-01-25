@@ -18,6 +18,11 @@ export class MatchController {
 		const open = await this.matchService.openMatch(session.passport.user.userid, 1, opponent);
 	}
 
+	@Get('opensingle')
+	async opensingleMatch( @Session() session: Record<string, any>) {
+		const open = await this.matchService.openSingleMatch(session.passport.user.userid, 1);
+	}
+
 	@Get('accept')
 	async acceptMatch(@Session() session: Record<string, any>) {
 		try {

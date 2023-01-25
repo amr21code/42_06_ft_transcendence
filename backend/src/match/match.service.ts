@@ -43,6 +43,34 @@ export class MatchService {
 		return match;
 	}
 
+	async openSingleMatch(userid: string, status: number){
+		console.log("singleMatch");
+		const already_open = await this.listMatch(userid);
+		if (Object.keys(already_open).length == 0)
+		{
+			console.log("no open session - creating");
+			const open = await this.db.$queryRaw(
+				Prisma.sql`INSERT INTO public.match_history (match_status)
+				VALUES (1)
+				RETURNING matchid;`
+			);
+			// console.log("new matchid", open[0].matchid);
+			// var timeout = (Date.now() / 1000) + 60;
+			// console.log("settimeout", timeout);
+			if (open[0].matchid) {
+				const join = await this.db.$queryRaw(
+					Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
+					VALUES (${userid}, ${open[0].matchid}, ${status})
+					RETURNING matchid;` //, to_timestamp(${timeout}));`
+				);
+			} 
+			console.log(open[0].matchid);
+			return (open[0].matchid);
+		}else {
+			throw new ForbiddenException();
+		}
+	}
+
 	async openMatch(userid: string, status: number, opponent?: string) {
 		try {
 			var opp;
@@ -165,6 +193,7 @@ export class MatchService {
 
 	async updateMatch(matchid: any, userid: any, userscore: number)
 	{ //update userscore, match_status, wins/losses
+		try{
 		console.log(matchid, userid, userscore);
 		const score = await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${userscore} AS INTEGER)
@@ -187,6 +216,9 @@ export class MatchService {
 			const user = await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user SET losses=CAST(${loss[0].losses} AS INTEGER)
 				WHERE userid=${userid}`);
+		}
+		}catch(error){
+			throw new ForbiddenException();
 		}
 	}
 

@@ -45,6 +45,9 @@ class DataService {
 	gameOver(gameState : any) : Promise<any> {
 		return apiInstance.post('/match/gameover', JSON.stringify(gameState));
 	}
+	openSingleMatch(): Promise<any> {
+		return apiInstance.get('/match/opensingle');
+	}
 
 	// sendMessage (userid : number, chatid : number, message : String) {
 		// console.log("sendMessage function got triggered with", userid, chatid, message);

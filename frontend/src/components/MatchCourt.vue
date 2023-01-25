@@ -42,6 +42,7 @@ export default defineComponent({
 		
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data;
+			DataService.openSingleMatch();
 			initCanvas();
 		};
 
