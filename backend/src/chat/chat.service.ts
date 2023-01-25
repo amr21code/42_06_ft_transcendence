@@ -24,7 +24,7 @@ export class ChatService {
 			FROM public.chat AS c
 			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
 			LEFT JOIN public.user_chat as uc ON uc.chatid=c.chatid
-			WHERE c.type<2 AND uc.userid=${userid}`
+			WHERE c.type<2 AND NOT uc.userid=${userid}`
 		);
 		return list;
 	}
