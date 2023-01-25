@@ -36,5 +36,9 @@ export class MatchGameStateDto {
 	@IsNumber()
 	canvasWidth: number;
 
+	@IsNotEmpty()
+	@IsNumber()
+	stepSize: number;
+
 
 }

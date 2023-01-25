@@ -52,7 +52,7 @@ export class MatchGateway {
 		gameState.player2.pos.y = gameState.canvasHeight / 2 - gameState.paddleHeight / 2;
 		gameState.ball.pos.x = gameState.canvasWidth  / 2 - gameState.ballSize / 2;
 		gameState.ball.pos.y = gameState.canvasHeight / 2 - gameState.ballSize / 2;
-		gameState.stepSize = 7;
+		gameState.stepSize = 10;
 
 		client.emit('gameState', gameState);
 		client.on('keydown', handleKeyDown);
@@ -61,15 +61,9 @@ export class MatchGateway {
 
 			const keyInt = parseInt(keyCode); // maybe put in try/catch?
 			const vel = getUpdatedVelocity(keyInt);
-			if (vel === -1 && !(gameState.player1.pos.y <= 20)) {
+			if (vel) {
 				gameState.player1.y_vel = vel;
-				gameState.player1.pos.y += vel * gameState.stepSize;
 			}
-			else if (vel == 1 && !(gameState.player1.pos.y + gameState.paddleHeight >= gameState.canvasHeight - 20)) {
-				gameState.player1.y_vel = vel;
-				gameState.player1.pos.y += vel * gameState.stepSize;
-			}
-
 			startGameInterval(client, gameState);
 		}
 

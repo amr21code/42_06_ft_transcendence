@@ -54,9 +54,20 @@ export function gameLoop (state: MatchGameStateDto) {
 	// LOGIC FOR WON/LOST GAME HERE
 	// maybe: logic for player left?
 
-	// MOVED BELOW INTO KEY HANDLER
-	// if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20? Gridsize?
-	// 	playerOne.y_vel = 0;
+	// MOVED BELOW INTO KEY
+	if ( state.player1.y_vel === -1 && (state.player1.pos.y <= 20)) {
+		state.player1.y_vel = 0;
+	}
+
+	if ( state.player1.y_vel === 1 && (state.player1.pos.y + state.paddleHeight >= state.canvasHeight - 20))  {
+		state.player1.y_vel = 0;
+	}
+	
+	state.player1.pos.y += state.player1.y_vel * state.stepSize;
+	state.player1.y_vel = 0;
+	// else if (state.player1.y_vel == 1 && !(state.player1.pos.y + state.paddleHeight >= state.canvasHeight - 20)) {
+	// 	// state.player1.y_vel = vel;
+	// 	state.player1.pos.y += state.player1.y_vel * state.stepSize;
 	// }
 
 	// make sure paddle is actually moving, before we move it
@@ -91,6 +102,7 @@ export function getUpdatedVelocity(keyCode: number) {
 			return (1);
 		}
 	}
+	return (0);
 }
 
 export default { createGameState, gameLoop, getUpdatedVelocity };
