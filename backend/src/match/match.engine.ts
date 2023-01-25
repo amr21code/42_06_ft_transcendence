@@ -35,6 +35,8 @@ export function createGameState() {
 		canvasWidth: 0,
 		paddleSpeed: 0,
 		ballSpeed: 0,
+		scorePlayer1: 0,
+		scorePlayer2: 0,
 	}
 }
 
@@ -90,13 +92,15 @@ export function gameLoop(state: MatchGameStateDto) {
 		if (ball.pos.x <= 0) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
 			ball.vel.x = 1;
+			state.scorePlayer2++;
 			// Game.playerTwoScores();
 		}
-
+		
 		//check right canvas bounds
 		if (ball.pos.x + state.ballSize >= state.canvasWidth) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
 			ball.vel.x = -1;
+			state.scorePlayer1++;
 			// Game.playerOneScores();
 		}
 

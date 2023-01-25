@@ -80,6 +80,13 @@ export default defineComponent({
 				ctx.fillStyle = "#444040";
 				ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
 			}
+			//draw scores
+			ctx.fillStyle = "#444040";
+			ctx.textalign = "center";
+			
+			ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
+			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
+
             paintPlayersAndBall(state);
         };
 
@@ -90,6 +97,7 @@ export default defineComponent({
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
         };
+
 		// ########### PAINTING ###################################################################################################
 
 

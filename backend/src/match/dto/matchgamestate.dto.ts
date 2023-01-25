@@ -43,4 +43,12 @@ export class MatchGameStateDto {
 	@IsNumber()
 	@IsNotEmpty()
 	ballSpeed: number;
+
+	@IsNumber()
+	@IsNotEmpty()
+	scorePlayer1: number;
+
+	@IsNumber()
+	@IsNotEmpty()
+	scorePlayer2: number;
 }
