@@ -20,7 +20,7 @@
 
 <!--------------BODY------------------------------------------------------------------------------------>
 
-		<div class="chat-message-view">
+		<div ref="chatContainer" class="chat-message-view">
 
 
 	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
@@ -118,7 +118,13 @@ export default defineComponent({
 		this.retrieveCurrentMessages(this.curr_chat.chatid);
 		this.socket.on('chat-message', (data: IMessages) => {
 			this.messages.push(data);
+			this.$nextTick(() => {
+        		this.scrollToBottom();
+     		});
 		});
+		this.$nextTick(() => {
+        		this.scrollToBottom();
+     		});
 	},
 
 	props: {
@@ -168,8 +174,15 @@ export default defineComponent({
 				console.log(e);
 			});
 			this.curr_chat.chat_name = chatname;
-		}
-
+		},
+		
+		scrollToBottom() {
+			this.$nextTick(() => {
+				const chat = this.$refs.chatContainer as any;
+				chat.scrollTop = chat.scrollHeight;
+				chat.scrollIntoView({ behavior: 'smooth' });
+      		});
+		},
 	},
 
 	setup() {
@@ -257,7 +270,7 @@ export default defineComponent({
 		border: black solid 3px;
 		height: 300px;
 		overflow-y: scroll;
-		scrollbar-color: rebeccapurple green;
+		scrollbar-color: black solid;
 		scrollbar-width: thin;
 	}
 	.message-recv {
