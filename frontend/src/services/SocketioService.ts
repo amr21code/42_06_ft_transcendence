@@ -46,8 +46,8 @@ class SocketioService {
   }
 
   //----------GAME STUFF----------------------
-  getOpponentStatus(canvasHeight: any, canvasWidth: any) {
-	this.socket.emit('send-opponent-status', canvasHeight, canvasWidth);
+  getOpponentStatus(canvas: any) {
+	this.socket.emit('send-opponent-status', canvas);
   }
 
 

@@ -8,39 +8,30 @@
 <script lang="ts">
 import { ref, computed, defineComponent } from 'vue'
 import SocketioService from '../services/SocketioService.js'
-import { io } from 'socket.io-client'; // OUTSOURCE LATER
 import MatchWaitPopup from './MatchWaitPopup.vue';
 
 export default defineComponent({
     setup() {
-		// toggle Popup when opponent arrives
-		const opponentArrived = ref(false);
-		const toggleMatchWaitPopup = (isArrived: boolean) => {
-			opponentArrived.value = isArrived;
-		}
-        let canvas: any, ctx: any;
+
+
+		// #################  VARIABLES ######################
+		let canvas: any, ctx: any;
 		let canvasHeight: number, canvasWidth: number;
+		const opponentArrived = ref(false);
+		
 
+		// #################  HANDLERS #######################
         const handleGameState = (gameState: any) => {
-			// console.log("success");
             gameState = JSON.parse(gameState);
-
-			// gameState.canvasHeight = canvas.height;
-			// gameState.canvasWidth = canvas.width;
-			// gameState.paddleWidth = canvas.width / 25;
-			// gameState.paddleHeight = canvas.height / 4;
-			// gameState.ballSize = canvas.width / 25;
-			// gameState.wallOffset = canvas.width / 25;
-			// gameState.player1.pos.x = gameState.wallOffset;
-			// gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-			// gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
-			// gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-			// gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
-			// gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2;
-
-
             requestAnimationFrame(() => paintGame(gameState));
         };
+
+		const handleOpponentArrived = (data: any) => {
+			opponentArrived.value = data.data;
+			console.log(data.data);
+			init();
+		};
+
 
 		// ---------- SOCKETIO: OUTSOURCE TO SERVICE END
         const init = () => {
@@ -58,17 +49,20 @@ export default defineComponent({
             fix_dpi();
             // REMOVE BLURRINESS END ---------------------------------------------------
 
-			socket.emit('init',  canvas.height, canvas.width );
-
+			socket.emit('init', canvas.height, canvas.width);
             ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
         };
-		
+
+
+		// #################  KEY HANDLER #######################
         const keydown = (e: any) => {
 			socket.emit('keydown', e.keyCode);
         };
 		
+
+		// ########### PAINTING ###################################################################################################
         const paintGame = (state: any) => {
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -94,50 +88,46 @@ export default defineComponent({
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
         };
+		// ########### PAINTING ###################################################################################################
 
-		// TEMP##############################
-
-
-		
-		// TEMP##############################
 
 		//############# SOCKETIO ##############
 		const socket = SocketioService.socket;
 		// socket.on("init", handleInit);
-		socket.on("opponent-status", (data: any) => {
-			toggleMatchWaitPopup(data.data);
-			console.log(data.data);
-		});
+		socket.on("opponent-status", handleOpponentArrived);
+		
+		// socket.on('init', handleGameState);
 		socket.on('gameState', handleGameState);
+		// socket.on('gameOver', handleGameState);
+		// socket.on('gameCode', handleGameCode);
+		// socket.on('unknownCode', handleGameState);
+		// socket.on('gameFull', handleGameState);
+
 
 		////############# SOCKETIO #############
 		
-        return { canvas, opponentArrived, toggleMatchWaitPopup, init, paintGame };
+        return { canvas, opponentArrived, init, paintGame };
     },
 
 	methods: {
 		checkOpponentStatus() {
-			SocketioService.getOpponentStatus(this.canvas.height, this.canvas.width);
+			SocketioService.getOpponentStatus(this.canvas);
 		},
 	},
-	
 
     mounted() {
-        // while (this.opponentArrived === false) {
 		this.checkOpponentStatus(); // SET CONDITION TO STOP STUFF
-		this.init();
-		// }
+		// this.init();
     },
+
     components: { MatchWaitPopup }
 });
+
 </script>
 
 <style scoped>
 	#match-court {
-		/* max-width: 100%; */
-		/* max-height: 60%; */
 		width: 80%;
-		/* max-height: 100%; */
 		aspect-ratio: 5/3;
 		background-color: white;
 		min-width: 200px; /*FIND DYNAMIC WAY*/
@@ -148,7 +138,9 @@ export default defineComponent({
 
 </style>
 
-<!-- gameState.canvasHeight = canvas.height;
+
+<!-- 
+gameState.canvasHeight = canvas.height;
 gameState.canvasWidth = canvas.width;
 gameState.paddleWidth = canvas.width / 25;
 gameState.paddleHeight = canvas.height / 4;
@@ -159,4 +151,5 @@ gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
 gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
 gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
 gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
-gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2; -->
+gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2; 
+-->

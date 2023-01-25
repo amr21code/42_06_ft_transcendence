@@ -18,7 +18,7 @@ import type { IUser } from '../types/User'
 export default defineComponent({
 	name: "match-wait-popup",
 
-	props: ['toggleMatchWaitPopup']
+	// props: ['toggleMatchWaitPopup']
 })
 </script>
 

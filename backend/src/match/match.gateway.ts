@@ -33,12 +33,15 @@ export class MatchGateway {
 
 	@SubscribeMessage('init')
 	async handleInit(client: any, canvas: any) {
-		console.log(canvas[0]);
+		// console.log(canvas);
+		// console.log(canvas[0]);
 		const gameState = await createGameState();
 
 
-		gameState.canvasHeight = canvas[0];
-		gameState.canvasWidth = canvas[1];
+		// gameState.canvasHeight = canvas[0];
+		// gameState.canvasWidth = canvas[1];
+		gameState.canvasWidth = 0;
+		gameState.canvasWidth = 0;
 		gameState.paddleWidth = gameState.canvasWidth  / 25;
 		gameState.paddleHeight = gameState.canvasHeight / 4;
 		gameState.ballSize = gameState.canvasWidth  / 25;
