@@ -68,6 +68,7 @@
 				</div>
 			</div>
 
+			<div ref="chatEnd"></div>
 		</div>
 
 <!--------------FOOTER------------------------------------------------------------------------------------>
@@ -96,7 +97,7 @@ import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
 
 
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, defineAsyncComponent } from 'vue'
 import type { PropType } from 'vue'
 
 export default defineComponent({
@@ -122,9 +123,6 @@ export default defineComponent({
         		this.scrollToBottom();
      		});
 		});
-		this.$nextTick(() => {
-        		this.scrollToBottom();
-     		});
 	},
 
 	props: {
@@ -153,6 +151,9 @@ export default defineComponent({
 			DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
 				this.db_messages = response.data;
+				this.$nextTick(() => {
+        			this.scrollToBottom();
+     			});
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -178,7 +179,7 @@ export default defineComponent({
 		
 		scrollToBottom() {
 			this.$nextTick(() => {
-				const chat = this.$refs.chatContainer as any;
+				const chat = this.$refs.chatEnd as any;
 				chat.scrollTop = chat.scrollHeight;
 				chat.scrollIntoView({ behavior: 'smooth' });
       		});
