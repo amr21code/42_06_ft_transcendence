@@ -55,12 +55,13 @@ export default defineComponent({
 	name: 'App',
 	el: "#app",
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
+	data () {
+		return {
+			socket: SocketioService.setupSocketConnection(),
+		}
+	},
 	created () {
-		console.log('connecting to socket.io');
-		var io = SocketioService.setupSocketConnection();
-		// io.on('chat-message', (data : any) => {
-		// 	console.log('App.vue: ', data);
-		// });
+
 	},
 	beforeUnmount() {
 		SocketioService.disconnect();
@@ -71,11 +72,13 @@ export default defineComponent({
 		const toggleLoginPopup = () => {
 			loggedIn.value = !loggedIn.value;
 		}
+
 		// for user data popup (user data)
 		const userDataPopupTrigger = ref(false);
 		const toggleUserDataPopup = () => {
 			userDataPopupTrigger.value = !userDataPopupTrigger.value;
 		}
+
 		// for side window selection
 		const selected = ref<SelectedSideWindow>('play');
 		const handleClick = (term: SelectedSideWindow) => {

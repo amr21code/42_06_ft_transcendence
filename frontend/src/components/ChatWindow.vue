@@ -20,7 +20,7 @@
 
 <!--------------BODY------------------------------------------------------------------------------------>
 
-		<div class="chat-message-view">
+		<div ref="chatContainer" class="chat-message-view">
 
 
 	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
@@ -96,7 +96,7 @@ import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
 
 
-import { computed, defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
 
 export default defineComponent({
@@ -114,10 +114,17 @@ export default defineComponent({
 	},
 
 	created () {
+		this.retrieveCurrentUser();
+		this.retrieveCurrentMessages(this.curr_chat.chatid);
 		this.socket.on('chat-message', (data: IMessages) => {
-			console.log('chat-message signal recieved');
 			this.messages.push(data);
+			this.$nextTick(() => {
+        		this.scrollToBottom();
+     		});
 		});
+		this.$nextTick(() => {
+        		this.scrollToBottom();
+     		});
 	},
 
 	props: {
@@ -154,7 +161,6 @@ export default defineComponent({
 
 		// passes the variables to socketio which sends them to the backend in order to send a message
 		sendMessage (chatid : number, message : String) {
-			console.log('sendMessage');
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
 		},
 
@@ -168,14 +174,15 @@ export default defineComponent({
 				console.log(e);
 			});
 			this.curr_chat.chat_name = chatname;
-		}
-
-	},
-
-	mounted () {
-		this.retrieveCurrentUser();
-		this.retrieveCurrentMessages(this.curr_chat.chatid)
+		},
 		
+		scrollToBottom() {
+			this.$nextTick(() => {
+				const chat = this.$refs.chatContainer as any;
+				chat.scrollTop = chat.scrollHeight;
+				chat.scrollIntoView({ behavior: 'smooth' });
+      		});
+		},
 	},
 
 	setup() {
@@ -263,7 +270,7 @@ export default defineComponent({
 		border: black solid 3px;
 		height: 300px;
 		overflow-y: scroll;
-		scrollbar-color: rebeccapurple green;
+		scrollbar-color: black solid;
 		scrollbar-width: thin;
 	}
 	.message-recv {

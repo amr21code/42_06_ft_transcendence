@@ -6,7 +6,6 @@
 <template>
 	<div class="chat-wrapper">
 
-		<!-- <Overview v-if="selected === 'overview'"/> -->
 		
 		<div v-if="selected === 'overview'">
 			<h2>Chat overview</h2>
@@ -15,7 +14,6 @@
 
 			<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
 				<a @click="handleClick('chatwindow', chat)" v-if="type === 'groups'">
-					<!-- {{ chat }} -->
 					<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
@@ -23,7 +21,7 @@
 							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
 					</div>
 				</a>
-				<a @click="handleClick('chatwindow', chat)" v-if="type === 'dms'"> <!--need a function for getting the dms-->
+				<a @click="handleClick('chatwindow', chat)" v-if="type === 'dms'">
 					<div class="">
 						<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
@@ -47,16 +45,12 @@
 				<a @click="handleClick('overview', 0), changeType('groups')">
 					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
-				<!--popup for a new chat-->
 				<a @click="togglePopup()">
 					<img src="../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'">
 					<img src="../assets/blackcross.png" alt="user-photo" width="35" height="40">
 				</a>
-				<!-- <a  v-if="selected === 'chatwindow'">
-					<img src="../assets/info-icon.png" alt="user-photo" width="40" height="40">
-				</a> -->
 			</div>
 
 			<NewMessagePopup id="NewMessagePopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
@@ -82,7 +76,6 @@ import type { IChats } from '../types/Chats'
 
 //socket.io
 import SocketioService from '../services/SocketioService.js';
-import { io } from 'socket.io-client';
 
 type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
@@ -100,12 +93,10 @@ export default defineComponent({
 
 	created () {
 		this.socket.on('refresh-chat', () => {
-			// console.log('refreshing chat');
 			this.retrieveCurrentChats();
 		});
 		
 		this.socket.on('chat-leave', () => {
-			// console.log('switch to overview');
 			this.handleClick('overview', 0);
 		});
 	},
@@ -116,7 +107,6 @@ export default defineComponent({
 			DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
-				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -124,51 +114,20 @@ export default defineComponent({
 		},
 
 		retrieveCurrentChats() {
-			// console.log("type:", this.type);
-			if (this.type == 'groups')
-			{
-				DataService.getChats()
-				.then((response: ResponseData) => {
+			DataService.getChats()
+			.then((response: ResponseData) => {
 				this.chats = response.data;
-				// console.log(response.data);
-				})
-				.catch((e: Error) => {
-					console.log(e);
 			})
-			}
-			else if (this.type == 'dms') //not sure if that works like this
-			{
-				DataService.getDms()
-				.then((response: ResponseData) => {
-					this.chats = response.data;
-					// console.log(response.data);
-				})
-				.catch((e: Error) => {
-					console.log(e);
-				})
-			}
+			.catch((e: Error) => {
+				console.log(e);
+			})
 		},
 
-		// retrieveCurrentDms() {
-		// 	console.log("Recieve Dms");
-		// 	DataService.getDms()
-		// 	.then((response: ResponseData) => {
-		// 		this.chats = response.data;
-		// 		// console.log(response.data);
-		// 	})
-		// 	.catch((e: Error) => {
-		// 		console.log(e);
-		// 	});
-		// }
 	},
 
 	mounted () {
 		this.retrieveCurrentUser();
 		this.retrieveCurrentChats();
-
-		// checks for new chats every second; change to getting messages when a change is in the db
-		// window.setInterval(() => {
-		// }, 1000)
 	},
 
 	setup(){
@@ -176,20 +135,15 @@ export default defineComponent({
 
 		const popupTrigger = ref(false);
 		const togglePopup = () => {
-			// console.log("togglePopup(NewMessagesPopup) got triggert")
 			popupTrigger.value = !popupTrigger.value;
 		}
 
 		const LeaveChatTrigger = ref(false);
 		const LeaveChattogglePopup = () => {
-			// console.log("togglePopup(LeaveChat) got triggert")
 			LeaveChatTrigger.value = !LeaveChatTrigger.value;
 			return LeaveChatTrigger.value;
 		}
 
-		onMounted(() => {
-	
-		});
 		const type = ref<String>('groups');
 		const changeType = (term: String) => {
 			type.value = term;
