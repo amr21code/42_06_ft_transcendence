@@ -13,6 +13,7 @@ import { MatchGameStateDto } from './dto/matchgamestate.dto';
 		credentials: true,
 	}
 })
+
 export class MatchGateway {
 	constructor(private readonly matchService: MatchService) { }
 
@@ -33,15 +34,14 @@ export class MatchGateway {
 
 	@SubscribeMessage('init')
 	async handleInit(client: any, canvas: any) {
-		// console.log(canvas);
-		// console.log(canvas[0]);
+		console.log(canvas);
+		// console.log(JSON.parse(canvas));
 		const gameState = await createGameState();
-
 
 		// gameState.canvasHeight = canvas[0];
 		// gameState.canvasWidth = canvas[1];
-		gameState.canvasWidth = 0;
-		gameState.canvasWidth = 0;
+		gameState.canvasHeight = 503;
+		gameState.canvasWidth = 839;
 		gameState.paddleWidth = gameState.canvasWidth  / 25;
 		gameState.paddleHeight = gameState.canvasHeight / 4;
 		gameState.ballSize = gameState.canvasWidth  / 25;
@@ -52,6 +52,7 @@ export class MatchGateway {
 		gameState.player2.pos.y = gameState.canvasHeight / 2 - gameState.paddleHeight / 2;
 		gameState.ball.pos.x = gameState.canvasWidth  / 2 - gameState.ballSize / 2;
 		gameState.ball.pos.y = gameState.canvasHeight / 2 - gameState.ballSize / 2;
+		gameState.stepSize = 7;
 
 		client.emit('gameState', gameState);
 		client.on('keydown', handleKeyDown);
@@ -62,10 +63,11 @@ export class MatchGateway {
 			const vel = getUpdatedVelocity(keyInt);
 			if (vel) {
 				gameState.player1.y_vel = vel;
-				gameState.player1.pos.y += vel;
+				gameState.player1.pos.y += vel * gameState.stepSize;
 			}
 			startGameInterval(client, gameState);
 		}
+
 		function startGameInterval(client: any, state: MatchGameStateDto) {
 			const intervalId = setInterval(() => {
 				const winner = gameLoop(state);
@@ -76,7 +78,7 @@ export class MatchGateway {
 					client.emit('gameOver');
 					clearInterval(intervalId);
 				}
-			}, 1000 / 30); //todo change to FRAME_RATE
+			}, 1000 / 10); //todo change to FRAME_RATE
 		}
 	}
 }

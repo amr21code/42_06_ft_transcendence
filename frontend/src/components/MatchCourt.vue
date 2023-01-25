@@ -19,26 +19,32 @@ export default defineComponent({
 		let canvasHeight: number, canvasWidth: number;
 		const opponentArrived = ref(false);
 		
-
+		
 		// #################  HANDLERS #######################
         const handleGameState = (gameState: any) => {
             gameState = JSON.parse(gameState);
             requestAnimationFrame(() => paintGame(gameState));
         };
-
+		
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data;
 			console.log(data.data);
 			init();
 		};
 
+		
+		// #################  KEY HANDLER #######################
+		const keydown = (e: any) => {
+			console.log("key sent to backend: ", e.keyCode);
+			socket.emit('keydown', e.keyCode);
+		};
 
-		// ---------- SOCKETIO: OUTSOURCE TO SERVICE END
+		// ################# INIT CANVAS #######################
         const init = () => {
 			canvas = document.getElementById("match-court");
             ctx = canvas.getContext("2d");
 
-            // REMOVE BLURRINESS ---------------------------------------------------
+            // REMOVE BLURRINESS
             let dpi = window.devicePixelRatio;
             const fix_dpi = () => {
                 let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
@@ -47,7 +53,7 @@ export default defineComponent({
                 canvas.setAttribute("width", styleWidth * dpi);
             };
             fix_dpi();
-            // REMOVE BLURRINESS END ---------------------------------------------------
+            // REMOVE BLURRINESS END
 
 			socket.emit('init', canvas.height, canvas.width);
             ctx.fillStyle = "#444040";
@@ -56,10 +62,6 @@ export default defineComponent({
         };
 
 
-		// #################  KEY HANDLER #######################
-        const keydown = (e: any) => {
-			socket.emit('keydown', e.keyCode);
-        };
 		
 
 		// ########### PAINTING ###################################################################################################
@@ -95,8 +97,6 @@ export default defineComponent({
 		const socket = SocketioService.socket;
 		// socket.on("init", handleInit);
 		socket.on("opponent-status", handleOpponentArrived);
-		
-		// socket.on('init', handleGameState);
 		socket.on('gameState', handleGameState);
 		// socket.on('gameOver', handleGameState);
 		// socket.on('gameCode', handleGameCode);

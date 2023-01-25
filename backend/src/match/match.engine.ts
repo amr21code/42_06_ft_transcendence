@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "@nestjs/common";
 import { MatchGameStateDto } from "./dto/matchgamestate.dto";
 
 export function createGameState() {
@@ -32,6 +33,7 @@ export function createGameState() {
 		wallOffset: 0,
 		canvasHeight: 0,
 		canvasWidth: 0,
+		stepSize: 0,
 	}
 }
 
@@ -52,6 +54,7 @@ export function gameLoop (state: MatchGameStateDto) {
 	// LOGIC FOR WON/LOST GAME HERE
 	// maybe: logic for player left?
 
+	// console.log("before boundary evaluation");
 	if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20? Gridsize?
 		playerOne.y_vel = 0;
 	}
