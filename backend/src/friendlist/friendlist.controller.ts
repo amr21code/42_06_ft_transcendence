@@ -10,11 +10,15 @@ export class FriendlistController {
 	constructor(private readonly flservice: FriendlistService, private readonly userService: UserService) {}
 
 	@Get('show/:userid?')
-	async showFL(@Session() session: Record<string, any>, @Param('userid') userid?){
-		if (!userid)
+	async showFL(@Session() session: Record<string, any>, @Param('userid') userid?) {
+		try {
+			if (!userid)
 			userid = session.passport.user.userid;
-		const fl = await this.flservice.showFL(userid);
-		return fl;
+			const fl = await this.flservice.showFL(userid);
+			return fl;
+		} catch (error) {
+			throw new ForbiddenException('showFL error');
+		}
 	}
 	
 	@Get('edit/:userid/:action')
@@ -27,7 +31,7 @@ export class FriendlistController {
 			const status = await this.flservice.changeStatus(user[0].userid, userid_other, action);
 				return { msg : "ok" };
 		} catch (error) {
-			throw new ForbiddenException('invalid change request');
+			throw new ForbiddenException('FL invalid change request');
 		}
 	}
 }

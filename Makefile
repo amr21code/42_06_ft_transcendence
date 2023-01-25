@@ -1,5 +1,6 @@
 NAME =      ft_transcendence
 YML =       ./docker-compose.yml
+YMLDB =     ./docker-compose_db.yml
 
 $(NAME):
 	@echo "Building Transcendence"
@@ -23,6 +24,9 @@ eval:
 # docker exec -it NAME bash
 
 .PHONY: stop contrm imagerm volrm netrm clean test eval
+
+db: 
+	@docker compose -f $(YMLDB) up -d
 
 clean: stop contrm
 	-docker system prune -f

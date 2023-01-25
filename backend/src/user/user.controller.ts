@@ -10,50 +10,57 @@ export class UserController {
 
 	@Get('me')
 	async getMe(@Req() request: Request) {
-		const user = await this.userService.getMe(request.user);
-		return user;
+		try {
+			const user = await this.userService.getMe(request.user);
+			return user;
+		} catch (error) {
+			throw new ForbiddenException('getMe failed');
+		}
 	}
 
 	@Get('all')
-	async getAll(@Req() request: Request) {
-		const users = await this.userService.getAll();
-		return users;
+	async getAll() {
+		try {
+			const users = await this.userService.getAll();
+			return users;
+		} catch (error) {
+			throw new ForbiddenException('getAll failed');
+		}
 	}
 
 	@Get(':userid')
 	async getOne(@Param('userid') userid) {
-		
-		const users = await this.userService.getOne(userid);
-		return users;
+		try {
+			const users = await this.userService.getOne(userid);
+			return users;
+		} catch (error) {
+			throw new ForbiddenException('getOne failed');
+		}
 	}
 	
 	@Get(':userid/:field/:new')
 	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Param('new') newdata) {
 		const user = request.session.passport.user.userid;
-		// const user = await this.getMe(request);
 		try {
 				if (userid != user)
 					throw new ForbiddenException();
 				const status = await this.userService.changeUserData(userid, field, newdata);
 					return { msg : "ok" };
 			} catch (error) {
-				throw new ForbiddenException('invalid userstatus');
+				throw new ForbiddenException('changeUserData failed');
 			}
 		}
 		
 		@Get(':userid/:field')
 		async getUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field) {
 		const user = request.session.passport.user.userid;
-		// const user = await this.getMe(request);
 		try {
 				if (userid != user)
 					throw new ForbiddenException();
 				const status = await this.userService.getUserData(userid, field);
 					return { msg : "ok" };
 			} catch (error) {
-				throw new ForbiddenException('invalid userstatus');
+				throw new ForbiddenException('getUserData failed');
 			}
 	}
-	
-
 }

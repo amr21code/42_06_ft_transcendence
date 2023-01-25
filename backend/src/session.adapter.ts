@@ -2,7 +2,7 @@ import { IoAdapter } from "@nestjs/platform-socket.io";
 import { Server, ServerOptions } from "socket.io";
 import * as express from 'express';
 import * as passport from "passport";
-import { INestApplicationContext } from "@nestjs/common";
+import { ForbiddenException, INestApplicationContext } from "@nestjs/common";
 import { UserService } from "./user/user.service";
 
 declare module "http" {
@@ -29,6 +29,10 @@ export class SessionAdapter extends IoAdapter {
   	createIOServer(port: number, options?: ServerOptions): Server {
 		const server: Server = super.createIOServer(port, options);
 
+		server.on('error', (error) => {
+			console.log('SocketIO Error Handler');
+			throw new ForbiddenException('SocketIO Error Handler');
+		});
 		const wrap = (middleware) => (socket, next) =>
 		middleware(socket.request, {}, next);
 		server.use((socket, next) => {

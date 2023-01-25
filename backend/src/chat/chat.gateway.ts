@@ -1,5 +1,5 @@
 import { ForbiddenException, } from '@nestjs/common';
-import {  SubscribeMessage, WebSocketGateway} from '@nestjs/websockets';
+import {  SubscribeMessage, WebSocketGateway, WsException} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from 'src/chat/chat.service';
@@ -19,15 +19,13 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-message')
 	async handleMessage(client: Socket, message: ChatMessageDto) {
-		// try {
-			// console.log("handleMessage()");
-			// console.log(message);
-			await this.chatService.addMessage(message);
-			// console.log(message.username);
+		console.log('backend: send-chat-message');
+		try {
 			client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
-		// } catch (error) {
-		// 	throw new ForbiddenException('add message in socketIO message-handler failed');
-		// }
+			await this.chatService.addMessage(message);
+		} catch (error) {
+			throw new WsException('add message in socketIO message-handler failed');
+		}
 	}
 
 	@SubscribeMessage('send-chat-refresh')
@@ -38,9 +36,13 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-leave')
 	async leaveChat(client: Socket, message: Record<string, number>) {
-		this.chatService.leaveChat(client.request.session.passport.user.userid, message.chatid);
-		client.emit('refresh-chat');
-		client.emit('chat-leave');
+		try {
+			this.chatService.leaveChat(client.request.session.passport.user.userid, message.chatid);
+			client.emit('refresh-chat');
+			client.emit('chat-leave');
+		} catch (error) {
+			throw new WsException('leave chat in socketIO message-handler failed');
+		}
 	}
 
 }
