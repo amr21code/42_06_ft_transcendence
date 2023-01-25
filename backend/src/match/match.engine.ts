@@ -54,10 +54,10 @@ export function gameLoop (state: MatchGameStateDto) {
 	// LOGIC FOR WON/LOST GAME HERE
 	// maybe: logic for player left?
 
-	// console.log("before boundary evaluation");
-	if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20? Gridsize?
-		playerOne.y_vel = 0;
-	}
+	// MOVED BELOW INTO KEY HANDLER
+	// if (playerOne.pos.y <= 20 || playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20) { // WHY 20? Gridsize?
+	// 	playerOne.y_vel = 0;
+	// }
 
 	// make sure paddle is actually moving, before we move it
 	//if (playerOne.yvel)

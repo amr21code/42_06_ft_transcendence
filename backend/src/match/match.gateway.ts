@@ -61,10 +61,15 @@ export class MatchGateway {
 
 			const keyInt = parseInt(keyCode); // maybe put in try/catch?
 			const vel = getUpdatedVelocity(keyInt);
-			if (vel) {
+			if (vel === -1 && !(gameState.player1.pos.y <= 20)) {
 				gameState.player1.y_vel = vel;
 				gameState.player1.pos.y += vel * gameState.stepSize;
 			}
+			else if (vel == 1 && !(gameState.player1.pos.y + gameState.paddleHeight >= gameState.canvasHeight - 20)) {
+				gameState.player1.y_vel = vel;
+				gameState.player1.pos.y += vel * gameState.stepSize;
+			}
+
 			startGameInterval(client, gameState);
 		}
 
