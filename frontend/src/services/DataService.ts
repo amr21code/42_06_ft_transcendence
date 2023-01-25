@@ -42,6 +42,10 @@ class DataService {
 		return apiInstance.get('/chat/leave/' + chatid)
 	}
 
+	gameOver(gameState : any) : Promise<any> {
+		return apiInstance.post('/match/gameover', JSON.stringify(gameState));
+	}
+
 	// sendMessage (userid : number, chatid : number, message : String) {
 		// console.log("sendMessage function got triggered with", userid, chatid, message);
 		// return apiInstance.post('/chat/message', JSON.stringify({

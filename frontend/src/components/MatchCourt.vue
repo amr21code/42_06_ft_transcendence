@@ -6,6 +6,7 @@
 </template>
 
 <script lang="ts">
+import DataService from '../services/DataService'
 import { ref, computed, defineComponent } from 'vue'
 import SocketioService from '../services/SocketioService.js'
 import MatchWaitPopup from './MatchWaitPopup.vue';
@@ -28,13 +29,15 @@ export default defineComponent({
 			gameState = JSON.parse(gameState);
 			if (gameState.scorePlayer1 == 3) {
 				console.log("Game Over, Player One wins");
-				//requestAnimationFrame(() => paintScores(gameState));
+				//socket.emit('gameOver', gameState);
+				DataService.gameOver(gameState);
 			}
 			else if (gameState.scorePlayer2 == 3) {
-				console.log("Game Over, Player Two wins")
-				//requestAnimationFrame(() => paintScores(gameState));
+				console.log("Game Over, Player Two wins");
+				DataService.gameOver(gameState);
+				//socket.emit('gameOver', gameState);
 			}
-            	requestAnimationFrame(() => paintGame(gameState));
+            requestAnimationFrame(() => paintGame(gameState));
         };
 		
 		const handleOpponentArrived = (data: any) => {

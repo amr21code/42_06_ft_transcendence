@@ -3,6 +3,8 @@ import { Socket } from 'socket.io';
 import { MatchService } from './match.service';
 import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
+import { UserService } from 'src/user/user.service';
+import { Session } from '@nestjs/common';
 
 //add namespace???
 
@@ -15,7 +17,7 @@ import { MatchGameStateDto } from './dto/matchgamestate.dto';
 })
 
 export class MatchGateway {
-	constructor(private readonly matchService: MatchService) { }
+	constructor(private readonly matchService: MatchService, private readonly userService: UserService) { }
 
 	@SubscribeMessage('message')
 	handleMessage(client: any, payload: any): string {
@@ -25,12 +27,21 @@ export class MatchGateway {
 
 	@SubscribeMessage('send-opponent-status')
 	async refreshMatch(client: Socket, payload: any) {
-		// const status = this.matchService.getOpponentStatus(payload.matchid, payload.userid);
+		//const userid = this.userService.getMe().userid;
+		//const matchid = this.matchService.listActiveMatch(userid);
+		// const status = this.matchService.getOpponentStatus(matchid, userid);
 		//client.emit('opponent-status', {data: status});
 		client.emit('opponent-status', { data: true });
 		// if clause for opponent-status === true hinzufügen!
 		this.handleInit(client, payload);
 	}
+
+	//@SubscribeMessage('gameOver')
+	//async gameOver(client: Socket, state: MatchGameStateDto, @Session() session: Record<string, any>){
+	//	const userid = session.passport.user.userid;
+	//	const matchid = this.matchService.listActiveMatch(userid);
+	//	this.matchService.updateMatch(matchid, userid, state.scorePlayer1); //how do I know if I'm Player1 or Player2
+	//}
 	
 	@SubscribeMessage('init')
 	async handleInit(client: any, canvas: any) {
@@ -54,7 +65,7 @@ export class MatchGateway {
 		gameState.ball.pos.x = gameState.canvasWidth  / 2 - gameState.ballSize / 2;
 		gameState.ball.pos.y = gameState.canvasHeight / 2 - gameState.ballSize / 2;
 		gameState.paddleSpeed = 3;
-		gameState.ballSpeed = 3;
+		gameState.ballSpeed = 6;
 		// DETERMINE BALL KICKOFF DIRECTION
 		var randomDirection = Math.floor(Math.random() * 2) + 1; 
 		if (randomDirection % 2) {
@@ -91,6 +102,10 @@ export class MatchGateway {
 				}
 				else {
 					client.emit('gameOver', JSON.stringify(state));
+					//const userid = this.userService.getMe().userid;
+					//const matchid = this.matchService.listActiveMatch(userid);
+					//this.matchService.updateMatch(matchid, userid, state.scorePlayer1); //how do I know if I'm Player1 or Player2
+
 					clearInterval(intervalId); // was macht das?
 				}
 			}, 1000 / 30); //todo change to FRAME_RATE

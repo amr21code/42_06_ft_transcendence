@@ -15,6 +15,15 @@ export class MatchService {
 		return matchlist;
 	}
 
+	async listActiveMatch(userid: string) {
+		const matchid = await this.db.$queryRaw(
+			Prisma.sql`SELECT um.matchid FROM public.user_match AS um
+			LEFT JOIN public.match_history AS mh ON um.matchid=mh.matchid
+			WHERE userid=${userid} AND mh.match_status=CAST(1 AS INTEGER);`
+		);
+		return matchid;
+	}
+
 	async listMatchesStatus(status: number) {
 		const matchlist = await this.db.$queryRaw(
 			Prisma.sql`SELECT mh.matchid, ms.statusname, um.players FROM public.match_history AS mh
@@ -154,11 +163,32 @@ export class MatchService {
 			return false;
 	}
 
-	//async handleKeyDown(keyCode: any, state: any) { // inline to have access to 'socket'
-	//	const keyInt = parseInt(keyCode); // maybe put in try/catch?
-	//	const vel = getUpdatedVelocity(keyInt);
-	//	if (vel) {
-	//		state.player1.y_vel = vel;	
-	//	}
-	//}
+	async updateMatch(matchid: any, userid: any, userscore: number)
+	{ //update userscore, match_status, wins/losses
+		console.log(matchid, userid, userscore);
+		const score = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${userscore} AS INTEGER)
+			WHERE matchid=${matchid} AND userid=${userid};`);
+		const match = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.match_history SET match_status=CAST(0 AS INTEGER)
+				WHERE matchid=${matchid}`);
+		if (userscore == 3){
+			var win= await this.db.$queryRaw<number>(
+			Prisma.sql`SELECT wins FROM public.users WHERE userid=${userid};`);
+			win[0].wins = win[0].wins + 1;
+			const user = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.users SET wins=CAST(${win[0].wins} AS INTEGER)
+				WHERE userid=${userid}`);
+		}
+		else{
+			var loss= await this.db.$queryRaw<number>(
+			Prisma.sql`SELECT losses FROM public.user WHERE userid=${userid};`);
+			loss[0].losses = loss[0].losses + 1;
+			const user = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.user SET losses=CAST(${loss[0].losses} AS INTEGER)
+				WHERE userid=${userid}`);
+		}
+	}
+
+
 }
