@@ -114,6 +114,8 @@ export default defineComponent({
 	},
 
 	created () {
+		this.retrieveCurrentUser();
+		this.retrieveCurrentMessages(this.curr_chat.chatid);
 		this.socket.on('chat-message', (data: IMessages) => {
 			this.messages.push(data);
 		});
@@ -153,7 +155,6 @@ export default defineComponent({
 
 		// passes the variables to socketio which sends them to the backend in order to send a message
 		sendMessage (chatid : number, message : String) {
-			console.log('sendMessage');
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
 		},
 
@@ -169,12 +170,6 @@ export default defineComponent({
 			this.curr_chat.chat_name = chatname;
 		}
 
-	},
-
-	mounted () {
-		this.retrieveCurrentUser();
-		this.retrieveCurrentMessages(this.curr_chat.chatid)
-		
 	},
 
 	setup() {
