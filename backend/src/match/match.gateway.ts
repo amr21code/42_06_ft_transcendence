@@ -31,9 +31,10 @@ export class MatchGateway {
 		// if clause for opponent-status === true hinzufügen!
 		this.handleInit(client, payload);
 	}
-
+	
 	@SubscribeMessage('init')
 	async handleInit(client: any, canvas: any) {
+		console.log("called once");
 		console.log(canvas);
 		// console.log(JSON.parse(canvas));
 		const gameState = await createGameState();
@@ -61,11 +62,11 @@ export class MatchGateway {
 		} else {
 			gameState.ball.vel.x = -1;
 		}
-		// ball.vel.x = -1;
+		// gameState.ball.vel.x = -1;
 		gameState.ball.vel.y = 1;
 
 
-		client.emit('gameState', gameState);
+		client.emit('gameState', JSON.stringify(gameState));
 		client.on('keydown', handleKeyDown);
 
 		function handleKeyDown(keyCode: any) { // inline to have access to 'socket'

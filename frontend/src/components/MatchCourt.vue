@@ -22,7 +22,10 @@ export default defineComponent({
 		
 		// #################  HANDLERS #######################
         const handleGameState = (gameState: any) => {
-            gameState = JSON.parse(gameState);
+            if (!gameState) {
+				return;
+			}
+			gameState = JSON.parse(gameState);
             requestAnimationFrame(() => paintGame(gameState));
         };
 		
@@ -54,14 +57,12 @@ export default defineComponent({
             fix_dpi();
             // REMOVE BLURRINESS END
 
-			socket.emit('init', canvas.height, canvas.width);
+			// socket.emit('init', canvas.height, canvas.width);
             ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
         };
 
-
-		
 
 		// ########### PAINTING ###################################################################################################
         const paintGame = (state: any) => {
@@ -100,9 +101,7 @@ export default defineComponent({
 		// socket.on('gameOver', handleGameState);
 		// socket.on('gameCode', handleGameCode);
 		// socket.on('unknownCode', handleGameState);
-		// socket.on('gameFull', handleGameState);
-
-
+		// socket.on('gameFull', handleGameState); //two players in room already
 		////############# SOCKETIO #############
 		
         return { canvas, opponentArrived, initCanvas, paintGame };

@@ -4,7 +4,7 @@ import { MatchGameStateDto } from "./dto/matchgamestate.dto";
 export function createGameState() {
 	return {
 		player1: {
-			pos: {
+				pos: {
 				x: 0,
 				y: 0,
 			},
@@ -70,6 +70,8 @@ export function gameLoop(state: MatchGameStateDto) {
 	}
 	// ################ MOVE PLAYER END ###################################################
 
+
+
 	// ################ MOVE BALL ###################################################
 	// make sure paddle is actually moving, before we check how to move it
 	if (ball.vel.x || ball.vel.y) {
@@ -98,14 +100,14 @@ export function gameLoop(state: MatchGameStateDto) {
 			// Game.playerOneScores();
 		}
 
-		//check player collision
+		//check playerOne collision
 		if (ball.pos.x <= playerOne.pos.x + state.paddleWidth && ball.pos.x > playerOne.pos.x) {
 			if (ball.pos.y >= playerOne.pos.y && ball.pos.y <= playerOne.pos.y + state.paddleHeight) {
 				ball.vel.x = 1;
 			}
 		}
 
-		//check computer collision
+		//check playerTwo collision
 		if (ball.pos.x + state.ballSize >= playerTwo.pos.x && ball.pos.x < playerTwo.pos.x) {
 			if (ball.pos.y >= playerTwo.pos.y && ball.pos.y <= playerTwo.pos.y + state.paddleHeight) {
 				ball.vel.x = -1;
