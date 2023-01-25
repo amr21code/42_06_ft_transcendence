@@ -19,10 +19,9 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-message')
 	async handleMessage(client: Socket, message: ChatMessageDto) {
-		console.log('backend: send-chat-message');
 		try {
-			client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
 			await this.chatService.addMessage(message);
+			client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
 		} catch (error) {
 			throw new WsException('add message in socketIO message-handler failed');
 		}

@@ -96,7 +96,7 @@ import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
 
 
-import { computed, defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
 
 export default defineComponent({
@@ -115,7 +115,6 @@ export default defineComponent({
 
 	created () {
 		this.socket.on('chat-message', (data: IMessages) => {
-			console.log('chat-message signal recieved');
 			this.messages.push(data);
 		});
 	},

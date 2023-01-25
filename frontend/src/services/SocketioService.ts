@@ -8,7 +8,7 @@ class SocketioService {
   // sets up the connection
   setupSocketConnection() {
     this.socket = io(import.meta.env.VITE_SOCKETIO_URL, { withCredentials: true });
-    if (this.socket)
+    if (this.socket != undefined)
       console.log('Socket connected: ', this.socket.id);
   
     return (this.socket);
@@ -16,7 +16,6 @@ class SocketioService {
 
   // sends a message to the server
   sendMessage(username: String, userid : String, chatid : number, message : String) {
-    console.log('SocketIO sendMessage');
     this.socket.emit('send-chat-message', {username, userid, chatid, message });
   }
 
