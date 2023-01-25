@@ -90,7 +90,7 @@ export class MatchGateway {
 					// console.log(state);
 				}
 				else {
-					client.emit('gameOver');
+					client.emit('gameOver', JSON.stringify(state));
 					clearInterval(intervalId); // was macht das?
 				}
 			}, 1000 / 30); //todo change to FRAME_RATE

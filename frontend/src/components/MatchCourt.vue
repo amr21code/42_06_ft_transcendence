@@ -26,7 +26,15 @@ export default defineComponent({
 				return;
 			}
 			gameState = JSON.parse(gameState);
-            requestAnimationFrame(() => paintGame(gameState));
+			if (gameState.scorePlayer1 == 3) {
+				console.log("Game Over, Player One wins");
+				//requestAnimationFrame(() => paintScores(gameState));
+			}
+			else if (gameState.scorePlayer2 == 3) {
+				console.log("Game Over, Player Two wins")
+				//requestAnimationFrame(() => paintScores(gameState));
+			}
+            	requestAnimationFrame(() => paintGame(gameState));
         };
 		
 		const handleOpponentArrived = (data: any) => {
@@ -81,12 +89,12 @@ export default defineComponent({
 				ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
 			}
 			//draw scores
-			ctx.fillStyle = "#444040";
-			ctx.textalign = "center";
+			//ctx.fillStyle = "#444040";
+			//ctx.textalign = "center";
 			
-			ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
-			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
-
+			//ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
+			//ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
+			paintScores(state);
             paintPlayersAndBall(state);
         };
 
@@ -98,6 +106,15 @@ export default defineComponent({
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
         };
 
+		 const paintScores = (state: any) => {
+            ctx.fillStyle = "#444040";
+			ctx.textalign = "center";
+			
+			ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
+			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
+        };
+
+
 		// ########### PAINTING ###################################################################################################
 
 
@@ -106,7 +123,7 @@ export default defineComponent({
 		// socket.on("init", handleInit);
 		socket.on("opponent-status", handleOpponentArrived);
 		socket.on('gameState', handleGameState);
-		// socket.on('gameOver', handleGameState);
+		socket.on('gameOver', handleGameState);
 		// socket.on('gameCode', handleGameCode);
 		// socket.on('unknownCode', handleGameState);
 		// socket.on('gameFull', handleGameState); //two players in room already

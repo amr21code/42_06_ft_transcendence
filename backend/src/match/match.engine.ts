@@ -93,6 +93,8 @@ export function gameLoop(state: MatchGameStateDto) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
 			ball.vel.x = 1;
 			state.scorePlayer2++;
+			if (state.scorePlayer2 == 3)
+				return 2;
 			// Game.playerTwoScores();
 		}
 		
@@ -101,6 +103,8 @@ export function gameLoop(state: MatchGameStateDto) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
 			ball.vel.x = -1;
 			state.scorePlayer1++;
+			if (state.scorePlayer1 == 3)
+				return 1;
 			// Game.playerOneScores();
 		}
 
