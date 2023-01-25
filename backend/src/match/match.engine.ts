@@ -111,7 +111,7 @@ export function gameLoop(state: MatchGameStateDto) {
 				ball.vel.x = -1;
 			}
 		}
-
+		// console.log("ball velo x: ", ball.vel.x, " ball velo y: ", ball.vel.y);
 		ball.pos.x += ball.vel.x * state.ballSpeed;
 		ball.pos.y += ball.vel.y * state.ballSpeed;
 	}

@@ -52,8 +52,8 @@ export class MatchGateway {
 		gameState.player2.pos.y = gameState.canvasHeight / 2 - gameState.paddleHeight / 2;
 		gameState.ball.pos.x = gameState.canvasWidth  / 2 - gameState.ballSize / 2;
 		gameState.ball.pos.y = gameState.canvasHeight / 2 - gameState.ballSize / 2;
-		gameState.paddleSpeed = 10;
-		gameState.ballSpeed = 10;
+		gameState.paddleSpeed = 3;
+		gameState.ballSpeed = 3;
 		// DETERMINE BALL KICKOFF DIRECTION
 		var randomDirection = Math.floor(Math.random() * 2) + 1; 
 		if (randomDirection % 2) {
@@ -75,20 +75,24 @@ export class MatchGateway {
 			if (vel) {
 				gameState.player1.y_vel = vel;
 			}
-			startGameInterval(client, gameState);
+			else {
+				gameState.player1.y_vel = 0;
+			}
 		}
+		startGameInterval(client, gameState);
 
 		function startGameInterval(client: any, state: MatchGameStateDto) {
 			const intervalId = setInterval(() => {
 				const winner = gameLoop(state);
 				if (!winner) {
 					client.emit('gameState', JSON.stringify(state));
+					// console.log(state);
 				}
 				else {
 					client.emit('gameOver');
 					clearInterval(intervalId); // was macht das?
 				}
-			}, 1000 / 10); //todo change to FRAME_RATE
+			}, 1000 / 30); //todo change to FRAME_RATE
 		}
 	}
 }

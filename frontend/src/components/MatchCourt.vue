@@ -28,8 +28,7 @@ export default defineComponent({
 		
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data;
-			console.log(data.data);
-			init();
+			initCanvas();
 		};
 
 		
@@ -40,7 +39,7 @@ export default defineComponent({
 		};
 
 		// ################# INIT CANVAS #######################
-        const init = () => {
+        const initCanvas = () => {
 			canvas = document.getElementById("match-court");
             ctx = canvas.getContext("2d");
 
@@ -80,10 +79,10 @@ export default defineComponent({
 				ctx.fillStyle = "#444040";
 				ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
 			}
-            paintPlayers(state);
+            paintPlayersAndBall(state);
         };
 
-        const paintPlayers = (state: any) => {
+        const paintPlayersAndBall = (state: any) => {
             ctx.fillStyle = "#b04716";
             // ctx.fillStyle = "#fff";
             ctx.fillRect(state.player1.pos.x, state.player1.pos.y, state.paddleWidth, state.paddleHeight);
@@ -106,7 +105,7 @@ export default defineComponent({
 
 		////############# SOCKETIO #############
 		
-        return { canvas, opponentArrived, init, paintGame };
+        return { canvas, opponentArrived, initCanvas, paintGame };
     },
 
 	methods: {
@@ -117,7 +116,7 @@ export default defineComponent({
 
     mounted() {
 		this.checkOpponentStatus(); // SET CONDITION TO STOP STUFF
-		// this.init();
+		// this.initCanvas();
     },
 
     components: { MatchWaitPopup }
