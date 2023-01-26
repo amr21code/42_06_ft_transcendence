@@ -17,8 +17,8 @@ import SocketioService from '../services/SocketioService.js'
 import MatchWaitPopup from './MatchWaitPopup.vue';
 
 export default defineComponent({
-    setup() {
 
+	setup() {
 
 		// #################  VARIABLES ######################
 		let canvas: any, ctx: any, matchSelectionDiv: any, joinMatchQueueBtn: any, watchMatchBtn: any;
@@ -45,6 +45,7 @@ export default defineComponent({
             requestAnimationFrame(() => paintGame(gameState));
         };
 
+
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data;
 			if (!playerNumber && !opponentArrived.value)
@@ -52,7 +53,6 @@ export default defineComponent({
 			else if (!playerNumber)
 				playerNumber = 2;
 			console.log("your player number is: ", playerNumber);
-			DataService.openSingleMatch(); // ersetzen
 		};
 
 		
@@ -62,9 +62,15 @@ export default defineComponent({
 		};
 
 		const joinMatchQueue = () => {
+			DataService.openSingleMatch(); // ersetzen
 			checkOpponentStatus(); // SET CONDITION TO STOP STUFF
+
+
+			// MARKER: RENDER WAITING POPUP IF OPPONENTSTATUS = FALSE
+
 			matchSelectionDiv.style.display = 'none';
 			canvas.style.display = 'block';
+
 			// REMOVE BLURRINESS
             let dpi = window.devicePixelRatio;
             const fix_dpi = () => {
@@ -76,7 +82,8 @@ export default defineComponent({
             fix_dpi();
 			console.log(canvas.height, canvas.width);
             // REMOVE BLURRINESS END
-			socket.emit('init');
+
+			socket.emit('init'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
 		};
 
 		// ################# INIT CANVAS #######################
@@ -146,6 +153,7 @@ export default defineComponent({
 		//############# SOCKETIO ##############
 		const socket = SocketioService.socket;
 		// socket.on("init", handleInit);
+		// RENAME TO 'CREATE_NEW_GAME'
 		socket.on("opponent-status", handleOpponentArrived);
 		socket.on('gameState', handleGameState);
 		 socket.on('gameOver', handleGameState);
