@@ -2,8 +2,8 @@
     <div class="popup" @keyup.esc="(ChatInfotogglePopup)" tabindex="0">
         <div class="popup-inner">
             <h2>Info</h2>
-			<!-- {{ chat }} <br>
-			{{ users }} <br> -->
+			<!-- {{ chat }} <br> -->
+			<!-- {{ users }} <br>  -->
 			<table id="info-table">
 			<thead id="top-row">
 				<tr>
@@ -11,7 +11,7 @@
 					<th>username</th>
 					<th>statusname</th>
 					<th>mute</th>
-					<th>block</th>
+					<th>ban</th>
 					<th>invite</th>
 				</tr>
 			</thead>
@@ -27,12 +27,12 @@
 						{{ user.statusname }}
 					</td>
 					<td> <!-- mute -->
-						<button @click="(toggleMute)" v-if="Mute === false">mute</button>
-						<button @click="(toggleMute)" v-if="Mute === true">unmute</button>
+						<button @click="(toggleMute)" v-if="Mute === false">mute</button> 
+						<button @click="(toggleMute)" v-if="user.status === 2 || Mute === true">unmute</button> 
 					</td>
-					<td> <!-- block -->
-						<button @click="(toggleBlock)" v-if="Block === false">block</button>
-						<button @click="(toggleBlock)" v-if="Block === true">unblock</button>
+					<td> <!-- ban -->
+						<button @click="(toggleBan)" v-if="Ban == false">ban</button> 
+						<button @click="(toggleBan)" v-if="user.status === 3 || Ban == true">unban</button>
 					</td>
 					<td> <!-- invite -->
 						<button @click="(toggleChallenge)" v-if="Challenge === false">challenge</button>
@@ -80,7 +80,6 @@ export default defineComponent({
 		return {
 			users: [] as IUser[],
             socket: SocketioService.socket,
-			// chat: {} as IChats,
 		}
 	},
 	methods: {
@@ -109,9 +108,9 @@ export default defineComponent({
 			Mute.value = !Mute.value;
 		}
 
-		const Block = ref(false);
-		const toggleBlock = () => {
-			Block.value = !Block.value;
+		const Ban = ref(false);
+		const toggleBan = () => {
+			Ban.value = !Ban.value;
 		}
 
 		const Challenge = ref(false);
@@ -119,7 +118,7 @@ export default defineComponent({
 			Challenge.value = !Challenge.value;
 		}
 
-		return { toggleMute, Mute, toggleBlock, Block, toggleChallenge, Challenge}
+		return { toggleMute, Mute, toggleBan, Ban, toggleChallenge, Challenge}
 			
     }  
 
