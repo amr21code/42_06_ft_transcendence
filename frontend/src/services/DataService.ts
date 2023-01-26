@@ -51,6 +51,9 @@ class DataService {
 	openSingleMatch(): Promise<any> {
 		return apiInstance.get('/match/opensingle');
 	}
+	joinMatchQueue(): Promise<any> {
+		return apiInstance.get('/match/making'); 
+	}
 
 	// sendMessage (userid : number, chatid : number, message : String) {
 		// console.log("sendMessage function got triggered with", userid, chatid, message);

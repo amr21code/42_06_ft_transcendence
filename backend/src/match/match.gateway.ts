@@ -35,8 +35,8 @@ export class MatchGateway {
 
 		this.clientRooms[client.id] = roomNumber;
 
-		// client.emit('opponent-status', {data: status});
-		client.emit('opponent-status', { data: true });
+		 client.emit('opponent-status', {data: status});
+		//client.emit('opponent-status', { data: true });
 		// if clause for opponent-status === true hinzufügen!
 	}
 

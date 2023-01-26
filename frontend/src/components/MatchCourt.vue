@@ -66,6 +66,7 @@ export default defineComponent({
 
 		const joinMatchQueue = () => {
 			DataService.openSingleMatch(); // ERSETZEN 
+			//DataService.joinMatchQueue();
 			
 			// sets opponentStatus
 			SocketioService.createNewGame(canvas); // SET CONDITION TO STOP STUFF

@@ -50,6 +50,17 @@ export class MatchController {
 			throw error;
 		}
 	}
+
+	//@Get('makingUnsafe')
+	//async matchmakingUnsafe(@Session() session: Record<string, any>) {
+	//	try {
+	//		const match = await this.matchService.matchmakingUnsafe(session.passport.user.userid);
+	//		return {"msg" : "ok" };
+	//	} catch (error) {
+	//		throw error;
+	//	}
+	//}
+
 	@Post('gameover')
 	async gameOver(@Body() state: MatchGameStateDto, @Session() session: Record<string, any>){
 		console.log("gameover");
