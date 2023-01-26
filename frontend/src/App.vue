@@ -51,7 +51,7 @@ import SocketioService from './services/SocketioService.js'
 import DataService from './services/DataService'
 
 export default defineComponent({
-	
+
 	name: 'App',
 	el: "#app",
 	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
@@ -68,7 +68,7 @@ export default defineComponent({
 	},
 	
 	setup() {
-		const loggedIn = ref(false);
+		const loggedIn = ref(true); // CHANGE THIS BACK TO FALSE
 		const toggleLoginPopup = () => {
 			loggedIn.value = !loggedIn.value;
 		}
@@ -98,7 +98,7 @@ export default defineComponent({
 		};
 		return { loggedIn, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
 	},
-	
+
 	methods: {
 		checkAuthStatus() {
 			DataService.getAuthStatus()
@@ -129,11 +129,6 @@ export default defineComponent({
 
 
 <style scoped>
-
-	#app { /*TEMP*/
-		height: 100%;
-		max-height: 100%;
-	}
 
 	header {
 		text-align: center;
@@ -185,11 +180,15 @@ export default defineComponent({
 
 	.game-part-screen {
 		display: grid;
+		text-align: center;
 		/* grid-template-columns: 0.2fr 1fr 0.2fr; */
 		grid-template-columns:  var(--leftofgame_fr) var(--game_fr) var(--sidewindow_fr);
-		margin: 20px;
-		gap: 20px;
+		/* gap: 20px; */
 		max-height: 70vh;
+		margin: 50px;
+		margin-top: 50px;
+		/* background: red; */
+		align-items:center;
 	}
 	
 	.game-part-screen MatchCourt {
@@ -214,6 +213,7 @@ export default defineComponent({
 		position: fixed;
 		bottom: 0;
 		width: 100%;
-		/* height: 2.5rem; */
+		/* background: blue; */
+		/* height: 1rem; */
 	}
 </style>

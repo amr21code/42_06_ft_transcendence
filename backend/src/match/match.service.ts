@@ -15,6 +15,15 @@ export class MatchService {
 		return matchlist;
 	}
 
+	async listActiveMatch(userid: string) {
+		const matchid = await this.db.$queryRaw(
+			Prisma.sql`SELECT um.matchid FROM public.user_match AS um
+			LEFT JOIN public.match_history AS mh ON um.matchid=mh.matchid
+			WHERE userid=${userid} AND mh.match_status=CAST(1 AS INTEGER);`
+		);
+		return matchid;
+	}
+
 	async listMatchesStatus(status: number) {
 		const matchlist = await this.db.$queryRaw(
 			Prisma.sql`SELECT mh.matchid, ms.statusname, um.players FROM public.match_history AS mh
@@ -32,6 +41,34 @@ export class MatchService {
 			WHERE mh.match_status > 0 AND um.userid=${userid};`
 		);
 		return match;
+	}
+
+	async openSingleMatch(userid: string, status: number){
+		console.log("singleMatch");
+		const already_open = await this.listMatch(userid);
+		if (Object.keys(already_open).length == 0)
+		{
+			console.log("no open session - creating");
+			const open = await this.db.$queryRaw(
+				Prisma.sql`INSERT INTO public.match_history (match_status)
+				VALUES (1)
+				RETURNING matchid;`
+			);
+			// console.log("new matchid", open[0].matchid);
+			// var timeout = (Date.now() / 1000) + 60;
+			// console.log("settimeout", timeout);
+			if (open[0].matchid) {
+				const join = await this.db.$queryRaw(
+					Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
+					VALUES (${userid}, ${open[0].matchid}, ${status})
+					RETURNING matchid;` //, to_timestamp(${timeout}));`
+				);
+			} 
+			console.log(open[0].matchid);
+			return (open[0].matchid);
+		}else {
+			throw new ForbiddenException();
+		}
 	}
 
 	async openMatch(userid: string, status: number, opponent?: string) {
@@ -140,4 +177,47 @@ export class MatchService {
 			WHERE matchid=(SELECT matchid FROM public.user_match WHERE userid=${userid} AND challenge!=3);`
 		);
 	}
+	async getOpponentStatus(matchid: number, userid: string){
+		const accept = await this.db.$queryRaw(
+			Prisma.sql`SELECT challenge FROM public.user_match
+			WHERE matchid=${matchid} AND userid!=${userid};`
+		);
+		if (accept && accept[0].challenge == 1)
+			return true;
+		else 
+			return false;
+	}
+
+	async updateMatch(matchid: any, userid: any, userscore: number)
+	{ //update userscore, match_status, wins/losses
+		try{
+		console.log(matchid, userid, userscore);
+		const score = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${userscore} AS INTEGER)
+			WHERE matchid=${matchid} AND userid=${userid};`);
+		const match = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.match_history SET match_status=CAST(0 AS INTEGER)
+				WHERE matchid=${matchid}`);
+		if (userscore == 3){
+			var win= await this.db.$queryRaw<number>(
+			Prisma.sql`SELECT wins FROM public.users WHERE userid=${userid};`);
+			win[0].wins = win[0].wins + 1;
+			const user = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.users SET wins=CAST(${win[0].wins} AS INTEGER)
+				WHERE userid=${userid}`);
+		}
+		else{
+			var loss= await this.db.$queryRaw<number>(
+			Prisma.sql`SELECT losses FROM public.user WHERE userid=${userid};`);
+			loss[0].losses = loss[0].losses + 1;
+			const user = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.user SET losses=CAST(${loss[0].losses} AS INTEGER)
+				WHERE userid=${userid}`);
+		}
+		}catch(error){
+			throw new ForbiddenException();
+		}
+	}
+
+
 }

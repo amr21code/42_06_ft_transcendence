@@ -173,7 +173,7 @@ export default defineComponent({
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 99; /*brings to highest front-layer*/
+	z-index: 98; /*brings to highest front-layer*/
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -181,7 +181,8 @@ export default defineComponent({
 .popup-inner {
 	background-color: var(--second-bg-color);
 	padding: 10px 26px;
-	border-radius: 10%;
+	/* border-radius: 10%; */
+	border-radius: 2px;
 }
 
 .popup-inner h2 {

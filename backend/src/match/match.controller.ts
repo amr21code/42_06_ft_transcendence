@@ -1,5 +1,6 @@
-import { Controller, ForbiddenException, Get, Param, Req, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Param, Post, Req, Session, UseGuards } from '@nestjs/common';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
+import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { MatchService } from './match.service';
 
 @Controller('match')
@@ -15,6 +16,11 @@ export class MatchController {
 	@Get('open/:opponent?')
 	async openMatch(@Param('opponent') opponent, @Session() session: Record<string, any>) {
 		const open = await this.matchService.openMatch(session.passport.user.userid, 1, opponent);
+	}
+
+	@Get('opensingle')
+	async opensingleMatch( @Session() session: Record<string, any>) {
+		const open = await this.matchService.openSingleMatch(session.passport.user.userid, 1);
 	}
 
 	@Get('accept')
@@ -43,5 +49,13 @@ export class MatchController {
 		} catch (error) {
 			throw error;
 		}
+	}
+	@Post('gameover')
+	async gameOver(@Body() state: MatchGameStateDto, @Session() session: Record<string, any>){
+		console.log("gameover");
+		const userid = session.passport.user.userid;
+		const matchid = await this.matchService.listActiveMatch(userid);
+		const update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer1); //how do I know if I'm Player1 or Player2
+		return(update);
 	}
 }
