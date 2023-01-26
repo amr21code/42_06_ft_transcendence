@@ -26,7 +26,6 @@ export default defineComponent({
             if (!gameState) {
 				return;
 			}
-			console.log("LOG in handleGameState");
 			gameState = JSON.parse(gameState);
 			if (gameState.scorePlayer1 == 3) {
 				console.log("Game Over, Player One wins");
@@ -40,10 +39,9 @@ export default defineComponent({
 			}
             requestAnimationFrame(() => paintGame(gameState));
         };
-		
+
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data;
-			console.log(opponentArrived.value);
 			DataService.openSingleMatch();
 			initCanvas();
 		};
@@ -51,7 +49,6 @@ export default defineComponent({
 		
 		// #################  KEY SIGNALING #######################
 		const keydown = (e: any) => {
-			console.log("key sent to backend: ", e.keyCode);
 			socket.emit('keydown', e.keyCode);
 		};
 

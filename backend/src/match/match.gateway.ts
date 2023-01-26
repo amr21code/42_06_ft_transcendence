@@ -15,9 +15,7 @@ import { Session } from '@nestjs/common';
 })
 
 export class MatchGateway {
-	constructor(private readonly matchService: MatchService, private readonly userService: UserService) { 
-		console.log("hello from constructor");
-	}
+	constructor(private readonly matchService: MatchService, private readonly userService: UserService) {}
 
 	@SubscribeMessage('message')
 	handleMessage(client: any, payload: any): string {
@@ -45,8 +43,7 @@ export class MatchGateway {
 	
 	@SubscribeMessage('init')
 	async handleInit(client: any, canvas: any) {
-		console.log("called once");
-		console.log(canvas);
+		// console.log(canvas);
 		// console.log(JSON.parse(canvas));
 		const gameState = await createGameState();
 
@@ -82,7 +79,6 @@ export class MatchGateway {
 
 		function handleKeyDown(keyCode: any) { // inline to have access to 'socket'
 
-			console.log("key down called");
 			const keyInt = parseInt(keyCode); // maybe put in try/catch?
 			const vel = getUpdatedVelocity(keyInt);
 			if (vel) {
