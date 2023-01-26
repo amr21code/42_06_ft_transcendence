@@ -100,18 +100,18 @@ export class MatchGateway {
 
 		function handleKeyDown(keyCode: any) { // inline to have access to 'socket'
 
-			console.log(this.states[roomNumber]); // HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEREEEEEEEEE ERROR
+			console.log(MatchGateway[roomNumber]);
 
 			const keyInt = parseInt(keyCode); // maybe put in try/catch?
 			const vel = getUpdatedVelocity(keyInt);
 			if (vel) {
-				this.states[roomNumber].player1.y_vel = vel;
+				MatchGateway[roomNumber].player1.y_vel = vel;
 			}
 			else {
-				this.states[roomNumber].player1.y_vel = 0;
+				MatchGateway[roomNumber].player1.y_vel = 0;
 			}
 		}
-		startGameInterval(client, MatchGateway.states[roomNumber]);
+		startGameInterval(client, MatchGateway[roomNumber]);
 
 		function startGameInterval(client: any, state: MatchGameStateDto) {
 			const intervalId = setInterval(() => {

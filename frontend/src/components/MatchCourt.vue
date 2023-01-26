@@ -107,6 +107,7 @@ export default defineComponent({
 
 		// ########### PAINTING ###################################################################################################
         const paintGame = (state: any) => {
+			console.log("Painting awesome stuff...");
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
