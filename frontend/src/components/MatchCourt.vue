@@ -22,7 +22,7 @@ export default defineComponent({
 
 		// #################  VARIABLES ######################
 		let canvas: any, ctx: any, matchSelectionDiv: any, joinMatchQueueBtn: any, watchMatchBtn: any;
-		let canvasHeight: number, canvasWidth: number;
+		let playerNumber: number;
 		const opponentArrived = ref(true); // CHANGE BACK TO FALSE!
 		
 		
@@ -47,8 +47,12 @@ export default defineComponent({
 
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data;
-			DataService.openSingleMatch();
-			
+			if (!playerNumber && !opponentArrived.value)
+				playerNumber = 1;
+			else if (!playerNumber)
+				playerNumber = 2;
+			console.log("your player number is: ", playerNumber);
+			DataService.openSingleMatch(); // ersetzen
 		};
 
 		
@@ -58,7 +62,6 @@ export default defineComponent({
 		};
 
 		const joinMatchQueue = () => {
-			console.log("button clicked");
 			checkOpponentStatus(); // SET CONDITION TO STOP STUFF
 			matchSelectionDiv.style.display = 'none';
 			canvas.style.display = 'block';
