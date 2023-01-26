@@ -1,7 +1,12 @@
 <template>
 	<div class="div-wrapper">
 		<MatchWaitPopup id="MatchWaitPopup" v-if="opponentArrived === false" />
-		<canvas ref="matchCourtRef" id="match-court"></canvas>
+		<div style="background: red; height: 100px" id="matchSelectionDiv">
+			game not started
+			<button id="joinMatchQueueBtn">join match queue</button>
+			<button id="watchMatchBtn">watch random game</button>
+		</div>
+		<canvas style="display:none" ref="matchCourtRef" id="matchScreen"></canvas>
 	</div>
 </template>
 
@@ -16,9 +21,9 @@ export default defineComponent({
 
 
 		// #################  VARIABLES ######################
-		let canvas: any, ctx: any;
+		let canvas: any, ctx: any, matchSelectionDiv: any, joinMatchQueueBtn: any, watchMatchBtn: any;
 		let canvasHeight: number, canvasWidth: number;
-		const opponentArrived = ref(false);
+		const opponentArrived = ref(true); // CHANGE BACK TO FALSE!
 		
 		
 		// #################  HANDLERS #######################
@@ -43,7 +48,7 @@ export default defineComponent({
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data;
 			DataService.openSingleMatch();
-			initCanvas();
+			
 		};
 
 		
@@ -52,12 +57,12 @@ export default defineComponent({
 			socket.emit('keydown', e.keyCode);
 		};
 
-		// ################# INIT CANVAS #######################
-        const initCanvas = () => {
-			canvas = document.getElementById("match-court");
-            ctx = canvas.getContext("2d");
-
-            // REMOVE BLURRINESS
+		const joinMatchQueue = () => {
+			console.log("button clicked");
+			checkOpponentStatus(); // SET CONDITION TO STOP STUFF
+			matchSelectionDiv.style.display = 'none';
+			canvas.style.display = 'block';
+			// REMOVE BLURRINESS
             let dpi = window.devicePixelRatio;
             const fix_dpi = () => {
                 let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
@@ -66,12 +71,27 @@ export default defineComponent({
                 canvas.setAttribute("width", styleWidth * dpi);
             };
             fix_dpi();
+			console.log(canvas.height, canvas.width);
             // REMOVE BLURRINESS END
+			socket.emit('init');
+		};
+
+		// ################# INIT CANVAS #######################
+        const initCanvas = () => {
+			matchSelectionDiv = document.getElementById("matchSelectionDiv");
+			joinMatchQueueBtn = document.getElementById("joinMatchQueueBtn");
+			watchMatchBtn = document.getElementById("watchMatchBtn");
+			canvas = document.getElementById("matchScreen");
+            ctx = canvas.getContext("2d");
 
 			// socket.emit('init', canvas.height, canvas.width);
             ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
+			joinMatchQueueBtn.addEventListener("click", joinMatchQueue);
+            
+			// später:
+			// watchMatchBtn.addEventListener("click", watchGame);
         };
 
 
@@ -117,7 +137,6 @@ export default defineComponent({
 			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
         };
 
-
 		// ########### PAINTING ###################################################################################################
 
 
@@ -131,19 +150,21 @@ export default defineComponent({
 		// socket.on('unknownCode', handleGameState);
 		// socket.on('gameFull', handleGameState); //two players in room already
 		////############# SOCKETIO #############
+
+		const checkOpponentStatus = () => {
+			SocketioService.getOpponentStatus(canvas);
+		}
 		
         return { canvas, opponentArrived, initCanvas, paintGame };
     },
 
 	methods: {
-		checkOpponentStatus() {
-			SocketioService.getOpponentStatus(this.canvas);
-		},
+		
 	},
 
     mounted() {
-		this.checkOpponentStatus(); // SET CONDITION TO STOP STUFF
-		// this.initCanvas();
+		// this.checkOpponentStatus(); // SET CONDITION TO STOP STUFF
+		this.initCanvas();
     },
 
     components: { MatchWaitPopup }
@@ -152,7 +173,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-	#match-court {
+	#matchScreen {
 		width: 80%;
 		aspect-ratio: 5/3;
 		background-color: white;

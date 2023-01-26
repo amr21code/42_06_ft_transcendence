@@ -31,7 +31,7 @@ export class MatchGateway {
 		//client.emit('opponent-status', {data: status});
 		client.emit('opponent-status', { data: true });
 		// if clause for opponent-status === true hinzufügen!
-		this.handleInit(client, payload);
+		// this.handleInit(client, payload);
 	}
 
 	//@SubscribeMessage('gameOver')
