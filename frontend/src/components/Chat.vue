@@ -9,11 +9,13 @@
 		
 		<div v-if="selected === 'overview'">
 			<h2>Chat overview</h2>
+			<a v-if="type === 'joined'">This are the chats where you already joined</a>
+			<a v-if="type === 'open'">This are the chats that you can join</a>
 			 <div class="chat-overview">
 
-
+			<!------------CHATS WHERE USER IS JOINED----------------------------------->
 			<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
-				<a @click="handleClick('chatwindow', chat)" v-if="type === 'groups'">
+				<a @click="handleClick('chatwindow', chat)" v-if="type === 'joined'">
 					<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
@@ -21,7 +23,11 @@
 							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
 					</div>
 				</a>
-				<a @click="handleClick('chatwindow', chat)" v-if="type === 'dms'">
+			</div>
+			<!------------CHATS WHERE USER IS NOT JOINED----------------------------------->
+			<div class="chat-message-view" v-for="chat in openchats" :key="chat.chatid">
+				{{ chat }}
+				<a @click="handleClick('chatwindow', chat)" v-if="type === 'open'">
 					<div class="">
 						<div class="" >
 							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
@@ -32,17 +38,16 @@
 					</div>
 				</a>
 			</div>
-
 		</div>
 	</div>
 
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
-				<a @click="handleClick('overview', 0), changeType('dms')">
+				<a @click="handleClick('overview', 0), changeType('open')">
 					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
 				</a>
-				<a @click="handleClick('overview', 0), changeType('groups')">
+				<a @click="handleClick('overview', 0), changeType('joined')">
 					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<a @click="togglePopup()">
@@ -87,6 +92,7 @@ export default defineComponent({
 		return {
 			user: [] as IUser[],
 			chats: [] as IChats[],
+			openchats: [] as IChats[],
 			socket: SocketioService.socket,
 		}
 	},
@@ -94,6 +100,7 @@ export default defineComponent({
 	created () {
 		this.socket.on('refresh-chat', () => {
 			this.retrieveCurrentChats();
+			this.retrieveOpenChats();
 		});
 		
 		this.socket.on('chat-leave', () => {
@@ -114,9 +121,19 @@ export default defineComponent({
 		},
 
 		retrieveCurrentChats() {
-			DataService.getChats()
+			DataService.getJoinedChats()
 			.then((response: ResponseData) => {
 				this.chats = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			})
+		},
+
+		retrieveOpenChats() {
+			DataService.getOpenChats()
+			.then((response: ResponseData) => {
+				this.openchats = response.data;
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -128,6 +145,7 @@ export default defineComponent({
 	mounted () {
 		this.retrieveCurrentUser();
 		this.retrieveCurrentChats();
+		this.retrieveOpenChats();
 	},
 
 	setup(){
@@ -144,7 +162,7 @@ export default defineComponent({
 			return LeaveChatTrigger.value;
 		}
 
-		const type = ref<String>('groups');
+		const type = ref<String>('joined');
 		const changeType = (term: String) => {
 			type.value = term;
 		}

@@ -16,10 +16,10 @@ class DataService {
 	getFriends() : Promise<any> {
 		return apiInstance.get("/fl/show");
 	}
-	getChats() : Promise<any> {
+	getJoinedChats() : Promise<any> {
 		return apiInstance.get("/chat/list/userchats");
 	}
-	getDms() : Promise<any> {
+	getOpenChats() : Promise<any> {
 		return apiInstance.get("/chat/list/chats");
 	}
 	createChat(chatname_id: string, password: string, type : String) : Promise<any> {
