@@ -14,29 +14,33 @@
 			 <div class="chat-overview">
 
 			<!------------CHATS WHERE USER IS JOINED----------------------------------->
-			<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
-				<a @click="handleClick('chatwindow', chat)" v-if="type === 'joined'">
-					<div class="" >
-							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
-							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-							<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
-							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
-					</div>
-				</a>
+			<div v-if="type === 'joined'">
+				<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
+					<a @click="handleClick('chatwindow', chat)" >
+						<div class="" >
+								<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+								<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+								<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
+								<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+						</div>
+					</a>
+				</div>
 			</div>
 			<!------------CHATS WHERE USER IS NOT JOINED----------------------------------->
-			<div class="chat-message-view" v-for="chat in openchats" :key="chat.chatid">
-				{{ chat }}
-				<a @click="handleClick('chatwindow', chat)" v-if="type === 'open'">
-					<div class="">
-						<div class="" >
-							<strong class="chat-chatid" >{{ chat.chatid }}</strong>
-							<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-							<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
-							<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
-					</div>
-					</div>
-				</a>
+			{{ openchats }}
+			<div v-if="type === 'open'">
+				<div class="chat-message-view" v-for="chat in openchats" :key="chat.chatid">
+					<a>
+						<div class="">
+							<div class="" >
+								<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+								<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+								<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
+								<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+						</div>
+						</div>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
