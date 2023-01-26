@@ -2,7 +2,7 @@
 	<div v-if="selected !== 'play' && selected !== 'watch'" class="side-window-wrapper">
 		<ChatWindow v-if="selected === 'chat'" />
 		<Leaderboard v-if="selected === 'leaderboard'"/>
-		<Friendlist v-if="selected === 'friendlist'"/>
+		<Friendlist v-if="selected === 'friends'"/>
 	</div>
 </template>
 
