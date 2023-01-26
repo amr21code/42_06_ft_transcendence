@@ -4,7 +4,7 @@ import { MatchService } from './match.service';
 import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { UserService } from 'src/user/user.service';
-import { Session } from '@nestjs/common';
+import { ConsoleLogger, Session } from '@nestjs/common';
 
 @WebSocketGateway(3002, {
 	cors: {
@@ -17,11 +17,9 @@ import { Session } from '@nestjs/common';
 
 export class MatchGateway {
 	public clientRooms: number[] = [];
-	public states: MatchGameStateDto[] = [];
+	public static states: MatchGameStateDto[] = [];
 
 	constructor(private readonly matchService: MatchService, private readonly userService: UserService) { }
-
-
 
 	@SubscribeMessage('message')
 	handleMessage(client: any, payload: any): string {
@@ -35,37 +33,13 @@ export class MatchGateway {
 		console.log("CHECK_OPPONENT: userid is: ", client.request.session);
 		const userid = client.request.session.passport.user.userid;
 		const matchid = await this.matchService.listActiveMatch(userid);
-		console.log("CHECK_OPPONENT: room number is: ", matchid);
 		const roomNumber = matchid[0].matchid;
 		const status = this.matchService.getOpponentStatus(roomNumber, userid);
-
+		
+		console.log("CHECK_OPPONENT: room number is: ", matchid[0].matchid);
 
 		this.clientRooms[client.id] = roomNumber;
-		this.states[roomNumber] = await createGameState();
 
-		this.states[roomNumber].canvasHeight = 503;
-		this.states[roomNumber].canvasWidth = 839;
-		this.states[roomNumber].paddleWidth = this.states[roomNumber].canvasWidth / 25;
-		this.states[roomNumber].paddleHeight = this.states[roomNumber].canvasHeight / 4;
-		this.states[roomNumber].ballSize = this.states[roomNumber].canvasWidth / 25;
-		this.states[roomNumber].wallOffset = this.states[roomNumber].canvasWidth / 25;
-		this.states[roomNumber].player1.pos.x = this.states[roomNumber].wallOffset;
-		this.states[roomNumber].player1.pos.y = this.states[roomNumber].canvasHeight / 2 - this.states[roomNumber].paddleHeight / 2;
-		this.states[roomNumber].player2.pos.x = this.states[roomNumber].canvasWidth - (this.states[roomNumber].wallOffset + this.states[roomNumber].paddleWidth);
-		this.states[roomNumber].player2.pos.y = this.states[roomNumber].canvasHeight / 2 - this.states[roomNumber].paddleHeight / 2;
-		this.states[roomNumber].ball.pos.x = this.states[roomNumber].canvasWidth / 2 - this.states[roomNumber].ballSize / 2;
-		this.states[roomNumber].ball.pos.y = this.states[roomNumber].canvasHeight / 2 - this.states[roomNumber].ballSize / 2;
-		this.states[roomNumber].paddleSpeed = 3;
-		this.states[roomNumber].ballSpeed = 6;
-		// DETERMINE BALL KICKOFF DIRECTION
-		var randomDirection = Math.floor(Math.random() * 2) + 1;
-		if (randomDirection % 2) {
-			this.states[roomNumber].ball.vel.x = 1;
-		} else {
-			this.states[roomNumber].ball.vel.x = -1;
-		}
-		// this.states[roomNumber].ball.vel.x = -1;
-		this.states[roomNumber].ball.vel.y = 1;
 
 		//client.emit('opponent-status', {data: status});
 		client.emit('opponent-status', { data: true });
@@ -91,41 +65,42 @@ export class MatchGateway {
 
 		// console.log(canvas);
 		// console.log(JSON.parse(canvas));
-		// const gameState = await createGameState();
+		MatchGateway[roomNumber] = await createGameState();
 
-		// // gameState.canvasHeight = canvas[0];
-		// // gameState.canvasWidth = canvas[1];
-		// gameState.canvasHeight = 503;
-		// gameState.canvasWidth = 839;
-		// gameState.paddleWidth = gameState.canvasWidth  / 25;
-		// gameState.paddleHeight = gameState.canvasHeight / 4;
-		// gameState.ballSize = gameState.canvasWidth  / 25;
-		// gameState.wallOffset = gameState.canvasWidth  / 25;
-		// gameState.player1.pos.x = gameState.wallOffset;
-		// gameState.player1.pos.y = gameState.canvasHeight / 2 - gameState.paddleHeight / 2;
-		// gameState.player2.pos.x = gameState.canvasWidth  - (gameState.wallOffset + gameState.paddleWidth);
-		// gameState.player2.pos.y = gameState.canvasHeight / 2 - gameState.paddleHeight / 2;
-		// gameState.ball.pos.x = gameState.canvasWidth  / 2 - gameState.ballSize / 2;
-		// gameState.ball.pos.y = gameState.canvasHeight / 2 - gameState.ballSize / 2;
-		// gameState.paddleSpeed = 3;
-		// gameState.ballSpeed = 6;
-		// // DETERMINE BALL KICKOFF DIRECTION
-		// var randomDirection = Math.floor(Math.random() * 2) + 1; 
-		// if (randomDirection % 2) {
-		// 	gameState.ball.vel.x = 1;
-		// } else {
-		// 	gameState.ball.vel.x = -1;
-		// }
-		// // gameState.ball.vel.x = -1;
-		// gameState.ball.vel.y = 1;
+		MatchGateway[roomNumber].canvasHeight = 503;
+		MatchGateway[roomNumber].canvasWidth = 839;
+		MatchGateway[roomNumber].paddleWidth = MatchGateway[roomNumber].canvasWidth / 25;
+		MatchGateway[roomNumber].paddleHeight = MatchGateway[roomNumber].canvasHeight / 4;
+		MatchGateway[roomNumber].ballSize = MatchGateway[roomNumber].canvasWidth / 25;
+		MatchGateway[roomNumber].wallOffset = MatchGateway[roomNumber].canvasWidth / 25;
+		MatchGateway[roomNumber].player1.pos.x = MatchGateway[roomNumber].wallOffset;
+		MatchGateway[roomNumber].player1.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].paddleHeight / 2;
+		MatchGateway[roomNumber].player2.pos.x = MatchGateway[roomNumber].canvasWidth - (MatchGateway[roomNumber].wallOffset + MatchGateway[roomNumber].paddleWidth);
+		MatchGateway[roomNumber].player2.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].paddleHeight / 2;
+		MatchGateway[roomNumber].ball.pos.x = MatchGateway[roomNumber].canvasWidth / 2 - MatchGateway[roomNumber].ballSize / 2;
+		MatchGateway[roomNumber].ball.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].ballSize / 2;
+		MatchGateway[roomNumber].paddleSpeed = 3;
+		MatchGateway[roomNumber].ballSpeed = 6;
+		// DETERMINE BALL KICKOFF DIRECTION
+		var randomDirection = Math.floor(Math.random() * 2) + 1;
+		if (randomDirection % 2) {
+			MatchGateway[roomNumber].ball.vel.x = 1;
+		} else {
+			MatchGateway[roomNumber].ball.vel.x = -1;
+		}
+		// MatchGateway[roomNumber].ball.vel.x = -1;
+		MatchGateway[roomNumber].ball.vel.y = 1;
 
 
+		console.log("INIT: state is: ", MatchGateway[roomNumber]);
 		// ab hier: JOIN
 
-		client.emit('gameState', JSON.stringify(this.states[roomNumber]));
+		client.emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
 		client.on('keydown', handleKeyDown);
 
 		function handleKeyDown(keyCode: any) { // inline to have access to 'socket'
+
+			console.log(this.states[roomNumber]); // HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEREEEEEEEEE ERROR
 
 			const keyInt = parseInt(keyCode); // maybe put in try/catch?
 			const vel = getUpdatedVelocity(keyInt);
@@ -136,7 +111,7 @@ export class MatchGateway {
 				this.states[roomNumber].player1.y_vel = 0;
 			}
 		}
-		startGameInterval(client, this.states[roomNumber]);
+		startGameInterval(client, MatchGateway.states[roomNumber]);
 
 		function startGameInterval(client: any, state: MatchGameStateDto) {
 			const intervalId = setInterval(() => {
