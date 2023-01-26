@@ -126,7 +126,7 @@ export default defineComponent({
 		// socket.on("init", handleInit);
 		socket.on("opponent-status", handleOpponentArrived);
 		socket.on('gameState', handleGameState);
-		// socket.on('gameOver', handleGameState);
+		 socket.on('gameOver', handleGameState);
 		// socket.on('gameCode', handleGameCode);
 		// socket.on('unknownCode', handleGameState);
 		// socket.on('gameFull', handleGameState); //two players in room already
