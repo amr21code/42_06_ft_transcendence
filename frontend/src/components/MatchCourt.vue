@@ -10,6 +10,7 @@
 	</div>
 </template>
 
+
 <script lang="ts">
 import DataService from '../services/DataService'
 import { ref, computed, defineComponent } from 'vue'
@@ -21,7 +22,11 @@ export default defineComponent({
 	setup() {
 
 		// #################  VARIABLES ######################
-		let canvas: any, ctx: any, matchSelectionDiv: any, joinMatchQueueBtn: any, watchMatchBtn: any;
+		let canvas: any;
+		let ctx: any;
+		let matchSelectionDiv: any;
+		let joinMatchQueueBtn: any;
+		let watchMatchBtn: any;
 		let playerNumber: number;
 		const opponentArrived = ref(true); // CHANGE BACK TO FALSE!
 		
@@ -34,13 +39,11 @@ export default defineComponent({
 			gameState = JSON.parse(gameState);
 			if (gameState.scorePlayer1 == 3) {
 				console.log("Game Over, Player One wins");
-				//socket.emit('gameOver', gameState);
 				DataService.gameOver(gameState);
 			}
 			else if (gameState.scorePlayer2 == 3) {
 				console.log("Game Over, Player Two wins");
 				DataService.gameOver(gameState);
-				//socket.emit('gameOver', gameState);
 			}
             requestAnimationFrame(() => paintGame(gameState));
         };
@@ -62,11 +65,14 @@ export default defineComponent({
 		};
 
 		const joinMatchQueue = () => {
-			DataService.openSingleMatch(); // ersetzen
-			checkOpponentStatus(); // SET CONDITION TO STOP STUFF
-
+			DataService.openSingleMatch(); // ERSETZEN 
+			
+			// sets opponentStatus
+			SocketioService.createNewGame(canvas); // SET CONDITION TO STOP STUFF
+			// ############### HEEEEEEEEEEEEEERE GO ON TOMORROW
 
 			// MARKER: RENDER WAITING POPUP IF OPPONENTSTATUS = FALSE
+
 
 			matchSelectionDiv.style.display = 'none';
 			canvas.style.display = 'block';
@@ -83,8 +89,9 @@ export default defineComponent({
 			console.log(canvas.height, canvas.width);
             // REMOVE BLURRINESS END
 
-			socket.emit('init'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
+			socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
 		};
+
 
 		// ################# INIT CANVAS #######################
         const initCanvas = () => {
@@ -94,20 +101,18 @@ export default defineComponent({
 			canvas = document.getElementById("matchScreen");
             ctx = canvas.getContext("2d");
 
-			// socket.emit('init', canvas.height, canvas.width);
             ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
 			joinMatchQueueBtn.addEventListener("click", joinMatchQueue);
             
-			// später:
+			// SPÄTER:
 			// watchMatchBtn.addEventListener("click", watchGame);
         };
 
 
 		// ########### PAINTING ###################################################################################################
         const paintGame = (state: any) => {
-			console.log("Painting awesome stuff...");
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -122,12 +127,6 @@ export default defineComponent({
 				ctx.fillStyle = "#444040";
 				ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
 			}
-			//draw scores
-			//ctx.fillStyle = "#444040";
-			//ctx.textalign = "center";
-			
-			//ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
-			//ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
 			paintScores(state);
             paintPlayersAndBall(state);
         };
@@ -140,32 +139,26 @@ export default defineComponent({
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
         };
 
-		 const paintScores = (state: any) => {
+		const paintScores = (state: any) => {
             ctx.fillStyle = "#444040";
 			ctx.textalign = "center";
 			
 			ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
 			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
         };
-
 		// ########### PAINTING ###################################################################################################
 
 
 		//############# SOCKETIO ##############
 		const socket = SocketioService.socket;
-		// socket.on("init", handleInit);
-		// RENAME TO 'CREATE_NEW_GAME'
 		socket.on("opponent-status", handleOpponentArrived);
 		socket.on('gameState', handleGameState);
-		 socket.on('gameOver', handleGameState);
+		socket.on('gameOver', handleGameState);
 		// socket.on('gameCode', handleGameCode);
 		// socket.on('unknownCode', handleGameState);
 		// socket.on('gameFull', handleGameState); //two players in room already
 		////############# SOCKETIO #############
 
-		const checkOpponentStatus = () => {
-			SocketioService.getOpponentStatus(canvas);
-		}
 		
         return { canvas, opponentArrived, initCanvas, paintGame };
     },
@@ -175,7 +168,6 @@ export default defineComponent({
 	},
 
     mounted() {
-		// this.checkOpponentStatus(); // SET CONDITION TO STOP STUFF
 		this.initCanvas();
     },
 

@@ -37,8 +37,8 @@ class SocketioService {
   }
 
   //----------GAME STUFF----------------------
-  getOpponentStatus(canvas: any) {
-	this.socket.emit('send-opponent-status', canvas);
+  createNewGame(canvas: any) {
+	this.socket.emit('create-new-game', canvas);
   }
 
 
