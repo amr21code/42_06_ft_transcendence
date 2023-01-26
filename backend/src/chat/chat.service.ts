@@ -42,11 +42,11 @@ export class ChatService {
 		return list;
 	}
 
-	async listUsers(chatid?: number) {
+	async listUsers(chatid: number) {
 		var list;
 		if (chatid) {
 			list = await this.db.$queryRaw(
-				Prisma.sql`SELECT uc.userid, u.username, usc.statusname, c.chatid, c.chat_name, ct.typename, password
+				Prisma.sql`SELECT uc.userid, u.username, uc.status, uc.bantime, usc.statusname, c.chatid, c.chat_name, ct.typename, password
 				FROM public.user_chat AS uc
 				LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
 				LEFT JOIN public.chat as c ON uc.chatid=c.chatid
@@ -55,17 +55,17 @@ export class ChatService {
 				WHERE uc.chatid=CAST(${chatid} AS INTEGER)
 				ORDER BY userid ASC`
 			);
-		} else {
-			list = await this.db.$queryRaw(
-				Prisma.sql`SELECT uc.userid, u.username, usc.statusname, c.chatid, c.chat_name, ct.typename, password
-				FROM public.user_chat AS uc
-				LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
-				LEFT JOIN public.chat as c ON uc.chatid=c.chatid
-				LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-				LEFT JOIN public.users as u ON u.userid=uc.userid
-				WHERE c.type<2
-				ORDER BY userid ASC`
-			);
+		// } else {
+			// list = await this.db.$queryRaw(
+			// 	Prisma.sql`SELECT uc.userid, u.username, usc.statusname, c.chatid, c.chat_name, ct.typename, password
+			// 	FROM public.user_chat AS uc
+			// 	LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
+			// 	LEFT JOIN public.chat as c ON uc.chatid=c.chatid
+			// 	LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
+			// 	LEFT JOIN public.users as u ON u.userid=uc.userid
+			// 	WHERE c.type<2
+			// 	ORDER BY userid ASC`
+			// );
 		}
 		return list;
 	}
