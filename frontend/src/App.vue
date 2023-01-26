@@ -10,7 +10,7 @@
 					<a @click="handleClick('watch')">Watch</a>
 					<a @click="handleClick('chat')">Chat</a>
 					<a @click="handleClick('leaderboard')">Leaderboard</a>
-					<a @click="handleClick('friendlist')">Friends</a>
+					<a @click="handleClick('friends')">Friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
 						<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
 					</div>
