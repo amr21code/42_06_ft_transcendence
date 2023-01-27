@@ -172,24 +172,56 @@ export class MatchGateway {
 					MatchGateway[roomNumber].player2.y_vel = 0;
 				}
 			}
-
 		}
-
 		function startGameInterval(roomNumber: number, server_helper: Server) {
 			const intervalId = setInterval(() => {
 				const winner = gameLoop(MatchGateway[roomNumber]);
+				console.log("###GAME is running (0 -> true): ", winner);
 				if (!winner) {
 					// sends new state to all room members
-					// this.server.in(roomNumber).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
-					server_helper.in(roomNumber.toString()).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+					client.emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+					// this.server.in(roomNumber.toString()).emit('sendToClient', JSON.stringify(MatchGateway[roomNumber]));
+					// this.server.in(roomNumber.toString()).emit('sendToClient', JSON.stringify(MatchGateway[roomNumber]));
+					// this.server.in(roomNumber.toString()).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+					// server_helper.in(roomNumber.toString()).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+					// this.emitGameState(roomNumber);
 				}
 				else {
 					// sends game over to all room members
-					server_helper.in(roomNumber.toString()).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
+					this.server.in(roomNumber.toString()).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
 					MatchGateway[roomNumber] = null;
 					clearInterval(intervalId); // was macht das?
 				}
 			}, 1000 / 30); // argument determines frames per ssecond
 		}
 	}
+
+	// async startGameInterval(roomNumber: number, server_helper: Server) {
+	// 	const intervalId = setInterval(() => {
+	// 		const winner = gameLoop(MatchGateway[roomNumber]);
+	// 		console.log("###GAME is running (0 -> true): ", winner);
+	// 		if (!winner) {
+	// 			// sends new state to all room members
+	// 			this.server.in(roomNumber.toString()).emit('sendToClient', JSON.stringify(MatchGateway[roomNumber]));
+	// 			// this.server.in(roomNumber.toString()).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+	// 			// server_helper.in(roomNumber.toString()).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+	// 			// this.emitGameState(roomNumber);
+	// 		}
+	// 		else {
+	// 			// sends game over to all room members
+	// 			this.server.in(roomNumber.toString()).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
+	// 			MatchGateway[roomNumber] = null;
+	// 			clearInterval(intervalId); // was macht das?
+	// 		}
+	// 	}, 1000 / 30); // argument determines frames per ssecond
+	// }
+
+	// @SubscribeMessage('sendToClient')
+	// async sendToClient(client: any, gameState: MatchGameStateDto) {
+	// 	client.emit('gameState', gameState);
+	// }
+
+	// emitGameState(roomNumber: number) {
+	// 	this.server.in(roomNumber.toString()).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+	// }
 }
