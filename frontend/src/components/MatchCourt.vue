@@ -80,7 +80,6 @@ export default defineComponent({
 				fix_dpi();
 				console.log(canvas.height, canvas.width);
 				// REMOVE BLURRINESS END
-	
 				socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
 
 			}

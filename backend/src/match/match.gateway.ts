@@ -30,6 +30,7 @@ export class MatchGateway {
 		const matchid = await this.matchService.listMatch(userid);
 		// const matchid = await this.matchService.listActiveMatch(userid);
 		const roomNumber = matchid[0].matchid;
+		client.join(roomNumber); //! NEW
 		console.log("room number for opponent status: ", roomNumber);
 		const status = await this.matchService.getOpponentStatus(roomNumber, userid);
 		
@@ -37,7 +38,7 @@ export class MatchGateway {
 
 		this.clientRooms[client.id] = roomNumber;
 
-		client.emit('opponent-status', {data: status}); // ALWAYS RETURNS TRUE (IN THE MOMENT) ##################################
+		client.emit('opponent-status', {data: status, matchid: roomNumber}); //! NEW
 		//client.emit('opponent-status', { data: true });
 		// if clause for opponent-status === true hinzufügen!
 	}
@@ -46,6 +47,7 @@ export class MatchGateway {
 	@SubscribeMessage('joinGame')
 	async joinGame(client: any, canvas: any) {
 		console.log("JOINED GAME");
+		// !!!!! USE MATCHID FROM CLIENTROOMS
 		const userid = client.request.session.passport.user.userid;
 		// const matchid = await this.matchService.listActiveMatch(userid);
 		const matchid = await this.matchService.listMatch(userid);
