@@ -1,7 +1,7 @@
 <template>
     <div class="popup" @keyup.esc="(ChatInfotogglePopup)" tabindex="0">
         <div class="popup-inner">
-            <h2>Info</h2>
+            <h2>Info to chat[{{ chat.chatid }}]</h2>
 			<!-- {{ chat }} <br> -->
 			<!-- {{ users }} <br>  -->
 			<table id="info-table">
@@ -27,12 +27,30 @@
 						{{ user.statusname }}
 					</td>
 					<td> <!-- mute -->
-						<button @click="(toggleMute)" v-if="Mute === false">mute</button> 
-						<button @click="(toggleMute)" v-if="user.status === 2 || Mute === true">unmute</button> 
+						<button @click="(toggleMute)" v-if="Mute === false">mute</button>
+						<div v-if="Mute === true">
+							<select v-model="mutetime" required>
+								<option value="1">10 minutes</option>
+								<option value="2">20 minutes</option>
+								<option value="3">30 minutes</option>
+								<option value="6">60 minutes</option>
+							</select>
+							<button @click="muteUser(user.userid, mutetime)">mute</button>
+						</div>
+						<button @click="(toggleMute)" v-if="user.status === 2">unmute</button>
 					</td>
 					<td> <!-- ban -->
-						<button @click="(toggleBan)" v-if="Ban == false">ban</button> 
-						<button @click="(toggleBan)" v-if="user.status === 3 || Ban == true">unban</button>
+						<button @click="(toggleBan)" v-if="Ban == false">ban</button>
+						<div v-if="Ban === true">
+							<select v-model="bantime" required>
+								<option value="1">10 minutes</option>
+								<option value="2">20 minutes</option>
+								<option value="3">30 minutes</option>
+								<option value="6">60 minutes</option>
+							</select>
+							<button @click="banUser(user.userid, bantime)">ban</button>
+						</div>
+						<button @click="(toggleBan)" v-if="user.status === 3">unban</button>
 					</td>
 					<td> <!-- invite -->
 						<button @click="(toggleChallenge)" v-if="Challenge === false">challenge</button>
@@ -80,6 +98,8 @@ export default defineComponent({
 		return {
 			users: [] as IUser[],
             socket: SocketioService.socket,
+			mutetime: 10,
+			bantime : 10,
 		}
 	},
 	methods: {
@@ -94,6 +114,16 @@ export default defineComponent({
 				console.log(e);
 			});
 		},
+
+		muteUser(userid : string, time : number){
+			DataService.muteUser(this.chat.chatid, userid, time);
+			this.toggleMute();
+		},
+
+		banUser(userid : string, time : number){
+			DataService.banUser(this.chat.chatid, userid, time);
+			this.toggleBan();
+		},
         
 	},
 
@@ -105,6 +135,7 @@ export default defineComponent({
 
 		const Mute = ref(false);
 		const toggleMute = () => {
+			console.log("toggleMute");
 			Mute.value = !Mute.value;
 		}
 

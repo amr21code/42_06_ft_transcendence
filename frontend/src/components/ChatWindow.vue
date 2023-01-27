@@ -242,7 +242,7 @@ export default defineComponent({
 
 	.chat-chatname {
 		color: white;
-		padding-left: 20%;
+		/* padding-left: 20%; */
 		float: middle;
 	}
 

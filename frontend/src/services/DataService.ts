@@ -52,21 +52,19 @@ class DataService {
 		return apiInstance.get('/match/opensingle');
 	}
 
-	// sendMessage (userid : number, chatid : number, message : String) {
-		// console.log("sendMessage function got triggered with", userid, chatid, message);
-		// return apiInstance.post('/chat/message', JSON.stringify({
-		// 	userid: userid,
-		// 	chatid: chatid,
-		// 	message: message
-		// }), 
-		// {
-		// 	method: 'POST',
-		// 	headers: {'Content-Type': 'application/json'}
-		// })
-	// }
+	muteUser(chatid : number, userid : string, time : number) : Promise<any> {
+		console.log("muteUser", chatid, userid, time);
+		// return apiInstance.get('/chat/mute/' + chatid + '/' + userid + '/' + time);
+		return "OK";
+	}
+
+	banUser(chatid : number, userid : string, time : number) : Promise<any> {
+		console.log("banUser", chatid, userid, time);
+		// return apiInstance.get('/chat/mute/' + chatid + '/' + userid + '/' + time);
+		return "OK";
+	}
 
 	changeChatName (type : String, chatid : number, chat_name : String, password : String) {
-		// console.log(type, chatid, chat_name, password);
 		var n_type;
 		if (type == "public")
 			n_type = 0;

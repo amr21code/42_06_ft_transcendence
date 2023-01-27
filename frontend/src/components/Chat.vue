@@ -27,7 +27,6 @@
 				</div>
 			</div>
 			<!------------CHATS WHERE USER IS NOT JOINED----------------------------------->
-			{{ openchats }}
 			<div v-if="type === 'open'">
 				<div class="chat-message-view" v-for="chat in openchats" :key="chat.chatid">
 					<a>
