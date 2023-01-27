@@ -29,43 +29,57 @@ export default defineComponent({
 		let joinMatchQueueBtn: any;
 		let watchMatchBtn: any;
 		let playerNumber: number;
-		let MatchWaitPopup: any;
+		let matchWaitPopup: any;
 		const opponentArrived = ref(false); // CHANGE BACK TO FALSE!
+		let gameActive = false;
 		
 		
 		// #################  HANDLERS #######################
-        const handleGameState = (gameState: any) => {
-            if (!gameState) {
+        const handlePlayerNumber = (nbr: number) => {
+			playerNumber = nbr;
+		}
+		
+		const handleGameState = (gameState: any) => {
+			if (!gameState || !gameActive) {
+				return;
+			}
+			gameState = JSON.parse(gameState);
+            requestAnimationFrame(() => paintGame(gameState));
+        };
+
+		const handleGameOver = (gameState: any) => {
+            if (!gameState || !gameActive) {
 				return;
 			}
 			gameState = JSON.parse(gameState);
 			if (gameState.scorePlayer1 == 3) {
-				console.log("Game Over, Player One wins");
+				alert("Game Over, Player One wins");
 				DataService.gameOver(gameState);
 			}
 			else if (gameState.scorePlayer2 == 3) {
-				console.log("Game Over, Player Two wins");
+				alert("Game Over, Player Two wins");
 				DataService.gameOver(gameState);
 			}
-			else
-			{
-				matchSelectionDiv.style.display = 'block';
-				MatchWaitPopup.style.display = 'none';
-				matchSelectionDiv.style.display = 'none';
-			}
+			// else
+			// {
+			// 	matchSelectionDiv.style.display = 'block';
+			// 	matchWaitPopup.style.display = 'none';
+			// 	matchSelectionDiv.style.display = 'none';
+			// }
             requestAnimationFrame(() => paintGame(gameState));
+			gameActive = false;
         };
 
 
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data; 
-			if (!playerNumber && !opponentArrived.value){
-				playerNumber = 1;
+			if (!opponentArrived.value){
+				// playerNumber = 1;
 				matchSelectionDiv.style.display = 'none';
-				MatchWaitPopup.style.display = 'block';
+				matchWaitPopup.style.display = 'block';
 			}
-			else if (!playerNumber){
-				playerNumber = 2;
+			else {
+				gameActive = true;
 				matchSelectionDiv.style.display = 'none';
 				canvas.style.display = 'block';
 	
@@ -85,6 +99,23 @@ export default defineComponent({
 			}
 			console.log("your player number is: ", playerNumber);
 		};
+
+		const handleJoinedEmptyGame = () => {
+			reset();
+			alert("You joined an empty room. WTF, how did you do that?");
+		}
+
+		const handleTooManyPlayers = () => {
+			reset();
+			alert("This game is full and in progress");
+		}
+
+		const reset = () => {
+			playerNumber = 0;
+			matchSelectionDiv.style.display = "block";
+			canvas.style.display = "none";
+			matchWaitPopup.style.display = "none";
+		}
 
 
 		// #################  KEY SIGNALING #######################
@@ -136,9 +167,9 @@ export default defineComponent({
 			matchSelectionDiv = document.getElementById("matchSelectionDiv");
 			joinMatchQueueBtn = document.getElementById("joinMatchQueueBtn");
 			watchMatchBtn = document.getElementById("watchMatchBtn");
+			matchWaitPopup = document.getElementById("MatchWaitPopup");
 			canvas = document.getElementById("matchScreen");
             ctx = canvas.getContext("2d");
-			MatchWaitPopup=document.getElementById("MatchWaitPopup");
 
             ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -190,21 +221,17 @@ export default defineComponent({
 
 		//############# SOCKETIO ##############
 		const socket = SocketioService.socket;
+		socket.on('init', handlePlayerNumber);
 		socket.on("opponent-status", handleOpponentArrived);
 		socket.on('gameState', handleGameState);
-		socket.on('gameOver', handleGameState);
-		// socket.on('gameCode', handleGameCode);
-		// socket.on('unknownCode', handleGameState);
-		// socket.on('gameFull', handleGameState); //two players in room already
+		socket.on('gameOver', handleGameOver);
+		socket.on('joinedEmptyGame', handleJoinedEmptyGame);
+		socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
 		////############# SOCKETIO #############
 
 		
         return { canvas, opponentArrived, initCanvas, paintGame };
     },
-
-	methods: {
-		
-	},
 
     mounted() {
 		this.initCanvas();

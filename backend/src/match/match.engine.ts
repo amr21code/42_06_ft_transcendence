@@ -67,6 +67,20 @@ export function gameLoop(state: MatchGameStateDto) {
 		playerOne.pos.y += playerOne.y_vel * state.paddleSpeed;
 		playerOne.y_vel = 0;
 	}
+
+	if (playerTwo.y_vel) {
+
+		if (playerTwo.y_vel === -1 && (playerTwo.pos.y <= 20)) {
+			playerTwo.y_vel = 0;
+		}
+
+		if (playerTwo.y_vel === 1 && (playerTwo.pos.y + state.paddleHeight >= state.canvasHeight - 20)) {
+			playerTwo.y_vel = 0;
+		}
+
+		playerTwo.pos.y += playerTwo.y_vel * state.paddleSpeed;
+		playerTwo.y_vel = 0;
+	}
 	// ################ MOVE PLAYER END ###################################################
 
 
@@ -93,7 +107,7 @@ export function gameLoop(state: MatchGameStateDto) {
 			if (state.scorePlayer2 == 3) // game ends here
 				return 2;
 		}
-		
+
 		//check right canvas bounds
 		if (ball.pos.x + state.ballSize >= state.canvasWidth) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
