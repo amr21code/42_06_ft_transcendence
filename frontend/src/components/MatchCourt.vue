@@ -47,16 +47,43 @@ export default defineComponent({
 				console.log("Game Over, Player Two wins");
 				DataService.gameOver(gameState);
 			}
+			else
+			{
+				matchSelectionDiv.style.display = 'block';
+				MatchWaitPopup.style.display = 'none';
+				matchSelectionDiv.style.display = 'none';
+			}
             requestAnimationFrame(() => paintGame(gameState));
         };
 
 
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data; 
-			if (!playerNumber && !opponentArrived.value)
+			if (!playerNumber && !opponentArrived.value){
 				playerNumber = 1;
-			else if (!playerNumber)
+				matchSelectionDiv.style.display = 'none';
+				MatchWaitPopup.style.display = 'block';
+			}
+			else if (!playerNumber){
 				playerNumber = 2;
+				matchSelectionDiv.style.display = 'none';
+				canvas.style.display = 'block';
+	
+				// REMOVE BLURRINESS
+				let dpi = window.devicePixelRatio;
+				const fix_dpi = () => {
+					let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
+					let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
+					canvas.setAttribute("height", styleHeight * dpi);
+					canvas.setAttribute("width", styleWidth * dpi);
+				};
+				fix_dpi();
+				console.log(canvas.height, canvas.width);
+				// REMOVE BLURRINESS END
+	
+				socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
+
+			}
 			console.log("your player number is: ", playerNumber);
 		};
 
@@ -76,32 +103,32 @@ export default defineComponent({
 
 			// MARKER: RENDER WAITING POPUP IF OPPONENTSTATUS = FALSE
 
-			console.log("opponent arrived: ", opponentArrived.value);
-			if (opponentArrived.value === false) {
+			//console.log("opponent arrived: ", opponentArrived.value);
+			//if (opponentArrived.value === false) {
 
-				matchSelectionDiv.style.display = 'none';
-				MatchWaitPopup.style.display = 'block';
-			}
+			//	matchSelectionDiv.style.display = 'none';
+			//	MatchWaitPopup.style.display = 'block';
+			//}
 			
-			else if (opponentArrived.value === true) { // WE NEVER GET IN HEREEEEEEEEEEEEEEEEEEEEEEEEEEEE
+			//else if (opponentArrived.value === true) { // WE NEVER GET IN HEREEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
-				matchSelectionDiv.style.display = 'none';
-				canvas.style.display = 'block';
+			//	matchSelectionDiv.style.display = 'none';
+			//	canvas.style.display = 'block';
 	
-				// REMOVE BLURRINESS
-				let dpi = window.devicePixelRatio;
-				const fix_dpi = () => {
-					let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
-					let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
-					canvas.setAttribute("height", styleHeight * dpi);
-					canvas.setAttribute("width", styleWidth * dpi);
-				};
-				fix_dpi();
-				console.log(canvas.height, canvas.width);
-				// REMOVE BLURRINESS END
+			//	// REMOVE BLURRINESS
+			//	let dpi = window.devicePixelRatio;
+			//	const fix_dpi = () => {
+			//		let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
+			//		let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
+			//		canvas.setAttribute("height", styleHeight * dpi);
+			//		canvas.setAttribute("width", styleWidth * dpi);
+			//	};
+			//	fix_dpi();
+			//	console.log(canvas.height, canvas.width);
+			//	// REMOVE BLURRINESS END
 	
-				socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
-			}
+			//	socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
+			//}
 		};
 
 
