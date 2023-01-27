@@ -31,7 +31,6 @@ export default defineComponent({
 		let playerNumber: number;
 		let matchWaitPopup: any;
 		const opponentArrived = ref(false);
-		let gameActive = false;
 		
 		
 		// #################  HANDLERS #######################
@@ -41,15 +40,20 @@ export default defineComponent({
 		}
 		
 		const handleGameState = (gameState: any) => {
-			if (!gameState || !gameActive) {
+			
+			if (!gameState) {
 				return;
 			}
+			console.log("game starts");
+			canvas.style.display = 'block';
+			matchWaitPopup.style.display = 'none';
+			matchSelectionDiv.style.display = 'none';
 			gameState = JSON.parse(gameState);
             requestAnimationFrame(() => paintGame(gameState));
         };
 
 		const handleGameOver = (gameState: any) => {
-            if (!gameState || !gameActive) {
+            if (!gameState) {
 				return;
 			}
 			gameState = JSON.parse(gameState);
@@ -65,7 +69,6 @@ export default defineComponent({
 			// 	matchWaitPopup.style.display = 'none';
 			// 	matchSelectionDiv.style.display = 'none';
             requestAnimationFrame(() => paintGame(gameState)); // kommt raus
-			gameActive = false;
         };
 
 
@@ -76,7 +79,6 @@ export default defineComponent({
 				matchWaitPopup.style.display = 'block';
 			}
 			else {
-				gameActive = true;
 				matchSelectionDiv.style.display = 'none';
 				canvas.style.display = 'block';
 	
