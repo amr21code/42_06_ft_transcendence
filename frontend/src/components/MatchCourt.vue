@@ -52,7 +52,7 @@ export default defineComponent({
 
 
 		const handleOpponentArrived = (data: any) => {
-			opponentArrived.value = data.data;
+			opponentArrived.value = data.data; 
 			if (!playerNumber && !opponentArrived.value)
 				playerNumber = 1;
 			else if (!playerNumber)
@@ -60,7 +60,7 @@ export default defineComponent({
 			console.log("your player number is: ", playerNumber);
 		};
 
-		
+
 		// #################  KEY SIGNALING #######################
 		const keydown = (e: any) => {
 			socket.emit('keydown', e.keyCode);
@@ -75,13 +75,15 @@ export default defineComponent({
 			// ############### HEEEEEEEEEEEEEERE GO ON TOMORROW
 
 			// MARKER: RENDER WAITING POPUP IF OPPONENTSTATUS = FALSE
+
+			console.log("opponent arrived: ", opponentArrived.value);
 			if (opponentArrived.value === false) {
 
 				matchSelectionDiv.style.display = 'none';
 				MatchWaitPopup.style.display = 'block';
 			}
 			
-			else if (opponentArrived.value === true) {
+			else if (opponentArrived.value === true) { // WE NEVER GET IN HEREEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
 				matchSelectionDiv.style.display = 'none';
 				canvas.style.display = 'block';
