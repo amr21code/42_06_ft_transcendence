@@ -30,7 +30,7 @@ export default defineComponent({
 		let watchMatchBtn: any;
 		let playerNumber: number;
 		let matchWaitPopup: any;
-		const opponentArrived = ref(false); // CHANGE BACK TO FALSE!
+		const opponentArrived = ref(false);
 		let gameActive = false;
 		
 		
@@ -61,13 +61,10 @@ export default defineComponent({
 				alert("Game Over, Player Two wins");
 				DataService.gameOver(gameState);
 			}
-			// else
-			// {
 			// 	matchSelectionDiv.style.display = 'block';
 			// 	matchWaitPopup.style.display = 'none';
 			// 	matchSelectionDiv.style.display = 'none';
-			// }
-            requestAnimationFrame(() => paintGame(gameState));
+            requestAnimationFrame(() => paintGame(gameState)); // kommt raus
 			gameActive = false;
         };
 
@@ -75,7 +72,6 @@ export default defineComponent({
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data; 
 			if (!opponentArrived.value){
-				// playerNumber = 1;
 				matchSelectionDiv.style.display = 'none';
 				matchWaitPopup.style.display = 'block';
 			}
@@ -95,8 +91,8 @@ export default defineComponent({
 				fix_dpi();
 				console.log(canvas.height, canvas.width);
 				// REMOVE BLURRINESS END
-				socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
 
+				socket.emit('joinGame');
 			}
 		};
 
@@ -124,12 +120,10 @@ export default defineComponent({
 		};
 
 		const joinMatchQueue = () => {
-			// DataService.openSingleMatch(); // ERSETZEN 
 			DataService.joinMatchQueue();
 			
 			// sets opponentStatus
-			SocketioService.createNewGame(canvas); // SET CONDITION TO STOP STUFF
-
+			SocketioService.createNewGame(canvas);
 		};
 
 
@@ -200,7 +194,6 @@ export default defineComponent({
 		socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
 		////############# SOCKETIO #############
 
-		
         return { canvas, opponentArrived, initCanvas, paintGame };
     },
 
@@ -225,19 +218,3 @@ export default defineComponent({
 	}
 
 </style>
-
-
-<!-- 
-gameState.canvasHeight = canvas.height;
-gameState.canvasWidth = canvas.width;
-gameState.paddleWidth = canvas.width / 25;
-gameState.paddleHeight = canvas.height / 4;
-gameState.ballSize = canvas.width / 25;
-gameState.wallOffset = canvas.width / 25;
-gameState.player1.pos.x = gameState.wallOffset;
-gameState.player1.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-gameState.player2.pos.x = canvas.width - (gameState.wallOffset + gameState.paddleWidth);
-gameState.player2.pos.y = canvas.height / 2 - gameState.paddleHeight / 2;
-gameState.ball.pos.x = canvas.width / 2 - gameState.ballSize / 2;
-gameState.ball.pos.y = canvas.height / 2 - gameState.ballSize / 2; 
--->
