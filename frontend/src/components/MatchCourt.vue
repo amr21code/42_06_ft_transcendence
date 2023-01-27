@@ -1,6 +1,7 @@
 <template>
 	<div class="div-wrapper">
-		<MatchWaitPopup id="MatchWaitPopup" v-if="opponentArrived === false" />
+		<!--<MatchWaitPopup id="MatchWaitPopup" v-if="opponentArrived === false" />-->
+		<MatchWaitPopup style="display:none" ref="matchCourtWaiting" id="MatchWaitPopup" />
 		<div style="background: red; height: 100px" id="matchSelectionDiv">
 			game not started
 			<button id="joinMatchQueueBtn">join match queue</button>
@@ -28,6 +29,7 @@ export default defineComponent({
 		let joinMatchQueueBtn: any;
 		let watchMatchBtn: any;
 		let playerNumber: number;
+		let MatchWaitPopup: any;
 		const opponentArrived = ref(false); // CHANGE BACK TO FALSE!
 		
 		
@@ -76,6 +78,7 @@ export default defineComponent({
 			if (opponentArrived.value === false) {
 
 				matchSelectionDiv.style.display = 'none';
+				MatchWaitPopup.style.display = 'block';
 			}
 			
 			else if (opponentArrived.value === true) {
@@ -107,6 +110,7 @@ export default defineComponent({
 			watchMatchBtn = document.getElementById("watchMatchBtn");
 			canvas = document.getElementById("matchScreen");
             ctx = canvas.getContext("2d");
+			MatchWaitPopup=document.getElementById("MatchWaitPopup");
 
             ctx.fillStyle = "#444040";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
