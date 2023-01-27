@@ -27,15 +27,17 @@ export class MatchGateway {
 	@SubscribeMessage('create-new-game')
 	async createNewGame(client: Socket, payload: any) {
 		const userid = client.request.session.passport.user.userid;
-		const matchid = await this.matchService.listActiveMatch(userid);
+		const matchid = await this.matchService.listMatch(userid);
+		// const matchid = await this.matchService.listActiveMatch(userid);
 		const roomNumber = matchid[0].matchid;
+		console.log("room number for opponent status: ", roomNumber);
 		const status = await this.matchService.getOpponentStatus(roomNumber, userid);
 		
-		console.log("CHECK_OPPONENT: opponent status is: ", status);
+		console.log("CHECK_OPPONENT: opponent status is: ", status, " room numver is: ", roomNumber);
 
 		this.clientRooms[client.id] = roomNumber;
 
-		 client.emit('opponent-status', {data: status});
+		client.emit('opponent-status', {data: status});
 		//client.emit('opponent-status', { data: true });
 		// if clause for opponent-status === true hinzufügen!
 	}
@@ -44,7 +46,8 @@ export class MatchGateway {
 	@SubscribeMessage('joinGame')
 	async joinGame(client: any, canvas: any) {
 		const userid = client.request.session.passport.user.userid;
-		const matchid = await this.matchService.listActiveMatch(userid);
+		// const matchid = await this.matchService.listActiveMatch(userid);
+		const matchid = await this.matchService.listMatch(userid);
 		const roomNumber = matchid[0].matchid;
 
 		MatchGateway[roomNumber] = await createGameState();

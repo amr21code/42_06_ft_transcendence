@@ -65,9 +65,16 @@ export class MatchController {
 	async gameOver(@Body() state: MatchGameStateDto, @Session() session: Record<string, any>){
 		console.log("gameover");
 		const userid = session.passport.user.userid;
-		const matchid = await this.matchService.listActiveMatch(userid);
-		//get Player from database (1 or 2)
-		const update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer1); //how do I know if I'm Player1 or Player2
-		return(update);
+		try {
+			const matchid = await this.matchService.listActiveMatch(userid);
+			//get Player from database (1 or 2)
+			if (matchid[0].matchid) {
+				const update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer1); //how do I know if I'm Player1 or Player2
+				return(update);
+			}
+		} catch (error) {
+			throw new ForbiddenException;
+		}
+		return;
 	}
 }

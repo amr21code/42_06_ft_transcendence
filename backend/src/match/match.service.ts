@@ -201,7 +201,8 @@ export class MatchService {
 			Prisma.sql`SELECT challenge FROM public.user_match
 			WHERE matchid=${matchid} AND userid!=${userid};`
 		);
-		if (accept[0] && accept[0].challenge == 1)
+		console.log("Accept returns: ", accept);
+		if (accept[0] && accept[0].challenge > 0)
 			return true;
 		else 
 			return false;

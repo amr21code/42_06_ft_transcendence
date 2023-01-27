@@ -28,7 +28,7 @@ export default defineComponent({
 		let joinMatchQueueBtn: any;
 		let watchMatchBtn: any;
 		let playerNumber: number;
-		const opponentArrived = ref(true); // CHANGE BACK TO FALSE!
+		const opponentArrived = ref(false); // CHANGE BACK TO FALSE!
 		
 		
 		// #################  HANDLERS #######################
@@ -65,32 +65,38 @@ export default defineComponent({
 		};
 
 		const joinMatchQueue = () => {
-			DataService.openSingleMatch(); // ERSETZEN 
-			//DataService.joinMatchQueue();
+			// DataService.openSingleMatch(); // ERSETZEN 
+			DataService.joinMatchQueue();
 			
 			// sets opponentStatus
 			SocketioService.createNewGame(canvas); // SET CONDITION TO STOP STUFF
 			// ############### HEEEEEEEEEEEEEERE GO ON TOMORROW
 
 			// MARKER: RENDER WAITING POPUP IF OPPONENTSTATUS = FALSE
+			if (opponentArrived.value === false) {
 
+				matchSelectionDiv.style.display = 'none';
+			}
+			
+			else if (opponentArrived.value === true) {
 
-			matchSelectionDiv.style.display = 'none';
-			canvas.style.display = 'block';
-
-			// REMOVE BLURRINESS
-            let dpi = window.devicePixelRatio;
-            const fix_dpi = () => {
-                let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
-                let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
-                canvas.setAttribute("height", styleHeight * dpi);
-                canvas.setAttribute("width", styleWidth * dpi);
-            };
-            fix_dpi();
-			console.log(canvas.height, canvas.width);
-            // REMOVE BLURRINESS END
-
-			socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
+				matchSelectionDiv.style.display = 'none';
+				canvas.style.display = 'block';
+	
+				// REMOVE BLURRINESS
+				let dpi = window.devicePixelRatio;
+				const fix_dpi = () => {
+					let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
+					let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
+					canvas.setAttribute("height", styleHeight * dpi);
+					canvas.setAttribute("width", styleWidth * dpi);
+				};
+				fix_dpi();
+				console.log(canvas.height, canvas.width);
+				// REMOVE BLURRINESS END
+	
+				socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
+			}
 		};
 
 
