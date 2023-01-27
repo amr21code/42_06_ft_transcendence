@@ -18,18 +18,18 @@ import { IoAdapter } from '@nestjs/platform-socket.io';
 
 export class MatchGateway {
 
-	public clientRooms: number[] = [];
+	// public clientRooms: number[] = [];
 	public static states: MatchGameStateDto[] = [];
 
-	
-    handleConnection(client: Socket, room: string): any {
-		client.on('room', function(room) {
+
+	handleConnection(client: Socket, room: string): any {
+		client.on('room', function (room) {
 			client.join(room);
-        });
-    }
-	
+		});
+	}
+
 	@WebSocketServer()
-	server: Server
+	public server: Server;
 
 	constructor(private readonly matchService: MatchService) { }
 
@@ -42,21 +42,28 @@ export class MatchGateway {
 		const roomNumber = matchid[0].matchid;
 
 		//-------------! NEW
-		client.join(roomNumber);
-		// client.number = 1;
-		(client as any).number = 1; // Error umgangen
-		client.emit('init', 1);
+		if (!this.server.sockets.adapter.rooms.has(roomNumber)) {
+
+			client.join(roomNumber);
+			// client.number = 1;
+			(client as any).number = 1; // Error umgangen
+			client.emit('init', 1);
+		}
+
+		// const cur_room = this.server.sockets.adapter.rooms[roomNumber];
+
+
 		//-------------! NEW
 
 
 		console.log("room number for opponent status: ", roomNumber);
 		const status = await this.matchService.getOpponentStatus(roomNumber, userid);
-		
+
 		console.log("CHECK_OPPONENT: opponent status is: ", status, " room numver is: ", roomNumber);
 
-		this.clientRooms[client.id] = roomNumber;
+		// this.clientRooms[client.id] = roomNumber;
 
-		client.emit('opponent-status', {data: status, matchid: roomNumber}); //! NEW
+		client.emit('opponent-status', { data: status, matchid: roomNumber }); //! NEW
 		//client.emit('opponent-status', { data: true });
 		// if clause for opponent-status === true hinzufügen!
 	}
@@ -86,7 +93,7 @@ export class MatchGateway {
 		MatchGateway[roomNumber].ball.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].ballSize / 2;
 		MatchGateway[roomNumber].paddleSpeed = 3;
 		MatchGateway[roomNumber].ballSpeed = 6;
-		
+
 		// RANDOM BALL KICKOFF DIRECTION
 		var randomDirection = Math.floor(Math.random() * 2) + 1;
 		if (randomDirection % 2) {
@@ -95,19 +102,28 @@ export class MatchGateway {
 			MatchGateway[roomNumber].ball.vel.x = -1;
 		}
 		MatchGateway[roomNumber].ball.vel.y = 1;
-		
+
 		// NEW
 		// const cur_room = this.server.in(roomNumber).emit
-		const cur_room = this.server.sockets.adapter.rooms[roomNumber];
-		
-		let allUsers;
-		if (cur_room) {
-			allUsers = cur_room.sockets;
-		}
+		const cur_room = this.server.sockets.adapter.rooms.get(roomNumber);
+		console.log("#CUR ROOM is: ", this.server.sockets.adapter.rooms.get(roomNumber));
+		// .has(roomNumber));
+
+		// let allUsers;
+		// if (cur_room) {
+		// 	allUsers = cur_room.sockets;
+		// }
+
+		// let numClients = 0;
+		// if (allUsers) {
+		// 	numClients = Object.keys(allUsers).length;
+		// }
 
 		let numClients = 0;
-		if (allUsers) {
-			numClients = Object.keys(allUsers).length;
+		if (cur_room) {
+			// numClients = Object.keys(cur_room).length;
+			numClients = cur_room.size;
+			console.log("num clients is: ", numClients);
 		}
 
 		if (numClients === 0) {
@@ -119,19 +135,19 @@ export class MatchGateway {
 			return;
 		}
 
-		this.clientRooms[client.id] = roomNumber;
+		// this.clientRooms[client.id] = roomNumber;
 		client.join(roomNumber);
-		(client as any).number = 2; 
+		(client as any).number = 2;
 		client.emit('init', 2);
 
 		// NEW
 
 
-		
+
 		client.emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
 		client.on('keydown', handleKeyDown);
 		// startGameInterval(client, MatchGateway[roomNumber]); // old
-		startGameInterval(roomNumber);
+		startGameInterval(roomNumber, this.server);
 
 
 		// ############################# FUNCTION DECLARATIONS ####################################################
@@ -156,19 +172,20 @@ export class MatchGateway {
 					MatchGateway[roomNumber].player2.y_vel = 0;
 				}
 			}
-			
+
 		}
 
-		function startGameInterval(roomNumber: number) {
+		function startGameInterval(roomNumber: number, server_helper: Server) {
 			const intervalId = setInterval(() => {
 				const winner = gameLoop(MatchGateway[roomNumber]);
 				if (!winner) {
 					// sends new state to all room members
-					this.server.in(roomNumber).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+					// this.server.in(roomNumber).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+					server_helper.in(roomNumber.toString()).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
 				}
 				else {
 					// sends game over to all room members
-					this.server.in(roomNumber).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
+					server_helper.in(roomNumber.toString()).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
 					MatchGateway[roomNumber] = null;
 					clearInterval(intervalId); // was macht das?
 				}

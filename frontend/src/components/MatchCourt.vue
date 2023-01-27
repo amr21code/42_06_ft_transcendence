@@ -37,6 +37,7 @@ export default defineComponent({
 		// #################  HANDLERS #######################
         const handlePlayerNumber = (nbr: number) => {
 			playerNumber = nbr;
+			console.log("your player number is: ", playerNumber);
 		}
 		
 		const handleGameState = (gameState: any) => {
@@ -97,7 +98,6 @@ export default defineComponent({
 				socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
 
 			}
-			console.log("your player number is: ", playerNumber);
 		};
 
 		const handleJoinedEmptyGame = () => {
@@ -129,36 +129,7 @@ export default defineComponent({
 			
 			// sets opponentStatus
 			SocketioService.createNewGame(canvas); // SET CONDITION TO STOP STUFF
-			// ############### HEEEEEEEEEEEEEERE GO ON TOMORROW
 
-			// MARKER: RENDER WAITING POPUP IF OPPONENTSTATUS = FALSE
-
-			//console.log("opponent arrived: ", opponentArrived.value);
-			//if (opponentArrived.value === false) {
-
-			//	matchSelectionDiv.style.display = 'none';
-			//	MatchWaitPopup.style.display = 'block';
-			//}
-			
-			//else if (opponentArrived.value === true) { // WE NEVER GET IN HEREEEEEEEEEEEEEEEEEEEEEEEEEEEE
-
-			//	matchSelectionDiv.style.display = 'none';
-			//	canvas.style.display = 'block';
-	
-			//	// REMOVE BLURRINESS
-			//	let dpi = window.devicePixelRatio;
-			//	const fix_dpi = () => {
-			//		let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
-			//		let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
-			//		canvas.setAttribute("height", styleHeight * dpi);
-			//		canvas.setAttribute("width", styleWidth * dpi);
-			//	};
-			//	fix_dpi();
-			//	console.log(canvas.height, canvas.width);
-			//	// REMOVE BLURRINESS END
-	
-			//	socket.emit('joinGame'); // MAKE CONDITIONAL -> IF SECOND PLAYER ARRIVED
-			//}
 		};
 
 
