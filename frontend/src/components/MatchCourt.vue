@@ -57,18 +57,25 @@ export default defineComponent({
 				return;
 			}
 			gameState = JSON.parse(gameState);
+			requestAnimationFrame(() => paintGame(gameState)); // kommt raus
 			if (gameState.scorePlayer1 == 3) {
-				alert("Game Over, Player One wins");
 				DataService.gameOver(gameState);
+				if (playerNumber === 1)
+					alert("You win! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
+				else
+					alert("You lose! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 			}
 			else if (gameState.scorePlayer2 == 3) {
-				alert("Game Over, Player Two wins");
 				DataService.gameOver(gameState);
+				if (playerNumber === 1)
+					alert("You lose! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
+				else
+					alert("You win! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 			}
 			// 	matchSelectionDiv.style.display = 'block';
 			// 	matchWaitPopup.style.display = 'none';
 			// 	matchSelectionDiv.style.display = 'none';
-            requestAnimationFrame(() => paintGame(gameState)); // kommt raus
+			reset();
         };
 
 
