@@ -55,10 +55,10 @@ class DataService {
 		return apiInstance.get('/match/making'); 
 	}
 	challengeUser(userid: string) : Promise<any> {
-		return apiInstance.get('/match/openMatch/' + userid);
+		return apiInstance.get('/match/open/' + userid);
 	}
 	acceptChallenge() : Promise<any> {
-		return apiInstance.get('/match/acceptMatch');
+		return apiInstance.get('/match/accept');
 	}
 
 	muteUser(chatid : number, userid : string, time : number) : Promise<any> {

@@ -171,14 +171,25 @@ export class MatchService {
 	}
 
 	async acceptMatch(userid: string) {
+		// const accept = await this.db.$queryRaw(
+		// 	Prisma.sql`UPDATE public.user_match
+		// 	SET challenge=1
+		// 	WHERE userid=${userid}
+		// 	RETURNING matchid;`
+		// );
 		const accept = await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user_match
 			SET challenge=1
-			WHERE userid=${userid}
-			RETURNING matchid;`
+			WHERE userid=${userid};`
 		);
+		const matchid = await this.db.$queryRaw(
+			Prisma.sql`SELECT matchid FROM public.user_match
+			WHERE userid=${userid} 
+			AND challenge=1;`
+		);
+		console.log("matchid:", matchid);
 		const matchstatus = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.match_history SET match_status=1 WHERE matchid=${accept[0].matchid};`
+				Prisma.sql`UPDATE public.match_history SET match_status=1 WHERE matchid=${matchid[0].matchid};`
 			);
 	}
 

@@ -146,7 +146,6 @@ export default defineComponent({
 		const challengeUser = (userid: string) => {
 			props.ChatInfotogglePopup();
 			SocketioService.challengeUser(userid);
-			// redirect to "waiting for second player" -> socketio
 			// close popups here? CHECK!
 		}
 

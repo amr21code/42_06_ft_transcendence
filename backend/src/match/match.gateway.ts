@@ -33,6 +33,9 @@ export class MatchGateway {
 	async createNewGame(client: Socket, payload: any) {
 		const userid = client.request.session.passport.user.userid;
 		const matchid = await this.matchService.listMatch(userid);
+		console.log("create-new-game: ", matchid);
+		// if (!matchid[0].matchid)
+		// 	this.createNewGame(client, payload);
 		const roomNumber = matchid[0].matchid;
 
 		if (!this.server.sockets.adapter.rooms.has(roomNumber)) {

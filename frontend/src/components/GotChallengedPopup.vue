@@ -5,7 +5,7 @@
 			<div class="user-data-wrapper">
 				<div>You just got challenged by {{ challenger }}: </div>
 			</div>
-			<button class="challengeAccept" @click="sendAcceptSignal"> 
+			<button class="challengeAccept" @click="(sendAcceptSignal(), toggleGotChallengedPopup())">
 				Accept
 			</button>
 		
@@ -22,6 +22,7 @@ import { defineComponent } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
+import SocketioService from '../services/SocketioService'
 
 export default defineComponent({
 	name: "got-challenged-popup",
@@ -29,7 +30,8 @@ export default defineComponent({
 	data () {
 		return {
 			user: {} as IUser,
-			memberSince: {} as string
+			memberSince: {} as string,
+			socket: SocketioService.socket,
 		}
 	},
 
@@ -58,8 +60,10 @@ export default defineComponent({
 			this.memberSince = new Intl.DateTimeFormat('en-us').format(this.user.created);
 		},
 
-		sendAcceptSignal() {
-			DataService.acceptChallenge();
+		async sendAcceptSignal() {
+			console.log("accepting challenge");
+			await DataService.acceptChallenge();
+			this.socket.emit('create-new-game');
 		}
 	},
 
