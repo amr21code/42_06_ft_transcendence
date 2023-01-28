@@ -120,7 +120,7 @@ export default defineComponent({
 
 		const reset = () => {
 			playerNumber = 0;
-			matchSelectionDiv.style.display = "block";
+			matchSelectionDiv.style.display = "inline-flex";
 			canvas.style.display = "none";
 			matchWaitPopup.style.display = "none";
 		}
@@ -197,7 +197,7 @@ export default defineComponent({
 
 		const removeMatchWaitPopup = () => {
 			matchWaitPopup.style.display = 'none';
-			matchSelectionDiv.style.display = 'block';
+			matchSelectionDiv.style.display = 'inline-flex';
 		}
 
 		//############# SOCKETIO ##############
