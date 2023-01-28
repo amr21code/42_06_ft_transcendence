@@ -5,12 +5,12 @@
 			<div class="user-data-wrapper">
 				<div>You just got challenged by {{ challenger }}: </div>
 			</div>
-			<button class="challengeAccept" @click="(sendAcceptSignal(), toggleGotChallengedPopup())">
+			<button class="challengeAccept" @click="( sendAcceptSignal(), toggleGotChallengedPopup() )">
 				Accept
 			</button>
 		
-			<button class="popup-close" @click="(toggleGotChallengedPopup)"> 
-				Close
+			<button class="popup-close" @click="( sendDenySignal(), toggleGotChallengedPopup() )"> 
+				Deny
 			</button>
 		</div>
 	</div>
@@ -60,10 +60,15 @@ export default defineComponent({
 			this.memberSince = new Intl.DateTimeFormat('en-us').format(this.user.created);
 		},
 
-		async sendAcceptSignal() {
+		sendAcceptSignal() {
 			console.log("accepting challenge");
-			await DataService.acceptChallenge();
+			DataService.acceptChallenge();
 			this.socket.emit('create-new-game');
+		},
+
+		sendDenySignal() {
+			console.log("denying challenge");
+			DataService.denyChallenge();
 		}
 	},
 

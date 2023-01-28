@@ -60,6 +60,9 @@ class DataService {
 	acceptChallenge() : Promise<any> {
 		return apiInstance.get('/match/accept');
 	}
+	denyChallenge() : Promise<any> {
+		return apiInstance.get('/match/delete');
+	}
 
 	muteUser(chatid : number, userid : string, time : number) : Promise<any> {
 		console.log("muteUser", chatid, userid, time);

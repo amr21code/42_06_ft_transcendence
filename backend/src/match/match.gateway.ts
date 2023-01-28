@@ -33,9 +33,6 @@ export class MatchGateway {
 	async createNewGame(client: Socket, payload: any) {
 		const userid = client.request.session.passport.user.userid;
 		const matchid = await this.matchService.listMatch(userid);
-		console.log("create-new-game: ", matchid);
-		// if (!matchid[0].matchid)
-		// 	this.createNewGame(client, payload);
 		const roomNumber = matchid[0].matchid;
 
 		if (!this.server.sockets.adapter.rooms.has(roomNumber)) {
@@ -162,7 +159,7 @@ export class MatchGateway {
 	@SubscribeMessage('sendChallengeRequest') 
 	async sendChallengeRequest(client: any, data: any) {	
 		const opponentid = await this.userService.getUserData(data, 'socket_token');
-		// console.log("OPPONENTID IS: ", opponentid[0].socket_token);
+		console.log("OPPONENTID IS: ", opponentid[0].socket_token);
 		if (opponentid[0])
 			this.server.to(opponentid[0].socket_token).emit('challengeRequest', client.request.session.passport.user.userid);
 	}
