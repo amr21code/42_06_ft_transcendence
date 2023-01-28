@@ -5,8 +5,10 @@
 		<div id="matchSelectionDiv">
 			<h2>no game started yet...</h2>
 			<p>do you want to play yourself or watch a game?</p>
-			<button id="joinMatchQueueBtn">join match queue</button>
-			<button id="watchMatchBtn">watch random game</button>
+			<div class="button-div">
+				<button id="joinMatchQueueBtn">join match queue</button>
+				<button id="watchMatchBtn">watch random game</button>
+			</div>
 		</div>
 		<canvas style="display:none" ref="matchCourtRef" id="matchScreen"></canvas>
 	</div>
@@ -224,7 +226,7 @@ export default defineComponent({
 	#matchScreen {
 		width: 80%;
 		aspect-ratio: 5/3;
-		background-color: white;
+		background: white;
 		min-width: 200px; /*FIND DYNAMIC WAY*/
 		/* outline: 10px solid red; */
 		border-radius: 2px;
@@ -232,12 +234,22 @@ export default defineComponent({
 	}
 
 	#matchSelectionDiv {
+		width: 80%;
+		aspect-ratio: 5/3;
 		background: var(--second-bg-color);
-		height: 100%;
-		width: 100%;
+		min-width: 200px; /*FIND DYNAMIC WAY*/
 
 		padding: 2rem;
-		/* outline: 10px solid red; */
+
+		/* make element inline flex-container */
+  		/* this will make its children flex-items */
+		display: inline-flex;
+		/* align-items items in column */
+		flex-direction: column;
+		/* center items horizontally */
+		align-items: center;
+		/* center items vertically */
+		justify-content: center;
 	}
 
 	#matchSelectionDiv h2 {
@@ -246,7 +258,7 @@ export default defineComponent({
 
 
 button {
-    margin: -0.5rem 0.5rem;
+    margin: 0 0.5rem;
 }
 
 </style>
