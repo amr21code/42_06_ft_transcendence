@@ -18,3 +18,34 @@ body, html {
 	margin: 0;
 	padding: 0;
 }
+
+
+button {
+	align-items: center;
+	background-color: #fff;
+	border: 2px solid #000;
+	box-sizing: border-box;
+	/* color: #000; */
+	cursor: pointer;
+	display: inline-flex;
+	height: 36px;
+	justify-content: center;
+	padding: 0 17px;
+	text-align: center;
+	text-decoration: none;
+	transition: all .4s;
+	margin: 10px;
+	font-weight: 600;
+}
+
+button:hover {
+	border-color: var(--first-highlight-color);
+	color: var(--first-highlight-color);
+	fill: var(--first-highlight-color);
+}
+
+button:active {
+	border-color: var(--first-highlight-color);
+	color: var(--first-highlight-color);
+	fill: var(--first-highlight-color);
+}
