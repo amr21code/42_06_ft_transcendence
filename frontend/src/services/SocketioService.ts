@@ -1,4 +1,6 @@
 import { io } from 'socket.io-client';
+import DataService from './DataService'
+
 
 class SocketioService {
   socket : any;
@@ -38,9 +40,13 @@ class SocketioService {
 
   //----------GAME STUFF----------------------
   createNewGame(canvas: any) {
-	this.socket.emit('create-new-game', canvas);
-  }
+	this.socket.emit('create-new-game');
+}
 
+challengeUser() {
+	// DataService.DESIREE -> openMatch + Opponent -#
+	this.socket.emit('create-new-game');
+  }
 
   //----------GAME STUFF END----------------------
 
