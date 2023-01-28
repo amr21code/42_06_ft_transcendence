@@ -4,6 +4,7 @@
 			<slot/>
 			<h2>waiting for second player...</h2>
 		</div>
+		<button class="stopWaitingForPlayerButton" @click="stopWaitingForPlayer">Exit (don't wait anymore)</button>
 	</div>
 </template>
 
@@ -18,7 +19,15 @@ import type { IUser } from '../types/User'
 export default defineComponent({
 	name: "match-wait-popup",
 
-	// props: ['toggleMatchWaitPopup']
+	props: ['removeMatchWaitPopup'],
+
+	methods: {
+		stopWaitingForPlayer() {
+			// dataservice @DESIREE
+			// send signal to player2 that player1 is not waiting anymore (if exists)
+			this.removeMatchWaitPopup();
+		}
+	}
 })
 </script>
 

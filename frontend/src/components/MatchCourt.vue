@@ -1,7 +1,7 @@
 <template>
 	<div class="div-wrapper">
 		<!--<MatchWaitPopup id="MatchWaitPopup" v-if="opponentArrived === false" />-->
-		<MatchWaitPopup style="display:none" ref="matchCourtWaiting" id="MatchWaitPopup" />
+		<MatchWaitPopup style="display:none" ref="matchCourtWaiting" id="MatchWaitPopup" :removeMatchWaitPopup=" () => removeMatchWaitPopup()"/>
 		<div style="background: red; height: 100px" id="matchSelectionDiv">
 			game not started
 			<button id="joinMatchQueueBtn">join match queue</button>
@@ -192,6 +192,10 @@ export default defineComponent({
         };
 		// ########### PAINTING ###################################################################################################
 
+		const removeMatchWaitPopup = () => {
+			matchWaitPopup.style.display = 'none';
+			matchSelectionDiv.style.display = 'block';
+		}
 
 		//############# SOCKETIO ##############
 		const socket = SocketioService.socket;
@@ -203,7 +207,7 @@ export default defineComponent({
 		socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
 		////############# SOCKETIO #############
 
-        return { canvas, opponentArrived, initCanvas, paintGame };
+        return { canvas, opponentArrived, initCanvas, paintGame, removeMatchWaitPopup };
     },
 
     mounted() {

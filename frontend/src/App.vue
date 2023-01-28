@@ -19,6 +19,7 @@
 			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
 				<!-- make Game stop while loggedIn === false -->
 			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
+			<gotChallengedPopup id="gotChallengedPopup" v-if="gotChallengedPopupTrigger === true" :toggleGotChallengedPopup="() => toggleGotChallengedPopup()" />
 			<!-- <div v-if="selected !== 'play' && selected !== 'watch'" class="game-part-screen"> -->
 			<div class="game-part-screen">
 				<div class="placeholder"></div>
@@ -45,6 +46,7 @@ import MatchCourt from './components/MatchCourt.vue'
 import SideWindow from './components/SideWindow.vue'
 import LoginPopup from './components/LoginPopup.vue'
 import UserDataPopup from './components/UserDataPopup.vue'
+import gotChallengedPopup from './components/GotChallengedPopup.vue'
 import LoggingService from './services/LoggingService'
 
 import SocketioService from './services/SocketioService.js'
@@ -54,7 +56,7 @@ export default defineComponent({
 
 	name: 'App',
 	el: "#app",
-	components: { LoginPopup, UserDataPopup, MatchCourt, SideWindow },
+	components: { LoginPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
 	data () {
 		return {
 			socket: SocketioService.setupSocketConnection(),
@@ -79,6 +81,12 @@ export default defineComponent({
 			userDataPopupTrigger.value = !userDataPopupTrigger.value;
 		}
 
+		// for user data popup (user data)
+		const gotChallengedPopupTrigger = ref(true);
+		const toggleGotChallengedPopup = () => {
+			gotChallengedPopupTrigger.value = !gotChallengedPopupTrigger.value;
+		}
+
 		// for side window selection
 		const selected = ref<SelectedSideWindow>('play');
 		const handleClick = (term: SelectedSideWindow) => {
@@ -96,7 +104,7 @@ export default defineComponent({
 			// console.log("game fr value: ", document.documentElement.style.getPropertyValue("--game_fr"));
 			// console.log("sidewindow fr value: ", document.documentElement.style.getPropertyValue("--sidewindow_fr"));
 		};
-		return { loggedIn, userDataPopupTrigger, toggleLoginPopup, toggleUserDataPopup, handleClick, selected }
+		return { loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick, selected }
 	},
 
 	methods: {

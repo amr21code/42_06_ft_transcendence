@@ -53,8 +53,7 @@
 						<button @click="(toggleBan)" v-if="user.status === 3">unban</button>
 					</td>
 					<td> <!-- invite -->
-						<button @click="(toggleChallenge)" v-if="Challenge === false">challenge</button>
-						<button @click="(toggleChallenge)" v-if="Challenge === true">unchallenge</button>
+						<button @click="(challengeUser(user.userid))">challenge</button>
 					</td>
 				</tr>
 			</tbody>
@@ -144,12 +143,13 @@ export default defineComponent({
 			Ban.value = !Ban.value;
 		}
 
-		const Challenge = ref(false);
-		const toggleChallenge = () => {
-			Challenge.value = !Challenge.value;
+		const challengeUser = (userid: string) => {
+			// Dataservice
+			// redirect to "waiting for second player" -> socketio
+			// close popups here? CHECK!
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, toggleChallenge, Challenge}
+		return { toggleMute, Mute, toggleBan, Ban, challengeUser}
 			
     }  
 
