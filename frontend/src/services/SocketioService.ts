@@ -44,8 +44,8 @@ class SocketioService {
 }
 
 challengeUser(userid: string) {
+  this.socket.emit('create-new-game');
 	DataService.challengeUser(userid);
-	this.socket.emit('create-new-game');
 	// send signal to opponent App.vue
 	this.socket.emit('sendChallengeRequest', userid);
   }

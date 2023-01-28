@@ -146,7 +146,6 @@ export default defineComponent({
 		const challengeUser = (userid: string) => {
 			props.ChatInfotogglePopup();
 			SocketioService.challengeUser(userid);
-			// close popups here? CHECK!
 		}
 
 		return { toggleMute, Mute, toggleBan, Ban, challengeUser}

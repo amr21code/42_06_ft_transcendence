@@ -97,7 +97,7 @@ import type { IChats } from '../types/Chats'
 import SocketioService from '../services/SocketioService'
 
 
-import { defineComponent, ref, defineAsyncComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
 
 export default defineComponent({
@@ -118,6 +118,7 @@ export default defineComponent({
 		this.retrieveCurrentUser();
 		this.retrieveCurrentMessages(this.curr_chat.chatid);
 		this.socket.on('chat-message', (data: IMessages) => {
+			console.log("message recieved");
 			this.messages.push(data);
 			this.$nextTick(() => {
         		this.scrollToBottom();
@@ -161,7 +162,17 @@ export default defineComponent({
 		},
 
 		// passes the variables to socketio which sends them to the backend in order to send a message
-		sendMessage (chatid : number, message : String) {
+		sendMessage (chatid : number, message : string) {
+			const data = {
+				username: this.user[0].username,
+				userid: this.user[0].userid,
+				chatid: chatid,
+				message: message,
+				time : new Date(),
+				statuscode: "0"
+			}
+			this.messages.push(data);
+			this.scrollToBottom();
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
 		},
 
