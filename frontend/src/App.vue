@@ -82,7 +82,7 @@ export default defineComponent({
 		}
 
 		// for user data popup (user data)
-		const gotChallengedPopupTrigger = ref(true);
+		const gotChallengedPopupTrigger = ref(false);
 		const toggleGotChallengedPopup = () => {
 			gotChallengedPopupTrigger.value = !gotChallengedPopupTrigger.value;
 		}
