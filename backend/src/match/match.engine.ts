@@ -50,9 +50,6 @@ export function gameLoop(state: MatchGameStateDto) {
 	const playerTwo = state.player2;
 	const ball = state.ball;
 
-	// LOGIC FOR SCORED GOAL HERE
-	// LOGIC FOR WON/LOST GAME HERE
-	// maybe: logic for player left?
 
 	// ################ MOVE PLAYER ###################################################
 	// Only update position, if player doesn't touch match court boundaries
@@ -70,8 +67,21 @@ export function gameLoop(state: MatchGameStateDto) {
 		playerOne.pos.y += playerOne.y_vel * state.paddleSpeed;
 		playerOne.y_vel = 0;
 	}
-	// ################ MOVE PLAYER END ###################################################
 
+	if (playerTwo.y_vel) {
+
+		if (playerTwo.y_vel === -1 && (playerTwo.pos.y <= 20)) {
+			playerTwo.y_vel = 0;
+		}
+
+		if (playerTwo.y_vel === 1 && (playerTwo.pos.y + state.paddleHeight >= state.canvasHeight - 20)) {
+			playerTwo.y_vel = 0;
+		}
+
+		playerTwo.pos.y += playerTwo.y_vel * state.paddleSpeed;
+		playerTwo.y_vel = 0;
+	}
+	// ################ MOVE PLAYER END ###################################################
 
 
 	// ################ MOVE BALL ###################################################
@@ -92,20 +102,20 @@ export function gameLoop(state: MatchGameStateDto) {
 		if (ball.pos.x <= 0) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
 			ball.vel.x = 1;
+			// player two scored
 			state.scorePlayer2++;
-			if (state.scorePlayer2 == 3)
+			if (state.scorePlayer2 == 3) // game ends here
 				return 2;
-			// Game.playerTwoScores();
 		}
-		
+
 		//check right canvas bounds
 		if (ball.pos.x + state.ballSize >= state.canvasWidth) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
 			ball.vel.x = -1;
+			// player one scored
 			state.scorePlayer1++;
-			if (state.scorePlayer1 == 3)
+			if (state.scorePlayer1 == 3) // game ends here
 				return 1;
-			// Game.playerOneScores();
 		}
 
 		//check playerOne collision
@@ -121,11 +131,11 @@ export function gameLoop(state: MatchGameStateDto) {
 				ball.vel.x = -1;
 			}
 		}
-		// console.log("ball velo x: ", ball.vel.x, " ball velo y: ", ball.vel.y);
 		ball.pos.x += ball.vel.x * state.ballSpeed;
 		ball.pos.y += ball.vel.y * state.ballSpeed;
 	}
 	// ################ MOVE BALL END ###################################################
+
 
 	return false; // game is still running
 }

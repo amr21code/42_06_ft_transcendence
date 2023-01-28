@@ -51,6 +51,9 @@ class DataService {
 	openSingleMatch(): Promise<any> {
 		return apiInstance.get('/match/opensingle');
 	}
+	joinMatchQueue(): Promise<any> {
+		return apiInstance.get('/match/making'); 
+	}
 
 	muteUser(chatid : number, userid : string, time : number) : Promise<any> {
 		console.log("muteUser", chatid, userid, time);
