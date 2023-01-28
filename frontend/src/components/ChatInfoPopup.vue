@@ -26,7 +26,7 @@
 					<td> <!-- statusname -->
 						{{ user.statusname }}
 					</td>
-					<td> <!-- mute -->
+					<td v-if="user.userid != user_me[0].userid"> <!-- mute -->
 						<button @click="(toggleMute)" v-if="Mute === false">mute</button>
 						<div v-if="Mute === true">
 							<select v-model="mutetime" required>
@@ -39,7 +39,7 @@
 						</div>
 						<button @click="(toggleMute)" v-if="user.status === 2">unmute</button>
 					</td>
-					<td> <!-- ban -->
+					<td v-if="user.userid != user_me[0].userid"> <!-- ban -->
 						<button @click="(toggleBan)" v-if="Ban == false">ban</button>
 						<div v-if="Ban === true">
 							<select v-model="bantime" required>
@@ -52,7 +52,7 @@
 						</div>
 						<button @click="(toggleBan)" v-if="user.status === 3">unban</button>
 					</td>
-					<td> <!-- invite -->
+					<td v-if="user.userid != user_me[0].userid"> <!-- invite -->
 						<button @click="(challengeUser(user.userid), ChatInfotogglePopup)">challenge</button>
 					</td>
 				</tr>
@@ -95,6 +95,7 @@ export default defineComponent({
 
     data () {
 		return {
+			user_me: [] as IUser[],
 			users: [] as IUser[],
             socket: SocketioService.socket,
 			mutetime: 10,
@@ -102,6 +103,17 @@ export default defineComponent({
 		}
 	},
 	methods: {
+
+		// loads the current user who is logged in
+		retrieveCurrentUser() {
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				this.user_me = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
 
 		retrieveCurrentUsersInChat(chatid : number) {
 			DataService.getUsersInChat(chatid)
@@ -127,6 +139,7 @@ export default defineComponent({
 	},
 
 	mounted () {
+		this.retrieveCurrentUser();
 		this.retrieveCurrentUsersInChat(this.chat.chatid);
 	},
 
@@ -146,8 +159,6 @@ export default defineComponent({
 		const challengeUser = (userid: string) => {
 			props.ChatInfotogglePopup();
 			SocketioService.challengeUser(userid);
-			// redirect to "waiting for second player" -> socketio
-			// close popups here? CHECK!
 		}
 
 		return { toggleMute, Mute, toggleBan, Ban, challengeUser}

@@ -19,7 +19,7 @@
 			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
 				<!-- make Game stop while loggedIn === false -->
 			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
-			<gotChallengedPopup id="gotChallengedPopup" v-if="gotChallengedPopupTrigger === true" :toggleGotChallengedPopup="() => toggleGotChallengedPopup()" />
+			<gotChallengedPopup id="gotChallengedPopup" v-if="gotChallengedPopupTrigger === true" :toggleGotChallengedPopup="() => toggleGotChallengedPopup()" :challenger="challenger"/>
 			<!-- <div v-if="selected !== 'play' && selected !== 'watch'" class="game-part-screen"> -->
 			<div class="game-part-screen">
 				<div class="placeholder"></div>
@@ -60,9 +60,14 @@ export default defineComponent({
 	data () {
 		return {
 			socket: SocketioService.setupSocketConnection(),
+			challenger : '',
 		}
 	},
 	created () {
+		this.socket.on('challengeRequest', (userid : string) => {
+			this.challenger = userid;
+			this.toggleGotChallengedPopup();
+		});
 
 	},
 	beforeUnmount() {

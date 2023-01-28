@@ -54,6 +54,15 @@ class DataService {
 	joinMatchQueue(): Promise<any> {
 		return apiInstance.get('/match/making'); 
 	}
+	challengeUser(userid: string) : Promise<any> {
+		return apiInstance.get('/match/open/' + userid);
+	}
+	acceptChallenge() : Promise<any> {
+		return apiInstance.get('/match/accept');
+	}
+	denyChallenge() : Promise<any> {
+		return apiInstance.get('/match/delete');
+	}
 
 	muteUser(chatid : number, userid : string, time : number) : Promise<any> {
 		console.log("muteUser", chatid, userid, time);

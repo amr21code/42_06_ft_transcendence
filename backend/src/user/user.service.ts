@@ -103,7 +103,7 @@ export class UserService {
 		}
 	}
 
-	async getUserData(userid: string, field: string)
+	async getUserData(userid: string, field: string) : Promise<any>
 	{
 		var status = userid;
 		if (field == 'username') {

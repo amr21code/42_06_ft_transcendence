@@ -1,16 +1,16 @@
 <template>
-	<div class="popup" @keyup.esc="toggleGotChallengedPopup" tabindex="0">
+	<div class="popup" @keyup.esc="(toggleGotChallengedPopup)" tabindex="0">
 		<div class="popup-inner">
 			<slot />
 			<div class="user-data-wrapper">
-				<div>You just got challenged by XXXX: </div>
+				<div>You just got challenged by {{ challenger }}: </div>
 			</div>
-			<button class="challengeAccept" @click="sendAcceptSignal"> 
+			<button class="challengeAccept" @click="( sendAcceptSignal(), toggleGotChallengedPopup() )">
 				Accept
 			</button>
 		
-			<button class="popup-close" @click="toggleGotChallengedPopup"> 
-				Close
+			<button class="popup-close" @click="( sendDenySignal(), toggleGotChallengedPopup() )"> 
+				Deny
 			</button>
 		</div>
 	</div>
@@ -22,6 +22,7 @@ import { defineComponent } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
+import SocketioService from '../services/SocketioService'
 
 export default defineComponent({
 	name: "got-challenged-popup",
@@ -29,11 +30,21 @@ export default defineComponent({
 	data () {
 		return {
 			user: {} as IUser,
-			memberSince: {} as string
+			memberSince: {} as string,
+			socket: SocketioService.socket,
 		}
 	},
 
-	props: ['toggleGotChallengedPopup'],
+	props: {
+		['toggleGotChallengedPopup'] : {
+			required: true,
+			type: Function
+		},
+		challenger : {
+			required: false,
+			type: String
+		},
+	},
 	methods: {
 		retrieveCurrentUser() {
 			DataService.getUser()
@@ -50,8 +61,14 @@ export default defineComponent({
 		},
 
 		sendAcceptSignal() {
-			// PUT DataService.acceptMatch() HERE
-			
+			console.log("accepting challenge");
+			DataService.acceptChallenge();
+			this.socket.emit('create-new-game');
+		},
+
+		sendDenySignal() {
+			console.log("denying challenge");
+			DataService.denyChallenge();
 		}
 	},
 
