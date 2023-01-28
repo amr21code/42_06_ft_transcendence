@@ -53,7 +53,7 @@
 						<button @click="(toggleBan)" v-if="user.status === 3">unban</button>
 					</td>
 					<td> <!-- invite -->
-						<button @click="(challengeUser(user.userid))">challenge</button>
+						<button @click="(challengeUser(user.userid), ChatInfotogglePopup)">challenge</button>
 					</td>
 				</tr>
 			</tbody>
@@ -130,7 +130,7 @@ export default defineComponent({
 		this.retrieveCurrentUsersInChat(this.chat.chatid);
 	},
 
-    setup () {
+    setup (props) {
 
 		const Mute = ref(false);
 		const toggleMute = () => {
@@ -144,6 +144,7 @@ export default defineComponent({
 		}
 
 		const challengeUser = (userid: string) => {
+			props.ChatInfotogglePopup();
 			// Dataservice
 			// redirect to "waiting for second player" -> socketio
 			// close popups here? CHECK!
