@@ -1,10 +1,10 @@
 <template>
-	<div class="popup" tabindex="0">
+	<div class="popup" @keyup.esc="stopWaitingForPlayer" tabindex="0">
 		<div class="popup-inner">
 			<slot/>
-			<h2>waiting for second player...</h2>
+			<h2>Waiting for second player...</h2>
+			<button class="stopWaitingForPlayerButton" @click="stopWaitingForPlayer">Quit (don't wait anymore)</button>
 		</div>
-		<button class="stopWaitingForPlayerButton" @click="stopWaitingForPlayer">Exit (don't wait anymore)</button>
 	</div>
 </template>
 
@@ -51,8 +51,13 @@ export default defineComponent({
 	padding: 10px 26px;
 	/* border-radius: 10%; */
 	border-radius: 2px;
-	width: 50%;
-	height: 50%;
+	/* width: 50%;
+	height: 50%; */
+
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .popup-inner h2 {
