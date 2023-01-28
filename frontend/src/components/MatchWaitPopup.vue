@@ -2,7 +2,7 @@
 	<div class="popup" @keyup.esc="stopWaitingForPlayer" tabindex="0">
 		<div class="popup-inner">
 			<slot/>
-			<h2>Waiting for second player...</h2>
+			<h2>waiting for second player...</h2>
 			<button class="stopWaitingForPlayerButton" @click="stopWaitingForPlayer">Quit (don't wait anymore)</button>
 		</div>
 	</div>

@@ -26,6 +26,7 @@ button {
 	border: 2px solid #000;
 	box-sizing: border-box;
 	/* color: #000; */
+	font-family: monospace;
 	cursor: pointer;
 	display: inline-flex;
 	height: 36px;
@@ -34,7 +35,7 @@ button {
 	text-align: center;
 	text-decoration: none;
 	transition: all .4s;
-	font-weight: 600;
+	font-weight: 500;
 }
 
 button:hover {

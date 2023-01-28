@@ -3,8 +3,8 @@
 		<!--<MatchWaitPopup id="MatchWaitPopup" v-if="opponentArrived === false" />-->
 		<MatchWaitPopup style="display:none" ref="matchCourtWaiting" id="MatchWaitPopup" :removeMatchWaitPopup=" () => removeMatchWaitPopup()"/>
 		<div id="matchSelectionDiv">
-			<h2>No game started yet...</h2>
-			<p>Do you want to play or watch a game?</p>
+			<h2>no game started yet...</h2>
+			<p>do you want to play yourself or watch a game?</p>
 			<button id="joinMatchQueueBtn">join match queue</button>
 			<button id="watchMatchBtn">watch random game</button>
 		</div>
@@ -240,35 +240,13 @@ export default defineComponent({
 		/* outline: 10px solid red; */
 	}
 
+	#matchSelectionDiv h2 {
+		margin-bottom: 1.5rem;
+	}
+
 
 button {
-  align-items: center;
-  background-color: #fff;
-  border: 2px solid #000;
-  box-sizing: border-box;
-  /* color: #000; */
-  cursor: pointer;
-  display: inline-flex;
-  height: 36px;
-  justify-content: center;
-  padding: 0 17px;
-  text-align: center;
-  text-decoration: none;
-  transition: all .4s;
-  margin: 10px;
-  font-weight: 600;
-}
-
-button:hover {
-  border-color: var(--first-highlight-color);
-  color: var(--first-highlight-color);
-  fill: var(--first-highlight-color);
-}
-
-button:active {
-  border-color: var(--first-highlight-color);
-  color: var(--first-highlight-color);
-  fill: var(--first-highlight-color);
+    margin: -0.5rem 0.5rem;
 }
 
 </style>

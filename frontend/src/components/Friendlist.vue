@@ -1,6 +1,6 @@
 <template>
 	<div class="friendlist-wrapper">
-		<h2>Friendlist</h2>
+		<h2>friendlist</h2>
 		<table id="friendlist-table">
 			<thead id="top-row">
 				<tr>
@@ -22,7 +22,7 @@
 						{{ friend.statusname }}
 					</td>
 					<td>
-						<button class="invite-button">Challenge</button>
+						<button class="invite-button">challenge</button>
 					</td>
 				</tr>
 			</tbody>

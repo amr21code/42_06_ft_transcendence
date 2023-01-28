@@ -6,11 +6,11 @@
 					<h1>The Pong Game</h1>
 				</div>
 				<div class="top-nav">
-					<a @click="handleClick('play')">Play</a>
-					<a @click="handleClick('watch')">Watch</a>
-					<a @click="handleClick('chat')">Chat</a>
-					<a @click="handleClick('leaderboard')">Leaderboard</a>
-					<a @click="handleClick('friends')">Friends</a>
+					<a @click="handleClick('play')">play</a>
+					<a @click="handleClick('watch')">watch</a>
+					<a @click="handleClick('chat')">chat</a>
+					<a @click="handleClick('leaderboard')">leaderboard</a>
+					<a @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
 						<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
 					</div>

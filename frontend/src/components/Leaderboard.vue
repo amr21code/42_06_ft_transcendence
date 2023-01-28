@@ -1,6 +1,6 @@
 <template>
 	<div class="leaderboard-wrapper">
-		<h2>Leaderboard</h2>
+		<h2>leaderboard</h2>
 		<table id="leaderboard-table">
 			<thead id="top-row">
 				<tr>
