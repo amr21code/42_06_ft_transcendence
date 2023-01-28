@@ -110,8 +110,6 @@ export default defineComponent({
 	margin-left: 0%;
 }
 
-
-
 #user-photo {
 	cursor: pointer;
 	width: 30%;

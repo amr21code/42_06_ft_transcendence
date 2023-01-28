@@ -101,8 +101,6 @@ export default defineComponent({
 }
 
 button {
-	/* background-color: #48c774; */
-	border-radius: 10%;
 	margin: 0 auto;
 	display: block;
 }

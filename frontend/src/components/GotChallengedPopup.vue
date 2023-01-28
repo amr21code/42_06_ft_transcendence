@@ -127,9 +127,6 @@ export default defineComponent({
 	opacity: 50%;
 }
 
-button {
-	border-radius: 10%;
-}
 </style>
 
 <!-- member since, avatar auswahl, wins, losses, user status, achievements-->
