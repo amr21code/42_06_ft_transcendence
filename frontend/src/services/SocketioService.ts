@@ -44,10 +44,10 @@ class SocketioService {
 }
 
 challengeUser(userid: string) {
-	// DataService.DESIREE -> openMatch + Opponent -#
+	DataService.challengeUser(userid);
 	this.socket.emit('create-new-game');
 	// send signal to opponent App.vue
-	// this.socket.emit('sendChallengeRequest', userid); ############### HEEEEEEEEEEEEEEEEEEEREEEEEEEEEEEEEE
+	this.socket.emit('sendChallengeRequest', userid);
   }
 
   //----------GAME STUFF END----------------------

@@ -1,15 +1,15 @@
 <template>
-	<div class="popup" @keyup.esc="toggleGotChallengedPopup" tabindex="0">
+	<div class="popup" @keyup.esc="(toggleGotChallengedPopup)" tabindex="0">
 		<div class="popup-inner">
 			<slot />
 			<div class="user-data-wrapper">
-				<div>You just got challenged by XXXX: </div>
+				<div>You just got challenged by {{ challenger }}: </div>
 			</div>
 			<button class="challengeAccept" @click="sendAcceptSignal"> 
 				Accept
 			</button>
 		
-			<button class="popup-close" @click="toggleGotChallengedPopup"> 
+			<button class="popup-close" @click="(toggleGotChallengedPopup)"> 
 				Close
 			</button>
 		</div>
@@ -33,7 +33,16 @@ export default defineComponent({
 		}
 	},
 
-	props: ['toggleGotChallengedPopup'],
+	props: {
+		['toggleGotChallengedPopup'] : {
+			required: true,
+			type: Function
+		},
+		challenger : {
+			required: false,
+			type: String
+		},
+	},
 	methods: {
 		retrieveCurrentUser() {
 			DataService.getUser()
@@ -50,8 +59,7 @@ export default defineComponent({
 		},
 
 		sendAcceptSignal() {
-			// PUT DataService.acceptMatch() HERE
-			
+			DataService.acceptChallenge();
 		}
 	},
 

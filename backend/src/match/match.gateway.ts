@@ -3,6 +3,7 @@ import { Server, Socket } from 'socket.io';
 import { MatchService } from './match.service';
 import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
+import { UserService } from 'src/user/user.service';
 
 @WebSocketGateway(3002, {
 	cors: {
@@ -25,7 +26,7 @@ export class MatchGateway {
 	}
 
 
-	constructor(private readonly matchService: MatchService) { }
+	constructor(private readonly matchService: MatchService, private readonly userService: UserService) { }
 
 
 	@SubscribeMessage('create-new-game')
@@ -153,5 +154,13 @@ export class MatchGateway {
 				clearInterval(intervalId); // was macht das?
 			}
 		}, 1000 / 30); // argument determines frames per ssecond
+	}
+
+	@SubscribeMessage('sendChallengeRequest') 
+	async sendChallengeRequest(client: any, data: any) {	
+		const opponentid = await this.userService.getUserData(data, 'socket_token');
+		// console.log("OPPONENTID IS: ", opponentid[0].socket_token);
+		if (opponentid[0])
+			this.server.to(opponentid[0].socket_token).emit('challengeRequest', client.request.session.passport.user.userid);
 	}
 }
