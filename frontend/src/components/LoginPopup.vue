@@ -104,4 +104,24 @@ button {
 	margin: 0 auto;
 	display: block;
 }
+
+/* unvisited link */
+a:link {
+	color: var(--first-highlight-color);
+}
+
+/* visited link */
+a:visited {
+	color: var(--first-highlight-color);
+}
+
+/* mouse over link */
+/* a:hover {
+  color: hotpink;
+} */
+
+/* selected link */
+a:active {
+  color: var(--first-highlight-color);
+}
 </style>

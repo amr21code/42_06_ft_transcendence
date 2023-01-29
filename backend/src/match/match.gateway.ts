@@ -43,10 +43,10 @@ export class MatchGateway {
 			client.emit('init', 1);
 		}
 
-		console.log("room number for opponent status: ", roomNumber);
+		// console.log("room number for opponent status: ", roomNumber);
 		const status = await this.matchService.getOpponentStatus(roomNumber, userid);
 
-		console.log("CHECK_OPPONENT: opponent status is: ", status, " room numver is: ", roomNumber);
+		// console.log("CHECK_OPPONENT: opponent status is: ", status, " room numver is: ", roomNumber);
 
 		client.emit('opponent-status', { data: status, matchid: roomNumber });
 		//client.emit('opponent-status', { data: true });
@@ -55,15 +55,15 @@ export class MatchGateway {
 
 
 	@SubscribeMessage('joinGame')
-	async joinGame(client: any, canvas: any) {
+	async joinGame(client: any, canvasData: number) {
 		console.log("JOINED GAME");
 		const userid = client.request.session.passport.user.userid;
 		const matchid = await this.matchService.listMatch(userid);
 		const roomNumber = matchid[0].matchid;
 
 		MatchGateway[roomNumber] = await createGameState();
-		MatchGateway[roomNumber].canvasHeight = 503;
-		MatchGateway[roomNumber].canvasWidth = 839;
+		MatchGateway[roomNumber].canvasHeight = canvasData[0];
+		MatchGateway[roomNumber].canvasWidth = canvasData[1];
 		MatchGateway[roomNumber].paddleWidth = MatchGateway[roomNumber].canvasWidth / 25;
 		MatchGateway[roomNumber].paddleHeight = MatchGateway[roomNumber].canvasHeight / 4;
 		MatchGateway[roomNumber].ballSize = MatchGateway[roomNumber].canvasWidth / 25;
@@ -74,8 +74,9 @@ export class MatchGateway {
 		MatchGateway[roomNumber].player2.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].paddleHeight / 2;
 		MatchGateway[roomNumber].ball.pos.x = MatchGateway[roomNumber].canvasWidth / 2 - MatchGateway[roomNumber].ballSize / 2;
 		MatchGateway[roomNumber].ball.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].ballSize / 2;
-		MatchGateway[roomNumber].paddleSpeed = 3;
-		MatchGateway[roomNumber].ballSpeed = 6;
+		MatchGateway[roomNumber].paddleSpeed = MatchGateway[roomNumber].canvasHeight / 75;
+		MatchGateway[roomNumber].ballSpeed = MatchGateway[roomNumber].canvasHeight / 75;
+		console.log("canvas height: ", canvasData[0], " ballSpeed: " ,MatchGateway[roomNumber].ballSpeed)
 
 		// RANDOM BALL KICKOFF DIRECTION
 		var randomDirection = Math.floor(Math.random() * 2) + 1;
@@ -89,12 +90,12 @@ export class MatchGateway {
 
 
 		const cur_room = this.server.sockets.adapter.rooms.get(roomNumber);
-		console.log("#CUR ROOM is: ", this.server.sockets.adapter.rooms.get(roomNumber));
+		// console.log("#CUR ROOM is: ", this.server.sockets.adapter.rooms.get(roomNumber));
 
 		let numClients = 0;
 		if (cur_room) {
 			numClients = cur_room.size;
-			console.log("num clients is: ", numClients);
+			// console.log("num clients is: ", numClients);
 		}
 
 		if (numClients === 0) {
@@ -159,7 +160,7 @@ export class MatchGateway {
 	@SubscribeMessage('sendChallengeRequest') 
 	async sendChallengeRequest(client: any, data: any) {	
 		const opponentid = await this.userService.getUserData(data, 'socket_token');
-		console.log("OPPONENTID IS: ", opponentid[0].socket_token);
+		// console.log("OPPONENTID IS: ", opponentid[0].socket_token);
 		if (opponentid[0])
 			this.server.to(opponentid[0].socket_token).emit('challengeRequest', client.request.session.passport.user.userid);
 	}

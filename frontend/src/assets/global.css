@@ -17,6 +17,8 @@ body {
 body, html {
 	margin: 0;
 	padding: 0;
+	max-width: 100%;
+    overflow-x: hidden;
 }
 
 
@@ -50,3 +52,8 @@ button:active {
 	color: var(--first-highlight-color);
 	fill: var(--first-highlight-color);
 }
+
+/* highlighting text color */
+::selection {
+	background: var(--first-highlight-color);
+  }

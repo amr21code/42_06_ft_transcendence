@@ -196,7 +196,7 @@ export default defineComponent({
 		text-align: center;
 		/* grid-template-columns: 0.2fr 1fr 0.2fr; */
 		grid-template-columns:  var(--leftofgame_fr) var(--game_fr) var(--sidewindow_fr);
-		/* gap: 20px; */
+		gap: 30px;
 		max-height: 70vh;
 		margin: 50px;
 		margin-top: 50px;

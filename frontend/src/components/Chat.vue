@@ -190,6 +190,9 @@ export default defineComponent({
 
 <style scoped>
 
+.chat-wrapper {
+	max-height: 600px;
+}
 .chat-chatid {
 	float: left;
 	color: white;

@@ -104,7 +104,7 @@ export default defineComponent({
 				console.log(canvas.height, canvas.width);
 				// REMOVE BLURRINESS END
 
-				socket.emit('joinGame');
+				socket.emit('joinGame', canvas.height, canvas.width);
 			}
 		};
 
