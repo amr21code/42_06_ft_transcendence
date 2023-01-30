@@ -17,16 +17,16 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>avatar:</div>
-				<img id="user-photo" :src="user.picurl" alt="user-photo" width="40" height="40" v-if="toggleAvatar === false">
+				<img id="user-photo" :src="user.picurl" alt="user-photo" v-if="toggleAvatar === false">
 			</div>
 			<div class="user-data-wrapper">
 				<div>select new avatar:</div>
-				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="avatar-photo" width="40" height="40">
-				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="avatar-photo" width="40" height="40">
-				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo" width="40" height="40">
-				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo" width="40" height="40">
-				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="avatar-photo" width="40" height="40">
-				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="avatar-photo" width="40" height="40">
+				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="avatar-photo">
+				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="avatar-photo">
+				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo">
+				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo">
+				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="avatar-photo">
+				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="avatar-photo">
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
 			<div class="user-data-wrapper">
@@ -156,8 +156,8 @@ export default defineComponent({
 
 #user-photo {
 	cursor: pointer;
-	width: 30%;
-	height: 30%;
+	width: 20%;
+	height: 20%;
 	margin: 3%;
 	background: white;
 	border-radius: 50%;
