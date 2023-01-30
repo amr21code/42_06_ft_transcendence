@@ -115,6 +115,12 @@ export default defineComponent({
 
 .popup-inner h2 {
 	text-align: center;
+	color: white;
+}
+
+.popup-inner a {
+	text-align: center;
+	color: white;
 }
 
 .popup-close {

@@ -9,7 +9,7 @@
 		
 		<div v-if="selected === 'overview'">
 			<h2>chat overview</h2>
-			<a v-if="type === 'joined'">This are the chats where you already joined</a>
+			<a v-if="type === 'joined'">This are the chats that you already joined</a>
 			<a v-if="type === 'open'">This are the chats that you can join</a>
 			 <div class="chat-overview">
 
