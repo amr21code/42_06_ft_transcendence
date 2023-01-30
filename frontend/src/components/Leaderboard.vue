@@ -8,12 +8,6 @@
 				<th>name</th>
 				<th>wins</th>
 			</tr>
-			<tr class="leaderboard-item">
-				<td>hello</td>
-				<td>hello</td>
-				<td>hello</td>
-				<td>hello</td>
-			</tr>
 			<tr class="leaderboard-item" v-for="(user, index) in users" :key="index">
 				<td>
 					{{ index + 1 }}
