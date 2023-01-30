@@ -74,7 +74,7 @@ export default defineComponent({
 	}
 
 	#leaderboard-table {
-		padding: calc(1px + 1.5625vw);
+		padding: calc(3px + 1.5625vw);
 		padding-top: 0;
 		border-collapse: collapse;
 		overflow-y: scroll;
@@ -98,7 +98,7 @@ export default defineComponent({
 	}
 
 	#leaderboard-table th, td {
-		padding: calc(0.3px + 1.5625vw) calc(0.8px + 1.5625vw);
+		padding: calc(-10px + 1.5625vw) calc(-5px + 1.5625vw);
 		text-align: center;
 		width: 100%; /*makes table central, but destroys equal width of columns (33% would be equal width)*/
 	}
