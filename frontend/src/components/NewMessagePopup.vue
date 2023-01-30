@@ -9,26 +9,26 @@
                 Group<input class="radio" type="checkbox">
             </label> -->
             <a class="info-text">Enter the chatid that you want to join, create a new chat with (public) or without
-                (protected) a password or enter a userid in order to create a direct chat.</a><br><br>
-            <button @click="(changeShowInput('group'))">Groupchat</button>
-            <button @click="(changeShowInput('dm'))">Privatechat</button>
-            <button @click="(changeShowInput('join'))">Join</button>
-            <br>
+                (protected) a password or enter a userid in order to create a direct chat.</a>
+            <div class="button-box">
+                <button class="" @click="(changeShowInput('group'))">Groupchat</button>
+                <button class="" @click="(changeShowInput('dm'))">Privatechat</button>
+                <button class="" @click="(changeShowInput('join'))">Join</button>
+            </div>
             <!-- <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe> -->
 
             <!-- <form action="" id="myForm" name="myForm" > -->
-              
-                <input class="popup-textfield" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'">(optional)</a>
-                <input class="popup-textfield" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'" required>
-                <input class="popup-textfield" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'" required>
-                <br>
-                <input class="popup-textfield" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join'"><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
-                <br>
-                <button class="submit-button" name="submit" v-if="showinput">
-                    <input class="submit-button" type="submit" @click="createNewChat(chatname, password, showinput)">
-                </button>
+            <input class="" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'">(optional)</a>
+            <input class="" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'" required>
+            <input class="" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'" required>
+            
+            <input class="" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join'"><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
+                
+            <div class="button-box">
+                <button class="submit-button" name="submit" v-if="showinput" @click="createNewChat(chatname, password, showinput)">submit</button>
                 <button class="popup-close" @click="togglePopup">Close</button>
-                <a v-if="invalid === true">Error: Could not perfom action</a>
+                <br><a v-if="invalid === true">Error: Could not perfom action</a>
+            </div>
 
             <!-- </form> -->
         </div>
@@ -117,19 +117,8 @@ export default defineComponent({
 
 <style scoped>
 
-.info-text {
-    border-bottom: 1% solid black;
-}
-
-.submit-button {
-  background-color: blue;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 10px;
+.button-box {
+    padding: 20px 20px
 }
 .popup {
 	/* text-align: left; */
@@ -149,15 +138,21 @@ export default defineComponent({
 	padding: 10px 26px;
 	/* border-radius: 10%; */
 	border-radius: 2px;
-    max-width: 300px;
+    max-width: 400px;
 }
 
 .popup-inner h2 {
 	text-align: center;
+    color: white;
+}
+
+.popup-inner a {
+	text-align: center;
+    color: white;
 }
 
 .popup-textfield {
-    border-top: 20%;
+    float: right;
 }
 
 .popup-close {
