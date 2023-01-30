@@ -10,6 +10,7 @@ interface IUser {
 	userid: string,
 	username: string,
 	picurl: string,
+	profilepic42: string,
 	created: Date,
 	statusname: string,
 	wins: string,

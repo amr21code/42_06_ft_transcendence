@@ -17,7 +17,17 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>avatar:</div>
-				<img id="user-photo" :src="user.picurl" alt="user-photo" width="40" height="40">
+				<img id="user-photo" :src="user.picurl" alt="user-photo" width="40" height="40" v-if="toggleAvatar === false">
+				<button @click="toggleChangeAvatar()" v-if="toggleAvatar === false">change</button>
+				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="user-photo" v-if="toggleAvatar === true">
+				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="user-photo" v-if="toggleAvatar === true">
+				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="user-photo" v-if="toggleAvatar === true">
+				<img @click="changeAvatar(3)" id="select-photo" src="../assets/ralf_profile.png" alt="user-photo" v-if="toggleAvatar === true">
+				<img @click="changeAvatar(4)" id="select-photo" src="../assets/jorit_profile.png" alt="user-photo" v-if="toggleAvatar === true">
+				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="user-photo" v-if="toggleAvatar === true">
+				<button @click="toggleChangeAvatar()" v-if="toggleAvatar === true">cancel</button>
+				<a v-if="avatarError === true">Error: something went wrong</a>
+				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
 			<div class="user-data-wrapper">
 				<div>member since: {{ memberSince }}</div>
@@ -57,6 +67,8 @@ export default defineComponent({
 			memberSince: {} as string,
 			newUsername: '' as string,
 			toggleUsername: false as boolean,
+			toggleAvatar: false as boolean,
+			avatarError: false as boolean,
 		}
 	},
 
@@ -83,6 +95,23 @@ export default defineComponent({
 			await DataService.changeUsername(this.user.userid, newUsername);
 			this.newUsername = '';
 			this.retrieveCurrentUser();
+		},
+
+		toggleChangeAvatar() {
+			this.toggleAvatar = !this.toggleAvatar;
+			this.avatarError = false;
+		},
+
+		async changeAvatar(id : number) {
+			await DataService.changeAvatar(this.user.userid, id)
+			.then((response: ResponseData) => {
+				this.toggleChangeAvatar();
+				this.retrieveCurrentUser();
+			})
+			.catch((e: Error) => {
+				console.log(e);
+				this.avatarError = true;
+			});
 		}
 	},
 
@@ -132,6 +161,15 @@ export default defineComponent({
 	margin: 3%;
 	background: white;
 	border-radius: 50%;
+}
+
+#select-photo {
+	cursor: pointer;
+	width: 10%;
+	height: 10%;
+	margin: 1%;
+	background: white;
+	border-radius: 10%;
 }
 
 
