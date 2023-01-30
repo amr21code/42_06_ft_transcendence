@@ -96,9 +96,10 @@ export class MatchService {
 					const join = await this.db.$queryRaw(
 						Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
 						VALUES (${userid}, ${open[0].matchid}, ${status})
-						RETURNING matchid;` //, to_timestamp(${timeout}));`
+						RETURNING matchid;` //, to_timestamp(${timeout}));`do
 					);
-					if (opponent) {
+					if (opponent) {	
+						console.log("join: ", join);
 						if (join[0].matchid) {
 							const join_opp = await this.db.$queryRaw(
 								Prisma.sql`INSERT INTO public.user_match (userid, matchid)
@@ -203,7 +204,9 @@ export class MatchService {
 	async deleteMatch(userid: string) {
 		const accept = await this.db.$queryRaw(
 			Prisma.sql`DELETE FROM public.match_history
-			WHERE matchid=(SELECT matchid FROM public.user_match WHERE userid=${userid} AND challenge!=3);`
+			WHERE matchid=(SELECT um.matchid FROM public.user_match AS um
+			LEFT JOIN public.match_history AS mh ON mh.matchid=um.matchid
+			WHERE mh.match_status > 0 AND um.userid=${userid});`
 		);
 	}
 
