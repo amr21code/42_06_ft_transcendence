@@ -17,7 +17,17 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>avatar:</div>
-				<img id="user-photo" :src="user.picurl" alt="user-photo" width="40" height="40">
+				<img id="user-photo" :src="user.picurl" alt="user-photo" v-if="toggleAvatar === false">
+			</div>
+			<div class="user-data-wrapper">
+				<div>select new avatar:</div>
+				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="avatar-photo">
+				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="avatar-photo">
+				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo">
+				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo">
+				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="avatar-photo">
+				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="avatar-photo">
+				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
 			<div class="user-data-wrapper">
 				<div>member since: {{ memberSince }}</div>
@@ -57,6 +67,8 @@ export default defineComponent({
 			memberSince: {} as string,
 			newUsername: '' as string,
 			toggleUsername: false as boolean,
+			toggleAvatar: false as boolean,
+			avatarError: false as boolean,
 		}
 	},
 
@@ -83,6 +95,23 @@ export default defineComponent({
 			await DataService.changeUsername(this.user.userid, newUsername);
 			this.newUsername = '';
 			this.retrieveCurrentUser();
+		},
+
+		toggleChangeAvatar() {
+			this.toggleAvatar = !this.toggleAvatar;
+			this.avatarError = false;
+		},
+
+		async changeAvatar(id : number) {
+			await DataService.changeAvatar(this.user.userid, id)
+			.then((response: ResponseData) => {
+				this.toggleChangeAvatar();
+				this.retrieveCurrentUser();
+			})
+			.catch((e: Error) => {
+				console.log(e);
+				this.avatarError = true;
+			});
 		}
 	},
 
@@ -103,7 +132,7 @@ export default defineComponent({
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 98; /*brings to highest front-layer*/
+	z-index: 98; /*brings to second front-layer (behind login popup)*/
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -127,15 +156,24 @@ export default defineComponent({
 
 #user-photo {
 	cursor: pointer;
-	width: 30%;
-	height: 30%;
+	width: 20%;
+	height: 20%;
 	margin: 3%;
 	background: white;
 	border-radius: 50%;
 }
 
+#select-photo {
+	height: 70px;
+	width: 70px;
+	cursor: pointer;
+	margin: 1rem;
+	background: white;
+	border-radius: 50%;
+}
 
-#user-photo:hover {
+
+#select-photo:hover {
 	opacity: 50%;
 }
 

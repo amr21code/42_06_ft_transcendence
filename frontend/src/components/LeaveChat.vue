@@ -62,14 +62,6 @@ export default defineComponent({
 
         leaveChat(chatid : number) {
 			SocketioService.chatLeave(chatid);
-			// SocketioService.refreshChats();
-            // DataService.leaveChat(chatid)
-            // .then((response: ResponseData) => {
-			// 	// console.log("leave chat with the id", chatid);
-			// })
-			// .catch((e: Error) => {
-			// 	console.log(e);
-			// });
         },
 
         setSelectedWindow(selectedWindow : String){
@@ -123,6 +115,12 @@ export default defineComponent({
 
 .popup-inner h2 {
 	text-align: center;
+	color: white;
+}
+
+.popup-inner a {
+	text-align: center;
+	color: white;
 }
 
 .popup-close {

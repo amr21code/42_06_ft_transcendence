@@ -102,6 +102,9 @@ class DataService {
 	changeUsername(userid : string, newUsername : string) {
 		return apiInstance.get('/users/' + userid + '/username/' + newUsername);
 	}
+	changeAvatar(userid : string, id : number) {
+		return apiInstance.get('/users/' + userid + '/avatar/' + id);
+	}
 }
 
 export default new DataService();
