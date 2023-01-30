@@ -30,7 +30,7 @@ export class UserService {
 				profilepic42 
 				ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 				END as picurl, 
-				created, statusname, wins, losses from public.users
+				created, statusname, wins, losses, profilepic42 from public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
 			WHERE userid=${user.userid}`
