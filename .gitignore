@@ -2,3 +2,4 @@
 node_modules
 TMP_GAME.ts
 .env_copy
+dbfolder

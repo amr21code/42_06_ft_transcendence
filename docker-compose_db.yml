@@ -4,7 +4,7 @@ services:
   db:
     container_name: db
     # image: postgres
-    build: ./docker/db
+    build: ./docker
     restart: unless-stopped
     networks:
     - external
@@ -25,10 +25,4 @@ volumes:
     driver_opts: 
       type: none
       o: bind
-      device: ${VOL_DIR}db
-  web:
-    driver: local
-    driver_opts: 
-      type: none
-      o: bind
-      device: ${VOL_DIR}web
+      device: ${PWD}/docker/dbfolder
