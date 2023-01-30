@@ -1,4 +1,5 @@
 import { Body, Controller, ForbiddenException, Get, Param, Post, Req, Session, UseGuards } from '@nestjs/common';
+import { Validator } from 'class-validator';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { MatchService } from './match.service';
@@ -61,15 +62,21 @@ export class MatchController {
 	//	}
 	//}
 
-	@Post('gameover')
-	async gameOver(@Body() state: MatchGameStateDto, @Session() session: Record<string, any>){
+	@Post('gameover/:playerNumber')
+	async gameOver(@Body() state: MatchGameStateDto,@Param() playerNumber:any,  @Session() session: Record<string, any>){
 		console.log("gameover");
 		const userid = session.passport.user.userid;
 		try {
 			const matchid = await this.matchService.listActiveMatch(userid);
 			//get Player from database (1 or 2)
+			var update;
+			console.log("Playernumber in gameover", playerNumber.playerNumber)
+			console.log("gamestate", state)
 			if (matchid[0].matchid) {
-				const update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer1); //how do I know if I'm Player1 or Player2
+				if (playerNumber.playerNumber == 1)
+					update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer1);
+				else
+					update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer2);
 				return(update);
 			}
 		} catch (error) {

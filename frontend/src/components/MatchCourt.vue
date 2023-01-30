@@ -49,7 +49,7 @@ export default defineComponent({
 				return;
 			}
 
-			console.log("game starts");
+			//console.log("game starts");
 			canvas.style.display = 'block';
 			matchWaitPopup.style.display = 'none';
 			matchSelectionDiv.style.display = 'none';
@@ -64,14 +64,14 @@ export default defineComponent({
 			gameState = JSON.parse(gameState);
 			requestAnimationFrame(() => paintGame(gameState)); // kommt raus
 			if (gameState.scorePlayer1 == 3) {
-				DataService.gameOver(gameState);
+				DataService.gameOver(gameState, playerNumber);
 				if (playerNumber === 1)
 					alert("You win! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 				else
 					alert("You lose! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 			}
 			else if (gameState.scorePlayer2 == 3) {
-				DataService.gameOver(gameState);
+				DataService.gameOver(gameState, playerNumber);
 				if (playerNumber === 1)
 					alert("You lose! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 				else

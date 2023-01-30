@@ -45,8 +45,8 @@ class DataService {
 		return apiInstance.get('/chat/leave/' + chatid)
 	}
 
-	gameOver(gameState : any) : Promise<any> {
-		return apiInstance.post('/match/gameover', JSON.stringify(gameState));
+	gameOver(gameState : any, playerNumber: number) : Promise<any> {
+		return apiInstance.post('/match/gameover/' + playerNumber, JSON.stringify(gameState));
 	}
 	openSingleMatch(): Promise<any> {
 		return apiInstance.get('/match/opensingle');

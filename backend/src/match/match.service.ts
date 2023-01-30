@@ -19,7 +19,7 @@ export class MatchService {
 		const matchid = await this.db.$queryRaw(
 			Prisma.sql`SELECT um.matchid FROM public.user_match AS um
 			LEFT JOIN public.match_history AS mh ON um.matchid=mh.matchid
-			WHERE userid=${userid} AND mh.match_status=CAST(1 AS INTEGER);`
+			WHERE userid=${userid} AND mh.match_status>0;`
 		);
 		return matchid;
 	}
@@ -214,29 +214,30 @@ export class MatchService {
 	async updateMatch(matchid: any, userid: any, userscore: number)
 	{ //update userscore, match_status, wins/losses
 		try{
+		console.log("update match");
 		console.log(matchid, userid, userscore);
 		const score = await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${userscore} AS INTEGER)
 			WHERE matchid=${matchid} AND userid=${userid};`);
-			console.log("score", score);
-		const match = await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.match_history SET match_status=0
-				WHERE matchid=${matchid}`);
-			console.log("match", match);
 		if (userscore == 3){
+			console.log("win");
 			var win= await this.db.$queryRaw<number>(
 			Prisma.sql`SELECT wins FROM public.users WHERE userid=${userid};`);
 			win[0].wins = win[0].wins + 1;
 			const user = await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.users SET wins=CAST(${win[0].wins} AS INTEGER)
 				WHERE userid=${userid}`);
+			const match = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.match_history SET match_status=0
+					WHERE matchid=${matchid}`);
 		}
 		else{
 			var loss= await this.db.$queryRaw<number>(
-			Prisma.sql`SELECT losses FROM public.user WHERE userid=${userid};`);
+			Prisma.sql`SELECT losses FROM public.users WHERE userid=${userid};`);
 			loss[0].losses = loss[0].losses + 1;
+			console.log("loss");
 			const user = await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.user SET losses=CAST(${loss[0].losses} AS INTEGER)
+			Prisma.sql`UPDATE public.users SET losses=CAST(${loss[0].losses} AS INTEGER)
 				WHERE userid=${userid}`);
 		}
 		}catch(error){
