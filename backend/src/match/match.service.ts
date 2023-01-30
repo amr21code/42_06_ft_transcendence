@@ -172,25 +172,14 @@ export class MatchService {
 	}
 
 	async acceptMatch(userid: string) {
-		// const accept = await this.db.$queryRaw(
-		// 	Prisma.sql`UPDATE public.user_match
-		// 	SET challenge=1
-		// 	WHERE userid=${userid}
-		// 	RETURNING matchid;`
-		// );
 		const accept = await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.user_match
-			SET challenge=1
-			WHERE userid=${userid};`
-		);
-		const matchid = await this.db.$queryRaw(
-			Prisma.sql`SELECT matchid FROM public.user_match
-			WHERE userid=${userid} 
-			AND challenge=1;`
-		);
-		console.log("matchid:", matchid);
+			Prisma.sql`UPDATE FROM public.user_match AS um 
+			LEFT JOIN public.match_history AS mh ON mh.matchid=um.matchid
+			SET um.challenge=1
+			WHERE mh.match_status > 0 AND um.userid=${userid})`);
+		console.log("matchid:", accept);
 		const matchstatus = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.match_history SET match_status=1 WHERE matchid=${matchid[0].matchid};`
+				Prisma.sql`UPDATE public.match_history SET match_status=1 WHERE matchid=${accept[0].matchid};`
 			);
 	}
 
@@ -229,9 +218,11 @@ export class MatchService {
 		const score = await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${userscore} AS INTEGER)
 			WHERE matchid=${matchid} AND userid=${userid};`);
+			console.log("score", score);
 		const match = await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.match_history SET match_status=CAST(0 AS INTEGER)
+			Prisma.sql`UPDATE public.match_history SET match_status=0
 				WHERE matchid=${matchid}`);
+			console.log("match", match);
 		if (userscore == 3){
 			var win= await this.db.$queryRaw<number>(
 			Prisma.sql`SELECT wins FROM public.users WHERE userid=${userid};`);
