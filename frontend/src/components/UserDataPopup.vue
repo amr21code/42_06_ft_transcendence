@@ -18,15 +18,14 @@
 			<div class="user-data-wrapper">
 				<div>avatar:</div>
 				<img id="user-photo" :src="user.picurl" alt="user-photo" width="40" height="40" v-if="toggleAvatar === false">
-				<button @click="toggleChangeAvatar()" v-if="toggleAvatar === false">change</button>
-				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="user-photo" v-if="toggleAvatar === true">
-				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="user-photo" v-if="toggleAvatar === true">
-				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="user-photo" v-if="toggleAvatar === true">
-				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="user-photo" v-if="toggleAvatar === true">
-				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="user-photo" v-if="toggleAvatar === true">
-				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="user-photo" v-if="toggleAvatar === true">
-				<button @click="toggleChangeAvatar()" v-if="toggleAvatar === true">cancel</button>
-				<a v-if="avatarError === true">Error: something went wrong</a>
+			</div>
+			<div class="user-data-wrapper">
+				<div>select new avatar:</div>
+				<img @click="changeAvatar(42)" id="select-photo" :src="user.picurl" alt="avatar-photo" width="40" height="40">
+				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo" width="40" height="40">
+				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo" width="40" height="40">
+				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="avatar-photo" width="40" height="40">
+				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="avatar-photo" width="40" height="40">
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
 			<div class="user-data-wrapper">
@@ -132,7 +131,7 @@ export default defineComponent({
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 98; /*brings to highest front-layer*/
+	z-index: 98; /*brings to second front-layer (behind login popup)*/
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -164,16 +163,16 @@ export default defineComponent({
 }
 
 #select-photo {
+	height: 70px;
+	width: 70px;
 	cursor: pointer;
-	width: 10%;
-	height: 10%;
-	margin: 1%;
+	margin: 1rem;
 	background: white;
-	border-radius: 10%;
+	border-radius: 50%;
 }
 
 
-#user-photo:hover {
+#select-photo:hover {
 	opacity: 50%;
 }
 
