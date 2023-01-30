@@ -209,12 +209,7 @@ export default defineComponent({
 		min-width: 66%;
 	}
 
-	/*.game-full-screen {
-		max-height: 70vh; find something more elegant
-		margin: 40px auto;
-		gap: 20px;
-		outline: 10px solid purple;
-	} */
+
 
 	footer {
 		text-align: center;

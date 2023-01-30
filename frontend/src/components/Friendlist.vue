@@ -2,30 +2,22 @@
 	<div class="friendlist-wrapper">
 		<h2>friendlist</h2>
 		<table id="friendlist-table">
-			<thead id="top-row">
-				<tr>
-					<th>picture</th>
-					<th>name</th>
-					<th>status</th>
-					<th>invite</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="friendlist-item" v-for="(friend, index) in friends" :key="index">
-					<td>
-						<img :src="friend.picurl">
-					</td>
-					<td>
-						{{ friend.username }}
-					</td>
-					<td>
-						{{ friend.statusname }}
-					</td>
-					<td>
-						<button class="invite-button">challenge</button>
-					</td>
-				</tr>
-			</tbody>
+			<tr>
+				<th>picture</th>
+				<th>name</th>
+				<th>status</th>
+			</tr>
+			<tr class="friendlist-item" v-for="(friend, index) in friends" :key="index">
+				<td>
+					<img :src="friend.picurl">
+				</td>
+				<td>
+					{{ friend.username }}
+				</td>
+				<td>
+					{{ friend.statusname }}
+				</td>
+			</tr>
 		</table>
 	</div>
 </template>
@@ -74,18 +66,29 @@ export default defineComponent({
 
 
 <style scoped>	
-	
-	#friendlist-table {
-		border-collapse: collapse;
-		overflow: auto;
-		max-height: 500px;
-		/* table-layout: fixed; */
-		display: block;
-		position: relative;
-		scrollbar-gutter: stable both-edges;
+
+	.friendlist-wrapper {
+		width: 100%;
+		padding: 0;
 	}
 	
-	th {
+	#friendlist-table {
+		padding: calc(1px + 1.5625vw);
+		padding-top: 0;
+		border-collapse: collapse;
+		overflow-y: scroll;
+		max-height: 500px;
+		table-layout: fixed;
+		display: block;
+		scrollbar-gutter: stable both-edges;
+		width: 100%;
+	}
+
+	#friendlist-table tr {
+		border: var(--second-bg-color) 3px solid;
+	}
+
+	#friendlist-table th {
 		position: sticky;
 		top: 0;
 		background-color: var(--second-bg-color);
@@ -93,8 +96,9 @@ export default defineComponent({
 	}
 
 	#friendlist-table th, td {
-		padding: 20px 40px;
+		padding: calc(0.3px + 1.5625vw) calc(0.8px + 1.5625vw);
 		text-align: center;
+		width: 100%; /*makes table central, but destroys equal width of columns (33% would be equal width)*/
 	}
 
 	/* hover effect on all but the first line */
@@ -104,16 +108,12 @@ export default defineComponent({
 		cursor: pointer;
 	}
 
+	#top-row tr:hover {
+		cursor: default;
+	}
+
 	.friendlist-item img {
 		max-height: 30px;
 	}
-
-	/* #friendlist-table tr:hover {
-		background-color: var(--first-highlight-color);
-		color: white;
-		cursor: pointer;
-	} */
-
-
 
 </style>

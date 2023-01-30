@@ -30,8 +30,21 @@ export default defineComponent({
 	.side-window-wrapper {
 		background: white;
 		/* background-color: var(--second-bg-color); */
-		color: red;
+		color: var(--second-bg-color);
 		border-radius: 2px;
-		padding: 30px;
+
+		/* make sidewindow fit horizontally (force scrollbar if needed) */
+		overflow-x: hidden;
+		/* width: 100%; */
+
+		/* make element inline flex-container */
+  		/* this will make its children flex-items */
+		display: inline-flex;
+		/* align-items items in column */
+		flex-direction: column;
+		/* center items horizontally */
+		align-items: center;
+		/* center items vertically */
+		justify-content: center;
 	}
 </style>
