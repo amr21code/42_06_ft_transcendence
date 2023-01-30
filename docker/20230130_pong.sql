@@ -20,7 +20,6 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
-
 --
 -- Name: achievements; Type: TABLE; Schema: public; Owner: pong
 --
@@ -316,7 +315,10 @@ CREATE TABLE public.users (
     profilepic42 character varying(200),
     avatar integer DEFAULT 42 NOT NULL,
     twofasecret character varying(100),
-    access_token character varying(100)
+    access_token character varying(100),
+    losses integer DEFAULT 0 NOT NULL,
+    socket_token character varying(100),
+    wins integer DEFAULT 0 NOT NULL
 );
 
 
@@ -380,19 +382,6 @@ ALTER SEQUENCE public.users_achievements_id_seq OWNED BY public.users_achievemen
 
 
 --
--- Name: userstats; Type: TABLE; Schema: public; Owner: pong
---
-
-CREATE TABLE public.userstats (
-    userid character varying(8) NOT NULL,
-    wins integer,
-    losses integer
-);
-
-
-ALTER TABLE public.userstats OWNER TO pong;
-
---
 -- Name: chat chatid; Type: DEFAULT; Schema: public; Owner: pong
 --
 
@@ -453,6 +442,22 @@ COPY public.challenge_status (statuscode, status_name) FROM stdin;
 
 
 --
+-- Data for Name: chat; Type: TABLE DATA; Schema: public; Owner: pong
+--
+
+COPY public.chat (type, password, chatid, chat_name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: chat_messages; Type: TABLE DATA; Schema: public; Owner: pong
+--
+
+COPY public.chat_messages (userid, chatid, message, "time", id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: chat_type; Type: TABLE DATA; Schema: public; Owner: pong
 --
 
@@ -465,6 +470,14 @@ COPY public.chat_type (typeid, typename) FROM stdin;
 
 
 --
+-- Data for Name: friends; Type: TABLE DATA; Schema: public; Owner: pong
+--
+
+COPY public.friends (requesterid, addresseeid, statuscode) FROM stdin;
+\.
+
+
+--
 -- Data for Name: friendship_codes; Type: TABLE DATA; Schema: public; Owner: pong
 --
 
@@ -472,6 +485,14 @@ COPY public.friendship_codes (statuscode, statusname) FROM stdin;
 0	requested
 1	friends
 2	blocked
+\.
+
+
+--
+-- Data for Name: match_history; Type: TABLE DATA; Schema: public; Owner: pong
+--
+
+COPY public.match_history (match_status, matchid) FROM stdin;
 \.
 
 
@@ -497,6 +518,23 @@ playing	2
 matchmaking	3
 \.
 
+
+--
+-- Data for Name: user_chat; Type: TABLE DATA; Schema: public; Owner: pong
+--
+
+COPY public.user_chat (userid, chatid, status, bantime) FROM stdin;
+\.
+
+
+--
+-- Data for Name: user_match; Type: TABLE DATA; Schema: public; Owner: pong
+--
+
+COPY public.user_match (userid, matchid, user_score, challenge, timeout) FROM stdin;
+\.
+
+
 --
 -- Data for Name: user_status_chat; Type: TABLE DATA; Schema: public; Owner: pong
 --
@@ -506,6 +544,22 @@ COPY public.user_status_chat (statusid, statusname) FROM stdin;
 1	member
 2	muted
 3	ban
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: pong
+--
+
+COPY public.users (userid, username, twofa, created, user_status, profilepic42, avatar, twofasecret, access_token, losses, socket_token, wins) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users_achievements; Type: TABLE DATA; Schema: public; Owner: pong
+--
+
+COPY public.users_achievements (userid, achievementid, count, id) FROM stdin;
 \.
 
 
@@ -650,14 +704,6 @@ ALTER TABLE ONLY public.users_achievements
 
 
 --
--- Name: userstats pk_userstats; Type: CONSTRAINT; Schema: public; Owner: pong
---
-
-ALTER TABLE ONLY public.userstats
-    ADD CONSTRAINT pk_userstats PRIMARY KEY (userid);
-
-
---
 -- Name: friends unq_friends; Type: CONSTRAINT; Schema: public; Owner: pong
 --
 
@@ -690,11 +736,11 @@ ALTER TABLE ONLY public.chat_messages
 
 
 --
--- Name: chat_messages fk_chat_messages_users; Type: FK CONSTRAINT; Schema: public; Owner: pong
+-- Name: chat_messages fk_chat_messages_user_chat; Type: FK CONSTRAINT; Schema: public; Owner: pong
 --
 
 ALTER TABLE ONLY public.chat_messages
-    ADD CONSTRAINT fk_chat_messages_users FOREIGN KEY (userid) REFERENCES public.users(userid) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT fk_chat_messages_user_chat FOREIGN KEY (userid) REFERENCES public.users(userid) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -807,14 +853,6 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT fk_users_online_status FOREIGN KEY (user_status) REFERENCES public.online_status(statuscode) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: userstats fk_userstats_users; Type: FK CONSTRAINT; Schema: public; Owner: pong
---
-
-ALTER TABLE ONLY public.userstats
-    ADD CONSTRAINT fk_userstats_users FOREIGN KEY (userid) REFERENCES public.users(userid) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

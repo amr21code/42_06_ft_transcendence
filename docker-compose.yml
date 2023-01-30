@@ -36,7 +36,7 @@ services:
     - 5173:5173
     restart: unless-stopped
     depends_on:
-      - db
+      - db, backend
   
 networks:
   external:
