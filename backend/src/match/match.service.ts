@@ -227,9 +227,12 @@ export class MatchService {
 			const user = await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.users SET wins=CAST(${win[0].wins} AS INTEGER)
 				WHERE userid=${userid}`);
+
+			// only change if both player scores are updated!!!!
 			const match = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.match_history SET match_status=0
 					WHERE matchid=${matchid}`);
+			// -----------------------------------------
 		}
 		else{
 			var loss= await this.db.$queryRaw<number>(

@@ -85,6 +85,8 @@ export default defineComponent({
 
 
 		const handleOpponentArrived = (data: any) => {
+			console.log("opponent arrived")
+			console.log(data)
 			opponentArrived.value = data.data; 
 			if (!opponentArrived.value){
 				matchSelectionDiv.style.display = 'none';
@@ -106,9 +108,13 @@ export default defineComponent({
 				console.log(canvas.height, canvas.width);
 				// REMOVE BLURRINESS END
 
-				socket.emit('joinGame', canvas.height, canvas.width);
+				socket.emit('startGame', canvas.height, canvas.width);
 			}
 		};
+
+		const handleJoinGame = (gameState:any, roomNumber: number) => {
+			socket.emit('joinGame', gameState, roomNumber);
+		}
 
 		const handleJoinedEmptyGame = () => {
 			reset();
@@ -227,6 +233,7 @@ export default defineComponent({
 		socket.on('gameOver', handleGameOver);
 		socket.on('joinedEmptyGame', handleJoinedEmptyGame);
 		socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
+		socket.on('joinGame', handleJoinGame);
 		////############# SOCKETIO #############
 
         return { canvas, opponentArrived, initCanvas, paintGame, removeMatchWaitPopup };
