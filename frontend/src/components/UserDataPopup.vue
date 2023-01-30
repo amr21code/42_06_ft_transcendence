@@ -22,8 +22,8 @@
 				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="user-photo" v-if="toggleAvatar === true">
 				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="user-photo" v-if="toggleAvatar === true">
 				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="user-photo" v-if="toggleAvatar === true">
-				<img @click="changeAvatar(3)" id="select-photo" src="../assets/ralf_profile.png" alt="user-photo" v-if="toggleAvatar === true">
-				<img @click="changeAvatar(4)" id="select-photo" src="../assets/jorit_profile.png" alt="user-photo" v-if="toggleAvatar === true">
+				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="user-photo" v-if="toggleAvatar === true">
+				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="user-photo" v-if="toggleAvatar === true">
 				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="user-photo" v-if="toggleAvatar === true">
 				<button @click="toggleChangeAvatar()" v-if="toggleAvatar === true">cancel</button>
 				<a v-if="avatarError === true">Error: something went wrong</a>
