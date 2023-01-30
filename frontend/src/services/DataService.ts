@@ -99,6 +99,9 @@ class DataService {
 			headers: {'Content-Type': 'application/json'}
 		})
 	}
+	changeUsername(userid : string, newUsername : string) {
+		return apiInstance.get('/users/' + userid + '/username/' + newUsername);
+	}
 }
 
 export default new DataService();

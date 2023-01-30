@@ -9,7 +9,11 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>user alias: </div>
-				<input type="text" :value="user.username" />
+				<input disabled type="text" :value="user.username" v-if="toggleUsername === false"/>
+				<button @click="toggleChangeUsername()" v-if="toggleUsername === false">change</button>
+
+				<input type="text" v-model="newUsername" v-if="toggleUsername === true">
+				<button @click="(changeUsername(newUsername), toggleChangeUsername())" v-if="toggleUsername === true">submit</button>
 			</div>
 			<div class="user-data-wrapper">
 				<div>avatar:</div>
@@ -50,7 +54,9 @@ export default defineComponent({
 	data () {
 		return {
 			user: {} as IUser,
-			memberSince: {} as string
+			memberSince: {} as string,
+			newUsername: '' as string,
+			toggleUsername: false as boolean,
 		}
 	},
 
@@ -69,6 +75,15 @@ export default defineComponent({
 		formatDate() {
 			this.memberSince = new Intl.DateTimeFormat('en-us').format(this.user.created);
 		},
+		toggleChangeUsername() {
+			this.toggleUsername = !this.toggleUsername;
+		},
+
+		async changeUsername(newUsername : string){
+			await DataService.changeUsername(this.user.userid, newUsername);
+			this.newUsername = '';
+			this.retrieveCurrentUser();
+		}
 	},
 
 	mounted () {
