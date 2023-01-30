@@ -21,7 +21,8 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>select new avatar:</div>
-				<img @click="changeAvatar(42)" id="select-photo" :src="user.picurl" alt="avatar-photo" width="40" height="40">
+				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="avatar-photo" width="40" height="40">
+				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="avatar-photo" width="40" height="40">
 				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo" width="40" height="40">
 				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo" width="40" height="40">
 				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="avatar-photo" width="40" height="40">
