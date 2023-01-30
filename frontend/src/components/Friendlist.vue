@@ -76,7 +76,7 @@ export default defineComponent({
 		padding: calc(3px + 1.5625vw);
 		padding-top: 0;
 		border-collapse: collapse;
-		overflow-y: scroll;
+		overflow-y: auto;
 		max-height: 500px;
 		table-layout: fixed;
 		display: block;

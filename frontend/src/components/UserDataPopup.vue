@@ -156,8 +156,8 @@ export default defineComponent({
 
 #user-photo {
 	cursor: pointer;
-	width: 20%;
-	height: 20%;
+	width: 15%;
+	height: 15%;
 	margin: 3%;
 	background: white;
 	border-radius: 50%;
