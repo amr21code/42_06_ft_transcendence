@@ -38,7 +38,8 @@ export default defineComponent({
 		
 		// #################  HANDLERS #######################
         const handlePlayerNumber = (nbr: number) => {
-			playerNumber = nbr;
+			if(!playerNumber)
+				playerNumber = nbr;
 			console.log("your player number is: ", playerNumber);
 		}
 		

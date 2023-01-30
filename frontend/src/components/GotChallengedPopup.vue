@@ -60,9 +60,9 @@ export default defineComponent({
 			this.memberSince = new Intl.DateTimeFormat('en-us').format(this.user.created);
 		},
 
-		sendAcceptSignal() {
+		async sendAcceptSignal() {
 			console.log("accepting challenge");
-			DataService.acceptChallenge();
+			await DataService.acceptChallenge();
 			this.socket.emit('create-new-game');
 		},
 

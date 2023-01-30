@@ -43,11 +43,18 @@ class SocketioService {
 	this.socket.emit('create-new-game');
 }
 
-challengeUser(userid: string) {
-  this.socket.emit('create-new-game');
-	DataService.challengeUser(userid);
-	// send signal to opponent App.vue
-	this.socket.emit('sendChallengeRequest', userid);
+  challengeUser(userid: string) {
+    try{
+      DataService.challengeUser(userid);
+      this.socket.emit('create-new-game');
+      // send signal to opponent App.vue
+      this.socket.emit('sendChallengeRequest', userid);
+    }
+    catch(error)
+    {
+      console.log("you can't challenge someone until you finish your current game");
+    }
+
   }
 
   //----------GAME STUFF END----------------------

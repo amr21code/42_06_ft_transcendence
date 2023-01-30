@@ -9,7 +9,7 @@
 		
 		<div v-if="selected === 'overview'">
 			<h2>chat overview</h2>
-			<a v-if="type === 'joined'">This are the chats where you already joined</a>
+			<a v-if="type === 'joined'">This are the chats that you already joined</a>
 			<a v-if="type === 'open'">This are the chats that you can join</a>
 			 <div class="chat-overview">
 
@@ -60,6 +60,7 @@
 					<img src="../assets/blackcross.png" alt="user-photo" width="35" height="40">
 				</a>
 			</div>
+			<div style="clear: left"></div>
 
 			<NewMessagePopup id="NewMessagePopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
 			<LeaveChatPopup id="LeaveChatPopup" v-if="LeaveChatTrigger === true" :LeaveChattogglePopup="() => LeaveChattogglePopup()" :curr_chat="sel_chat" :selectedWindow="selected"/>
@@ -220,43 +221,47 @@ export default defineComponent({
 		scrollbar-width: thin;
 		/* display: flex;
 		flex-direction: column-reverse; */
-	}
+}
 
-	.user-photo {
-		float: left;
-		padding-top: 15px;
-	}
-	
-	.chat-message-view {
-		background-color: rgb(0,0,0,0.4);
-		border: black solid 1px;
-		color: black;
-		padding: 10px;
-	}
-	.chat-message-view:hover {
-		background-color: rgb(0,0,0,0.3)
-	}
+.user-photo {
+	float: left;
+	padding-top: 15px;
+}
 
-	.chat-person-text {
-		color:rgb(224, 19, 19);
-		padding-left: 50px;
-	}
+.chat-message-view {
+	background-color: rgb(0,0,0,0.4);
+	border: black solid 1px;
+	color: black;
+	padding: 10px;
+}
+.chat-message-view:hover {
+	background-color: rgb(0,0,0,0.3)
+}
 
-	.chat-person-message {
-		color: black solid;
-		padding-left: 50px;
-	}
-	
-	.chat-menu {
-		background-color: var(--second-bg-color);
-		color: white;
-		text-align: center;
-	}
-	.chat-menu img {
-		margin: 5px 20px;
-		cursor: pointer;
-	}
-	.chat-menu img:hover {
-		background-color: rgb(0,0,0,0.3)
-	}
+.chat-person-text {
+	color:rgb(224, 19, 19);
+	padding-left: 50px;
+}
+
+.chat-person-message {
+	color: black solid;
+	padding-left: 50px;
+}
+
+.chat-menu {
+	background-color: var(--second-bg-color);
+	color: white;
+	text-align: center;
+	max-height: 50px;
+	width: 100%;
+	overflow: auto;
+}
+.chat-menu img {
+	margin: 5px 20px;
+	cursor: pointer;
+	float: left;
+}
+.chat-menu img:hover {
+	background-color: rgb(0,0,0,0.3)
+}
 </style>
