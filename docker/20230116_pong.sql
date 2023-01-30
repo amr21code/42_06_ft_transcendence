@@ -20,6 +20,7 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
+
 --
 -- Name: achievements; Type: TABLE; Schema: public; Owner: pong
 --
@@ -45,6 +46,25 @@ CREATE TABLE public.avatars (
 
 
 ALTER TABLE public.avatars OWNER TO pong;
+
+--
+-- Name: challenge_status; Type: TABLE; Schema: public; Owner: pong
+--
+
+CREATE TABLE public.challenge_status (
+    statuscode integer NOT NULL,
+    status_name character varying(100)
+);
+
+
+ALTER TABLE public.challenge_status OWNER TO pong;
+
+--
+-- Name: TABLE challenge_status; Type: COMMENT; Schema: public; Owner: pong
+--
+
+COMMENT ON TABLE public.challenge_status IS '0 not accepted\n1 accepted\n2 queue';
+
 
 --
 -- Name: chat; Type: TABLE; Schema: public; Owner: pong
@@ -168,12 +188,53 @@ ALTER TABLE public.friendship_codes OWNER TO pong;
 --
 
 CREATE TABLE public.match_history (
-    matchid integer NOT NULL,
-    match_type integer NOT NULL
+    match_status integer NOT NULL,
+    matchid integer NOT NULL
 );
 
 
 ALTER TABLE public.match_history OWNER TO pong;
+
+--
+-- Name: match_history_matchid_seq; Type: SEQUENCE; Schema: public; Owner: pong
+--
+
+CREATE SEQUENCE public.match_history_matchid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.match_history_matchid_seq OWNER TO pong;
+
+--
+-- Name: match_history_matchid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: pong
+--
+
+ALTER SEQUENCE public.match_history_matchid_seq OWNED BY public.match_history.matchid;
+
+
+--
+-- Name: match_status; Type: TABLE; Schema: public; Owner: pong
+--
+
+CREATE TABLE public.match_status (
+    statuscode integer NOT NULL,
+    statusname character varying(100)
+);
+
+
+ALTER TABLE public.match_status OWNER TO pong;
+
+--
+-- Name: TABLE match_status; Type: COMMENT; Schema: public; Owner: pong
+--
+
+COMMENT ON TABLE public.match_status IS '0 finished\n1 active\n2 waiting for players';
+
 
 --
 -- Name: online_status; Type: TABLE; Schema: public; Owner: pong
@@ -215,20 +276,13 @@ ALTER TABLE public.user_chat OWNER TO pong;
 CREATE TABLE public.user_match (
     userid character varying(8) NOT NULL,
     matchid integer NOT NULL,
-    user_score integer NOT NULL,
+    user_score integer DEFAULT 0 NOT NULL,
     challenge integer DEFAULT 0 NOT NULL,
-    timeout timestamp without time zone NOT NULL
+    timeout timestamp without time zone
 );
 
 
 ALTER TABLE public.user_match OWNER TO pong;
-
---
--- Name: COLUMN user_match.challenge; Type: COMMENT; Schema: public; Owner: pong
---
-
-COMMENT ON COLUMN public.user_match.challenge IS '0 not accepted\n1 accepted\n2 queue';
-
 
 --
 -- Name: user_status_chat; Type: TABLE; Schema: public; Owner: pong
@@ -260,7 +314,9 @@ CREATE TABLE public.users (
     created timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     user_status integer DEFAULT 0 NOT NULL,
     profilepic42 character varying(200),
-    avatar integer DEFAULT 42 NOT NULL
+    avatar integer DEFAULT 42 NOT NULL,
+    twofasecret character varying(100),
+    access_token character varying(100)
 );
 
 
@@ -351,6 +407,13 @@ ALTER TABLE ONLY public.chat_messages ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: match_history matchid; Type: DEFAULT; Schema: public; Owner: pong
+--
+
+ALTER TABLE ONLY public.match_history ALTER COLUMN matchid SET DEFAULT nextval('public.match_history_matchid_seq'::regclass);
+
+
+--
 -- Name: users_achievements id; Type: DEFAULT; Schema: public; Owner: pong
 --
 
@@ -364,9 +427,7 @@ ALTER TABLE ONLY public.users_achievements ALTER COLUMN id SET DEFAULT nextval('
 COPY public.achievements (achievementid, achievementname, achievementdescription) FROM stdin;
 0	First Blood	You scored the first point in a match
 1	Too easy	You won to zero
-2	the Gui	changed your name to Guillaume Calvi
-3	the Chatty one	typed 10 messages in one chat
-4	MacBeth	said something insulting in french in a chat
+2	the Gui	changed your name to GuillaumeCalvi
 \.
 
 
@@ -381,24 +442,13 @@ COPY public.avatars (avatarurl, avatarname, avatarid) FROM stdin;
 
 
 --
--- Data for Name: chat; Type: TABLE DATA; Schema: public; Owner: pong
+-- Data for Name: challenge_status; Type: TABLE DATA; Schema: public; Owner: pong
 --
 
-COPY public.chat (type, password, chatid, chat_name) FROM stdin;
-0		1	new name
-\.
-
-
---
--- Data for Name: chat_messages; Type: TABLE DATA; Schema: public; Owner: pong
---
-
-COPY public.chat_messages (userid, chatid, message, "time", id) FROM stdin;
-anruland	1	testnachricht	2023-01-08 16:40:56.050666	2
-anruland	1	testnachricht	2023-01-08 16:41:13.182293	3
-djedasch	1	testnachricht2	2023-01-08 16:41:29.510422	4
-jtomala	1	test	2023-01-08 16:44:00.796979	8
-anruland	1	test	2023-01-09 14:51:53.502991	9
+COPY public.challenge_status (statuscode, status_name) FROM stdin;
+0	not accepted
+1	accepted
+2	queue
 \.
 
 
@@ -415,17 +465,6 @@ COPY public.chat_type (typeid, typename) FROM stdin;
 
 
 --
--- Data for Name: friends; Type: TABLE DATA; Schema: public; Owner: pong
---
-
-COPY public.friends (requesterid, addresseeid, statuscode) FROM stdin;
-jtomala	raweber	2
-jtomala	djedasch	1
-djedasch	raweber	1
-\.
-
-
---
 -- Data for Name: friendship_codes; Type: TABLE DATA; Schema: public; Owner: pong
 --
 
@@ -437,10 +476,13 @@ COPY public.friendship_codes (statuscode, statusname) FROM stdin;
 
 
 --
--- Data for Name: match_history; Type: TABLE DATA; Schema: public; Owner: pong
+-- Data for Name: match_status; Type: TABLE DATA; Schema: public; Owner: pong
 --
 
-COPY public.match_history (matchid, match_type) FROM stdin;
+COPY public.match_status (statuscode, statusname) FROM stdin;
+0	finished
+1	active
+2	waiting for players
 \.
 
 
@@ -455,25 +497,6 @@ playing	2
 matchmaking	3
 \.
 
-
---
--- Data for Name: user_chat; Type: TABLE DATA; Schema: public; Owner: pong
---
-
-COPY public.user_chat (userid, chatid, status, bantime) FROM stdin;
-djedasch	1	0	\N
-anruland	1	3	2023-01-09 14:53:10.993
-\.
-
-
---
--- Data for Name: user_match; Type: TABLE DATA; Schema: public; Owner: pong
---
-
-COPY public.user_match (userid, matchid, user_score, challenge, timeout) FROM stdin;
-\.
-
-
 --
 -- Data for Name: user_status_chat; Type: TABLE DATA; Schema: public; Owner: pong
 --
@@ -487,41 +510,10 @@ COPY public.user_status_chat (statusid, statusname) FROM stdin;
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: pong
---
-
-COPY public.users (userid, username, twofa, created, user_status, profilepic42, avatar) FROM stdin;
-raweber	raweber	0	2022-12-29 13:01:31.283	0	\N	0
-djedasch	Desiree	0	2022-12-29 16:15:29.517	0	\N	0
-anruland	Andreas	0	2023-01-05 08:37:27.188	0	https://cdn.intra.42.fr/users/cb10fe6877ac88da011465a5902d0f9a/small_anruland.jpg	42
-jtomala	Jorit	0	2022-12-29 12:52:40.494	0	\N	0
-\.
-
-
---
--- Data for Name: users_achievements; Type: TABLE DATA; Schema: public; Owner: pong
---
-
-COPY public.users_achievements (userid, achievementid, count, id) FROM stdin;
-anruland	4	1	1
-anruland	2	2	2
-anruland	1	1	3
-\.
-
-
---
--- Data for Name: userstats; Type: TABLE DATA; Schema: public; Owner: pong
---
-
-COPY public.userstats (userid, wins, losses) FROM stdin;
-\.
-
-
---
 -- Name: chat_chatid_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.chat_chatid_seq', 22, true);
+SELECT pg_catalog.setval('public.chat_chatid_seq', 37, true);
 
 
 --
@@ -529,6 +521,13 @@ SELECT pg_catalog.setval('public.chat_chatid_seq', 22, true);
 --
 
 SELECT pg_catalog.setval('public.chat_messages_id_seq', 9, true);
+
+
+--
+-- Name: match_history_matchid_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
+--
+
+SELECT pg_catalog.setval('public.match_history_matchid_seq', 8, true);
 
 
 --
@@ -552,6 +551,14 @@ ALTER TABLE ONLY public.achievements
 
 ALTER TABLE ONLY public.avatars
     ADD CONSTRAINT pk_avatars PRIMARY KEY (avatarid);
+
+
+--
+-- Name: challenge_status pk_challenge_status; Type: CONSTRAINT; Schema: public; Owner: pong
+--
+
+ALTER TABLE ONLY public.challenge_status
+    ADD CONSTRAINT pk_challenge_status PRIMARY KEY (statuscode);
 
 
 --
@@ -592,6 +599,14 @@ ALTER TABLE ONLY public.friendship_codes
 
 ALTER TABLE ONLY public.match_history
     ADD CONSTRAINT pk_match_history PRIMARY KEY (matchid);
+
+
+--
+-- Name: match_status pk_match_status; Type: CONSTRAINT; Schema: public; Owner: pong
+--
+
+ALTER TABLE ONLY public.match_status
+    ADD CONSTRAINT pk_match_status PRIMARY KEY (statuscode);
 
 
 --
@@ -655,7 +670,7 @@ ALTER TABLE ONLY public.friends
 --
 
 ALTER TABLE ONLY public.user_match
-    ADD CONSTRAINT unq_user_match_matchid UNIQUE (matchid);
+    ADD CONSTRAINT unq_user_match_matchid UNIQUE (matchid, userid);
 
 
 --
@@ -707,6 +722,14 @@ ALTER TABLE ONLY public.friends
 
 
 --
+-- Name: match_history fk_match_history_match_status; Type: FK CONSTRAINT; Schema: public; Owner: pong
+--
+
+ALTER TABLE ONLY public.match_history
+    ADD CONSTRAINT fk_match_history_match_status FOREIGN KEY (match_status) REFERENCES public.match_status(statuscode) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: user_chat fk_user_chat_chat; Type: FK CONSTRAINT; Schema: public; Owner: pong
 --
 
@@ -728,6 +751,14 @@ ALTER TABLE ONLY public.user_chat
 
 ALTER TABLE ONLY public.user_chat
     ADD CONSTRAINT fk_user_chat_users FOREIGN KEY (userid) REFERENCES public.users(userid) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: user_match fk_user_match_challenge_status; Type: FK CONSTRAINT; Schema: public; Owner: pong
+--
+
+ALTER TABLE ONLY public.user_match
+    ADD CONSTRAINT fk_user_match_challenge_status FOREIGN KEY (challenge) REFERENCES public.challenge_status(statuscode) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
