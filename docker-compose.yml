@@ -4,7 +4,7 @@ services:
   db:
     container_name: db
     # image: postgres
-    build: ./docker/db
+    build: ./docker
     restart: unless-stopped
     networks:
     - external
