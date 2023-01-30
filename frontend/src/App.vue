@@ -6,11 +6,11 @@
 					<h1>The Pong Game</h1>
 				</div>
 				<div class="top-nav">
-					<a @click="handleClick('play')">play</a>
-					<a @click="handleClick('watch')">watch</a>
-					<a @click="handleClick('chat')">chat</a>
-					<a @click="handleClick('leaderboard')">leaderboard</a>
-					<a @click="handleClick('friends')">friends</a>
+					<a class="menuOption" id="playSelected" @click="handleClick('play')">play</a>
+					<a class="menuOption" id="watchSelected" @click="handleClick('watch')">watch</a>
+					<a class="menuOption" id="chatSelected" @click="handleClick('chat')">chat</a>
+					<a class="menuOption" id="leaderboardSelected" @click="handleClick('leaderboard')">leaderboard</a>
+					<a class="menuOption" id="friendsSelected" @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
 						<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
 					</div>
@@ -96,6 +96,25 @@ export default defineComponent({
 		const selected = ref<SelectedSideWindow>('play');
 		const handleClick = (term: SelectedSideWindow) => {
 			selected.value = term;
+
+			
+			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
+			menuElements.forEach((element) => {
+				element.style.backgroundColor = "#444040";
+			});
+			// selected menu highlighting below
+			if (selected.value === 'play')
+				document.getElementById("playSelected").style.backgroundColor = "#b04716";
+			if (selected.value === 'watch')
+				document.getElementById("watchSelected").style.backgroundColor = "#b04716";
+			if (selected.value === 'chat')
+				document.getElementById("chatSelected").style.backgroundColor = "#b04716";
+			if (selected.value === 'leaderboard')
+				document.getElementById("leaderboardSelected").style.backgroundColor = "#b04716";
+			if (selected.value === 'friends')
+				document.getElementById("friendsSelected").style.backgroundColor = "#b04716";
+
+
 			if (selected.value === 'play' || selected.value === 'watch') {
 				document.documentElement.style.setProperty("--leftofgame_fr", "0.2fr");
 				document.documentElement.style.setProperty("--game_fr", "1fr");
@@ -168,10 +187,10 @@ export default defineComponent({
 	}
 
 	.top-nav a:hover {
-		background-color: var(--first-highlight-color);
+		background-color: var(--first-highlight-color) !important;
 		color: black;
+		
 	}
-
 	.logged-photo {
 		float: right;
 		padding: 3px;
