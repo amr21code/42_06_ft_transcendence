@@ -8,7 +8,7 @@
 				<th>name</th>
 				<th>wins</th>
 			</tr>
-			<tr class="leaderboard-item" v-for="(user, index) in users" :key="index">
+			<tr class="leaderboard-item" v-for="(user, index) in usersByWins" :key="user.userid">
 				<td>
 					{{ index + 1 }}
 				</td>
@@ -28,33 +28,33 @@
 
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 
 export default defineComponent({
-	name: 'leaderboard-window',
-	data () {
-		return {
-			users: [] as IUser[]
-		}
-	},
-	methods: {
-		retrieveUsers() {
+
+	setup() {
+		const retrievedUsers = ref([] as IUser[]);
+		onMounted(async () => {
 			DataService.getAll()
 			.then((response: ResponseData) => {
-				this.users = response.data;
+				retrievedUsers.value = response.data;
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
-		}
-	},
+		});
 
-	mounted () {
-		this.retrieveUsers();
-	}
+		const usersByWins = computed(() => {
+				return [...retrievedUsers.value].sort((a: IUser, b: IUser) => {
+					return a.wins > b.wins ? -1: 1;
+				})
+			});
+			
+		return { retrievedUsers, usersByWins };
+	},
 })
 </script>
 
@@ -71,7 +71,7 @@ export default defineComponent({
 		padding: calc(3px + 1.5625vw);
 		padding-top: 0;
 		border-collapse: collapse;
-		overflow-y: scroll;
+		overflow-y: auto;
 		max-height: 500px;
 		table-layout: fixed;
 		display: block;
