@@ -140,8 +140,8 @@ export default defineComponent({
 			socket.emit('keydown', e.keyCode);
 		};
 
-		async function joinMatchQueue () {
-			await DataService.joinMatchQueue();
+		const joinMatchQueue = () => {
+			// DataService.joinMatchQueue();
 			
 			// sets opponentStatus
 			SocketioService.createNewGame(canvas);

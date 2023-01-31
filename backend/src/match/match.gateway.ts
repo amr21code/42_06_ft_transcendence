@@ -33,7 +33,9 @@ export class MatchGateway {
 	@SubscribeMessage('create-new-game')
 	async createNewGame(client: Socket, payload: any) {
 		const userid = client.request.session.passport.user.userid;
-		const matchid = await this.matchService.listMatch(userid);
+		const matchid = await this.matchService.matchmaking(userid);
+		// const matchid = await this.matchService.listMatch(userid);
+		console.log("matchid ",matchid);
 		const roomNumber = matchid[0].matchid;
 
 		if (!this.server.sockets.adapter.rooms.has(roomNumber)) {
@@ -140,7 +142,7 @@ export class MatchGateway {
 
 			const keyInt = parseInt(keyCode); // maybe put in try/catch?
 			const vel = getUpdatedVelocity(keyInt);
-			console.log("key down:" ,client.number);
+			// console.log("key down:" ,client.number);
 			if (client.number === 1) {
 				if (vel) {
 					MatchGateway[roomNumber].player1.y_vel = vel;

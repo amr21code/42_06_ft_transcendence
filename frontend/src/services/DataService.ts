@@ -68,13 +68,13 @@ class DataService {
 	leaveChat(chatid : number) : Promise<any> {
 		return apiInstance.get('/chat/leave/' + chatid)
 	}
-	muteUser(chatid : number, userid : string, time : number) : Promise<any> {
+	muteUser(chatid : number, userid : string, time : number) : string {
 		console.log("muteUser", chatid, userid, time);
 		// return apiInstance.get('/chat/mute/' + chatid + '/' + userid + '/' + time);
 		return "OK";
 	}
 
-	banUser(chatid : number, userid : string, time : number) : Promise<any> {
+	banUser(chatid : number, userid : string, time : number) : string {
 		console.log("banUser", chatid, userid, time);
 		// return apiInstance.get('/chat/mute/' + chatid + '/' + userid + '/' + time);
 		return "OK";

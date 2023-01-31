@@ -105,12 +105,12 @@ export class MatchService {
 				if (Object.keys(opp).length != 1 || Object.keys(opp_open).length != 0)
 				throw new ForbiddenException();
 			}
-			console.log("opponent", opponent);
-			console.log("opp", opp);
+			// console.log("opponent", opponent);
+			// console.log("opp", opp);
 			const already_open = await this.listMatch(userid);
 			if (Object.keys(already_open).length == 0)
 			{
-				console.log("no open session - creating");
+				// console.log("no open session - creating");
 				const open = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.match_history (match_status)
 					VALUES (2)
@@ -134,6 +134,7 @@ export class MatchService {
 							throw new ForbiddenException();
 						}
 					}
+					return open;
 				} else {
 					throw new ForbiddenException();
 				}
@@ -157,7 +158,7 @@ export class MatchService {
 					return this.join(userid, open_matches[0].matchid);
 				}
 			} else {
-				throw new ForbiddenException('user already in a match');
+				throw new ForbiddenException();
 			}
 		} catch (error) {
 			throw new ForbiddenException('possible db error');
@@ -227,10 +228,10 @@ export class MatchService {
 	async getOpponentStatus(matchid: number, userid: string){
 		const accept = await this.db.$queryRaw(
 			Prisma.sql`SELECT challenge FROM public.user_match
-			WHERE matchid=${matchid} AND userid!=${userid};`
+			WHERE matchid=CAST(${matchid} AS INTEGER) AND userid!=${userid};`
 		);
 		console.log("Accept returns: ", accept);
-		if (accept[0] && accept[0].challenge > 0)
+		if (Object.keys(accept).length == 1 && accept[0].challenge > 0)
 			return true;
 		else 
 			return false;
