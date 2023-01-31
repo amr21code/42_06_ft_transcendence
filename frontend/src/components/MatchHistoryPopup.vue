@@ -4,6 +4,28 @@
 			<slot />
 			<h2>{{ userid }}'s match history</h2>
 			
+			<table id="history-table">
+				<tr id="top-row">
+					<th>player1</th>
+					<th></th>
+					<th></th>
+					<th>player2</th>
+				</tr>
+				<tr class="history-item" v-for="(match) in matchHistory" :key="match.match_id">
+					<td>
+						{{ match.user1 }}
+					</td>
+					<td>
+						{{ match.user1_score }}
+					</td>
+					<td>
+						{{ match.user2_score }}
+					</td>
+					<td>
+						{{ match.user2 }}
+					</td>
+				</tr>
+			</table>
 			
 			<!-- <div class="user-data-wrapper">
 				<div>avatar:</div>
@@ -31,16 +53,9 @@
 import { ref, defineComponent, onMounted } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
+import type { ISingleMatchHistory } from '../types/SingleMatchHistory'
 
 export default defineComponent({
-	name: "user-data-popup",
-	
-	// data () {
-	// 	return {
-	// 		user: {} as IUser,
-	// 	}
-	// },
 
 	props: {
 		['untoggleUserHistory'] : {
@@ -53,7 +68,7 @@ export default defineComponent({
 		}
 	},
 	setup(props) {
-		const matchHistory = ref("");
+		const matchHistory = ref([] as ISingleMatchHistory[]);
 		onMounted(async () => {
 			DataService.getMatchHistory(props.userid)
 			.then((response: ResponseData) => {
@@ -64,6 +79,7 @@ export default defineComponent({
 				console.log(e);
 			});
 		});
+		return { matchHistory };
 	}
 	
 })
@@ -87,7 +103,7 @@ export default defineComponent({
 
 .popup-inner {
 	background-color: var(--second-bg-color);
-	padding: 10px 26px;
+	padding: 1rem 2rem;
 	/* border-radius: 10%; */
 	border-radius: 2px;
 	color: white;
@@ -97,10 +113,6 @@ export default defineComponent({
 	text-align: center;
 }
 
-.user-data-wrapper {
-	margin-bottom: 10px;
-	margin-left: 0%;
-}
 
 #user-photo {
 	cursor: pointer;
@@ -111,20 +123,45 @@ export default defineComponent({
 	border-radius: 50%;
 }
 
-#select-photo {
-	height: 70px;
-	width: 70px;
-	cursor: pointer;
-	margin: 1rem;
-	background: white;
-	border-radius: 50%;
-}
 
 
-#select-photo:hover {
-	opacity: 50%;
-}
 
+
+
+
+	#history-table {
+		padding: calc(3px + 1.5625vw);
+		padding-top: 0;
+		border-collapse: collapse;
+		overflow-y: auto;
+		max-height: 500px;
+		table-layout: fixed;
+		display: block;
+		position: relative;
+		scrollbar-gutter: stable both-edges;
+		width: 100%;		
+		margin-bottom: 2rem;
+	}
+
+	#history-table tr {
+		border: var(--second-bg-color) 3px solid;
+	}
+
+	
+	#history-table th, td {
+		padding: calc(-10px + 1.5625vw) calc(-5px + 1.5625vw);
+		text-align: center;
+		width: 100%; /*makes table central, but destroys equal width of columns (33% would be equal width)*/
+		background: white;
+		color: var(--second-bg-color);
+	}
+	
+	#history-table th {
+		position: sticky;
+		top: 0;
+		background-color: black;
+		color: white;
+	}
 
 </style>
 

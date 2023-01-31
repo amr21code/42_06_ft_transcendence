@@ -87,7 +87,7 @@ export default defineComponent({
                 chatname_id = 'public chat by ' + this.user[0].userid;
             var inputElements = document.getElementsByClassName('checkbox-input');
             for(var i=0; inputElements[i]; ++i){
-                if(inputElements[i].checked){
+                if(inputElements[i].checked){ //this works and exists!!!
                     type = 'private';
                     break;
                 }
@@ -150,7 +150,7 @@ export default defineComponent({
 }
 .popup-inner {
 	background-color: var(--second-bg-color);
-	padding: 10px 26px;
+	padding: 1rem 2rem;
 	/* border-radius: 10%; */
 	border-radius: 2px;
     max-width: 400px;
