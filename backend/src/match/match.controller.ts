@@ -71,26 +71,26 @@ export class MatchController {
 	//	}
 	//}
 
-	@Post('gameover/:playerNumber')
-	async gameOver(@Body() state: MatchGameStateDto,@Param() playerNumber:any,  @Session() session: Record<string, any>){
-		//console.log("gameover");
-		const userid = session.passport.user.userid;
-		try {
-			const matchid = await this.matchService.listActiveMatch(userid);
-			//get Player from database (1 or 2)
-			var update;
-			console.log("Playernumber in gameover", playerNumber.playerNumber)
-			//console.log("gamestate", state)
-			if (matchid[0].matchid) {
-				if (playerNumber.playerNumber == 1)
-					update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer1);
-				else
-					update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer2);
-				return(update);
-			}
-		} catch (error) {
-			throw new ForbiddenException;
-		}
-		return;
-	}
+	// @Post('gameover/:playerNumber')
+	// async gameOver(@Body() state: MatchGameStateDto,@Param() playerNumber:any,  @Session() session: Record<string, any>){
+	// 	//console.log("gameover");
+	// 	const userid = session.passport.user.userid;
+	// 	try {
+	// 		const matchid = await this.matchService.listActiveMatch(userid);
+	// 		//get Player from database (1 or 2)
+	// 		var update;
+	// 		console.log("Playernumber in gameover", playerNumber.playerNumber)
+	// 		//console.log("gamestate", state)
+	// 		if (matchid[0].matchid) {
+	// 			if (playerNumber.playerNumber == 1)
+	// 				update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer1);
+	// 			else
+	// 				update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer2);
+	// 			return(update);
+	// 		}
+	// 	} catch (error) {
+	// 		throw new ForbiddenException;
+	// 	}
+	// 	return;
+	// }
 }
