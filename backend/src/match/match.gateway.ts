@@ -36,22 +36,25 @@ export class MatchGateway {
 		const roomNumber = matchid[0].matchid;
 
 		if (!this.server.sockets.adapter.rooms.has(roomNumber)) {
-
 			client.join(roomNumber);
+			MatchGateway[roomNumber].player1.userid = userid;
 			// client.number = 1;
 			(client as any).number = 1;
 			client.emit('init', 1);
+		} else {
+			MatchGateway[roomNumber].player2.userid = userid;
 		}
 
 		// console.log("room number for opponent status: ", roomNumber);
 		const status = await this.matchService.getOpponentStatus(roomNumber, userid);
 
-		 console.log("CHECK_OPPONENT: opponent status is: ", status, " room number is: ", roomNumber);
+		console.log("CHECK_OPPONENT: opponent status is: ", status, " room number is: ", roomNumber);
 
 		client.emit('opponent-status', { data: status, matchid: roomNumber });
 		//client.emit('opponent-status', { data: true });
 		// if clause for opponent-status === true hinzufügen!
 	}
+
 	@SubscribeMessage('startGame')
 	async startGame(client: Socket, canvasData: number)
 	{
@@ -60,6 +63,9 @@ export class MatchGateway {
 		const matchid = await this.matchService.listMatch(userid);
 		const roomNumber = matchid[0].matchid;
 		MatchGateway[roomNumber] = await createGameState();
+		console.log("Users");
+		console.log(MatchGateway[roomNumber].player1.userid);
+		console.log(MatchGateway[roomNumber].player2.userid);
 		MatchGateway[roomNumber].canvasHeight = canvasData[0];
 		MatchGateway[roomNumber].canvasWidth = canvasData[1];
 		MatchGateway[roomNumber].paddleWidth = MatchGateway[roomNumber].canvasWidth / 25;
