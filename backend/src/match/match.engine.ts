@@ -136,7 +136,6 @@ export function gameLoop(state: MatchGameStateDto) {
 	}
 	// ################ MOVE BALL END ###################################################
 
-
 	return false; // game is still running
 }
 

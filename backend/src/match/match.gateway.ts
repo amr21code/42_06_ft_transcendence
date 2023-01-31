@@ -109,7 +109,7 @@ export class MatchGateway {
 			client.emit('init', 2);
 		//}
 		this.server.to(roomNumber).emit('joinGame', MatchGateway[roomNumber], roomNumber);
-
+		this.startGameInterval(roomNumber, client);
 	}
 
 	@SubscribeMessage('joinGame')
@@ -119,66 +119,12 @@ export class MatchGateway {
 		const roomNumber = gameState[1];
 		MatchGateway[roomNumber] = gameState[0];
 
-		//const userid = client.request.session.passport.user.userid;
-		//const matchid = await this.matchService.listMatch(userid);
-		//const roomNumber = matchid[0].matchid;
 		
-		//MatchGateway[roomNumber] = await createGameState();
-		//MatchGateway[roomNumber].canvasHeight = canvasData[0];
-		//MatchGateway[roomNumber].canvasWidth = canvasData[1];
-		//MatchGateway[roomNumber].paddleWidth = MatchGateway[roomNumber].canvasWidth / 25;
-		//MatchGateway[roomNumber].paddleHeight = MatchGateway[roomNumber].canvasHeight / 4;
-		//MatchGateway[roomNumber].ballSize = MatchGateway[roomNumber].canvasWidth / 25;
-		//MatchGateway[roomNumber].wallOffset = MatchGateway[roomNumber].canvasWidth / 25;
-		//MatchGateway[roomNumber].player1.pos.x = MatchGateway[roomNumber].wallOffset;
-		//MatchGateway[roomNumber].player1.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].paddleHeight / 2;
-		//MatchGateway[roomNumber].player2.pos.x = MatchGateway[roomNumber].canvasWidth - (MatchGateway[roomNumber].wallOffset + MatchGateway[roomNumber].paddleWidth);
-		//MatchGateway[roomNumber].player2.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].paddleHeight / 2;
-		//MatchGateway[roomNumber].ball.pos.x = MatchGateway[roomNumber].canvasWidth / 2 - MatchGateway[roomNumber].ballSize / 2;
-		//MatchGateway[roomNumber].ball.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].ballSize / 2;
-		//MatchGateway[roomNumber].paddleSpeed = MatchGateway[roomNumber].canvasHeight / 75;
-		//MatchGateway[roomNumber].ballSpeed = MatchGateway[roomNumber].canvasHeight / 75;
-		//console.log("canvas height: ", canvasData[0], " ballSpeed: " ,MatchGateway[roomNumber].ballSpeed)
-
-		// RANDOM BALL KICKOFF DIRECTION
-		//var randomDirection = Math.floor(Math.random() * 2) + 1;
-		//if (randomDirection % 2) {
-		//	MatchGateway[roomNumber].ball.vel.x = 1;
-		//} else {
-		//	MatchGateway[roomNumber].ball.vel.x = -1;
-		//}
-		//MatchGateway[roomNumber].ball.vel.y = 1;
-
-
-
-		//const cur_room = this.server.sockets.adapter.rooms.get(roomNumber);
-		//// console.log("#CUR ROOM is: ", this.server.sockets.adapter.rooms.get(roomNumber));
-
-		//let numClients = 0;
-		//if (cur_room) {
-		//	numClients = cur_room.size;
-		//	// console.log("num clients is: ", numClients);
-		//}
-
-		//if (numClients === 0) {
-		//	client.emit('joinedEmptyGame');
-		//	return;
-		//}
-		//else if (numClients > 1) {
-		//	client.emit('tooManyPlayers');
-		//	return;
-		//}
-		//if (client.number != 1)
-		//{
-		//	client.join(roomNumber);
-		//	(client as any).number = 2;
-		//	client.emit('init', 2);
-		//}
 		console.log(MatchGateway[roomNumber]);
 
 		client.emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
 		client.on('keydown', handleKeyDown);
-		this.startGameInterval(roomNumber, client);
+		// this.startGameInterval(roomNumber, client);
 
 
 		// ############################# FUNCTION DECLARATIONS ####################################################
@@ -217,7 +163,7 @@ export class MatchGateway {
 			else {
 				// sends game over to all room members
 				this.server.to(roomNumber).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
-				MatchGateway[roomNumber] = null;
+				// MatchGateway[roomNumber] = null;
 				clearInterval(intervalId); // was macht das?
 			}
 		}, 1000 / 30); // argument determines frames per ssecond
