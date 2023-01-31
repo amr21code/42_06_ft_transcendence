@@ -267,7 +267,7 @@ export class MatchService {
 			var loss= await this.db.$queryRaw<number>(
 				Prisma.sql`SELECT losses FROM public.users WHERE userid=${loser};`);
 			loss[0].losses = loss[0].losses + 1;
-			console.log("loss");
+			console.log("loss", loser);
 			await this.db.$queryRaw(
 					Prisma.sql`UPDATE public.users SET losses=CAST(${loss[0].losses} AS INTEGER)
 					WHERE userid=${loser}`);

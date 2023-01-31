@@ -115,8 +115,8 @@ class DataService {
 	openSingleMatch(): Promise<any> {
 		return apiInstance.get('/match/opensingle');
 	}
-	joinMatchQueue(): Promise<any> {
-		return apiInstance.get('/match/making'); 
+	async joinMatchQueue(): Promise<any> {
+		return await apiInstance.get('/match/making'); 
 	}
 	challengeUser(userid: string) : Promise<any> {
 		return apiInstance.get('/match/open/' + userid);
