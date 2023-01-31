@@ -22,6 +22,7 @@
 								<a class="chat-chatname">{{ chat.chat_name }}</a><br>
 								<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
 								<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+								<a class="chat-typename-orange" v-if="chat.typename === 'private'" >{{ chat.typename }}</a>
 						</div>
 					</a>
 				</div>
@@ -31,12 +32,21 @@
 				<div class="chat-message-view" v-for="chat in openchats" :key="chat.chatid">
 					<a>
 						<div class="">
-							<div class="" >
-								<strong class="chat-chatid" >{{ chat.chatid }}</strong>
-								<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-								<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
-								<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
-						</div>
+							<a @click="joinchat(chat.chatid)" v-if="chat.typename === 'public'">
+								<div class="" >
+									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+									<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
+								</div>
+							</a>
+							<a @click="togglePwdPopup()" v-if="chat.typename === 'protected'">
+								<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => togglePwdPopup()" />
+								<div class="" >
+									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+									<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+								</div>
+							</a>
 						</div>
 					</a>
 				</div>
@@ -75,7 +85,8 @@
 import ChatWindow from './ChatWindow.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
 import LeaveChatPopup from './LeaveChat.vue'
-import { defineComponent, ref, onMounted } from 'vue'
+import PwdPopup from './pwdPopup.vue'
+import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
 import DataService from '../services/DataService'
@@ -90,7 +101,7 @@ type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
 	name: 'chat-module',
-	components: { ChatWindow, LeaveChatPopup, NewMessagePopup },
+	components: { ChatWindow, LeaveChatPopup, NewMessagePopup, PwdPopup },
 
 	data () {
 		return {
@@ -183,7 +194,25 @@ export default defineComponent({
             selected.value = term;
         }
 
-		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger, changeType, type }
+		const pwdPopup = ref(false);
+		const togglePwdPopup = () => {
+			pwdPopup.value = !pwdPopup.value;
+		}
+
+		const joinchat = (id : number, password ?: string) =>{
+			if (password === undefined)
+				password = '';
+			DataService.createChat(String(id), password, 'join')
+            .then((response: ResponseData) => {
+                SocketioService.refreshChats();
+            })
+            .catch((e: Error) => {
+                console.log(e);
+            });
+		}
+
+		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger,
+				changeType, type, joinchat, togglePwdPopup, pwdPopup }
 	} //end of setup
 }) //end of defineComponent
 </script>
@@ -212,6 +241,10 @@ export default defineComponent({
 
 .chat-typename-red {
 	color: red;
+}
+
+.chat-typename-orange {
+	color: orangered;
 }
 
 .chat-overview {

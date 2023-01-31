@@ -36,15 +36,26 @@ class DataService {
 		return apiInstance.get("/chat/list/chats");
 	}
 	createChat(chatname_id: string, password: string, type : String) : Promise<any> {
-		// console.log(chatname_id, password, type);
+		console.log(chatname_id, password, type);
 		if (type == 'dm')
 		return apiInstance.get('/chat/open/pm/' + chatname_id)
 		if (type == 'join') //change that you pass the chatid and optional password in order to join an existing chat
-			return apiInstance.get('/chat/join/' + chatname_id);
+		{
+			if (password === '')
+				return apiInstance.get('/chat/join/' + chatname_id);
+			else
+				return apiInstance.get('/chat/join/' + chatname_id + '/' + password);	
+		}
 		else {
 			// { type: number; chatid: number; chat_name: string; password: string; }
+			if (type === 'private')
+				var n_type = 2;
+			else if (type === 'protected')
+				var n_type = 1;
+			else
+				var n_type = 0;
 			return apiInstance.post('/chat/create', JSON.stringify({
-				type : 0,
+				type : n_type,
 				chatid: 0,
 				chat_name: chatname_id,
 				password: password
