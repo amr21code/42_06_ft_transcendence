@@ -37,6 +37,7 @@ export class MatchController {
 		try {
 			const accept = await this.matchService.acceptMatch(session.passport.user.userid);
 		} catch (error) {
+			console.log("error!!!!");
 			throw new ForbiddenException();
 		}
 	}

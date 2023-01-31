@@ -34,6 +34,17 @@ export class MatchService {
 		return matchlist;
 	}
 
+	// matchStatus = 2 -> queue
+	async listMatchQueue(userid: string) {
+		const match = await this.db.$queryRaw(
+			Prisma.sql`SELECT um.userid, um.matchid FROM public.user_match AS um
+			LEFT JOIN public.match_history AS mh ON mh.matchid=um.matchid
+			WHERE mh.match_status > 0 AND um.userid=${userid} AND um.challenge=2;`
+		);
+		return match;
+	}
+
+	// matchStatus = 2 -> queue
 	async listMatch(userid: string) {
 		const match = await this.db.$queryRaw(
 			Prisma.sql`SELECT um.userid, um.matchid FROM public.user_match AS um
@@ -136,7 +147,7 @@ export class MatchService {
 
 	async matchmaking(userid: string) {
 		try {
-			const already_open = await this.listMatch(userid);
+			const already_open = await this.listMatchQueue(userid);
 			if (Object.keys(already_open).length == 0) {
 				const open_matches = await this.listMatchesStatus(2);
 				if (Object.keys(open_matches).length == 0) {
@@ -185,11 +196,12 @@ export class MatchService {
 
 	async acceptMatch(userid: string) {
 		const accept = await this.db.$queryRaw(
-			Prisma.sql`UPDATE FROM public.user_match AS um 
-			LEFT JOIN public.match_history AS mh ON mh.matchid=um.matchid
-			SET um.challenge=1
-			WHERE mh.match_status > 0 AND um.userid=${userid})`);
-		console.log("matchid:", accept);
+			Prisma.sql`UPDATE public.user_match 
+			SET challenge=1
+			WHERE matchid=(SELECT um.matchid from public.match_history AS mh LEFT JOIN public.user_match AS um ON mh.matchid=um.matchid
+				WHERE mh.match_status > 0 AND um.userid=${userid}) AND userid=${userid}
+			RETURNING matchid;`);
+		console.log("ACCEPTMATCH: matchid:", accept);
 		const matchstatus = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.match_history SET match_status=1 WHERE matchid=${accept[0].matchid};`
 			);
