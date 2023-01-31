@@ -61,9 +61,10 @@ export default defineComponent({
 		},
 
 		async sendAcceptSignal() {
-			console.log("accepting challenge");
-			await DataService.acceptChallenge();
-			this.socket.emit('create-new-game');
+			const user = await DataService.getUser();
+			console.log("accepting challenge", user);
+			// await DataService.acceptChallenge();
+			this.socket.emit('create-new-game', user.data[0].userid);
 		},
 
 		sendDenySignal() {

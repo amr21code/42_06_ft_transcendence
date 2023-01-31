@@ -224,6 +224,7 @@ export default defineComponent({
 		const removeMatchWaitPopup = () => {
 			matchWaitPopup.style.display = 'none';
 			matchSelectionDiv.style.display = 'inline-flex';
+			DataService.denyChallenge();
 		}
 
 		//############# SOCKETIO ##############

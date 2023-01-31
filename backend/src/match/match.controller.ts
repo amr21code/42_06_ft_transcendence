@@ -16,6 +16,7 @@ export class MatchController {
 
 	@Get('open/:opponent?')
 	async openMatch(@Param('opponent') opponent, @Session() session: Record<string, any>) {
+		console.log("open match", opponent);
 		const open = await this.matchService.openMatch(session.passport.user.userid, 1, opponent);
 	}
 

@@ -103,7 +103,7 @@ export class MatchService {
 				console.log('opp in if', opp);
 				const opp_open = await this.listMatch(opp[0].userid);
 				if (Object.keys(opp).length != 1 || Object.keys(opp_open).length != 0)
-				throw new ForbiddenException();
+					throw new ForbiddenException();
 			}
 			// console.log("opponent", opponent);
 			// console.log("opp", opp);
@@ -117,11 +117,13 @@ export class MatchService {
 					RETURNING matchid;`
 				);
 				if (open[0].matchid) {
+					console.log("before join", opponent);
 					const join = await this.db.$queryRaw(
 						Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
 						VALUES (${userid}, ${open[0].matchid}, ${status})
 						RETURNING matchid;` //, to_timestamp(${timeout}));`do
-					);
+						);
+					console.log("after join", opponent);
 					if (opponent) {	
 						console.log("join: ", join);
 						if (join[0].matchid) {
@@ -134,6 +136,7 @@ export class MatchService {
 							throw new ForbiddenException();
 						}
 					}
+					console.log("end open match");
 					return open;
 				} else {
 					throw new ForbiddenException();

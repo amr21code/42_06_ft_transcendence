@@ -119,6 +119,7 @@ class DataService {
 		return await apiInstance.get('/match/making'); 
 	}
 	challengeUser(userid: string) : Promise<any> {
+		console.log(userid);
 		return apiInstance.get('/match/open/' + userid);
 	}
 	acceptChallenge() : Promise<any> {

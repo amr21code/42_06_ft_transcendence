@@ -31,9 +31,18 @@ export class MatchGateway {
 
 
 	@SubscribeMessage('create-new-game')
-	async createNewGame(client: Socket, payload: any) {
+	async createNewGame(client: Socket, opponent: any) {
+		var matchid;
+		console.log("crete game opp", opponent);
 		const userid = client.request.session.passport.user.userid;
-		const matchid = await this.matchService.matchmaking(userid);
+		if (!opponent)
+			matchid = await this.matchService.matchmaking(userid);
+		else if (opponent === userid) {
+			matchid = await this.matchService.listMatch(userid);
+			await this.matchService.acceptMatch(userid);
+			// matchid = await this.matchService.join(userid, matchid[0].matchid);
+		} else
+			matchid = await this.matchService.openMatch(userid, 1, opponent);
 		// const matchid = await this.matchService.listMatch(userid);
 		console.log("matchid ",matchid);
 		const roomNumber = matchid[0].matchid;
