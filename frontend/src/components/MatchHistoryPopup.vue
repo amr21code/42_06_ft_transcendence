@@ -140,6 +140,7 @@ export default defineComponent({
 		position: relative;
 		scrollbar-gutter: stable both-edges;
 		width: 100%;		
+		margin-bottom: 2rem;
 	}
 
 	#history-table tr {
