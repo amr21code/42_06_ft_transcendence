@@ -147,7 +147,7 @@ export class MatchService {
 
 	async matchmaking(userid: string) {
 		try {
-			const already_open = await this.listMatchQueue(userid);
+			const already_open = await this.listMatch(userid);
 			if (Object.keys(already_open).length == 0) {
 				const open_matches = await this.listMatchesStatus(2);
 				if (Object.keys(open_matches).length == 0) {
