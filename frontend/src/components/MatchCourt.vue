@@ -77,6 +77,7 @@ export default defineComponent({
 				else
 					alert("You win! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 			}
+			playerNumber=0;
 			// 	matchSelectionDiv.style.display = 'block';
 			// 	matchWaitPopup.style.display = 'none';
 			// 	matchSelectionDiv.style.display = 'none';
@@ -139,8 +140,8 @@ export default defineComponent({
 			socket.emit('keydown', e.keyCode);
 		};
 
-		const joinMatchQueue = () => {
-			DataService.joinMatchQueue();
+		async function joinMatchQueue () {
+			await DataService.joinMatchQueue();
 			
 			// sets opponentStatus
 			SocketioService.createNewGame(canvas);
