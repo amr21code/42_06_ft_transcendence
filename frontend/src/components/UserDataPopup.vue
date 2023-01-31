@@ -2,7 +2,7 @@
 	<div class="popup" @keyup.esc="toggleUserDataPopup" tabindex="0">
 		<div class="popup-inner">
 			<slot />
-			<h2>{{ user.userid }}'s user data</h2>
+			<h2>{{ user.username }}'s user data</h2>
 			<div class="user-data-wrapper">
 				<div>intra name: </div>
 				<input disabled type="text" :value="user.userid" /> 

@@ -1,14 +1,14 @@
 import apiInstance from "../http.common";
 
 class DataService {
+
+	//################ GENERAL ###########################################
+	
 	getAuthStatus() : Promise<any> {
 		return apiInstance.get("/auth/status");
 	}
 	getUser() : Promise<any> {
 		return apiInstance.get("/users/me");
-	}
-	getUsersInChat(chatid: number) : Promise<any> {
-		return apiInstance.get("/chat/list/users/" + chatid);
 	}
 	getAll() : Promise<any> {
 		return apiInstance.get("/users/all");
@@ -16,6 +16,19 @@ class DataService {
 	getFriends() : Promise<any> {
 		return apiInstance.get("/fl/show");
 	}
+	changeUsername(userid : string, newUsername : string) {
+		return apiInstance.get('/users/' + userid + '/username/' + newUsername);
+	}
+	changeAvatar(userid : string, id : number) {
+		return apiInstance.get('/users/' + userid + '/avatar/' + id);
+	}
+
+	//################ CHAT ###########################################
+
+	getUsersInChat(chatid: number) : Promise<any> {
+		return apiInstance.get("/chat/list/users/" + chatid);
+	}
+	
 	getJoinedChats() : Promise<any> {
 		return apiInstance.get("/chat/list/userchats");
 	}
@@ -25,7 +38,7 @@ class DataService {
 	createChat(chatname_id: string, password: string, type : String) : Promise<any> {
 		// console.log(chatname_id, password, type);
 		if (type == 'dm')
-			return apiInstance.get('/chat/open/pm/' + chatname_id)
+		return apiInstance.get('/chat/open/pm/' + chatname_id)
 		if (type == 'join') //change that you pass the chatid and optional password in order to join an existing chat
 			return apiInstance.get('/chat/join/' + chatname_id);
 		else {
@@ -44,26 +57,6 @@ class DataService {
 	leaveChat(chatid : number) : Promise<any> {
 		return apiInstance.get('/chat/leave/' + chatid)
 	}
-
-	gameOver(gameState : any, playerNumber: number) : Promise<any> {
-		return apiInstance.post('/match/gameover/' + playerNumber, JSON.stringify(gameState));
-	}
-	openSingleMatch(): Promise<any> {
-		return apiInstance.get('/match/opensingle');
-	}
-	joinMatchQueue(): Promise<any> {
-		return apiInstance.get('/match/making'); 
-	}
-	challengeUser(userid: string) : Promise<any> {
-		return apiInstance.get('/match/open/' + userid);
-	}
-	acceptChallenge() : Promise<any> {
-		return apiInstance.get('/match/accept');
-	}
-	denyChallenge() : Promise<any> {
-		return apiInstance.get('/match/delete');
-	}
-
 	muteUser(chatid : number, userid : string, time : number) : Promise<any> {
 		console.log("muteUser", chatid, userid, time);
 		// return apiInstance.get('/chat/mute/' + chatid + '/' + userid + '/' + time);
@@ -99,11 +92,29 @@ class DataService {
 			headers: {'Content-Type': 'application/json'}
 		})
 	}
-	changeUsername(userid : string, newUsername : string) {
-		return apiInstance.get('/users/' + userid + '/username/' + newUsername);
+	
+	//################ MATCH ###########################################
+	
+	getMatchHistory(userid : string) : Promise<any> {
+		return apiInstance.get('/match/history/' + userid);
 	}
-	changeAvatar(userid : string, id : number) {
-		return apiInstance.get('/users/' + userid + '/avatar/' + id);
+	gameOver(gameState : any, playerNumber: number) : Promise<any> {
+		return apiInstance.post('/match/gameover/' + playerNumber, JSON.stringify(gameState));
+	}
+	openSingleMatch(): Promise<any> {
+		return apiInstance.get('/match/opensingle');
+	}
+	joinMatchQueue(): Promise<any> {
+		return apiInstance.get('/match/making'); 
+	}
+	challengeUser(userid: string) : Promise<any> {
+		return apiInstance.get('/match/open/' + userid);
+	}
+	acceptChallenge() : Promise<any> {
+		return apiInstance.get('/match/accept');
+	}
+	denyChallenge() : Promise<any> {
+		return apiInstance.get('/match/delete');
 	}
 }
 

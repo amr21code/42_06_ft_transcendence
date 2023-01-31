@@ -2,13 +2,13 @@
 	<div class="leaderboard-wrapper">
 		<h2>leaderboard</h2>
 		<table id="leaderboard-table">
-			<tr>
+			<tr id="top-row">
 				<th>#</th>
 				<th>picture</th>
 				<th>name</th>
 				<th>wins</th>
 			</tr>
-			<tr class="leaderboard-item" v-for="(user, index) in usersByWins" :key="user.userid">
+			<tr class="leaderboard-item" @click="toggleUserHistory(user.userid)" v-for="(user, index) in usersByWins" :key="user.userid">
 				<td>
 					{{ index + 1 }}
 				</td>
@@ -22,6 +22,7 @@
 					{{ user.wins }}
 				</td>
 			</tr>
+			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser"/>
 		</table>
 	</div>
 </template>
@@ -32,9 +33,11 @@ import { computed, defineComponent, onMounted, ref } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
+import MatchHistoryPopup from './MatchHistoryPopup.vue'
 
 export default defineComponent({
 
+	components: { MatchHistoryPopup },
 	setup() {
 		const retrievedUsers = ref([] as IUser[]);
 		onMounted(async () => {
@@ -48,12 +51,25 @@ export default defineComponent({
 		});
 
 		const usersByWins = computed(() => {
-				return [...retrievedUsers.value].sort((a: IUser, b: IUser) => {
-					return a.wins > b.wins ? -1: 1;
-				})
-			});
+			return [...retrievedUsers.value].sort((a: IUser, b: IUser) => {
+				return a.wins > b.wins ? -1: 1;
+			})
+		});
 			
-		return { retrievedUsers, usersByWins };
+		// for user info popup (wins/match history)
+		const showUserHistoryTrigger = ref(false);
+		const selectedUser = ref("");
+		const toggleUserHistory = (user: string) => {
+			showUserHistoryTrigger.value = true;
+			selectedUser.value = user;
+		}
+
+		const untoggleUserHistory = () => {
+			showUserHistoryTrigger.value = false;
+			selectedUser.value = "";
+		}
+
+		return { retrievedUsers, usersByWins, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser };
 	},
 })
 </script>
@@ -104,9 +120,9 @@ export default defineComponent({
 		cursor: pointer;
 	}
 
-	#top-row tr:hover {
+	/* #top-row tr:hover {
 		cursor: default;
-	}
+	} */
 
 	.leaderboard-item img {
 		max-height: 30px;
