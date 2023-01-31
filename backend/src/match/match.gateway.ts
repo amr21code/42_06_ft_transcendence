@@ -4,6 +4,7 @@ import { MatchService } from './match.service';
 import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { UserService } from 'src/user/user.service';
+import { state } from 'pactum';
 
 @WebSocketGateway(3002, {
 	cors: {
@@ -37,6 +38,7 @@ export class MatchGateway {
 
 		if (!this.server.sockets.adapter.rooms.has(roomNumber)) {
 			client.join(roomNumber);
+			MatchGateway[roomNumber] = await createGameState();
 			MatchGateway[roomNumber].player1.userid = userid;
 			// client.number = 1;
 			(client as any).number = 1;
@@ -62,7 +64,6 @@ export class MatchGateway {
 		const userid = client.request.session.passport.user.userid;
 		const matchid = await this.matchService.listMatch(userid);
 		const roomNumber = matchid[0].matchid;
-		MatchGateway[roomNumber] = await createGameState();
 		console.log("Users");
 		console.log(MatchGateway[roomNumber].player1.userid);
 		console.log(MatchGateway[roomNumber].player2.userid);
@@ -165,10 +166,10 @@ export class MatchGateway {
 			if (!winner) {
 				// sends new state to all room members
 				this.server.to(roomNumber).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
-			}
-			else {
+			} else {
 				// sends game over to all room members
 				this.server.to(roomNumber).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
+				this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
 				// MatchGateway[roomNumber] = null;
 				clearInterval(intervalId); // was macht das?
 			}

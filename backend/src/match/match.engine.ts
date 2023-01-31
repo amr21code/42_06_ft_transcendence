@@ -4,13 +4,15 @@ import { MatchGameStateDto } from "./dto/matchgamestate.dto";
 export function createGameState() {
 	return {
 		player1: {
-				pos: {
+			userid: "",
+			pos: {
 				x: 0,
 				y: 0,
 			},
 			y_vel: 0,
 		},
 		player2: {
+			userid: "",
 			pos: {
 				x: 0,
 				y: 0,

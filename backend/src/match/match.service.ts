@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { UserService } from 'src/user/user.service';
 import { Prisma } from '@prisma/client';
+import { MatchGameStateDto } from './dto/matchgamestate.dto';
 
 @Injectable()
 export class MatchService {
@@ -235,39 +236,47 @@ export class MatchService {
 			return false;
 	}
 
-	async updateMatch(matchid: any, userid: any, userscore: number)
-	{ //update userscore, match_status, wins/losses
+	async updateMatch(matchid: any, state: MatchGameStateDto) { //update userscore, match_status, wins/losses
 		try{
-		console.log("update match");
-		console.log(matchid, userid, userscore);
-		const score = await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${userscore} AS INTEGER)
-			WHERE matchid=${matchid} AND userid=${userid};`);
-		if (userscore == 3){
-			console.log("win");
-			var win= await this.db.$queryRaw<number>(
-			Prisma.sql`SELECT wins FROM public.users WHERE userid=${userid};`);
+			console.log("update match");
+			console.log(matchid, state);
+			var winner, loser;
+			await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${state.scorePlayer1} AS INTEGER)
+			WHERE matchid=${matchid} AND userid=${state.player1.userid};`);
+			await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${state.scorePlayer2} AS INTEGER)
+			WHERE matchid=${matchid} AND userid=${state.player2.userid};`);
+			if (state.scorePlayer1 == 3) {
+				winner = state.player1.userid;
+				loser = state.player2.userid;
+			} else {
+				winner = state.player2.userid;
+				loser = state.player1.userid;
+			}
+			// begin winner update
+			console.log("win", winner);
+			var win = await this.db.$queryRaw<number>(
+			Prisma.sql`SELECT wins FROM public.users WHERE userid=${winner};`);
 			win[0].wins = win[0].wins + 1;
-			const user = await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.users SET wins=CAST(${win[0].wins} AS INTEGER)
-				WHERE userid=${userid}`);
-
-			// only change if both player scores are updated!!!!
-			const match = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.match_history SET match_status=0
-					WHERE matchid=${matchid}`);
-			// -----------------------------------------
-		}
-		else{
+			await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET wins=CAST(${win[0].wins} AS INTEGER)
+				WHERE userid=${winner}`);
+			// end winner update
+			// begin loser update
 			var loss= await this.db.$queryRaw<number>(
-			Prisma.sql`SELECT losses FROM public.users WHERE userid=${userid};`);
+				Prisma.sql`SELECT losses FROM public.users WHERE userid=${loser};`);
 			loss[0].losses = loss[0].losses + 1;
 			console.log("loss");
-			const user = await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.users SET losses=CAST(${loss[0].losses} AS INTEGER)
-				WHERE userid=${userid}`);
-		}
-		}catch(error){
+			await this.db.$queryRaw(
+					Prisma.sql`UPDATE public.users SET losses=CAST(${loss[0].losses} AS INTEGER)
+					WHERE userid=${loser}`);
+			// end loser update
+			
+			const match = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.match_history SET match_status=0
+				WHERE matchid=${matchid}`);
+		} catch (error) {
 			throw new ForbiddenException();
 		}
 	}
