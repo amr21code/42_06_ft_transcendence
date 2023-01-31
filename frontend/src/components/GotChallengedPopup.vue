@@ -97,7 +97,7 @@ export default defineComponent({
 
 .popup-inner {
 	background-color: var(--second-bg-color);
-	padding: 10px 26px;
+	padding: 1rem 2rem;
 	/* border-radius: 10%; */
 	border-radius: 2px;
 }
