@@ -20,8 +20,16 @@ export class MatchController {
 	}
 
 	@Get('opensingle')
-	async opensingleMatch( @Session() session: Record<string, any>) {
+	async opensingleMatch(@Session() session: Record<string, any>) {
 		const open = await this.matchService.openSingleMatch(session.passport.user.userid, 1);
+	}
+
+	@Get('history/:userid?')
+	async showHistory(@Session() session: Record<string, any>, @Param('userid') userid) {
+		if (!userid)
+			userid = session.passport.user.userid;
+		const history = this.matchService.showHistory(userid);
+		return history;
 	}
 
 	@Get('accept')

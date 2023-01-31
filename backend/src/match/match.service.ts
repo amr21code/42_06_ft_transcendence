@@ -38,7 +38,19 @@ export class MatchService {
 		const match = await this.db.$queryRaw(
 			Prisma.sql`SELECT um.userid, um.matchid FROM public.user_match AS um
 			LEFT JOIN public.match_history AS mh ON mh.matchid=um.matchid
-			WHERE mh.match_status > 0 AND um.userid=${userid};`
+			WHERE mh.match_status >= 0 AND um.userid=${userid};`
+		);
+		return match;
+	}
+
+	async showHistory(userid: string) {
+		const match = await this.db.$queryRaw(
+			Prisma.sql`SELECT mh.matchid, mh.match_status, u1.username as user1, um1.user_score as user1_score, um2.username as user2, um2.user_score AS user2_score  FROM public.user_match as um1
+			LEFT JOIN public.users AS u1 ON um1.userid=u1.userid
+			LEFT JOIN (SELECT um.userid, u2.username, um.matchid, um.user_score FROM public.user_match as um
+			LEFT JOIN public.users AS u2 ON um.userid=u2.userid) AS um2 ON um1.matchid=um2.matchid AND um1.userid<>um2.userid
+			LEFT JOIN public.match_history AS mh ON mh.matchid=um1.matchid
+			WHERE mh.match_status>0 AND um1.userid=${userid};`
 		);
 		return match;
 	}
