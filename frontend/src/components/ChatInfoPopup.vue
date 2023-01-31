@@ -125,6 +125,7 @@ export default defineComponent({
 			})
 			.catch((e: Error) => {
 				console.log(e);
+				this.retrieveCurrentUsersInChat(chatid);
 			});
 		},
 
