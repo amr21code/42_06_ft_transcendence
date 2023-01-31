@@ -8,7 +8,7 @@
             <label>
                 Group<input class="radio" type="checkbox">
             </label> -->
-            <a class="info-text">Enter the chatid that you want to join, create a new chat with (public) or without
+            <a class="info-text">Enter the chatid that you want to join, create a new chat either private, with (public) or without
                 (protected) a password or enter a userid in order to create a direct chat.</a>
             <div class="button-box">
                 <button class="" @click="(changeShowInput('group'))">Groupchat</button>
@@ -16,6 +16,9 @@
                 <button class="" @click="(changeShowInput('join'))">Join</button>
             </div>
             <!-- <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe> -->
+            <div class="checkbox-label" v-if="showinput === 'group'">
+                <input class="checkbox-input" type="checkbox" id="privatechat" value="private"><label class="" for="privatechat">Privatechat</label><br>
+            </div>
 
             <!-- <form action="" id="myForm" name="myForm" > -->
             <input class="" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'">(optional)</a>
@@ -82,6 +85,13 @@ export default defineComponent({
                 return ;
             if (chatname_id === '' && type == 'group')
                 chatname_id = 'public chat by ' + this.user[0].userid;
+            var inputElements = document.getElementsByClassName('checkbox-input');
+            for(var i=0; inputElements[i]; ++i){
+                if(inputElements[i].checked){
+                    type = 'private';
+                    break;
+                }
+            }
             DataService.createChat(chatname_id, password, type)
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
@@ -119,6 +129,11 @@ export default defineComponent({
 
 .button-box {
     padding: 20px 20px
+}
+
+.checkbox-label {
+    color: white;
+
 }
 .popup {
 	/* text-align: left; */
