@@ -10,8 +10,8 @@
 					<th>userid</th>
 					<th>username</th>
 					<th>statusname</th>
-					<th>mute</th>
-					<th>ban</th>
+					<th v-if="isAdmin === true">mute</th>
+					<th v-if="isAdmin === true">ban</th>
 					<th>invite</th>
 				</tr>
 			</thead>
@@ -26,7 +26,7 @@
 					<td> <!-- statusname -->
 						{{ user.statusname }}
 					</td>
-					<td v-if="user.userid != user_me[0].userid"> <!-- mute -->
+					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- mute -->
 						<button @click="(toggleMute)" v-if="Mute === false">mute</button>
 						<div v-if="Mute === true">
 							<select v-model="mutetime" required>
@@ -39,7 +39,7 @@
 						</div>
 						<button @click="(toggleMute)" v-if="user.status === 2">unmute</button>
 					</td>
-					<td v-if="user.userid != user_me[0].userid"> <!-- ban -->
+					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- ban -->
 						<button @click="(toggleBan)" v-if="Ban == false">ban</button>
 						<div v-if="Ban === true">
 							<select v-model="bantime" required>
@@ -100,6 +100,7 @@ export default defineComponent({
             socket: SocketioService.socket,
 			mutetime: 10,
 			bantime : 10,
+			isAdmin: false as boolean,
 		}
 	},
 	methods: {
@@ -119,7 +120,8 @@ export default defineComponent({
 			DataService.getUsersInChat(chatid)
 			.then((response: ResponseData) => {
 				this.users = response.data;
-				console.log(response.data);
+				this.checkIfAdmin();
+				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -135,6 +137,14 @@ export default defineComponent({
 			DataService.banUser(this.chat.chatid, userid, time);
 			this.toggleBan();
 		},
+
+		checkIfAdmin() {
+			for (var user of this.users) {
+				if (this.user_me[0].userid === user.userid)
+					if (user.statusname === 'admin')
+						this.isAdmin = true;
+			}
+		}
         
 	},
 
@@ -219,6 +229,7 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	color: white;
 }
 .popup-inner {
 	background-color: var(--second-bg-color);

@@ -87,7 +87,7 @@ export default defineComponent({
                 chatname_id = 'public chat by ' + this.user[0].userid;
             var inputElements = document.getElementsByClassName('checkbox-input');
             for(var i=0; inputElements[i]; ++i){
-                if(inputElements[i].checked){
+                if(inputElements[i].checked){ //this works and exists!!!
                     type = 'private';
                     break;
                 }

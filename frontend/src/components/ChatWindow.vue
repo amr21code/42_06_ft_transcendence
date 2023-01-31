@@ -26,7 +26,7 @@
 	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 			<div class="messages-wrapper" v-for="message in db_messages" :key="message.message">
 				<!-- message sent -->
-				<div class="message-sent" v-if="user[0].userid == message.userid">
+				<div class="message-sent" v-if="user[0].userid === message.userid">
 					<div class="message-username">
 						<strong >{{ message.username }}</strong>
 					</div>
