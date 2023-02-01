@@ -40,7 +40,9 @@
 					<th>invite</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody @click="ChatUserdatatogglePopup()">
+				
+				
 				<tr class="info-item" v-for="(user, index) in users" :key="index">
 					<td> <!-- userid -->
 						{{ user.userid }}
@@ -85,6 +87,7 @@
 		</table>
 			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
         </div>
+		<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()"/>
     </div>
 </template>
 
@@ -93,6 +96,9 @@
 
 
 <script lang="ts">
+
+import ChatUserdataPopup from './ChatUserdataPopup.vue'
+
 import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
 
@@ -106,6 +112,7 @@ import SocketioService from '../services/SocketioService'
 
 export default defineComponent({
 	name: "ChatInfoPopup",
+	components: { ChatUserdataPopup },
     props: {
 			['ChatInfotogglePopup']  : {
 			required: true,
@@ -117,7 +124,10 @@ export default defineComponent({
 				default: () => ({} as IChats)
 			}
 	},
-
+	created () {
+		this.retrieveCurrentUser();
+		this.retrieveCurrentUsersInChat(this.chat.chatid);
+	},
     data () {
 		return {
 			user_me: [] as IUser[],
@@ -189,13 +199,6 @@ export default defineComponent({
 		},
         
 	},
-
-	mounted () {
-		this.retrieveCurrentUser();
-		this.retrieveCurrentUsersInChat(this.chat.chatid);
-		this.retrieveCurrentUsersInChat(this.chat.chatid);
-	},
-
     setup (props) {
 
 		const Mute = ref(false);
@@ -219,7 +222,12 @@ export default defineComponent({
 			option.value = i;
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option }
+		const ChatUserdataPopupTrigger = ref(false);	
+		const ChatUserdatatogglePopup = () => {
+			ChatUserdataPopupTrigger.value = !ChatUserdataPopupTrigger.value;
+		}
+
+		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option, ChatUserdatatogglePopup, ChatUserdataPopupTrigger }
 			
     }  
 

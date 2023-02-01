@@ -1,5 +1,5 @@
 <template>
-	<div class="popup" @keyup.esc="toggleUserDataPopup" tabindex="0">
+	<div class="popup" @keyup.esc="(ChatUserdatatogglePopup)" tabindex="0">
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ user.username }}'s user data</h2>
@@ -20,16 +20,6 @@
 				<img id="user-photo" :src="user.picurl" alt="user-photo" v-if="toggleAvatar === false">
 			</div>
 			<div class="user-data-wrapper">
-				<div>select new avatar:</div>
-				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="avatar-photo">
-				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="avatar-photo">
-				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo">
-				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo">
-				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="avatar-photo">
-				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="avatar-photo">
-				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
-			</div>
-			<div class="user-data-wrapper">
 				<div>member since: {{ memberSince }}</div>
 			</div>
 			<div class="user-data-wrapper">
@@ -44,7 +34,7 @@
 			<div class="user-data-wrapper">
 				<div>2-factor-authentication:</div>
 			</div>
-			<button class="popup-close" @click="toggleUserDataPopup"> 
+			<button class="popup-close" @click="(ChatUserdatatogglePopup)"> 
 				Close
 			</button>
 		</div>
@@ -59,7 +49,7 @@ import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 
 export default defineComponent({
-	name: "user-data-popup",
+	name: "ChatUserdataPopup",
 	
 	data () {
 		return {
@@ -72,7 +62,12 @@ export default defineComponent({
 		}
 	},
 
-	props: ['toggleUserDataPopup'],
+	props: {
+        ['ChatUserdatatogglePopup'] : {
+			required: true,
+			type: Function
+		},
+    },
 	methods: {
 		retrieveCurrentUser() {
 			DataService.getUser()
@@ -154,17 +149,17 @@ export default defineComponent({
 }
 
 #user-photo {
-	width : 7rem;
-	height: 7rem;
-	object-fit: cover;
-	border-radius: 50%;
+	cursor: pointer;
+	width: 15%;
+	height: 15%;
 	margin: 3%;
+	background: white;
+	border-radius: 50%;
 }
 
 #select-photo {
 	height: 70px;
 	width: 70px;
-	object-fit: cover;
 	cursor: pointer;
 	margin: 1rem;
 	background: white;

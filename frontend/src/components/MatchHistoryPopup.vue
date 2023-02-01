@@ -3,7 +3,11 @@
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ userid }}'s match history</h2>
-			
+			<div class="user-photo-div">
+				<img :src="userPhoto">
+				<button class="add-friend-button">Add friend</button>
+			</div>
+
 			<table id="history-table">
 				<tr id="top-row">
 					<th>player1</th>
@@ -69,6 +73,10 @@ export default defineComponent({
 		userid : {
 			required: true,
 			type: String,
+		},
+		userPhoto : {
+			required: true,
+			type: String,
 		}
 	},
 	setup(props) {
@@ -115,17 +123,31 @@ export default defineComponent({
 
 .popup-inner h2 {
 	text-align: center;
+
+	
 }
 
+.user-photo-div {
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 2rem;
+}
 
-#user-photo {
-	cursor: pointer;
-	width: 15%;
-	height: 15%;
-	margin: 3%;
-	background: white;
+.user-photo-div img {
+	width : 7rem;
+	height: 7rem;
+	object-fit: cover;
 	border-radius: 50%;
+	
 }
+
+.add-friend-button {
+	margin: 2rem;
+	
+}
+
 
 #history-table {
 	padding: calc(3px + 1.5625vw);

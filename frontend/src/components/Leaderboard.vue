@@ -7,8 +7,9 @@
 				<th>picture</th>
 				<th>name</th>
 				<th>wins</th>
+				<th></th>
 			</tr>
-			<tr class="leaderboard-item" @click="toggleUserHistory(user.userid)" v-for="(user, index) in usersByWins" :key="user.userid">
+			<tr class="leaderboard-item" @click="toggleUserHistory(user)" v-for="(user, index) in usersByWins" :key="user.userid">
 				<td>
 					{{ index + 1 }}
 				</td>
@@ -22,7 +23,7 @@
 					{{ user.wins }}
 				</td>
 			</tr>
-			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser"/>
+			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
 		</table>
 	</div>
 </template>
@@ -59,9 +60,11 @@ export default defineComponent({
 		// for user info popup (wins/match history)
 		const showUserHistoryTrigger = ref(false);
 		const selectedUser = ref("");
-		const toggleUserHistory = (user: string) => {
+		const selectedUserPhoto = ref("");
+		const toggleUserHistory = (user: any) => {
 			showUserHistoryTrigger.value = true;
-			selectedUser.value = user;
+			selectedUser.value = user.userid;
+			selectedUserPhoto.value = user.picurl;
 		}
 
 		const untoggleUserHistory = () => {
@@ -69,7 +72,7 @@ export default defineComponent({
 			selectedUser.value = "";
 		}
 
-		return { retrievedUsers, usersByWins, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser };
+		return { retrievedUsers, usersByWins, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser, selectedUserPhoto };
 	},
 })
 </script>
