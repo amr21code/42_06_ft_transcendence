@@ -97,16 +97,16 @@ export default defineComponent({
 				matchSelectionDiv.style.display = 'none';
 				canvas.style.display = 'block';
 	
-				// REMOVE BLURRINESS
-				let dpi = window.devicePixelRatio;
-				const fix_dpi = () => {
-					let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
-					let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
-					canvas.setAttribute("height", styleHeight * dpi);
-					canvas.setAttribute("width", styleWidth * dpi);
-				};
-				fix_dpi();
-				console.log(canvas.height, canvas.width);
+				// REMOVE BLURRINESS ((IF no blurriness errrors anymore: remove this!))
+				// let dpi = window.devicePixelRatio;
+				// const fix_dpi = () => {
+				// 	let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
+				// 	let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
+				// 	canvas.setAttribute("height", styleHeight * dpi);
+				// 	canvas.setAttribute("width", styleWidth * dpi);
+				// };
+				// fix_dpi();
+				// console.log(canvas.height, canvas.width);
 				// REMOVE BLURRINESS END
 
 				socket.emit('startGame', canvas.height, canvas.width);
@@ -168,7 +168,7 @@ export default defineComponent({
 
 
 		// ########### PAINTING ###################################################################################################
-        const resizeCanvasToDisplaySize = (canvas: any) => {
+        const removeBlurriness = (canvas: any) => {
 			// Lookup the size the browser is displaying the canvas in CSS pixels.
 			const displayWidth  = canvas.clientWidth;
 			const displayHeight = canvas.clientHeight;
@@ -183,16 +183,38 @@ export default defineComponent({
 				canvas.height = displayHeight;
 			}
 		}
-		
+
+		const scaleUpGameStateForPlayer = (state: any) => {
+			state.canvasHeight = state.canvasHeight / 120 * canvas.height;
+			state.canvasWidth = state.canvasWidth / 200 * canvas.width;
+			
+			// static stuff (no movement involved)
+			state.paddleWidth = state.canvasWidth / 25;
+			state.paddleHeight = state.canvasHeight / 4;
+			state.ballSize = state.canvasWidth / 25;
+			state.wallOffset = state.canvasWidth / 25;
+			state.player1.pos.x = state.wallOffset;
+			state.player2.pos.x = state.canvasWidth - (state.wallOffset + state.paddleWidth);
+			state.paddleSpeed = state.canvasHeight / 75;
+			state.ballSpeed = state.canvasHeight / 7
+			
+			// dynamic stuff (movement involved)
+			state.player1.pos.y = state.player1.pos.y / 120 * canvas.height;
+			state.player2.pos.y = state.player2.pos.y / 120 * canvas.height;
+			state.ball.pos.x = state.ball.pos.x / 200 * canvas.width;
+			state.ball.pos.y = state.ball.pos.y / 120 * canvas.height;
+		}
+
 		const paintGame = (state: any) => {
-			resizeCanvasToDisplaySize(canvas);
+			removeBlurriness(canvas); // comment IN again!
+			scaleUpGameStateForPlayer(state);
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 			ctx.strokeStyle = "#fff";
 			ctx.font = "200px monspace";
-			ctx.lineWidth = 7;
-			ctx.centerLineWidth = 7;
+			ctx.lineWidth = state.drawLineWidth;
+			ctx.centerLineWidth = state.drawLineWidth;
 			ctx.centerLineHeight = canvas.height / 10;
 			ctx.strokeRect(0, 0, canvas.width, canvas.height);
 			//draw center lines
@@ -205,6 +227,7 @@ export default defineComponent({
         };
 
         const paintPlayersAndBall = (state: any) => {
+			// scaleUpGameStateForPlayer(state);
             ctx.fillStyle = "#b04716";
             // ctx.fillStyle = "#fff";
             ctx.fillRect(state.player1.pos.x, state.player1.pos.y, state.paddleWidth, state.paddleHeight);

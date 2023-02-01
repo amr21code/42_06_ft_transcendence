@@ -39,6 +39,7 @@ export function createGameState() {
 		ballSpeed: 0,
 		scorePlayer1: 0,
 		scorePlayer2: 0,
+		drawLineWidth: 7,
 	}
 }
 
@@ -55,14 +56,14 @@ export function gameLoop(state: MatchGameStateDto) {
 
 	// ################ MOVE PLAYER ###################################################
 	// Only update position, if player doesn't touch match court boundaries
-	// make sure paddle is actually moving, before we check how to move it
+	// if clause makes sure paddle is actually moving, before we check how to move it
 	if (playerOne.y_vel) {
 
-		if (playerOne.y_vel === -1 && (playerOne.pos.y <= 20)) {
+		if (playerOne.y_vel === -1 && (playerOne.pos.y <= 2)) {
 			playerOne.y_vel = 0;
 		}
 
-		if (playerOne.y_vel === 1 && (playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 20)) {
+		if (playerOne.y_vel === 1 && (playerOne.pos.y + state.paddleHeight >= state.canvasHeight - 2)) {
 			playerOne.y_vel = 0;
 		}
 
@@ -72,11 +73,11 @@ export function gameLoop(state: MatchGameStateDto) {
 
 	if (playerTwo.y_vel) {
 
-		if (playerTwo.y_vel === -1 && (playerTwo.pos.y <= 20)) {
+		if (playerTwo.y_vel === -1 && (playerTwo.pos.y <= 2)) {
 			playerTwo.y_vel = 0;
 		}
 
-		if (playerTwo.y_vel === 1 && (playerTwo.pos.y + state.paddleHeight >= state.canvasHeight - 20)) {
+		if (playerTwo.y_vel === 1 && (playerTwo.pos.y + state.paddleHeight >= state.canvasHeight - 2)) {
 			playerTwo.y_vel = 0;
 		}
 

@@ -51,4 +51,8 @@ export class MatchGameStateDto {
 	@IsNumber()
 	@IsNotEmpty()
 	scorePlayer2: number;
+
+	@IsNumber()
+	@IsNotEmpty()
+	drawLineWidth: number;
 }
