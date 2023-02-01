@@ -54,8 +54,11 @@ export class MatchGateway {
 			// client.number = 1;
 			(client as any).number = 1;
 			client.emit('init', 1);
+			await this.userService.changeUserData(userid, "user_status", 3);
 		} else {
 			MatchGateway[roomNumber].player2.userid = userid;
+			await this.userService.changeUserData(userid, "user_status", 2);
+			await this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 2);
 		}
 
 		// console.log("room number for opponent status: ", roomNumber);
@@ -141,7 +144,6 @@ export class MatchGateway {
 
 		
 		console.log(MatchGateway[roomNumber]);
-
 		client.emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
 		client.on('keydown', handleKeyDown);
 		// this.startGameInterval(roomNumber, client);
@@ -183,6 +185,8 @@ export class MatchGateway {
 				// sends game over to all room members
 				this.server.to(roomNumber).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
 				this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
+				this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
+				this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
 				// MatchGateway[roomNumber] = null;
 				clearInterval(intervalId); // was macht das?
 			}

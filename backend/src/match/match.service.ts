@@ -226,6 +226,7 @@ export class MatchService {
 			LEFT JOIN public.match_history AS mh ON mh.matchid=um.matchid
 			WHERE mh.match_status > 0 AND um.userid=${userid});`
 		);
+		await this.userService.changeUserData(userid, "user_status", 1);
 	}
 
 	async getOpponentStatus(matchid: number, userid: string){

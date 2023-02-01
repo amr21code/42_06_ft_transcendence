@@ -23,7 +23,6 @@ export default defineComponent({
 
 	methods: {
 		stopWaitingForPlayer() {
-			// dataservice @DESIREE
 			// send signal to player2 that player1 is not waiting anymore (if exists)
 			this.removeMatchWaitPopup();
 		}
