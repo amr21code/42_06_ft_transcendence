@@ -177,7 +177,7 @@ export default defineComponent({
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
-		changeChatDetails (type : String, chatid : number, chatname : string, password : String) {
+		changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
 			DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();

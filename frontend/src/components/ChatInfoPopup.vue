@@ -5,15 +5,27 @@
 			<!-- {{ chat }} <br> -->
 			<!-- {{ users }} <br>  -->
 			<!-- <a>Change channel password:</a> -->
-			<div class="button-container">
+			<div class="button-container" v-if="isAdmin === true">
 				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">Change name</button>
-				<input type="text" placeholder="Enter new chatname" v-if="option === 1" v-model="newChatname">
-				<button @click="changeChatDetails(chat.typename, chat.chatid, newChatname, chat.password), toggleOption(0)" v-if="option === 1">submit</button>
+				<div v-if="option === 1">
+					<input type="text" placeholder="Enter new chatname"  v-model="newChatname">
+					<button @click="changeChatDetails(chat.typename, chat.chatid, newChatname, chat.password), toggleOption(0)">submit</button>
+				</div>
 
-				<button @click="toggleOption(2)" class="option-button" v-if="option === 0">Remove password</button>
+				<button @click="toggleOption(2)" class="option-button" v-if="option === 0 && chat.typename === 'protected'">Remove password</button>
+				<div v-if="option === 2">
+					<a>You are about to remove the password.</a><br>
+					<a>This makes the Chat public. Are you sure?</a><br>
+					<button class="option-button" @click="changeChatDetails('public', chat.chatid, newChatname, ''), toggleOption(0)">Yes</button>
+					<button class="option-button" @click="toggleOption(0)">No</button>
+				</div>
 
 
 				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">Change password</button>
+				<div v-if="option === 3">
+					<input type="text" placeholder="Enter new chatpassword"  v-model="newChatpassword">
+					<button @click="changeChatDetails(chat.typename, chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
+				</div>
 
 
 			</div>
@@ -115,6 +127,7 @@ export default defineComponent({
 			bantime : 10,
 			isAdmin: false as boolean,
 			newChatname: '' as string,
+			newChatpassword: '' as string,
 		}
 	},
 	methods: {
@@ -164,7 +177,7 @@ export default defineComponent({
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
-		changeChatDetails (type : String, chatid : number, chatname : string, password : String) {
+		changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
 			DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
