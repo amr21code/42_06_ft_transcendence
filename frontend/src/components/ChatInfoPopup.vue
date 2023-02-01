@@ -27,7 +27,7 @@
 						{{ user.statusname }}
 					</td>
 					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- mute -->
-						<button @click="(toggleMute)" v-if="Mute === false">mute</button>
+						<button @click="(toggleMute)" v-if="Mute === false && user.status !== 2">mute</button>
 						<div v-if="Mute === true">
 							<select v-model="mutetime" required>
 								<option value="10">10 minutes</option>
@@ -35,9 +35,9 @@
 								<option value="30">30 minutes</option>
 								<option value="60">60 minutes</option>
 							</select>
-							<button @click="muteUser(user.userid, mutetime)">mute</button>
+							<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 2">mute</button>
 						</div>
-						<button @click="(toggleMute)" v-if="user.status === 2">unmute</button>
+						<button @click="(toggleMute)" v-if="user.status === 2">-MUTED-</button>
 					</td>
 					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- ban -->
 						<button @click="(toggleBan)" v-if="Ban == false && user.status !== 3">ban</button>
@@ -50,7 +50,7 @@
 							</select>
 							<button @click="banUser(user.userid, bantime)" v-if="user.status !== 3">ban</button>
 						</div>
-						<button @click="(toggleBan)" v-if="user.status === 3">unban</button>
+						<button v-if="user.status === 3">-BANNED-</button>
 					</td>
 					<td v-if="user.userid != user_me[0].userid"> <!-- invite -->
 						<button @click="(challengeUser(user.userid), ChatInfotogglePopup)">challenge</button>
@@ -125,7 +125,7 @@ export default defineComponent({
 			})
 			.catch((e: Error) => {
 				console.log(e);
-				this.retrieveCurrentUsersInChat(chatid);
+				// this.retrieveCurrentUsersInChat(chatid);
 			});
 		},
 
