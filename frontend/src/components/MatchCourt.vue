@@ -212,7 +212,6 @@ export default defineComponent({
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 			ctx.strokeStyle = "#fff";
-			ctx.font = "200px monspace";
 			ctx.lineWidth = state.drawLineWidth;
 			ctx.centerLineWidth = state.drawLineWidth;
 			ctx.centerLineHeight = canvas.height / 10;
@@ -238,6 +237,10 @@ export default defineComponent({
 		const paintScores = (state: any) => {
             ctx.fillStyle = "#444040";
 			ctx.textalign = "center";
+			const fontSize = canvas.height / 2.5;
+			console.log(canvas.height, canvas.width);
+			ctx.font = (fontSize|0) + 'px monspace';
+
 			
 			ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
 			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
