@@ -7,7 +7,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 
 @Controller('users')
-@UseGuards(AuthenticatedGuard)
+//@UseGuards(AuthenticatedGuard)
 export class UserController {
 	constructor(private readonly userService: UserService){}
 
@@ -79,7 +79,7 @@ export class UserController {
 	@Post('upload')
 	@UseInterceptors(FileInterceptor('file', {
 		storage: diskStorage({
-			destination: './files',
+			destination: './upload',
 			filename: (req, file, callback) => {
 				const ext = extname(file.originalname);
 				const filename = `${req.session.passport.user.userid}${ext}`;
