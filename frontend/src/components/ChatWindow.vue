@@ -9,7 +9,7 @@
 			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
 			<a @click="showChangeNameField()" class="chat-chatname" v-if="showinput === false">{{ curr_chat.chat_name }}</a>
 			<input v-if="showinput === true" placeholder="enter new name" v-model="newName">
-			<button class="ok-button" @click="showChangeNameField(), changeChatName(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
+			<button class="ok-button" @click="showChangeNameField(), changeChatDetails(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
 			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
 			<a class="info-icon" @click="(ChatInfotogglePopup)">
 				<img src="../assets/info-icon.png" alt="user-photo" width="20" height="20">
@@ -177,8 +177,8 @@ export default defineComponent({
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
-		changeChatName (type : String, chatid : number, chatname : string, password : String) {
-			DataService.changeChatName(type, chatid, chatname, password)
+		changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
+			DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
 			})

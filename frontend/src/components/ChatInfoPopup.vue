@@ -4,6 +4,31 @@
             <h2>Info to chat[{{ chat.chatid }}]</h2>
 			<!-- {{ chat }} <br> -->
 			<!-- {{ users }} <br>  -->
+			<!-- <a>Change channel password:</a> -->
+			<div class="button-container" v-if="isAdmin === true">
+				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">Change name</button>
+				<div v-if="option === 1">
+					<input type="text" placeholder="Enter new chatname"  v-model="newChatname">
+					<button @click="changeChatDetails(chat.typename, chat.chatid, newChatname, chat.password), toggleOption(0)">submit</button>
+				</div>
+
+				<button @click="toggleOption(2)" class="option-button" v-if="option === 0 && chat.typename === 'protected'">Remove password</button>
+				<div v-if="option === 2">
+					<a>You are about to remove the password.</a><br>
+					<a>This makes the Chat public. Are you sure?</a><br>
+					<button class="option-button" @click="changeChatDetails('public', chat.chatid, newChatname, ''), toggleOption(0)">Yes</button>
+					<button class="option-button" @click="toggleOption(0)">No</button>
+				</div>
+
+
+				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">Change password</button>
+				<div v-if="option === 3">
+					<input type="text" placeholder="Enter new chatpassword"  v-model="newChatpassword">
+					<button @click="changeChatDetails(chat.typename, chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
+				</div>
+
+
+			</div>
 			<table id="info-table">
 			<thead id="top-row">
 				<tr>
@@ -101,6 +126,8 @@ export default defineComponent({
 			mutetime: 10,
 			bantime : 10,
 			isAdmin: false as boolean,
+			newChatname: '' as string,
+			newChatpassword: '' as string,
 		}
 	},
 	methods: {
@@ -147,12 +174,25 @@ export default defineComponent({
 					if (user.statusname === 'admin')
 						this.isAdmin = true;
 			}
-		}
+		},
+
+		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
+		changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
+			DataService.changeChatDetails(type, chatid, chatname, password)
+			.then((response: ResponseData) => {
+				SocketioService.refreshChats();
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			this.chat.chat_name = chatname;
+		},
         
 	},
 
 	mounted () {
 		this.retrieveCurrentUser();
+		this.retrieveCurrentUsersInChat(this.chat.chatid);
 		this.retrieveCurrentUsersInChat(this.chat.chatid);
 	},
 
@@ -174,7 +214,12 @@ export default defineComponent({
 			props.ChatInfotogglePopup();
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, challengeUser}
+		const option = ref(0);
+		const toggleOption = (i : number) => {
+			option.value = i;
+		}
+
+		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option }
 			
     }  
 
@@ -186,6 +231,14 @@ export default defineComponent({
 
 
 <style scoped>
+
+.button-container{
+	text-align: center;
+}
+
+.option-button {
+	margin: 1%;
+}
 
 #info-table {
 		border-collapse: collapse;
