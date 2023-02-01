@@ -154,17 +154,17 @@ export default defineComponent({
 }
 
 #user-photo {
-	cursor: pointer;
-	width: 15%;
-	height: 15%;
-	margin: 3%;
-	background: white;
+	width : 7rem;
+	height: 7rem;
+	object-fit: cover;
 	border-radius: 50%;
+	margin: 3%;
 }
 
 #select-photo {
 	height: 70px;
 	width: 70px;
+	object-fit: cover;
 	cursor: pointer;
 	margin: 1rem;
 	background: white;
