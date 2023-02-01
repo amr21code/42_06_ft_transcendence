@@ -185,7 +185,7 @@ export class MatchService {
 	async join(userid: string, matchid: number) {
 		const join = await this.db.$queryRaw(
 			Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
-			VALUES (${userid}, ${matchid}, 1)
+			VALUES (${userid}, ${matchid}, 2)
 			RETURNING matchid`
 		);
 		if (join[0].matchid == matchid) {
