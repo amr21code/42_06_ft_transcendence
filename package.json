@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "vue-property-decorator": "^9.1.2"
+  },
+  "devDependencies": {
+    "@types/multer": "^1.4.7"
   }
 }
