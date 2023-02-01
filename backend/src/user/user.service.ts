@@ -22,6 +22,15 @@ export class UserService {
 		return (user);
 	}
 
+	async getLeaderboardPos(userid: string){
+		const pos = await this.db.$queryRaw<number>(
+			Prisma.sql`SELECT COUNT(*)
+			FROM public.users
+			WHERE wins > (SELECT wins FROM public.users WHERE userid = ${userid})`
+		);
+		return (pos + 1);
+	}
+
 	async getMe(user: any) {
 		const meuser = await this.db.$queryRaw(
 			Prisma.sql`SELECT userid, username, 
