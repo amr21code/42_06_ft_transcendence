@@ -219,7 +219,8 @@ export default defineComponent({
 			//draw center lines
 			for (var i = (canvas.height / 5 / 5); i < canvas.height; i += canvas.height / 5) {
 				ctx.fillStyle = "#444040";
-				ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
+				// ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
+				ctx.fillRect(canvas.width / 2 - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight - ctx.lineWidth);
 			}
 			paintScoresAndNames(state);
             paintPlayersAndBall(state);
@@ -250,15 +251,15 @@ export default defineComponent({
 			ctx.fillText(state.player1.userid, (canvas.width / 4 - (ctx.measureText(state.player1.userid).width / 2)), (canvas.height - canvas.height / 6) + ((biggerMeasureAscent + biggerMeasureDescent) / 2));
 			ctx.fillText(state.player2.userid,  canvas.width - (canvas.width / 4) - ctx.measureText(state.player2.userid).width / 2 , (canvas.height - canvas.height / 6) + ((biggerMeasureAscent+ biggerMeasureDescent) / 2));
 		};
-		// ########### PAINTING ###################################################################################################
 
+		// ########### PAINTING ###################################################################################################
 		const removeMatchWaitPopup = () => {
 			matchWaitPopup.style.display = 'none';
 			matchSelectionDiv.style.display = 'inline-flex';
 			DataService.denyChallenge();
 		}
 
-		//############# SOCKETIO ##############
+		//############# SOCKETIO ##################################################################################################
 		const socket = SocketioService.socket;
 		socket.on('init', handlePlayerNumber);
 		socket.on("opponent-status", handleOpponentArrived);
