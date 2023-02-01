@@ -63,4 +63,13 @@ export class UserController {
 				throw new ForbiddenException('getUserData failed');
 			}
 	}
+
+	@Get('leaderboardpos/:userid')
+	async getLeaderboardPos(@Param('userid') userid){
+		try{
+			await this.userService.getLeaderboardPos(userid);
+		} catch (error) {
+			throw new ForbiddenException('getLeaderboardPos failed');
+		}
+	}
 }
