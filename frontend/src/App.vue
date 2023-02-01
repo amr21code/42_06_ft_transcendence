@@ -12,7 +12,7 @@
 					<a class="menuOption" id="leaderboardSelected" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friendsSelected" @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
-						<img :src="user[0].picurl" alt="user-photo" width="40" height="40">
+						<!-- <img :src="user[0].picurl" alt="user-photo" width="40" height="40"> --> 
 					</div>
 				</div>
 			</header>
@@ -156,6 +156,7 @@ export default defineComponent({
 			DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
+				console.log("answer is: ", response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
