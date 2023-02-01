@@ -10,6 +10,7 @@
 					<th></th>
 					<th></th>
 					<th>player2</th>
+					<th>type</th>
 				</tr>
 				<tr class="history-item" v-for="(match) in matchHistory" :key="match.match_id">
 					<td>
@@ -23,6 +24,9 @@
 					</td>
 					<td>
 						{{ match.user2 }}
+					</td>
+					<td>
+						{{ match.challenge === 1 ? "challenge" : "random" }}
 					</td>
 				</tr>
 			</table>
@@ -123,45 +127,39 @@ export default defineComponent({
 	border-radius: 50%;
 }
 
+#history-table {
+	padding: calc(3px + 1.5625vw);
+	padding-top: 0;
+	border-collapse: collapse;
+	overflow-y: auto;
+	max-height: 500px;
+	table-layout: fixed;
+	display: block;
+	position: relative;
+	scrollbar-gutter: stable both-edges;
+	width: 100%;		
+	margin-bottom: 2rem;
+}
+
+#history-table tr {
+	border: var(--second-bg-color) 3px solid;
+}
 
 
+#history-table th, td {
+	padding: calc(-10px + 1.5625vw) calc(-5px + 1.5625vw);
+	text-align: center;
+	width: 100%; /*makes table central, but destroys equal width of columns (33% would be equal width)*/
+	background: white;
+	color: var(--second-bg-color);
+}
 
-
-
-
-	#history-table {
-		padding: calc(3px + 1.5625vw);
-		padding-top: 0;
-		border-collapse: collapse;
-		overflow-y: auto;
-		max-height: 500px;
-		table-layout: fixed;
-		display: block;
-		position: relative;
-		scrollbar-gutter: stable both-edges;
-		width: 100%;		
-		margin-bottom: 2rem;
-	}
-
-	#history-table tr {
-		border: var(--second-bg-color) 3px solid;
-	}
-
-	
-	#history-table th, td {
-		padding: calc(-10px + 1.5625vw) calc(-5px + 1.5625vw);
-		text-align: center;
-		width: 100%; /*makes table central, but destroys equal width of columns (33% would be equal width)*/
-		background: white;
-		color: var(--second-bg-color);
-	}
-	
-	#history-table th {
-		position: sticky;
-		top: 0;
-		background-color: black;
-		color: white;
-	}
+#history-table th {
+	position: sticky;
+	top: 0;
+	background-color: black;
+	color: white;
+}
 
 </style>
 

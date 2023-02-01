@@ -35,7 +35,6 @@ export default defineComponent({
 		let matchWaitPopup: any;
 		const opponentArrived = ref(false);
 		
-		
 		// #################  HANDLERS #######################
         const handlePlayerNumber = (nbr: number) => {
 			if(!playerNumber)
