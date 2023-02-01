@@ -8,6 +8,7 @@ import { FriendlistModule } from './friendlist/friendlist.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { ChatModule } from './chat/chat.module';
 import { MatchModule } from './match/match.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -20,6 +21,7 @@ import { MatchModule } from './match/match.module';
   FriendlistModule, 
   AchievementsModule, 
   ChatModule, 
-  MatchModule],
+  MatchModule,
+  MulterModule.register({dest: '../uploads'})],
 })
 export class AppModule {}

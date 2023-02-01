@@ -3,6 +3,8 @@ import { AuthenticatedGuard} from '../auth/guards/guards';
 import { Request } from 'express';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
@@ -75,7 +77,16 @@ export class UserController {
 	}
 
 	@Post('upload')
-	@UseInterceptors(FileInterceptor('file'))
+	@UseInterceptors(FileInterceptor('file', {
+		storage: diskStorage({
+			destination: './files',
+			filename: (req, file, callback) => {
+				const ext = extname(file.originalname);
+				const filename = `${req.session.passport.user.userid}${ext}`;
+				callback(null, filename);
+			}
+		})
+	}))
 	async upload(@UploadedFile() file: Express.Multer.File){
 		console.log('file', file);
 	}
