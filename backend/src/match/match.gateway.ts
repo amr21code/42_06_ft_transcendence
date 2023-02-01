@@ -78,8 +78,10 @@ export class MatchGateway {
 		console.log("Users");
 		console.log(MatchGateway[roomNumber].player1.userid);
 		console.log(MatchGateway[roomNumber].player2.userid);
-		MatchGateway[roomNumber].canvasHeight = canvasData[0];
-		MatchGateway[roomNumber].canvasWidth = canvasData[1];
+		// MatchGateway[roomNumber].canvasHeight = canvasData[0];
+		// MatchGateway[roomNumber].canvasWidth = canvasData[1];
+		MatchGateway[roomNumber].canvasHeight = 120;
+		MatchGateway[roomNumber].canvasWidth = 200;
 		MatchGateway[roomNumber].paddleWidth = MatchGateway[roomNumber].canvasWidth / 25;
 		MatchGateway[roomNumber].paddleHeight = MatchGateway[roomNumber].canvasHeight / 4;
 		MatchGateway[roomNumber].ballSize = MatchGateway[roomNumber].canvasWidth / 25;
@@ -92,7 +94,7 @@ export class MatchGateway {
 		MatchGateway[roomNumber].ball.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].ballSize / 2;
 		MatchGateway[roomNumber].paddleSpeed = MatchGateway[roomNumber].canvasHeight / 75;
 		MatchGateway[roomNumber].ballSpeed = MatchGateway[roomNumber].canvasHeight / 75;
-		console.log("canvas height: ", canvasData[0], " ballSpeed: " ,MatchGateway[roomNumber].ballSpeed)
+		// console.log("canvas height: ", canvasData[0], " ballSpeed: " ,MatchGateway[roomNumber].ballSpeed)
 		var randomDirection = Math.floor(Math.random() * 2) + 1;
 		if (randomDirection % 2) {
 			MatchGateway[roomNumber].ball.vel.x = 1;
