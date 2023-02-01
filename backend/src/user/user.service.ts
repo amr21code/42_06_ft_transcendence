@@ -81,8 +81,9 @@ export class UserService {
 		if (field == 'username') {
 			const find = await this.db.$queryRaw(
 				Prisma.sql`SELECT COUNT(*) FROM public.users WHERE username=${newdata}`);
-			console.log(find);
-			if (find[0].COUNT == 0){
+			//console.log(find);
+			if (find[0].count == 0){
+				console.log("changing username")
 				const status = await this.db.$queryRaw(
 					Prisma.sql`UPDATE public.users SET username=${newdata} WHERE userid=${userid}`
 					);
@@ -90,7 +91,7 @@ export class UserService {
 					this.achieve.addAchieve(userid, 2);
 				}
 			} else {
-				throw new ForbiddenException("username already taken");
+				console.log("username already taken");
 			}
 		} else if (field == 'user_status'){
 			const status = await this.db.$queryRaw(
