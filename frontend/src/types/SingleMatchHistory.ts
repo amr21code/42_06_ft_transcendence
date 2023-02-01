@@ -1,4 +1,5 @@
 interface ISingleMatchHistory {
+	challenge: number,
 	match_status: number,
 	match_id: string,
 	user1: string,

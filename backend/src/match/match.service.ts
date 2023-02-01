@@ -246,13 +246,12 @@ export class MatchService {
 			console.log("update match");
 			console.log(matchid, state);
 			var winner, loser;
-			await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${state.scorePlayer1} AS INTEGER)
-			WHERE matchid=${matchid} AND userid=${state.player1.userid};`);
 			const challenge = await this.db.$queryRaw(
+			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${state.scorePlayer1} AS INTEGER)
+			WHERE matchid=${matchid} AND userid=${state.player1.userid} RETURNING challenge;`);
+			await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${state.scorePlayer2} AS INTEGER)
-			WHERE matchid=${matchid} AND userid=${state.player2.userid}
-			RETURNING challenge;`);
+			WHERE matchid=${matchid} AND userid=${state.player2.userid};`);
 			if (state.scorePlayer1 == 3) {
 				winner = state.player1.userid;
 				loser = state.player2.userid;
