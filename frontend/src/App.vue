@@ -12,7 +12,7 @@
 					<a class="menuOption" id="leaderboardSelected" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friendsSelected" @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
-						<img src="./assets/bitcoin-black-white.png" alt="user-photo" width="40" height="40">
+						<img :src="user[0].picurl" alt="user-photo" width="40" height="40">
 					</div>
 				</div>
 			</header>
@@ -51,6 +51,8 @@ import LoggingService from './services/LoggingService'
 
 import SocketioService from './services/SocketioService.js'
 import DataService from './services/DataService'
+import type { IUser } from './types/User'
+import type { ResponseData } from './types/ResponseData'
 
 export default defineComponent({
 
@@ -59,11 +61,13 @@ export default defineComponent({
 	components: { LoginPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
 	data () {
 		return {
+			user: [] as IUser[],
 			socket: SocketioService.setupSocketConnection(),
 			challenger : '',
 		}
 	},
 	created () {
+		this.retrieveCurrentUser();
 		this.socket.on('challengeRequest', (userid : string) => {
 			this.challenger = userid;
 			this.toggleGotChallengedPopup();
@@ -146,6 +150,16 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log("Error occured in getAuthStatus", e);
 			})
+		},
+
+		retrieveCurrentUser() {
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				this.user = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 		},
 	},
 	mounted () {
