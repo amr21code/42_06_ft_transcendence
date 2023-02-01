@@ -4,6 +4,20 @@
             <h2>Info to chat[{{ chat.chatid }}]</h2>
 			<!-- {{ chat }} <br> -->
 			<!-- {{ users }} <br>  -->
+			<!-- <a>Change channel password:</a> -->
+			<div class="button-container">
+				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">Change name</button>
+				<input type="text" placeholder="Enter new chatname" v-if="option === 1" v-model="newChatname">
+				<!--changeChatName (type : String, chatid : number, chatname : string, password : String) -->
+				<button @click="changeChatName(chat.typename, chat.chatid, newChatname, chat.password), toggleOption(0)" v-if="option === 1">submit</button>
+
+				<button @click="toggleOption(2)" class="option-button" v-if="option === 0">Remove password</button>
+
+
+				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">Change password</button>
+
+
+			</div>
 			<table id="info-table">
 			<thead id="top-row">
 				<tr>
@@ -101,6 +115,7 @@ export default defineComponent({
 			mutetime: 10,
 			bantime : 10,
 			isAdmin: false as boolean,
+			newChatname: '' as string,
 		}
 	},
 	methods: {
@@ -147,12 +162,25 @@ export default defineComponent({
 					if (user.statusname === 'admin')
 						this.isAdmin = true;
 			}
-		}
+		},
+
+		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
+		changeChatName (type : String, chatid : number, chatname : string, password : String) {
+			DataService.changeChatName(type, chatid, chatname, password)
+			.then((response: ResponseData) => {
+				SocketioService.refreshChats();
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			this.chat.chat_name = chatname;
+		},
         
 	},
 
 	mounted () {
 		this.retrieveCurrentUser();
+		this.retrieveCurrentUsersInChat(this.chat.chatid);
 		this.retrieveCurrentUsersInChat(this.chat.chatid);
 	},
 
@@ -174,7 +202,12 @@ export default defineComponent({
 			props.ChatInfotogglePopup();
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, challengeUser}
+		const option = ref(0);
+		const toggleOption = (i : number) => {
+			option.value = i;
+		}
+
+		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option }
 			
     }  
 
@@ -186,6 +219,14 @@ export default defineComponent({
 
 
 <style scoped>
+
+.button-container{
+	text-align: center;
+}
+
+.option-button {
+	margin: 1%;
+}
 
 #info-table {
 		border-collapse: collapse;
