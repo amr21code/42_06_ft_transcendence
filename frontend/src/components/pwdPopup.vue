@@ -2,8 +2,13 @@
 	<div class="popup" @keyup.esc="(togglePwdPopup)" tabindex="0">
 		<div class="popup-inner">
 			<slot />
-			<div class="user-data-wrapper">
-				<div>Hier könnte Ihre Werbung stehen! </div>
+			<div class="password-text-wrapper">
+				<div>
+					<h2>Join protected chat[{{ curr_chatid }}]</h2>
+					<a>Enter a password</a><br>
+					<input type=password placeholder="password" v-model="password"> <!-- v-model="password"  -->
+					<button @click="joinchat(curr_chatid, password)" type="submit">submit</button> <!-- @click = join function  -->
+				</div>
 			</div>
 			
 		</div>
@@ -25,6 +30,7 @@ export default defineComponent({
 		return {
 			user: {} as IUser,
 			socket: SocketioService.socket,
+			password: '' as string
 		}
 	},
 
@@ -32,6 +38,10 @@ export default defineComponent({
 		['togglePwdPopup'] : {
 			required: true,
 			type: Function
+		},
+		curr_chatid : {
+			required: true,
+			type: Number
 		},
 	},
 	methods: {
@@ -46,11 +56,39 @@ export default defineComponent({
 			});
 		},
 
+		// joinchat(id : number, password ?: string){
+		// 	if (password === undefined)
+		// 		password = '';
+		// 	DataService.createChat(String(id), password, 'join')
+        //     .then((response: ResponseData) => {
+        //         SocketioService.refreshChats();
+        //     })
+        //     .catch((e: Error) => {
+        //         console.log(e);
+        //     });
+		// }
+
 	},
 
 	mounted () {
 		this.retrieveCurrentUser();
 
+	},
+
+	setup () {
+		const joinchat = (id : number, password ?: string) =>{
+			if (password === undefined)
+				password = '';
+			DataService.createChat(String(id), password, 'join')
+            .then((response: ResponseData) => {
+                SocketioService.refreshChats();
+            })
+            .catch((e: Error) => {
+                console.log(e);
+            });
+		}
+
+		return { joinchat }
 	}
 })
 </script>
@@ -82,25 +120,10 @@ export default defineComponent({
 	text-align: center;
 }
 
-.user-data-wrapper {
+.password-text-wrapper {
 	margin-bottom: 10px;
 	margin-left: 0%;
 }
 
-
-
-#user-photo {
-	cursor: pointer;
-	width: 30%;
-	height: 30%;
-	margin: 3%;
-	background: white;
-	border-radius: 50%;
-}
-
-
-#user-photo:hover {
-	opacity: 50%;
-}
 
 </style>

@@ -41,7 +41,7 @@ export default defineComponent({
 			type: Function
 		},
 		challenger : {
-			required: false,
+			required: true,
 			type: String
 		},
 	},
