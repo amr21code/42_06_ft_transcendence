@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Profile } from 'passport-42';
 import { DbService } from '../db/db.service';
@@ -79,11 +79,18 @@ export class UserService {
 	async changeUserData(userid: string, field: string, newdata: any)
 	{
 		if (field == 'username') {
-			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET username=${newdata} WHERE userid=${userid}`
-				);
-			if (newdata = 'GuillaumeCalvi') {
-				this.achieve.addAchieve(userid, 2);
+			const find = await this.db.$queryRaw(
+				Prisma.sql`SELECT COUNT(*) FROM public.users WHERE username=${newdata}`);
+			console.log(find);
+			if (find[0].COUNT == 0){
+				const status = await this.db.$queryRaw(
+					Prisma.sql`UPDATE public.users SET username=${newdata} WHERE userid=${userid}`
+					);
+				if (newdata = 'GuillaumeCalvi') {
+					this.achieve.addAchieve(userid, 2);
+				}
+			} else {
+				throw new ForbiddenException("username already taken");
 			}
 		} else if (field == 'user_status'){
 			const status = await this.db.$queryRaw(
