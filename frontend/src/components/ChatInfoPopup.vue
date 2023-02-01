@@ -30,25 +30,25 @@
 						<button @click="(toggleMute)" v-if="Mute === false">mute</button>
 						<div v-if="Mute === true">
 							<select v-model="mutetime" required>
-								<option value="1">10 minutes</option>
-								<option value="2">20 minutes</option>
-								<option value="3">30 minutes</option>
-								<option value="6">60 minutes</option>
+								<option value="10">10 minutes</option>
+								<option value="20">20 minutes</option>
+								<option value="30">30 minutes</option>
+								<option value="60">60 minutes</option>
 							</select>
 							<button @click="muteUser(user.userid, mutetime)">mute</button>
 						</div>
 						<button @click="(toggleMute)" v-if="user.status === 2">unmute</button>
 					</td>
 					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- ban -->
-						<button @click="(toggleBan)" v-if="Ban == false">ban</button>
+						<button @click="(toggleBan)" v-if="Ban == false && user.status !== 3">ban</button>
 						<div v-if="Ban === true">
 							<select v-model="bantime" required>
-								<option value="1">10 minutes</option>
-								<option value="2">20 minutes</option>
-								<option value="3">30 minutes</option>
-								<option value="6">60 minutes</option>
+								<option value="10">10 minutes</option>
+								<option value="20">20 minutes</option>
+								<option value="30">30 minutes</option>
+								<option value="60">60 minutes</option>
 							</select>
-							<button @click="banUser(user.userid, bantime)">ban</button>
+							<button @click="banUser(user.userid, bantime)" v-if="user.status !== 3">ban</button>
 						</div>
 						<button @click="(toggleBan)" v-if="user.status === 3">unban</button>
 					</td>
@@ -131,11 +131,13 @@ export default defineComponent({
 
 		muteUser(userid : string, time : number){
 			DataService.muteUser(this.chat.chatid, userid, time);
+			this.retrieveCurrentUsersInChat(this.chat.chatid);
 			this.toggleMute();
 		},
 
 		banUser(userid : string, time : number){
 			DataService.banUser(this.chat.chatid, userid, time);
+			this.retrieveCurrentUsersInChat(this.chat.chatid);
 			this.toggleBan();
 		},
 

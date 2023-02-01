@@ -68,16 +68,34 @@ class DataService {
 	leaveChat(chatid : number) : Promise<any> {
 		return apiInstance.get('/chat/leave/' + chatid)
 	}
-	muteUser(chatid : number, userid : string, time : number) : string {
+	muteUser(chatid : number, userid : string, time : number) : Promise<any> {
 		console.log("muteUser", chatid, userid, time);
-		// return apiInstance.get('/chat/mute/' + chatid + '/' + userid + '/' + time);
-		return "OK";
+		//JSON object { userid: string; chatid: number; status: number; bantime: number; }
+		return apiInstance.post('/chat/user/status', JSON.stringify({
+			userid: userid,
+			chatid: chatid,
+			status: 2,
+			mutetime: time
+		}), 
+		{
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'}
+		})
 	}
 
-	banUser(chatid : number, userid : string, time : number) : string {
+	banUser(chatid : number, userid : string, time : number) : Promise<any> {
 		console.log("banUser", chatid, userid, time);
-		// return apiInstance.get('/chat/mute/' + chatid + '/' + userid + '/' + time);
-		return "OK";
+		//JSON object { userid: string; chatid: number; status: number; bantime: number; }
+		return apiInstance.post('/chat/user/status', JSON.stringify({
+			userid: userid,
+			chatid: chatid,
+			status: 3,
+			bantime: time,
+		}), 
+		{
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'}
+		})
 	}
 
 	changeChatName (type : String, chatid : number, chat_name : String, password : String) {
