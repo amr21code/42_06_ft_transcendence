@@ -98,7 +98,7 @@ class DataService {
 		})
 	}
 
-	changeChatName (type : String, chatid : number, chat_name : String, password : String) {
+	changeChatDetails (type : String, chatid : number, chat_name : String, password : String) {
 		var n_type;
 		if (type == "public")
 			n_type = 0;

@@ -8,8 +8,7 @@
 			<div class="button-container">
 				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">Change name</button>
 				<input type="text" placeholder="Enter new chatname" v-if="option === 1" v-model="newChatname">
-				<!--changeChatName (type : String, chatid : number, chatname : string, password : String) -->
-				<button @click="changeChatName(chat.typename, chat.chatid, newChatname, chat.password), toggleOption(0)" v-if="option === 1">submit</button>
+				<button @click="changeChatDetails(chat.typename, chat.chatid, newChatname, chat.password), toggleOption(0)" v-if="option === 1">submit</button>
 
 				<button @click="toggleOption(2)" class="option-button" v-if="option === 0">Remove password</button>
 
@@ -165,8 +164,8 @@ export default defineComponent({
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
-		changeChatName (type : String, chatid : number, chatname : string, password : String) {
-			DataService.changeChatName(type, chatid, chatname, password)
+		changeChatDetails (type : String, chatid : number, chatname : string, password : String) {
+			DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
 			})
