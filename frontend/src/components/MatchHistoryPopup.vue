@@ -6,15 +6,24 @@
 			<div class="user-photo-div">
 				<img :src="userPhoto">
 				<div class="achievements">
-					<div class="achievement-wrapper" title="Scored the first goal in a match">
-						<a>first blut</a>
+					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
+						<a id="achievement-gui">the gui</a>
 					</div>
-					<div class="achievement-wrapper" title="Won a match 3:0">
-						<a>too easy</a>
+					<div class="achievement-wrapper" title="Won a game 3:0">
+						<a id="achievement-tooEasy">too easy</a>
 					</div>
-					<div class="achievement-wrapper" title="Successfully hanged username to a certain french staff member's name">
-						<a>the gui</a>	
+					<div class="achievement-wrapper" title="Scored first goal in a match">
+						<a id="achievement-firstGoal">first blut</a>	
 					</div>
+					<!-- <div class="achievement-wrapper" :title="achievements[0].description">
+						<a>{{ achievements[0].name }}</a>
+					</div>
+					<div class="achievement-wrapper" :title="achievements[1].description">
+						<a>{{ achievements[1].name }}</a>
+					</div>
+					<div class="achievement-wrapper" :title="achievements[2].description">
+						<a>{{ achievements[2].name }}</a>	
+					</div> -->
 				</div>
 				<button class="add-friend-button">Add friend</button>
 			</div>
@@ -58,6 +67,7 @@ import { ref, defineComponent, onMounted } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { ISingleMatchHistory } from '../types/SingleMatchHistory'
+import type { IAchievements } from '../types/Achievements'
 
 export default defineComponent({
 
@@ -81,7 +91,25 @@ export default defineComponent({
 			DataService.getMatchHistory(props.userid)
 			.then((response: ResponseData) => {
 				matchHistory.value = response.data;
-				console.log(matchHistory.value);
+				// console.log(matchHistory.value);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			DataService.getAchievements(props.userid)
+			.then((response: ResponseData) => {
+				for (var achievement of response.data) {
+					console.log("achievement name: ", achievement.name);
+					if (achievement.name == "the Gui") {
+						document.getElementById("achievement-gui").style.opacity = "100%";
+					}
+					if (achievement.name == "Too easy") {
+						document.getElementById("achievement-tooEasy").style.opacity = "100%";
+					}
+					if (achievement.name == "First Blood") {
+						document.getElementById("achievement-firstGoal").style.opacity = "100%";
+					}
+				}
 			})
 			.catch((e: Error) => {
 				console.log(e);
