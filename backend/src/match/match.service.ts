@@ -3,10 +3,11 @@ import { DbService } from 'src/db/db.service';
 import { UserService } from 'src/user/user.service';
 import { Prisma } from '@prisma/client';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
+import { AchievementsService } from 'src/achievements/achievements.service';
 
 @Injectable()
 export class MatchService {
-	constructor(private readonly db: DbService, private readonly userService: UserService) {}
+	constructor(private readonly db: DbService, private readonly userService: UserService,private readonly achieve: AchievementsService) {}
 
 	async listMatches() {
 		const matchlist = await this.db.$queryRaw(
@@ -265,9 +266,13 @@ export class MatchService {
 			if (state.scorePlayer1 == 3) {
 				winner = state.player1.userid;
 				loser = state.player2.userid;
+				if (state.scorePlayer2 == 0)
+					this.achieve.addAchieve(state.player2.userid, 1);
 			} else {
 				winner = state.player2.userid;
 				loser = state.player1.userid;
+				if (state.scorePlayer1 == 0)
+					this.achieve.addAchieve(state.player1.userid, 1);
 			}
 			console.log("Challenge", challenge);
 			if (challenge[0].challenge == 2){ //only count random games in wins/losses
