@@ -40,17 +40,17 @@
 					<th>invite</th>
 				</tr>
 			</thead>
-			<tbody @click="ChatUserdatatogglePopup()">
+			<tbody>
 				
 				
 				<tr class="info-item" v-for="(user, index) in users" :key="index">
-					<td> <!-- userid -->
+					<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
 						{{ user.userid }}
 					</td>
-					<td> <!-- username -->
+					<td @click="ChatUserdatatogglePopup()"> <!-- username -->
 						{{ user.username }}
 					</td>
-					<td> <!-- statusname -->
+					<td @click="ChatUserdatatogglePopup()"> <!-- statusname -->
 						{{ user.statusname }}
 					</td>
 					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- mute -->
