@@ -5,6 +5,7 @@ npm i @nestjs/common @nestjs/passport @nestjs/config express passport passport-4
 
 npm i --save @nestjs/websockets @nestjs/platform-socket.io
 npm install cookie @types/cookie
+npm i -D @types/multer
 
 for 2fa
 npm install otplib qrcode

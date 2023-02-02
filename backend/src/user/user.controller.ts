@@ -1,10 +1,13 @@
-import { Controller, ForbiddenException, Get, Param,  Req, UseGuards } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Param,  Post,  Put,  Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthenticatedGuard} from '../auth/guards/guards';
 import { Request } from 'express';
 import { UserService } from './user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('users')
-@UseGuards(AuthenticatedGuard)
+//@UseGuards(AuthenticatedGuard)
 export class UserController {
 	constructor(private readonly userService: UserService){}
 
@@ -71,5 +74,20 @@ export class UserController {
 		} catch (error) {
 			throw new ForbiddenException('getLeaderboardPos failed');
 		}
+	}
+
+	@Post('upload')
+	@UseInterceptors(FileInterceptor('file', {
+		storage: diskStorage({
+			destination: './upload',
+			filename: (req, file, callback) => {
+				const ext = extname(file.originalname);
+				const filename = `${req.session.passport.user.userid}${ext}`;
+				callback(null, filename);
+			}
+		})
+	}))
+	async upload(@UploadedFile() file: Express.Multer.File){
+		console.log('file', file);
 	}
 }
