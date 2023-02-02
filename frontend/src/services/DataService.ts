@@ -13,9 +13,6 @@ class DataService {
 	getAll() : Promise<any> {
 		return apiInstance.get("/users/all");
 	}
-	getFriends() : Promise<any> {
-		return apiInstance.get("/fl/show");
-	}
 	changeUsername(userid : string, newUsername : string) {
 		return apiInstance.get('/users/' + userid + '/username/' + newUsername);
 	}
@@ -26,6 +23,21 @@ class DataService {
 	getAchievements(userid : string) {
 		return apiInstance.get('/achieve/show/' + userid);
 	}
+
+	//################ FRIENDS ###########################################
+
+	getFriends() : Promise<any> {
+		return apiInstance.get("/fl/show");
+	}
+	requestFriend(userid: string) : Promise<any> {
+		console.log("/fl/edit/" + userid + "/request");
+		return apiInstance.get("/fl/edit/" + userid + "/request");
+	}
+	confirmFriend(userid: string) : Promise<any> {
+		return apiInstance.get("/fl/edit/" + userid + "/confirm");
+	}
+	//  (actions: request, confirm, block, unblock, remove)
+
 
 	//################ CHAT ###########################################
 

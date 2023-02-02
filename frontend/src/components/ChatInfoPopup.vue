@@ -127,6 +127,9 @@ export default defineComponent({
 	created () {
 		this.retrieveCurrentUser();
 		this.retrieveCurrentUsersInChat(this.chat.chatid);
+		this.socket.on('refresh-chat', () => {
+			this.retrieveCurrentUsersInChat(this.chat.chatid);
+		});
 	},
     data () {
 		return {
@@ -169,12 +172,14 @@ export default defineComponent({
 		muteUser(userid : string, time : number){
 			DataService.muteUser(this.chat.chatid, userid, time);
 			this.retrieveCurrentUsersInChat(this.chat.chatid);
+			SocketioService.refreshChats();
 			this.toggleMute();
 		},
 
 		banUser(userid : string, time : number){
 			DataService.banUser(this.chat.chatid, userid, time);
 			this.retrieveCurrentUsersInChat(this.chat.chatid);
+			SocketioService.refreshChats();
 			this.toggleBan();
 		},
 

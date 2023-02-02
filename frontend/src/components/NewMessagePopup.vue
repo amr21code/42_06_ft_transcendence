@@ -12,7 +12,7 @@
                 (protected) a password or enter a userid in order to create a direct chat.</a>
             <div class="button-box">
                 <button class="" @click="(changeShowInput('group'))">Groupchat</button>
-                <button class="" @click="(changeShowInput('dm'))">Privatechat</button>
+                <button class="" @click="(changeShowInput('dm'))">Directchat</button>
                 <button class="" @click="(changeShowInput('join'))">Join</button>
             </div>
             <!-- <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe> -->

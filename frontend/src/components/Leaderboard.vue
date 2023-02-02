@@ -7,7 +7,6 @@
 				<th>picture</th>
 				<th>name</th>
 				<th>wins</th>
-				<th></th>
 			</tr>
 			<tr class="leaderboard-item" @click="toggleUserHistory(user)" v-for="(user, index) in usersByWins" :key="user.userid">
 				<td>

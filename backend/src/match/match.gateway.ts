@@ -5,6 +5,7 @@ import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { UserService } from 'src/user/user.service';
 import { state } from 'pactum';
+import { AchievementsService } from 'src/achievements/achievements.service';
 
 @WebSocketGateway(3002, {
 	cors: {
@@ -27,13 +28,13 @@ export class MatchGateway {
 	}
 
 
-	constructor(private readonly matchService: MatchService, private readonly userService: UserService) { }
+	constructor(private readonly matchService: MatchService, private readonly userService: UserService,  private readonly achieve: AchievementsService) { }
 
 
 	@SubscribeMessage('create-new-game')
 	async createNewGame(client: Socket, opponent: any) {
 		var matchid;
-		console.log("crete game opp", opponent);
+		console.log("create game opp", opponent);
 		const userid = client.request.session.passport.user.userid;
 		if (!opponent)
 			matchid = await this.matchService.matchmaking(userid);
@@ -181,6 +182,10 @@ export class MatchGateway {
 			if (!winner) {
 				// sends new state to all room members
 				this.server.to(roomNumber).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+				if (MatchGateway[roomNumber].scorePlayer1 == 0 && MatchGateway[roomNumber].scorePlayer2 == 1)
+					this.achieve.addAchieve(MatchGateway[roomNumber].player2.userid, 0);
+				else if (MatchGateway[roomNumber].scorePlayer2 == 0 && MatchGateway[roomNumber].scorePlayer1 == 1)
+					this.achieve.addAchieve(MatchGateway[roomNumber].player1.userid, 0);
 			} else {
 				// sends game over to all room members
 				this.server.to(roomNumber).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
@@ -199,5 +204,14 @@ export class MatchGateway {
 		// console.log("OPPONENTID IS: ", opponentid[0].socket_token);
 		if (opponentid[0])
 			this.server.to(opponentid[0].socket_token).emit('challengeRequest', client.request.session.passport.user.userid);
+	}
+
+	@SubscribeMessage('opponentLeft') 
+	async opponentLeft(client: any, roomNumber: any) {	
+		console.log('Opponent left room', client.user.userid);
+		//this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
+		this.matchService.endMatch(roomNumber, MatchGateway[roomNumber], client.number);
+		this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
+		this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
 	}
 }

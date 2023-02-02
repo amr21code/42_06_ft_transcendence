@@ -126,6 +126,11 @@ export default defineComponent({
 			alert("This game is full and in progress");
 		}
 
+		const handleOpponentLeft = (matchid:number) => {
+			alert("Your Opponent Left, you win!");
+			socket.emit('opponentLeft',matchid);
+		}
+
 		const reset = () => {
 			playerNumber = 0;
 			matchSelectionDiv.style.display = "inline-flex";
@@ -267,6 +272,7 @@ export default defineComponent({
 		socket.on('joinedEmptyGame', handleJoinedEmptyGame);
 		socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
 		socket.on('joinGame', handleJoinGame);
+		socket.on('opponentLeft', handleOpponentLeft);
 		////############# SOCKETIO #############
 
         return { canvas, opponentArrived, initCanvas, paintGame, removeMatchWaitPopup };
