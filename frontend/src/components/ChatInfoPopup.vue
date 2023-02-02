@@ -40,50 +40,53 @@
 					<th>invite</th>
 				</tr>
 			</thead>
-			<tbody>
+			<div v-for="(user, index) in users" :key="index">
+				<div  v-if="user.status != 3">
+					<tbody>
 				
-				
-				<tr class="info-item" v-for="(user, index) in users" :key="index">
-					<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
-						{{ user.userid }}
-					</td>
-					<td @click="ChatUserdatatogglePopup()"> <!-- username -->
-						{{ user.username }}
-					</td>
-					<td @click="ChatUserdatatogglePopup()"> <!-- statusname -->
-						{{ user.statusname }}
-					</td>
-					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- mute -->
-						<button @click="(toggleMute)" v-if="Mute === false && user.status !== 2">mute</button>
-						<div v-if="Mute === true">
-							<select v-model="mutetime" required>
-								<option value="10">10 minutes</option>
-								<option value="20">20 minutes</option>
-								<option value="30">30 minutes</option>
-								<option value="60">60 minutes</option>
-							</select>
-							<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 2">mute</button>
-						</div>
-						<button @click="(toggleMute)" v-if="user.status === 2">-MUTED-</button>
-					</td>
-					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- ban -->
-						<button @click="(toggleBan)" v-if="Ban == false && user.status !== 3">ban</button>
-						<div v-if="Ban === true">
-							<select v-model="bantime" required>
-								<option value="10">10 minutes</option>
-								<option value="20">20 minutes</option>
-								<option value="30">30 minutes</option>
-								<option value="60">60 minutes</option>
-							</select>
-							<button @click="banUser(user.userid, bantime)" v-if="user.status !== 3">ban</button>
-						</div>
-						<button v-if="user.status === 3">-BANNED-</button>
-					</td>
-					<td v-if="user.userid != user_me[0].userid"> <!-- invite -->
-						<button @click="(challengeUser(user.userid), ChatInfotogglePopup)">challenge</button>
-					</td>
-				</tr>
-			</tbody>
+						<tr class="info-item" >
+							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
+								{{ user.userid }}
+							</td>
+							<td @click="ChatUserdatatogglePopup()"> <!-- username -->
+								{{ user.username }}
+							</td>
+							<td @click="ChatUserdatatogglePopup()"> <!-- statusname -->
+								{{ user.statusname }}
+							</td>
+							<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- mute -->
+								<button @click="(toggleMute)" v-if="Mute === false && user.status !== 2">mute</button>
+								<div v-if="Mute === true">
+									<select v-model="mutetime" required>
+										<option value="10">10 minutes</option>
+										<option value="20">20 minutes</option>
+										<option value="30">30 minutes</option>
+										<option value="60">60 minutes</option>
+									</select>
+									<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 2">mute</button>
+								</div>
+								<button @click="(toggleMute)" v-if="user.status === 2">-MUTED-</button>
+							</td>
+							<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- ban -->
+								<button @click="(toggleBan)" v-if="Ban == false && user.status !== 3">ban</button>
+								<div v-if="Ban === true">
+									<select v-model="bantime" required>
+										<option value="10">10 minutes</option>
+										<option value="20">20 minutes</option>
+										<option value="30">30 minutes</option>
+										<option value="60">60 minutes</option>
+									</select>
+									<button @click="banUser(user.userid, bantime)" v-if="user.status !== 3">ban</button>
+								</div>
+								<button v-if="user.status === 3">-BANNED-</button>
+							</td>
+							<td v-if="user.userid != user_me[0].userid"> <!-- invite -->
+								<button @click="(challengeUser(user.userid), ChatInfotogglePopup)">challenge</button>
+							</td>
+						</tr>
+					</tbody>
+				</div>
+			</div>
 		</table>
 			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
         </div>
