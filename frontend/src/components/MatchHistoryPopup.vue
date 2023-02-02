@@ -13,7 +13,7 @@
 						<a id="achievement-tooEasy">too easy</a>
 					</div>
 					<div class="achievement-wrapper" title="Scored first goal in a match">
-						<a id="achievement-firstGoal">first blut</a>	
+						<a id="achievement-firstGoal">first blood</a>	
 					</div>
 					<!-- <div class="achievement-wrapper" :title="achievements[0].description">
 						<a>{{ achievements[0].name }}</a>
