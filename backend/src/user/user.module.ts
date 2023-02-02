@@ -5,10 +5,11 @@ import { AuthService } from 'src/auth/auth.service';
 import { UserGateway } from './user.gateway';
 import { sessionMiddleware } from 'src/middleware';
 import { AchievementsService } from 'src/achievements/achievements.service';
+import { MatchService } from 'src/match/match.service';
 
 @Module({
   controllers: [UserController],
-  providers: [UserService, AuthService, UserGateway, AchievementsService]
+  providers: [UserService, AuthService, UserGateway, AchievementsService, MatchService]
 })
 export class UserModule {
 	configure(consumer: MiddlewareConsumer){
