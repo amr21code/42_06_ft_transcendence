@@ -79,7 +79,7 @@ class DataService {
 			userid: userid,
 			chatid: chatid,
 			status: 2,
-			mutetime: time
+			bantime: time
 		}), 
 		{
 			method: 'POST',
