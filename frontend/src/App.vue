@@ -117,15 +117,15 @@ export default defineComponent({
 			});
 			// selected menu highlighting below
 			if (selected.value === 'play')
-				document.getElementById("playSelected").style.backgroundColor = "#b04716";
+				document.getElementById("playSelected")!.style.backgroundColor = "#b04716";
 			if (selected.value === 'watch')
-				document.getElementById("watchSelected").style.backgroundColor = "#b04716";
+				document.getElementById("watchSelected")!.style.backgroundColor = "#b04716";
 			if (selected.value === 'chat')
-				document.getElementById("chatSelected").style.backgroundColor = "#b04716";
+				document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
 			if (selected.value === 'leaderboard')
-				document.getElementById("leaderboardSelected").style.backgroundColor = "#b04716";
+				document.getElementById("leaderboardSelected")!.style.backgroundColor = "#b04716";
 			if (selected.value === 'friends')
-				document.getElementById("friendsSelected").style.backgroundColor = "#b04716";
+				document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
 
 
 			if (selected.value === 'play' || selected.value === 'watch') {

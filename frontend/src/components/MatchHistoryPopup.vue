@@ -91,25 +91,25 @@ export default defineComponent({
 		const myUser = ref({} as IUser);
 
 		const friendButtonAction = (userid: string) => {
-			if (document.getElementById("add-friend-button").innerHTML === "add friend") {
+			if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
 				try {
 						DataService.requestFriend(userid);
 				} catch {
-					document.getElementById("add-friend-button").style.background = "#b04716";
-					document.getElementById("add-friend-button").innerHTML = "error";
+					document.getElementById("add-friend-button")!.style.background = "#b04716";
+					document.getElementById("add-friend-button")!.innerHTML = "error";
 				}
-				document.getElementById("add-friend-button").style.background = "#b04716";
-				document.getElementById("add-friend-button").innerHTML = "pending";
+				document.getElementById("add-friend-button")!.style.background = "#b04716";
+				document.getElementById("add-friend-button")!.innerHTML = "pending";
 			}
-			else if (document.getElementById("add-friend-button").innerHTML === "confirm") {
+			else if (document.getElementById("add-friend-button")!.innerHTML === "confirm") {
 				try {
 						DataService.confirmFriend(userid);
 				} catch {
-					document.getElementById("add-friend-button").style.background = "#b04716";
-					document.getElementById("add-friend-button").innerHTML = "error";
+					document.getElementById("add-friend-button")!.style.background = "#b04716";
+					document.getElementById("add-friend-button")!.innerHTML = "error";
 				}
-				document.getElementById("add-friend-button").style.background = "#00cc00";
-				document.getElementById("add-friend-button").innerHTML = "friends";
+				document.getElementById("add-friend-button")!.style.background = "#00cc00";
+				document.getElementById("add-friend-button")!.innerHTML = "friends";
 			}
 		}
 		
@@ -126,7 +126,7 @@ export default defineComponent({
 				myUser.value = response.data[0];
 				// dont show button, if it's yourself
 				if (props.userid === myUser.value.userid) {
-					document.getElementById("add-friend-button").style.display = "none";
+					document.getElementById("add-friend-button")!.style.display = "none";
 				}
 			})
 			.catch((e: Error) => {
@@ -136,16 +136,16 @@ export default defineComponent({
 			.then((response: ResponseData) => {
 				for (var achievement of response.data) {
 					if (achievement.name == "the Gui") {
-						document.getElementById("achievement-gui").style.opacity = "100%";
-						document.getElementById("achievement-gui").style.background = "#00cc00";
+						document.getElementById("achievement-gui")!.style.opacity = "100%";
+						document.getElementById("achievement-gui")!.style.background = "#00cc00";
 					}
 					if (achievement.name == "Too easy") {
-						document.getElementById("achievement-tooEasy").style.opacity = "100%";
-						document.getElementById("achievement-tooEasy").style.background = "#00cc00";
+						document.getElementById("achievement-tooEasy")!.style.opacity = "100%";
+						document.getElementById("achievement-tooEasy")!.style.background = "#00cc00";
 					}
 					if (achievement.name == "First Blood") {
-						document.getElementById("achievement-firstGoal").style.opacity = "100%";
-						document.getElementById("achievement-firstGoal").style.background = "#00cc00";
+						document.getElementById("achievement-firstGoal")!.style.opacity = "100%";
+						document.getElementById("achievement-firstGoal")!.style.background = "#00cc00";
 					}
 				}
 			})
@@ -158,18 +158,18 @@ export default defineComponent({
 
 					if (friend.userid === props.userid) {
 						if (friend.friendstatus == "friends") {
-							document.getElementById("add-friend-button").style.background = "#00cc00";
-							document.getElementById("add-friend-button").innerHTML = "friends";
+							document.getElementById("add-friend-button")!.style.background = "#00cc00";
+							document.getElementById("add-friend-button")!.innerHTML = "friends";
 						}
 						console.log(friend)
 						if (friend.friendstatus == "requested") {
 							if (friend.addresseeid === myUser.value.userid) {
-								document.getElementById("add-friend-button").style.background = "#b04716";
-								document.getElementById("add-friend-button").innerHTML = "confirm";
+								document.getElementById("add-friend-button")!.style.background = "#b04716";
+								document.getElementById("add-friend-button")!.innerHTML = "confirm";
 							}
 							else {
-								document.getElementById("add-friend-button").style.background = "#b04716";
-								document.getElementById("add-friend-button").innerHTML = "pending";
+								document.getElementById("add-friend-button")!.style.background = "#b04716";
+								document.getElementById("add-friend-button")!.innerHTML = "pending";
 							}
 						}
 					}
