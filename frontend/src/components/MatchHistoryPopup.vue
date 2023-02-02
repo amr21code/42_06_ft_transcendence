@@ -5,6 +5,17 @@
 			<h2>{{ userid }}'s match history</h2>
 			<div class="user-photo-div">
 				<img :src="userPhoto">
+				<div class="achievements">
+					<div class="achievement-wrapper" title="Scored the first goal in a match">
+						<a>first blut</a>
+					</div>
+					<div class="achievement-wrapper" title="Won a match 3:0">
+						<a>too easy</a>
+					</div>
+					<div class="achievement-wrapper" title="Successfully hanged username to a certain french staff member's name">
+						<a>the gui</a>	
+					</div>
+				</div>
 				<button class="add-friend-button">Add friend</button>
 			</div>
 
@@ -34,21 +45,6 @@
 					</td>
 				</tr>
 			</table>
-			
-			<!-- <div class="user-data-wrapper">
-				<div>avatar:</div>
-				<img id="user-photo" :src="user.picurl" alt="user-photo"	>
-			</div>
-		
-			<div class="user-data-wrapper">
-				<div>wins: {{ user.wins }}</div>
-			</div>
-			<div class="user-data-wrapper">
-				<div>losses: {{ user.losses }}</div>
-			</div>
-			<div class="user-data-wrapper">
-				<div>achievements:</div>
-			</div> -->
 			<button class="popup-close" @click="untoggleUserHistory()"> 
 				Close
 			</button>
@@ -93,7 +89,6 @@ export default defineComponent({
 		});
 		return { matchHistory };
 	}
-	
 })
 </script>
 
@@ -143,11 +138,36 @@ export default defineComponent({
 	
 }
 
-.add-friend-button {
+.achievements {
 	margin: 2rem;
 	
 }
 
+.achievement-wrapper {
+	text-align: left;
+}
+
+.achievement-wrapper a {
+	width: 7rem;
+	margin: 0.5rem;
+	align-items: center;
+	background-color: var(--first-highlight-color);
+	border: 2px solid #000;
+	box-sizing: border-box;
+	color: #000;
+	font-family: monospace;
+	cursor: pointer;
+	display: inline-flex;
+	height: 36px;
+	justify-content: center;
+	padding: 0 17px;
+	text-align: center;
+	text-decoration: none;
+	transition: all .4s;
+	font-weight: 500;
+	white-space: nowrap;
+	opacity: 20%;
+}
 
 #history-table {
 	padding: calc(3px + 1.5625vw);

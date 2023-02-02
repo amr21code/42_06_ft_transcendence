@@ -219,6 +219,7 @@ export default defineComponent({
 	.logged-photo img {
 		background: white;
 		border-radius: 50%;
+		object-fit: cover;
 	}
 	
 	.logged-photo img:hover {
