@@ -25,7 +25,7 @@
 						<a>{{ achievements[2].name }}</a>	
 					</div> -->
 				</div>
-				<button class="add-friend-button">Add friend</button>
+				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
 			</div>
 
 			<table id="history-table">
@@ -68,6 +68,7 @@ import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { ISingleMatchHistory } from '../types/SingleMatchHistory'
 import type { IAchievements } from '../types/Achievements'
+import type { IUser } from '../types/User'
 
 export default defineComponent({
 
@@ -87,11 +88,46 @@ export default defineComponent({
 	},
 	setup(props) {
 		const matchHistory = ref([] as ISingleMatchHistory[]);
+		const myUser = ref({} as IUser);
+
+		const friendButtonAction = (userid: string) => {
+			if (document.getElementById("add-friend-button").innerHTML === "add friend") {
+				try {
+						DataService.requestFriend(userid);
+				} catch {
+					document.getElementById("add-friend-button").style.background = "#b04716";
+					document.getElementById("add-friend-button").innerHTML = "error";
+				}
+				document.getElementById("add-friend-button").style.background = "#b04716";
+				document.getElementById("add-friend-button").innerHTML = "pending";
+			}
+			else if (document.getElementById("add-friend-button").innerHTML === "confirm") {
+				try {
+						DataService.confirmFriend(userid);
+				} catch {
+					document.getElementById("add-friend-button").style.background = "#b04716";
+					document.getElementById("add-friend-button").innerHTML = "error";
+				}
+				document.getElementById("add-friend-button").style.background = "#00cc00";
+				document.getElementById("add-friend-button").innerHTML = "friends";
+			}
+		}
+		
 		onMounted(async () => {
 			DataService.getMatchHistory(props.userid)
 			.then((response: ResponseData) => {
 				matchHistory.value = response.data;
-				// console.log(matchHistory.value);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				myUser.value = response.data[0];
+				// dont show button, if it's yourself
+				if (props.userid === myUser.value.userid) {
+					document.getElementById("add-friend-button").style.display = "none";
+				}
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -99,7 +135,6 @@ export default defineComponent({
 			DataService.getAchievements(props.userid)
 			.then((response: ResponseData) => {
 				for (var achievement of response.data) {
-					console.log("achievement name: ", achievement.name);
 					if (achievement.name == "the Gui") {
 						document.getElementById("achievement-gui").style.opacity = "100%";
 					}
@@ -114,8 +149,36 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
+			DataService.getFriends()
+			.then((response: ResponseData) => {
+				for (var friend of response.data) {
+
+					if (friend.userid === props.userid) {
+						if (friend.friendstatus == "friends") {
+							document.getElementById("add-friend-button").style.background = "#00cc00";
+							document.getElementById("add-friend-button").innerHTML = "friends";
+						}
+						console.log(friend)
+						if (friend.friendstatus == "requested") {
+							if (friend.addresseeid === myUser.value.userid) {
+								document.getElementById("add-friend-button").style.background = "#b04716";
+								document.getElementById("add-friend-button").innerHTML = "confirm";
+							}
+							else {
+								document.getElementById("add-friend-button").style.background = "#b04716";
+								document.getElementById("add-friend-button").innerHTML = "pending";
+							}
+						}
+					}
+				}
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+
+			
 		});
-		return { matchHistory };
+		return { matchHistory, friendButtonAction };
 	}
 })
 </script>
