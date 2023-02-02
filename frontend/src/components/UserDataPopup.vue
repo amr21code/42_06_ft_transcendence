@@ -17,7 +17,7 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>avatar:</div>
-				<img id="user-photo" :src="user.picurl" alt="user-photo" v-if="toggleAvatar === false">
+				<img id="user-photo" :src="user.picurl" alt="user-photo">
 			</div>
 			<div class="user-data-wrapper">
 				<div>select new avatar:</div>
@@ -53,43 +53,56 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { ref, defineComponent, onMounted } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 
 export default defineComponent({
-	name: "user-data-popup",
-	
-	data () {
-		return {
-			user: {} as IUser,
-			memberSince: {} as string,
-			newUsername: '' as string,
-			toggleUsername: false as boolean,
-			toggleAvatar: false as boolean,
-			avatarError: false as boolean,
-		}
-	},
 
 	props: ['toggleUserDataPopup'],
+
+	setup() {
+		const user = ref({} as IUser);
+		const memberSince = ref('');
+		const newUsername = ref('');
+		const toggleUsername = ref(false);
+
+		onMounted(async () => {
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				user.value = response.data[0];
+				// console.log(response.data[0]);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		});
+
+		const formatDate = () => {
+			memberSince.value = new Intl.DateTimeFormat('en-us').format(user.value.created);
+		}
+
+		const toggleChangeUsername = () => {
+			toggleUsername.value = !toggleUsername.value;
+		}
+
+		formatDate();
+
+		return { user, memberSince, toggleUsername, newUsername, toggleChangeUsername};
+	},
+
 	methods: {
 		retrieveCurrentUser() {
 			DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data[0];
-				console.log(response.data[0]);
+				// console.log(response.data[0]);
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
-		},
-		formatDate() {
-			this.memberSince = new Intl.DateTimeFormat('en-us').format(this.user.created);
-		},
-		toggleChangeUsername() {
-			this.toggleUsername = !this.toggleUsername;
-		},
+		},		
 
 		async changeUsername(newUsername : string){
 			await DataService.changeUsername(this.user.userid, newUsername);
@@ -97,28 +110,17 @@ export default defineComponent({
 			this.retrieveCurrentUser();
 		},
 
-		toggleChangeAvatar() {
-			this.toggleAvatar = !this.toggleAvatar;
-			this.avatarError = false;
-		},
-
 		async changeAvatar(id : number) {
 			await DataService.changeAvatar(this.user.userid, id)
 			.then((response: ResponseData) => {
-				this.toggleChangeAvatar();
 				this.retrieveCurrentUser();
 			})
 			.catch((e: Error) => {
 				console.log(e);
-				this.avatarError = true;
 			});
 		}
 	},
-
-	mounted () {
-		this.retrieveCurrentUser();
-		this.formatDate();
-	}
+	
 })
 </script>
 
@@ -158,6 +160,7 @@ export default defineComponent({
 	height: 7rem;
 	object-fit: cover;
 	border-radius: 50%;
+	background: white;
 	margin: 3%;
 }
 

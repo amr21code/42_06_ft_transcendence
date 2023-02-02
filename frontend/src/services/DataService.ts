@@ -23,6 +23,10 @@ class DataService {
 		return apiInstance.get('/users/' + userid + '/avatar/' + id);
 	}
 
+	getAchievements(userid : string) {
+		return apiInstance.get('/achieve/show/' + userid);
+	}
+
 	//################ CHAT ###########################################
 
 	getUsersInChat(chatid: number) : Promise<any> {

@@ -12,7 +12,7 @@
 					<a class="menuOption" id="leaderboardSelected" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friendsSelected" @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
-						<!-- <img :src="user[0].picurl" alt="user-photo" width="40" height="40"> --> 
+						<img :src="user.picurl" alt="user-photo" width="40" height="40"> 
 					</div>
 				</div>
 			</header>
@@ -40,7 +40,7 @@
 
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs } from 'vue'
+import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue'
 import type { SelectedSideWindow } from './types/SelectedSideWindow'
 import MatchCourt from './components/MatchCourt.vue'
 import SideWindow from './components/SideWindow.vue'
@@ -61,13 +61,12 @@ export default defineComponent({
 	components: { LoginPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
 	data () {
 		return {
-			user: [] as IUser[],
 			socket: SocketioService.setupSocketConnection(),
 			challenger : '',
 		}
 	},
 	created () {
-		this.retrieveCurrentUser();
+		// this.retrieveCurrentUser();
 		this.socket.on('challengeRequest', (userid : string) => {
 			this.challenger = userid;
 			this.toggleGotChallengedPopup();
@@ -79,6 +78,18 @@ export default defineComponent({
 	},
 	
 	setup() {
+		const user = ref({} as IUser);
+		onMounted(async () => {
+			DataService.getUser()
+			.then((response: ResponseData) => {
+				user.value = response.data[0];
+				// console.log(response.data[0]);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		});
+
 		const loggedIn = ref(true); // CHANGE THIS BACK TO FALSE
 		const toggleLoginPopup = () => {
 			loggedIn.value = !loggedIn.value;
@@ -100,8 +111,6 @@ export default defineComponent({
 		const selected = ref<SelectedSideWindow>('play');
 		const handleClick = (term: SelectedSideWindow) => {
 			selected.value = term;
-
-			
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
 			menuElements.forEach((element) => {
 				element.style.backgroundColor = "#444040";
@@ -131,8 +140,10 @@ export default defineComponent({
 			}
 			// console.log("game fr value: ", document.documentElement.style.getPropertyValue("--game_fr"));
 			// console.log("sidewindow fr value: ", document.documentElement.style.getPropertyValue("--sidewindow_fr"));
+
 		};
-		return { loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick, selected }
+		
+		return { user, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick, selected }
 	},
 
 	methods: {
@@ -150,17 +161,6 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log("Error occured in getAuthStatus", e);
 			})
-		},
-
-		retrieveCurrentUser() {
-			DataService.getUser()
-			.then((response: ResponseData) => {
-				this.user = response.data;
-				console.log("answer is: ", response.data);
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
 		},
 	},
 	mounted () {
@@ -219,6 +219,7 @@ export default defineComponent({
 	.logged-photo img {
 		background: white;
 		border-radius: 50%;
+		object-fit: cover;
 	}
 	
 	.logged-photo img:hover {
