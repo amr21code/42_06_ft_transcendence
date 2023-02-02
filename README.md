@@ -6,6 +6,8 @@ npm i @nestjs/common @nestjs/passport @nestjs/config express passport passport-4
 npm i --save @nestjs/websockets @nestjs/platform-socket.io
 npm install cookie @types/cookie
 npm i -D @types/multer
+npm i bcrypt
+npm i -D @types/bcrypt
 
 for 2fa
 npm install otplib qrcode
@@ -18,6 +20,7 @@ sample data in database needed
 
 in frontend folder to install the vue server
 npm i vite
+npm install pinia
 
 
 

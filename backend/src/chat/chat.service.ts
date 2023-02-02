@@ -4,6 +4,7 @@ import { DbService } from '../db/db.service';
 import { ChatMessageDto } from './dto';
 import { ChatDto } from './dto/chat.dto';
 import { ChatUserStatusDto } from './dto/chatuserstatus.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ChatService {
@@ -31,7 +32,7 @@ export class ChatService {
 
 	async listUserChats(userid: string) {
 		const list = await this.db.$queryRaw(
-			Prisma.sql`SELECT uc.userid, usc.statusname, c.chatid, c.chat_name, ct.typename, password
+			Prisma.sql`SELECT uc.userid, usc.statusname, c.chatid, c.chat_name, ct.typename
 			FROM public.user_chat AS uc
 			LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
 			LEFT JOIN public.chat as c ON uc.chatid=c.chatid
@@ -46,7 +47,7 @@ export class ChatService {
 		var list;
 		if (chatid) {
 			list = await this.db.$queryRaw(
-				Prisma.sql`SELECT uc.userid, u.username, uc.status, uc.bantime, usc.statusname, c.chatid, c.chat_name, ct.typename, password
+				Prisma.sql`SELECT uc.userid, u.username, uc.status, uc.bantime, usc.statusname, c.chatid, c.chat_name, ct.typename
 				FROM public.user_chat AS uc
 				LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
 				LEFT JOIN public.chat as c ON uc.chatid=c.chatid
@@ -71,6 +72,9 @@ export class ChatService {
 	}
 
 	async joinChat(userid: string, chatid?: number, pw?: string) {
+		if (pw) {
+			var pwHash = await bcrypt.hash(pw, 10);
+		}
 		const result = await this.db.$queryRaw(
 			Prisma.sql`SELECT chatid, password FROM public.chat
 			WHERE chatid=CAST(${chatid} AS INTEGER)`
@@ -87,7 +91,12 @@ export class ChatService {
 			}
 		}
 		try {
-			if (result[0].chatid == chatid && pw == result[0].password) {
+			const pwmatch = await bcrypt.compare(pw, result[0].password);
+			console.log("res", result[0].password);
+			console.log("hash", pwHash);
+			console.log("match", pwmatch);
+			if (result[0].chatid == chatid && pwmatch) {
+				console.log("true");
 				const join = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_chat(
 						userid, chatid, status)
@@ -102,7 +111,7 @@ export class ChatService {
 				var chatname = 'public chat by ' + userid;
 				const create = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.chat(type, chat_name, password)
-					VALUES (0, ${chatname}, ${pw})
+					VALUES (0, ${chatname}, ${pwHash})
 					RETURNING chatid;`
 				);
 				const join = await this.db.$queryRaw(
@@ -171,9 +180,13 @@ export class ChatService {
 	}
 
 	async changeChatDetails(details: ChatDto) {
+		if (details.password) {
+			const salt = 10;
+			var pwHash = await bcrypt.hash(details.password, salt);
+		}
 		const result = await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.chat
-			SET type=CAST(${details.type} AS INTEGER), password=${details.password}, chat_name=${details.chat_name}
+			SET type=CAST(${details.type} AS INTEGER), password=${pwHash}, chat_name=${details.chat_name}
 			WHERE chatid=CAST(${details.chatid} AS INTEGER);`
 		);
 		return { msg:"ok"};
