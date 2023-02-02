@@ -101,7 +101,7 @@ export default defineComponent({
 				document.getElementById("add-friend-button").style.background = "#b04716";
 				document.getElementById("add-friend-button").innerHTML = "pending";
 			}
-			else if (document.getElementById("add-friend-button").innerHTML === "pending") {
+			else if (document.getElementById("add-friend-button").innerHTML === "confirm") {
 				try {
 						DataService.confirmFriend(userid);
 				} catch {
