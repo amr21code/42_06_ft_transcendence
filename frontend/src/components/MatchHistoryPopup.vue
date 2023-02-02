@@ -4,7 +4,6 @@
 			<slot />
 			<h2>{{ userid }}'s match history</h2>
 			<div class="user-photo-div">
-				<img :src="userPhoto">
 				<div class="achievements">
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
 						<a id="achievement-gui">the gui</a>
@@ -25,6 +24,7 @@
 						<a>{{ achievements[2].name }}</a>	
 					</div> -->
 				</div>
+				<img :src="userPhoto">
 				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
 			</div>
 
@@ -137,12 +137,15 @@ export default defineComponent({
 				for (var achievement of response.data) {
 					if (achievement.name == "the Gui") {
 						document.getElementById("achievement-gui").style.opacity = "100%";
+						document.getElementById("achievement-gui").style.background = "#00cc00";
 					}
 					if (achievement.name == "Too easy") {
 						document.getElementById("achievement-tooEasy").style.opacity = "100%";
+						document.getElementById("achievement-tooEasy").style.background = "#00cc00";
 					}
 					if (achievement.name == "First Blood") {
 						document.getElementById("achievement-firstGoal").style.opacity = "100%";
+						document.getElementById("achievement-firstGoal").style.background = "#00cc00";
 					}
 				}
 			})
@@ -209,8 +212,6 @@ export default defineComponent({
 
 .popup-inner h2 {
 	text-align: center;
-
-	
 }
 
 .user-photo-div {
@@ -226,12 +227,12 @@ export default defineComponent({
 	height: 7rem;
 	object-fit: cover;
 	border-radius: 50%;
-	
+	margin: 2rem;
 }
 
-.achievements {
-	margin: 2rem;
-	
+#add-friend-button {
+	margin: 0.5rem;
+	width: 7rem;
 }
 
 .achievement-wrapper {

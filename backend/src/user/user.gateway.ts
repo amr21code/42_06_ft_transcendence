@@ -1,4 +1,6 @@
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { Server } from 'socket.io';
+import { MatchService } from 'src/match/match.service';
 import { UserService } from './user.service';
 
 @WebSocketGateway(3002, {cors: {
@@ -8,7 +10,10 @@ import { UserService } from './user.service';
 }
 })
 export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
-	constructor (private readonly userService: UserService) {}
+	constructor (private readonly userService: UserService, private readonly matchService: MatchService) {}
+
+	@WebSocketServer()
+	public server: Server;
 
 	@SubscribeMessage('user')
 	async handleConnection(client: any) {
@@ -26,6 +31,16 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		if (client.request.user) {
 			const user = client.request.user;
 			if (user) {
+				const status = await this.userService.getUserData(user.userid, "user_status");
+				if (status[0].user_status == 3) {
+					this.matchService.deleteMatch(user.userid);
+				} else if (status[0].user_status == 2){	//end match, other player wins
+					const matchid = await this.matchService.listMatch(user.userid);
+					const opp = await this.matchService.getOpponent(user.userid, matchid[0].matchid);
+					this.server.to(opp[0].socket_token).emit('opponentLeft', matchid[0].matchid); // to MatchCourt
+
+					//update game 
+				}
 				await this.userService.changeUserData(user.userid, "user_status", 0);
 				await this.userService.changeUserData(user.userid, "socket_token", "");
 			}
