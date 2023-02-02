@@ -16,7 +16,7 @@
 				<div v-if="option === 2">
 					<a>You are about to remove the password.</a><br>
 					<a>This makes the Chat public. Are you sure?</a><br>
-					<button class="option-button" @click="changeChatDetails('public', chat.chatid, newChatname, ''), toggleOption(0)">Yes</button>
+					<button class="option-button" @click="changeChatDetails('public', chat.chatid, chat.chat_name, ''), toggleOption(0)">Yes</button>
 					<button class="option-button" @click="toggleOption(0)">No</button>
 				</div>
 
@@ -40,17 +40,17 @@
 					<th>invite</th>
 				</tr>
 			</thead>
-			<tbody @click="ChatUserdatatogglePopup()">
+			<tbody>
 				
 				
 				<tr class="info-item" v-for="(user, index) in users" :key="index">
-					<td> <!-- userid -->
+					<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
 						{{ user.userid }}
 					</td>
-					<td> <!-- username -->
+					<td @click="ChatUserdatatogglePopup()"> <!-- username -->
 						{{ user.username }}
 					</td>
-					<td> <!-- statusname -->
+					<td @click="ChatUserdatatogglePopup()"> <!-- statusname -->
 						{{ user.statusname }}
 					</td>
 					<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- mute -->
