@@ -20,11 +20,11 @@ export class ChatService {
 
 	async listChats(userid: string) {
 		const list = await this.db.$queryRaw(
-			Prisma.sql`SELECT c.chatid, chat_name, ct.typename, uc.status
+			Prisma.sql`SELECT c.chatid, chat_name, ct.typename, uc.status, uc.userid
 			FROM public.chat AS c
 			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
 			LEFT JOIN public.user_chat as uc ON uc.chatid=c.chatid
-			WHERE c.type<2 AND NOT uc.userid=${userid}`
+			WHERE c.type<2 AND c.chatid NOT IN (SELECT chatid FROM public.user_chat WHERE userid=${userid})`
 		);
 		return list;
 	}
