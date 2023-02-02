@@ -5,6 +5,7 @@ import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { UserService } from 'src/user/user.service';
 import { state } from 'pactum';
+import { AchievementsService } from 'src/achievements/achievements.service';
 
 @WebSocketGateway(3002, {
 	cors: {
@@ -27,7 +28,7 @@ export class MatchGateway {
 	}
 
 
-	constructor(private readonly matchService: MatchService, private readonly userService: UserService) { }
+	constructor(private readonly matchService: MatchService, private readonly userService: UserService,  private readonly achieve: AchievementsService) { }
 
 
 	@SubscribeMessage('create-new-game')
@@ -181,6 +182,10 @@ export class MatchGateway {
 			if (!winner) {
 				// sends new state to all room members
 				this.server.to(roomNumber).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
+				if (MatchGateway[roomNumber].scorePlayer1 == 0 && MatchGateway[roomNumber].scorePlayer2 == 1)
+					this.achieve.addAchieve(MatchGateway[roomNumber].player2.userid, 0);
+				else if (MatchGateway[roomNumber].scorePlayer2 == 0 && MatchGateway[roomNumber].scorePlayer1 == 1)
+					this.achieve.addAchieve(MatchGateway[roomNumber].player1.userid, 0);
 			} else {
 				// sends game over to all room members
 				this.server.to(roomNumber).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
