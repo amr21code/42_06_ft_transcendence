@@ -55,7 +55,7 @@
 								{{ user.statusname }}
 							</td>
 							<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- mute -->
-								<button @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">mute1</button>
+								<button @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">mute</button>
 								<div v-if="Mute === index + 1">
 									<select v-model="mutetime" required>
 										<option value="10">10 minutes</option>
@@ -63,13 +63,13 @@
 										<option value="30">30 minutes</option>
 										<option value="60">60 minutes</option>
 									</select>
-									<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 2">mute2</button>
+									<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 2">mute</button>
 								</div>
 								<button v-if="user.status === 2">-MUTED-</button>
 							</td>
 							<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- ban -->
-								<button @click="(toggleBan)" v-if="Ban == false && user.status !== 3">ban</button>
-								<div v-if="Ban === true">
+								<button @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">ban</button>
+								<div v-if="Ban === index + 1">
 									<select v-model="bantime" required>
 										<option value="10">10 minutes</option>
 										<option value="20">20 minutes</option>
@@ -183,7 +183,7 @@ export default defineComponent({
 			DataService.banUser(this.chat.chatid, userid, time);
 			this.retrieveCurrentUsersInChat(this.chat.chatid);
 			SocketioService.refreshChats();
-			this.toggleBan();
+			this.toggleBan(0);
 		},
 
 		checkIfAdmin() {
@@ -217,7 +217,7 @@ export default defineComponent({
 
 		const Ban = ref(0);
 		const toggleBan = (newValue : number) => {
-			Ban = newValue;
+			Ban.value = newValue;
 		}
 
 		const challengeUser = (userid: string) => {
