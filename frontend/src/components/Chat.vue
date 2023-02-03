@@ -127,8 +127,8 @@ export default defineComponent({
 		});
 
 		this.socket.on('got-banned', (data : any) => {
-			// console.log("ban got triggert", this.user[0].userid, data);
-			if (this.user[0].userid === data)
+			console.log("ban got triggert", this.user[0].userid, data.userid, data.time);
+			if (this.user[0].userid === data.userid)
 			{
 				this.handleClick('overview', 0);
 				// console.log('YOU GOT BANNED FROM THE CHANNEL');

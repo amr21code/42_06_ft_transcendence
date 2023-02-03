@@ -183,7 +183,7 @@ export default defineComponent({
 			await DataService.banUser(this.chat.chatid, userid, time);
 			await this.retrieveCurrentUsersInChat(this.chat.chatid);
 			SocketioService.refreshChats();
-			SocketioService.gotBanned(userid);
+			SocketioService.gotBanned(userid, time);
 			this.toggleBan(0);
 		},
 

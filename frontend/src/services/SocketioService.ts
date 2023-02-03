@@ -32,8 +32,8 @@ class SocketioService {
   }
 
   //sends a signal to the banned user gets kicked out of the chat
-  gotBanned(userid : string) {
-    this.socket.emit('send-got-banned', userid);
+  gotBanned(userid : string, time : number) {
+    this.socket.emit('send-got-banned', { userid, time });
   }
 
   // user disconnected
