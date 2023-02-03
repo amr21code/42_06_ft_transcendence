@@ -91,7 +91,9 @@ export class ChatService {
 			}
 		}
 		try {
-			const pwmatch = await bcrypt.compare(pw, result[0].password);
+			var pwmatch = true;
+			if (result[0].passport)
+				pwmatch = await bcrypt.compare(pw, result[0].password);
 			console.log("res", result[0].password);
 			console.log("hash", pwHash);
 			console.log("match", pwmatch);
@@ -158,13 +160,13 @@ export class ChatService {
 			await this.changeUserStatus(userDto);
 		}
 		if (Object.keys(user).length == 0)
-			throw new ForbiddenException();
+			return false;
 		const msg = await this.db.$queryRaw(
 			Prisma.sql`INSERT INTO public.chat_messages(
 				userid, chatid, message)
 				VALUES (${message.userid}, CAST(${message.chatid} AS INTEGER), ${message.message});`
 		);
-		return { msg : "ok" };
+		return true;
 	}
 
 	async listMessages(userid: string, chatid: string) {
