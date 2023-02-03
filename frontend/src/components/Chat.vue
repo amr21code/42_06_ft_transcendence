@@ -56,7 +56,8 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<gotBannedPopup id="gotBannedPopup" v-if="gotBannedtrigger === true" :togglegotBanned="() => togglegotBanned()" />
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
@@ -89,6 +90,7 @@ import ChatWindow from './ChatWindow.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
 import LeaveChatPopup from './LeaveChat.vue'
 import PwdPopup from './pwdPopup.vue'
+import gotBannedPopup from './gotBanned.vue'
 import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
@@ -104,7 +106,7 @@ type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
 	name: 'chat-module',
-	components: { ChatWindow, LeaveChatPopup, NewMessagePopup, PwdPopup },
+	components: { ChatWindow, LeaveChatPopup, NewMessagePopup, PwdPopup, gotBannedPopup },
 
 	data () {
 		return {
@@ -131,6 +133,7 @@ export default defineComponent({
 			if (this.user[0].userid === data.userid)
 			{
 				this.handleClick('overview', 0);
+				this.togglegotBanned();
 				// console.log('YOU GOT BANNED FROM THE CHANNEL');
 			}
 		})
@@ -212,6 +215,11 @@ export default defineComponent({
 			pwdPopup.value = !pwdPopup.value;
 		}
 
+		const gotBannedtrigger = ref(false);
+		const togglegotBanned = () => {
+			gotBannedtrigger.value = !gotBannedtrigger.value;
+		}
+
 		const joinchat = async (id : number, password ?: string) => {
 			if (password === undefined)
 				password = '';
@@ -225,7 +233,7 @@ export default defineComponent({
 		}
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger,
-				changeType, type, joinchat, togglePwdPopup, pwdPopup }
+				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger }
 	} //end of setup
 }) //end of defineComponent
 </script>
