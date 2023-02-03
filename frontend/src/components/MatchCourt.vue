@@ -1,6 +1,5 @@
 <template>
 	<div class="div-wrapper">
-		<!--<MatchWaitPopup id="MatchWaitPopup" v-if="opponentArrived === false" />-->
 		<MatchWaitPopup style="display:none" ref="matchCourtWaiting" id="MatchWaitPopup" :removeMatchWaitPopup=" () => removeMatchWaitPopup()"/>
 		<div id="matchSelectionDiv">
 			<h2>no game started yet...</h2>
@@ -76,10 +75,7 @@ export default defineComponent({
 				else
 					alert("You win! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 			}
-			playerNumber=0;
-			// 	matchSelectionDiv.style.display = 'block';
-			// 	matchWaitPopup.style.display = 'none';
-			// 	matchSelectionDiv.style.display = 'none';
+			playerNumber = 0;
 			reset();
         };
 
@@ -95,19 +91,6 @@ export default defineComponent({
 			else {
 				matchSelectionDiv.style.display = 'none';
 				canvas.style.display = 'block';
-	
-				// REMOVE BLURRINESS ((IF no blurriness errrors anymore: remove this!))
-				// let dpi = window.devicePixelRatio;
-				// const fix_dpi = () => {
-				// 	let styleHeight = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
-				// 	let styleWidth = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
-				// 	canvas.setAttribute("height", styleHeight * dpi);
-				// 	canvas.setAttribute("width", styleWidth * dpi);
-				// };
-				// fix_dpi();
-				// console.log(canvas.height, canvas.width);
-				// REMOVE BLURRINESS END
-
 				socket.emit('startGame', canvas.height, canvas.width);
 			}
 		};

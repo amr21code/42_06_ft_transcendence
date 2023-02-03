@@ -12,25 +12,19 @@
 					<a class="menuOption" id="leaderboardSelected" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friendsSelected" @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
-						<img :src="user.picurl" alt="user-photo" width="40" height="40"> 
+						<img :src="store.user.picurl" alt="user-photo" width="40" height="40"> 
 					</div>
 				</div>
 			</header>
+			<!-- enforce this properly!-->
 			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
-				<!-- make Game stop while loggedIn === false -->
 			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 			<gotChallengedPopup id="gotChallengedPopup" v-if="gotChallengedPopupTrigger === true" :toggleGotChallengedPopup="() => toggleGotChallengedPopup()" :challenger="challenger"/>
-			<!-- <div v-if="selected !== 'play' && selected !== 'watch'" class="game-part-screen"> -->
 			<div class="game-part-screen">
 				<div class="placeholder"></div>
 				<MatchCourt ref="matchCourtRef2"/>
-				<SideWindow :selected="selected"/>
+				<SideWindow />
 			</div>
-			<!-- BEGIN ONLY TEMPORARY, should be implemented above -->
-			<!-- <div class="game-full-screen" v-if="selected === 'play' || selected === 'watch'"> -->
-				<!-- <MatchCourt ref="matchCourtRef1"/> -->
-			<!-- </div> -->
-			<!-- ONLY TEMPORARY, should be implemented above END -->
 			<footer>
 				Made with ❤️ by anruland, djedasch, jtomala and raweber
 			</footer>
@@ -40,8 +34,10 @@
 
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
+import { useUserDataStore } from './stores/myUserDataStore'
 import type { SelectedSideWindow } from './types/SelectedSideWindow'
+import type { ResponseData } from './types/ResponseData'
 import MatchCourt from './components/MatchCourt.vue'
 import SideWindow from './components/SideWindow.vue'
 import LoginPopup from './components/LoginPopup.vue'
@@ -51,8 +47,6 @@ import LoggingService from './services/LoggingService'
 
 import SocketioService from './services/SocketioService.js'
 import DataService from './services/DataService'
-import type { IUser } from './types/User'
-import type { ResponseData } from './types/ResponseData'
 
 export default defineComponent({
 
@@ -66,24 +60,22 @@ export default defineComponent({
 		}
 	},
 	created () {
-		// this.retrieveCurrentUser();
 		this.socket.on('challengeRequest', (userid : string) => {
 			this.challenger = userid;
 			this.toggleGotChallengedPopup();
 		});
-
 	},
 	beforeUnmount() {
 		SocketioService.disconnect();
 	},
 	
 	setup() {
-		const user = ref({} as IUser);
+		const store = useUserDataStore();
+
 		onMounted(async () => {
 			DataService.getUser()
 			.then((response: ResponseData) => {
-				user.value = response.data[0];
-				// console.log(response.data[0]);
+				store.user = response.data[0];
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -108,27 +100,27 @@ export default defineComponent({
 		}
 
 		// for side window selection
-		const selected = ref<SelectedSideWindow>('play');
+		store.selected = 'play';
 		const handleClick = (term: SelectedSideWindow) => {
-			selected.value = term;
+			store.selected = term;
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
 			menuElements.forEach((element) => {
 				element.style.backgroundColor = "#444040";
 			});
 			// selected menu highlighting below
-			if (selected.value === 'play')
+			if (store.selected === 'play')
 				document.getElementById("playSelected")!.style.backgroundColor = "#b04716";
-			if (selected.value === 'watch')
+			if (store.selected === 'watch')
 				document.getElementById("watchSelected")!.style.backgroundColor = "#b04716";
-			if (selected.value === 'chat')
+			if (store.selected === 'chat')
 				document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
-			if (selected.value === 'leaderboard')
+			if (store.selected === 'leaderboard')
 				document.getElementById("leaderboardSelected")!.style.backgroundColor = "#b04716";
-			if (selected.value === 'friends')
+			if (store.selected === 'friends')
 				document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
 
 
-			if (selected.value === 'play' || selected.value === 'watch') {
+			if (store.selected === 'play' || store.selected === 'watch') {
 				document.documentElement.style.setProperty("--leftofgame_fr", "0.2fr");
 				document.documentElement.style.setProperty("--game_fr", "1fr");
 				document.documentElement.style.setProperty("--sidewindow_fr", "0.2fr");
@@ -138,12 +130,9 @@ export default defineComponent({
 				document.documentElement.style.setProperty("--game_fr", "2fr");
 				document.documentElement.style.setProperty("--sidewindow_fr", "1fr");
 			}
-			// console.log("game fr value: ", document.documentElement.style.getPropertyValue("--game_fr"));
-			// console.log("sidewindow fr value: ", document.documentElement.style.getPropertyValue("--sidewindow_fr"));
-
 		};
 		
-		return { user, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick, selected }
+		return { store, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 
 	methods: {

@@ -11,21 +11,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import LoginService from '../services/LoginService'
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
 
 export default defineComponent({
 	name: "match-wait-popup",
 
 	props: ['removeMatchWaitPopup'],
 
-	methods: {
-		stopWaitingForPlayer() {
+	setup(props) {
+		const stopWaitingForPlayer = () => {
 			// send signal to player2 that player1 is not waiting anymore (if exists)
-			this.removeMatchWaitPopup();
+			props.removeMatchWaitPopup();
 		}
+		return { stopWaitingForPlayer };
 	}
 })
 </script>

@@ -1,26 +1,26 @@
 <template>
-	<div v-if="selected !== 'play' && selected !== 'watch'" class="side-window-wrapper">
-		<ChatWindow v-if="selected === 'chat'" />
-		<Leaderboard v-if="selected === 'leaderboard'"/>
-		<Friendlist v-if="selected === 'friends'"/>
+	<div v-if="store.selected !== 'play' && store.selected !== 'watch'" class="side-window-wrapper">
+		<ChatWindow v-if="store.selected === 'chat'" />
+		<Leaderboard v-if="store.selected === 'leaderboard'"/>
+		<Friendlist v-if="store.selected === 'friends'"/>
 	</div>
 </template>
 
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import ChatWindow from '../components/Chat.vue'
 import Leaderboard from '../components/Leaderboard.vue'
 import Friendlist from '../components/Friendlist.vue'
+import { useUserDataStore } from '../stores/myUserDataStore'
 
 export default defineComponent({
 	name: 'side-window',
 	components: { ChatWindow, Leaderboard, Friendlist },
-	props: {
-		selected: {
-			required: true,
-			type: String
-		}
+	
+	setup() {
+		const store = useUserDataStore();
+		return { store };
 	}
 })
 </script>

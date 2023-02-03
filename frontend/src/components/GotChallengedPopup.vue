@@ -18,19 +18,18 @@
 
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import SocketioService from '../services/SocketioService'
+import { useUserDataStore } from '../stores/myUserDataStore'
 
 export default defineComponent({
 	name: "got-challenged-popup",
 	
 	data () {
 		return {
-			user: {} as IUser,
-			memberSince: {} as string,
 			socket: SocketioService.socket,
 		}
 	},
@@ -45,38 +44,24 @@ export default defineComponent({
 			type: String
 		},
 	},
-	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
-			.then((response: ResponseData) => {
-				this.user = response.data[0];
-				console.log(response.data[0]);
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		},
-		formatDate() {
-			this.memberSince = new Intl.DateTimeFormat('en-us').format(this.user.created);
-		},
 
-		async sendAcceptSignal() {
-			const user = await DataService.getUser();
-			console.log("accepting challenge", user);
+	setup() {
+		const store = useUserDataStore();
+		const socket = SocketioService.socket;
+
+		const sendAcceptSignal = () => {
+			console.log("accepting challenge", store.user);
 			// await DataService.acceptChallenge();
-			this.socket.emit('create-new-game', user.data[0].userid);
-		},
+			socket.emit('create-new-game', store.user.userid);
+		};
 
-		sendDenySignal() {
+		const sendDenySignal = () => {
 			console.log("denying challenge");
 			DataService.denyChallenge();
 		}
-	},
 
-	mounted () {
-		this.retrieveCurrentUser();
-		this.formatDate();
-	}
+		return { store, sendAcceptSignal, sendDenySignal };
+	},
 })
 </script>
 
@@ -112,8 +97,6 @@ export default defineComponent({
 	margin-left: 0%;
 }
 
-
-
 #user-photo {
 	cursor: pointer;
 	width: 30%;
@@ -123,11 +106,8 @@ export default defineComponent({
 	border-radius: 50%;
 }
 
-
 #user-photo:hover {
 	opacity: 50%;
 }
 
 </style>
-
-<!-- member since, avatar auswahl, wins, losses, user status, achievements-->

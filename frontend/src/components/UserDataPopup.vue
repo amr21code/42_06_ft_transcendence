@@ -55,6 +55,7 @@
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
 import DataService from '../services/DataService'
+import { useUserDataStore } from '../stores/myUserDataStore'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 
@@ -63,6 +64,7 @@ export default defineComponent({
 	props: ['toggleUserDataPopup'],
 
 	setup() {
+		// ADD STORE HERE!
 		const user = ref({} as IUser);
 		const memberSince = ref('');
 		const newUsername = ref('');
