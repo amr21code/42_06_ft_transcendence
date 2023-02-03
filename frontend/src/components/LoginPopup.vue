@@ -1,15 +1,11 @@
 <template>
 	<div class="popup" tabindex="0">
-		<!-- REMOVE ESC OPTION ABOVE -->
 		<div class="popup-inner">
 			<slot/>
-			<!-- NON-DYNAMIC <h2>raweber's user data</h2> -->
 			<h2>welcome to ft_pong</h2>
 			<p>please sign in with your 42 account first</p>
 			<button class="login_button">
-			<!-- <button class="login_button"> @click="callLoginApi"> -->
 				<a :href="apiLink42" @click="callLoginApi">Sign in with 42</a>
-				<!-- <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-8affeef3d6eb0d25d3d614179575e429a1b7c886e7d3848ac0750b211d36a9cc&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Freturn&response_type=code" @click="callLoginApi">Sign in with 42</a> -->
 			</button>
 		</div>
 	</div>
@@ -26,47 +22,24 @@ import type { IUser } from '../types/User'
 export default defineComponent({
 	name: "login-popup",
 	
-	data () {
-		return {
-			user: {} as IUser,
-			apiLink42: import.meta.env.VITE_API_42_URL
-			// apiLink42: "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-8affeef3d6eb0d25d3d614179575e429a1b7c886e7d3848ac0750b211d36a9cc&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Freturn&response_type=code" as string
-		}
-	},
-
 	props: ['toggleLoginPopup'],
-	methods: {
-		callLoginApi() {
-
-			// LoginService.login();
+	
+	setup() {
+		const apiLink42 = import.meta.env.VITE_API_42_URL;
+		const callLoginApi = () => {
 			LoginService.login()
 			.then((response: ResponseData)=> {
 
 				console.log(response.data);
 			})
-			.catch((e: Error) => console.log("Error in login process", e));
-			
-		},
-		
-		// retrieveCurrentUser() {
-		// 	DataService.getUser()
-		// 	.then((response: ResponseData) => {
-		// 		this.user = response.data;
-		// 		console.log(response.data);
-		// 	})
-		// 	.catch((e: Error) => {
-		// 		console.log(e);
-		// 	});
-		// }
+			.catch((e: Error) => {
+				console.log("Error in login process", e)
+			});	
+		}
+		return { apiLink42, callLoginApi }
 	}
 })
 </script>
-
-
-
-<!-- check if cookie present -> if yes, /auth/status ('authenticated' or 'not authenticated') -->
-<!-- msg: 'authenticated' -->
-<!-- if not authenticated -> cookie löschen -->
 
 
 <style scoped>

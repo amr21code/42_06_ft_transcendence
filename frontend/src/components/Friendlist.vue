@@ -7,7 +7,7 @@
 				<th>name</th>
 				<th>status</th>
 			</tr>
-			<tr class="friendlist-item" v-for="(friend, index) in friends" :key="index">
+			<tr class="friendlist-item" v-for="(friend, index) in store.friends" :key="index">
 				<td>
 					<img :src="friend.picurl">
 				</td>
@@ -24,43 +24,26 @@
 
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import DataService from '../services/DataService'
+import { useUserDataStore } from '../stores/myUserDataStore'
 import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
 
 export default defineComponent({
-	name: 'friendlist-window',
-	data () {
-		return {
-			user: {} as IUser,
-			friends: [] as IUser[]
-		}
-	},
-	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
-			.then((response: ResponseData) => {
-				this.user = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		},
-		retrieveFriends() {
+	setup() {
+		const store = useUserDataStore();
+
+		onMounted(async () => {
 			DataService.getFriends()
 			.then((response: ResponseData) => {
-				this.friends = response.data;
+				store.friends = response.data;
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
-		}
+		});
+		return { store };
 	},
-
-	mounted () {
-		this.retrieveFriends();
-	}
 })
 </script>
 

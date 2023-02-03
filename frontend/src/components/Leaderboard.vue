@@ -31,6 +31,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import DataService from '../services/DataService'
+import { useUserDataStore } from '../stores/myUserDataStore'
 import type { ResponseData } from '../types/ResponseData'
 import type { IUser } from '../types/User'
 import MatchHistoryPopup from './MatchHistoryPopup.vue'
@@ -39,11 +40,12 @@ export default defineComponent({
 
 	components: { MatchHistoryPopup },
 	setup() {
-		const retrievedUsers = ref([] as IUser[]);
+
+		const store = useUserDataStore();
 		onMounted(async () => {
 			DataService.getAll()
 			.then((response: ResponseData) => {
-				retrievedUsers.value = response.data;
+				store.allUsers = response.data;
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -51,7 +53,7 @@ export default defineComponent({
 		});
 
 		const usersByWins = computed(() => {
-			return [...retrievedUsers.value].sort((a: IUser, b: IUser) => {
+			return [...store.allUsers].sort((a: IUser, b: IUser) => {
 				return a.wins > b.wins ? -1: 1;
 			})
 		});
@@ -71,7 +73,7 @@ export default defineComponent({
 			selectedUser.value = "";
 		}
 
-		return { retrievedUsers, usersByWins, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser, selectedUserPhoto };
+		return { store, usersByWins, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser, selectedUserPhoto };
 	},
 })
 </script>
