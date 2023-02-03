@@ -46,7 +46,7 @@
 				
 						<tr class="info-item" >
 							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
-								{{ user.userid }} {{ index }}
+								{{ user.userid }}
 							</td>
 							<td @click="ChatUserdatatogglePopup()"> <!-- username -->
 								{{ user.username }}
@@ -131,7 +131,6 @@ export default defineComponent({
 		this.retrieveCurrentUser();
 		this.retrieveCurrentUsersInChat(this.chat.chatid);
 		this.socket.on('refresh-chat', () => {
-			console.log("recieved refresh-chat");
 			this.retrieveCurrentUsersInChat(this.chat.chatid);
 		});
 	},
@@ -184,6 +183,7 @@ export default defineComponent({
 			await DataService.banUser(this.chat.chatid, userid, time);
 			await this.retrieveCurrentUsersInChat(this.chat.chatid);
 			SocketioService.refreshChats();
+			SocketioService.gotBanned(userid);
 			this.toggleBan(0);
 		},
 

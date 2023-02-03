@@ -16,15 +16,18 @@
 			<!------------CHATS WHERE USER IS JOINED----------------------------------->
 			<div v-if="type === 'joined'">
 				<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
-					<a @click="handleClick('chatwindow', chat)" >
-						<div class="" >
-								<strong class="chat-chatid" >{{ chat.chatid }}</strong>
-								<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-								<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
-								<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
-								<a class="chat-typename-orange" v-if="chat.typename === 'private'" >{{ chat.typename }}</a>
-						</div>
-					</a>
+					<div v-if="chat.statusname !== 'ban'">
+						<a @click="handleClick('chatwindow', chat)">
+							{{ chat.statusname }}
+							<div class="" >
+									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+									<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
+									<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+									<a class="chat-typename-orange" v-if="chat.typename === 'private'" >{{ chat.typename }}</a>
+							</div>
+						</a>
+					</div>
 				</div>
 			</div>
 			<!------------CHATS WHERE USER IS NOT JOINED----------------------------------->
@@ -114,6 +117,7 @@ export default defineComponent({
 
 	created () {
 		this.socket.on('refresh-chat', () => {
+			// console.log("chats got refreshed");
 			this.retrieveCurrentChats();
 			this.retrieveOpenChats();
 		});
@@ -121,6 +125,15 @@ export default defineComponent({
 		this.socket.on('chat-leave', () => {
 			this.handleClick('overview', 0);
 		});
+
+		this.socket.on('got-banned', (data : any) => {
+			// console.log("ban got triggert", this.user[0].userid, data);
+			if (this.user[0].userid === data)
+			{
+				this.handleClick('overview', 0);
+				// console.log('YOU GOT BANNED FROM THE CHANNEL');
+			}
+		})
 	},
 
 

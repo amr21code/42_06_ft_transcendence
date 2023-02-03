@@ -30,6 +30,7 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-refresh')
 	async refreshChat(client: Socket) {
+		client.broadcast.emit('refresh-chat');
 		client.emit('refresh-chat');
 	}
 
@@ -44,5 +45,12 @@ export class ChatGateway {
 			throw new WsException('leave chat in socketIO message-handler failed');
 		}
 	}
+
+	@SubscribeMessage('send-got-banned')
+	async gotBanned(client: Socket, data: Record<string, string>) {
+		client.broadcast.emit('got-banned', data);
+		client.emit('got-banned', data);
+	}
+
 
 }
