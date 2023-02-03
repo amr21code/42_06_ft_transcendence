@@ -62,6 +62,7 @@ export default defineComponent({
 
         leaveChat(chatid : number) {
 			SocketioService.chatLeave(chatid);
+			SocketioService.refreshChats();
         },
 
         setSelectedWindow(selectedWindow : String){
