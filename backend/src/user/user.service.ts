@@ -15,7 +15,7 @@ export class UserService {
 			WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL 
 			THEN profilepic42 
 			ELSE (select avatarurl from public.avatars where avatarid = avatar) 
-			END as picurl,created, statusname, wins, losses FROM public.users
+			END as picurl,created, statusname, wins, losses, paddlecolor FROM public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid`
 			);
@@ -39,7 +39,7 @@ export class UserService {
 				profilepic42 
 				ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 				END as picurl, 
-				created, statusname, wins, losses, profilepic42 from public.users
+				created, statusname, wins, losses, profilepic42, paddlecolor from public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
 			WHERE userid=${user.userid}`
@@ -55,7 +55,7 @@ export class UserService {
 				profilepic42 
 				ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 				END as picurl, 
-				created, statusname, wins, losses from public.users
+				created, statusname, wins, losses, paddlecolor from public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
 			WHERE userid=${userid}`
@@ -117,6 +117,10 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET socket_token=${newdata} WHERE userid=${userid}`
 				);
+		}else if (field == 'paddlecolor') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET paddlecolor=${newdata} WHERE userid=${userid}`
+				);
 		}
 	}
 
@@ -154,6 +158,10 @@ export class UserService {
 		}else if (field == 'socket_token') {
 			status = await this.db.$queryRaw(
 				Prisma.sql`SELECT socket_token FROM public.users WHERE userid=${userid}`
+				);
+		}else if (field == 'paddlecolor') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT paddlecolor FROM public.users WHERE userid=${userid}`
 				);
 		}
 		return status;

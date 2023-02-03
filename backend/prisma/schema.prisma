@@ -118,9 +118,10 @@ model users {
   avatar                             Int                  @default(42)
   twofasecret                        String?              @db.VarChar(100)
   access_token                       String?              @db.VarChar(100)
-  wins                               Int                  @default(0)
   losses                             Int                  @default(0)
   socket_token                       String?              @db.VarChar(100)
+  wins                               Int                  @default(0)
+  paddlecolor                        String?              @db.VarChar(7)
   chat_messages                      chat_messages[]
   friends_friends_requesteridTousers friends[]            @relation("friends_requesteridTousers")
   friends_friends_addresseeidTousers friends[]            @relation("friends_addresseeidTousers")
