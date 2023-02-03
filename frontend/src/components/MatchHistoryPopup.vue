@@ -50,7 +50,7 @@
 						{{ match.user2 }}
 					</td>
 					<td>
-						{{ match.challenge === 1 ? "challenge" : "random" }}
+						{{ match.challenge === 1 ? "challenge" : "ladder" }}
 					</td>
 				</tr>
 			</table>
