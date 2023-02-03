@@ -112,6 +112,7 @@ export default defineComponent({
 		const handleOpponentLeft = (matchid:number) => {
 			socket.emit('opponentLeft',matchid);
 			alert("Your Opponent Left, you win!");
+			reset();
 		}
 
 		const reset = () => {
