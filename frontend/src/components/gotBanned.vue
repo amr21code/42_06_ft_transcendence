@@ -5,6 +5,7 @@
 			<div class="text-wrapper">
 				<div>
 					<h2>You got banned from the channel</h2>
+					<a>Bantime: {{ bantime }} mintes</a><br>
                     <button class="close-button" @click="(togglegotBanned)">close</button>
 					<a></a><br>
 				</div>
@@ -38,6 +39,10 @@ export default defineComponent({
 			required: true,
 			type: Function
 		},
+		bantime : {
+			require: true,
+			type: Number
+		}
 	},
 	methods: {
 		async retrieveCurrentUser() {

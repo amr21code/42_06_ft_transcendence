@@ -18,7 +18,6 @@
 				<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
 					<div v-if="chat.statusname !== 'ban'">
 						<a @click="handleClick('chatwindow', chat)">
-							{{ chat.statusname }}
 							<div class="" >
 									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
@@ -57,7 +56,7 @@
 		</div>
 	</div>
 	
-	<gotBannedPopup id="gotBannedPopup" v-if="gotBannedtrigger === true" :togglegotBanned="() => togglegotBanned()" />
+	<gotBannedPopup id="gotBannedPopup" v-if="gotBannedtrigger === true" :togglegotBanned="() => togglegotBanned()" :bantime="bantime" />
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
@@ -114,6 +113,7 @@ export default defineComponent({
 			chats: [] as IChats[],
 			openchats: [] as IChats[],
 			socket: SocketioService.socket,
+			bantime : 0 as number,
 		}
 	},
 
@@ -129,10 +129,11 @@ export default defineComponent({
 		});
 
 		this.socket.on('got-banned', (data : any) => {
-			console.log("ban got triggert", this.user[0].userid, data.userid, data.time);
+			// console.log("ban got triggert", this.user[0].userid, data.userid, data.time);
 			if (this.user[0].userid === data.userid)
 			{
 				this.handleClick('overview', 0);
+				this.bantime = data.time;
 				this.togglegotBanned();
 				// console.log('YOU GOT BANNED FROM THE CHANNEL');
 			}
