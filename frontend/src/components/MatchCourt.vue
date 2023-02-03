@@ -16,15 +16,17 @@
 
 <script lang="ts">
 import DataService from '../services/DataService'
-import { ref, computed, defineComponent } from 'vue'
+import { ref, defineComponent } from 'vue'
 import SocketioService from '../services/SocketioService.js'
 import MatchWaitPopup from './MatchWaitPopup.vue';
+import { useUserDataStore } from '../stores/myUserDataStore';
 
 export default defineComponent({
 
 	setup() {
 
 		// #################  VARIABLES ######################
+		const store = useUserDataStore();
 		let canvas: any;
 		let ctx: any;
 		let matchSelectionDiv: any;
@@ -110,8 +112,9 @@ export default defineComponent({
 		}
 
 		const handleOpponentLeft = (matchid:number) => {
-			alert("Your Opponent Left, you win!");
 			socket.emit('opponentLeft',matchid);
+			alert("Your Opponent Left, you win!");
+			reset();
 		}
 
 		const reset = () => {
@@ -216,7 +219,7 @@ export default defineComponent({
         const paintPlayersAndBall = (state: any) => {
 			// scaleUpGameStateForPlayer(state);
             ctx.fillStyle = "#b04716";
-            // ctx.fillStyle = "#fff";
+            // ctx.fillStyle = store.user.paddlecolor;
             ctx.fillRect(state.player1.pos.x, state.player1.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
@@ -240,10 +243,10 @@ export default defineComponent({
 		};
 
 		// ########### PAINTING ###################################################################################################
-		const removeMatchWaitPopup = () => {
+		const removeMatchWaitPopup = async () => {
 			matchWaitPopup.style.display = 'none';
 			matchSelectionDiv.style.display = 'inline-flex';
-			DataService.denyChallenge();
+			await DataService.denyChallenge();
 		}
 
 		//############# SOCKETIO ##################################################################################################

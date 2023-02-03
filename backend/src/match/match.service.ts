@@ -306,8 +306,8 @@ export class MatchService {
 
 	async endMatch(matchid: any, state: MatchGameStateDto, winner: string) { //update userscore, match_status, wins/losses
 		try{
-			console.log("end match");
-			console.log(matchid, state);
+			// console.log("end match");
+			// console.log(matchid, state);
 			var loser, loserScore;
 			if (winner==state.player1.userid) {
 				loser = state.player2.userid;
@@ -322,7 +322,7 @@ export class MatchService {
 			await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${loserScore} AS INTEGER)
 			WHERE matchid=${matchid} AND userid=${loser};`);
-			console.log("Challenge", challenge);
+			// console.log("Challenge", challenge);
 			if (challenge[0].challenge == 2){ //only count random games in wins/losses
 				// begin winner update
 				console.log("win", winner);

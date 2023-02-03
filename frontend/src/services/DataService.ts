@@ -19,7 +19,9 @@ class DataService {
 	changeAvatar(userid : string, id : number) {
 		return apiInstance.get('/users/' + userid + '/avatar/' + id);
 	}
-
+	changePaddleColor(userid : string, color : string) {
+		return apiInstance.get('/users/' + userid + '/paddlecolor/' + color);
+	}
 	getAchievements(userid : string) {
 		return apiInstance.get('/achieve/show/' + userid);
 	}

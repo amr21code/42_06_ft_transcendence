@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber} from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber} from "class-validator";
 import { MatchBallDto } from "./matchball.dto";
 import { MatchPlayerDto } from "./matchplayer.dto";
 
@@ -55,4 +55,8 @@ export class MatchGameStateDto {
 	@IsNumber()
 	@IsNotEmpty()
 	drawLineWidth: number;
+
+	@IsBoolean()
+	@IsNotEmpty()
+	prematureEnd: boolean;
 }

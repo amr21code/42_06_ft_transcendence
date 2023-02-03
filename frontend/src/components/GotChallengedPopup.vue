@@ -55,9 +55,9 @@ export default defineComponent({
 			socket.emit('create-new-game', store.user.userid);
 		};
 
-		const sendDenySignal = () => {
+		const sendDenySignal = async () => {
 			console.log("denying challenge");
-			DataService.denyChallenge();
+			await DataService.denyChallenge();
 		}
 
 		return { store, sendAcceptSignal, sendDenySignal };

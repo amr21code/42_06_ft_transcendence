@@ -125,8 +125,8 @@ export default defineComponent({
 
 
 	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
+		async retrieveCurrentUser() {
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
 			})
@@ -135,8 +135,8 @@ export default defineComponent({
 			});
 		},
 
-		retrieveCurrentChats() {
-			DataService.getJoinedChats()
+		async retrieveCurrentChats() {
+			await DataService.getJoinedChats()
 			.then((response: ResponseData) => {
 				this.chats = response.data;
 			})
@@ -145,8 +145,8 @@ export default defineComponent({
 			})
 		},
 
-		retrieveOpenChats() {
-			DataService.getOpenChats()
+		async retrieveOpenChats() {
+			await DataService.getOpenChats()
 			.then((response: ResponseData) => {
 				this.openchats = response.data;
 			})
@@ -199,10 +199,10 @@ export default defineComponent({
 			pwdPopup.value = !pwdPopup.value;
 		}
 
-		const joinchat = (id : number, password ?: string) =>{
+		const joinchat = async (id : number, password ?: string) => {
 			if (password === undefined)
 				password = '';
-			DataService.createChat(String(id), password, 'join')
+			await DataService.createChat(String(id), password, 'join')
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
             })

@@ -29,6 +29,12 @@
 				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="avatar-photo">
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
+			<div class="user-data-wrapper game-color-wrapper">
+				<div>select game color:</div>
+				<div @click="changePaddleColor('ffffff')" class="select-color" id="select-color1"></div>
+				<div @click="changePaddleColor('444040')" class="select-color" id="select-color2"></div>
+				<div @click="changePaddleColor('00cc00')" class="select-color" id="select-color3"></div>
+			</div>
 			<div class="user-data-wrapper">
 				<div>member since: {{ memberSince }}</div>
 			</div>
@@ -65,16 +71,41 @@ export default defineComponent({
 
 	setup() {
 		// ADD STORE HERE!
+		const store = useUserDataStore();
 		const user = ref({} as IUser);
 		const memberSince = ref('');
 		const newUsername = ref('');
 		const toggleUsername = ref(false);
 
 		onMounted(async () => {
-			DataService.getUser()
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				user.value = response.data[0];
-				// console.log(response.data[0]);
+				// console.log(user);
+				if (user.value.paddlecolor === "ffffff") {
+					document.getElementById("select-color1")!.style.border = "2px solid black";
+					document.getElementById("select-color1")!.style.opacity = "100%";
+					document.getElementById("select-color2")!.style.border = "none";
+					document.getElementById("select-color2")!.style.opacity = "30%";
+					document.getElementById("select-color3")!.style.border = "none";
+					document.getElementById("select-color3")!.style.opacity = "30%";
+				}
+				else if (user.value.paddlecolor === "444040") {	
+					document.getElementById("select-color1")!.style.border = "none";
+					document.getElementById("select-color1")!.style.opacity = "30%";
+					document.getElementById("select-color2")!.style.border = "2px solid black";
+					document.getElementById("select-color2")!.style.opacity = "100%";
+					document.getElementById("select-color3")!.style.border = "none";
+					document.getElementById("select-color3")!.style.opacity = "30%";
+				}
+				else if (user.value.paddlecolor === "00cc00") {
+					document.getElementById("select-color1")!.style.border = "none";
+					document.getElementById("select-color1")!.style.opacity = "30%";
+					document.getElementById("select-color2")!.style.border = "none";
+					document.getElementById("select-color2")!.style.opacity = "30%";
+					document.getElementById("select-color3")!.style.border = "2px solid black";
+					document.getElementById("select-color3")!.style.opacity = "100%";
+				}
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -91,15 +122,38 @@ export default defineComponent({
 
 		formatDate();
 
-		return { user, memberSince, toggleUsername, newUsername, toggleChangeUsername};
+		return { user, memberSince, toggleUsername, newUsername, toggleChangeUsername };
 	},
 
 	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
+		async retrieveCurrentUser() {
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data[0];
-				// console.log(response.data[0]);
+				if (this.user.paddlecolor === "ffffff") {
+					document.getElementById("select-color1")!.style.border = "2px solid black";
+					document.getElementById("select-color1")!.style.opacity = "100%";
+					document.getElementById("select-color2")!.style.border = "none";
+					document.getElementById("select-color2")!.style.opacity = "30%";
+					document.getElementById("select-color3")!.style.border = "none";
+					document.getElementById("select-color3")!.style.opacity = "30%";
+				}
+				else if (this.user.paddlecolor === "444040") {	
+					document.getElementById("select-color1")!.style.border = "none";
+					document.getElementById("select-color1")!.style.opacity = "30%";
+					document.getElementById("select-color2")!.style.border = "2px solid black";
+					document.getElementById("select-color2")!.style.opacity = "100%";
+					document.getElementById("select-color3")!.style.border = "none";
+					document.getElementById("select-color3")!.style.opacity = "30%";
+				}
+				else if (this.user.paddlecolor === "00cc00") {
+					document.getElementById("select-color1")!.style.border = "none";
+					document.getElementById("select-color1")!.style.opacity = "30%";
+					document.getElementById("select-color2")!.style.border = "none";
+					document.getElementById("select-color2")!.style.opacity = "30%";
+					document.getElementById("select-color3")!.style.border = "2px solid black";
+					document.getElementById("select-color3")!.style.opacity = "100%";
+				}
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -114,6 +168,16 @@ export default defineComponent({
 
 		async changeAvatar(id : number) {
 			await DataService.changeAvatar(this.user.userid, id)
+			.then((response: ResponseData) => {
+				this.retrieveCurrentUser();
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+
+		async changePaddleColor(color : string) {
+			await DataService.changePaddleColor(this.user.userid, color)
 			.then((response: ResponseData) => {
 				this.retrieveCurrentUser();
 			})
@@ -157,6 +221,7 @@ export default defineComponent({
 	margin-left: 0%;
 }
 
+
 #user-photo {
 	width : 7rem;
 	height: 7rem;
@@ -176,11 +241,50 @@ export default defineComponent({
 	border-radius: 50%;
 }
 
-
 #select-photo:hover {
 	opacity: 50%;
 }
+.select-color {
+	height: 70px;
+	width: 70px;
+	object-fit: cover;
+	cursor: pointer;
+	margin: 1rem;
+	border: none;
+	border-radius: 50%;
+	display: inline-block;
+	box-sizing: border-box;
+}
 
+/* ISSUE HERE */
+#select-color1:hover {
+	background-color: black;
+	opacity: 100%;
+}
+
+#select-color2:hover {
+	background-color: black;
+	opacity: 100%;
+}
+
+#select-color3:hover {
+	background-color: black;
+	opacity: 100%;
+}
+/* ISSUE ABOVE */
+
+#select-color1 {
+	background: white;
+}
+
+#select-color2 {
+	
+	background: var(--first-highlight-color);
+}
+
+#select-color3 {
+	background: var(--second-highlight-color);;
+}
 
 </style>
 

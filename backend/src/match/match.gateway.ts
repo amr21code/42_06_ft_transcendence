@@ -31,6 +31,11 @@ export class MatchGateway {
 	constructor(private readonly matchService: MatchService, private readonly userService: UserService,  private readonly achieve: AchievementsService) { }
 
 
+	@SubscribeMessage('watchGame')
+	async watchGame(client: Socket, payload: any) {
+		client.join(payload);
+	}
+
 	@SubscribeMessage('create-new-game')
 	async createNewGame(client: Socket, opponent: any) {
 		var matchid;
@@ -178,6 +183,8 @@ export class MatchGateway {
 
 	async startGameInterval(roomNumber: any, client: any) {
 		const intervalId = setInterval(() => {
+			if (MatchGateway[roomNumber].prematureEnd)
+				return clearInterval(intervalId);
 			const winner = gameLoop(MatchGateway[roomNumber]);
 			if (!winner) {
 				// sends new state to all room members
@@ -208,10 +215,13 @@ export class MatchGateway {
 
 	@SubscribeMessage('opponentLeft') 
 	async opponentLeft(client: any, roomNumber: any) {	
-		console.log('Opponent left room', client.user.userid);
+		// console.log('Opponent left room', client.request.session.passport.user.userid);
+		// console.log(roomNumber);
+		// console.log(client);
 		//this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
-		this.matchService.endMatch(roomNumber, MatchGateway[roomNumber], client.number);
-		this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
-		this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
+		MatchGateway[roomNumber].prematureEnd = true;
+		await this.matchService.endMatch(roomNumber, MatchGateway[roomNumber], client.request.session.passport.user.userid);
+		await this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
+		await this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
 	}
 }

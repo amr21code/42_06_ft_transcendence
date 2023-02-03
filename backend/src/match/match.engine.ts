@@ -40,6 +40,7 @@ export function createGameState() {
 		scorePlayer1: 0,
 		scorePlayer2: 0,
 		drawLineWidth: 7,
+		prematureEnd: false,
 	}
 }
 
@@ -107,8 +108,8 @@ export function gameLoop(state: MatchGameStateDto) {
 			ball.vel.x = 1;
 			// player two scored
 			state.scorePlayer2++;
-			if (state.scorePlayer2 == 3) // game ends here
-				return 2;
+			// if (state.scorePlayer2 == 3) // game ends here
+			// 	return 2;
 		}
 
 		//check right canvas bounds
@@ -117,8 +118,8 @@ export function gameLoop(state: MatchGameStateDto) {
 			ball.vel.x = -1;
 			// player one scored
 			state.scorePlayer1++;
-			if (state.scorePlayer1 == 3) // game ends here
-				return 1;
+			// if (state.scorePlayer1 == 3) // game ends here
+			// 	return 1;
 		}
 
 		//check playerOne collision
