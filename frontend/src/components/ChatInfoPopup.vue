@@ -129,6 +129,7 @@ export default defineComponent({
 	},
 	created () {
 		this.retrieveCurrentUser();
+		this.checkIfAdmin();
 		this.retrieveCurrentUsersInChat(this.chat.chatid);
 		this.socket.on('refresh-chat', () => {
 			this.retrieveCurrentUsersInChat(this.chat.chatid);
@@ -187,7 +188,7 @@ export default defineComponent({
 			this.toggleBan(0);
 		},
 
-		checkIfAdmin() {
+		async checkIfAdmin() {
 			for (var user of this.users) {
 				if (this.user_me[0].userid === user.userid)
 					if (user.statusname === 'admin')
