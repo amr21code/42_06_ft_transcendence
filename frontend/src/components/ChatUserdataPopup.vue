@@ -69,8 +69,8 @@ export default defineComponent({
 		},
     },
 	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
+		async retrieveCurrentUser() {
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data[0];
 				console.log(response.data[0]);

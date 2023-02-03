@@ -95,10 +95,10 @@ export default defineComponent({
 		
 
 		
-		const friendButtonAction = (userid: string) => {
+		const friendButtonAction = async (userid: string) => {
 			if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
 				try {
-						DataService.requestFriend(userid);
+						await DataService.requestFriend(userid);
 				} catch {
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
@@ -108,7 +108,7 @@ export default defineComponent({
 			}
 			else if (document.getElementById("add-friend-button")!.innerHTML === "confirm") {
 				try {
-						DataService.confirmFriend(userid);
+						await DataService.confirmFriend(userid);
 				} catch {
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
@@ -119,7 +119,7 @@ export default defineComponent({
 		}
 		
 		onMounted(async () => {
-			DataService.getMatchHistory(props.userid)
+			await DataService.getMatchHistory(props.userid)
 			.then((response: ResponseData) => {
 				matchHistory.value = response.data;
 			})
@@ -127,7 +127,7 @@ export default defineComponent({
 				console.log(e);
 			});
 			
-			DataService.getAchievements(props.userid)
+			await DataService.getAchievements(props.userid)
 			.then((response: ResponseData) => {
 				for (var achievement of response.data) {
 					if (achievement.name == "the Gui") {

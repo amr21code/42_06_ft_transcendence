@@ -30,11 +30,11 @@ import { useUserDataStore } from '../stores/myUserDataStore'
 import type { ResponseData } from '../types/ResponseData'
 
 export default defineComponent({
-	setup() {
+	async setup() {
 		const store = useUserDataStore();
 
 		onMounted(async () => {
-			DataService.getFriends()
+			await DataService.getFriends()
 			.then((response: ResponseData) => {
 				store.friends = response.data;
 			})

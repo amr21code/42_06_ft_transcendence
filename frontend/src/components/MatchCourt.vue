@@ -241,10 +241,10 @@ export default defineComponent({
 		};
 
 		// ########### PAINTING ###################################################################################################
-		const removeMatchWaitPopup = () => {
+		const removeMatchWaitPopup = async () => {
 			matchWaitPopup.style.display = 'none';
 			matchSelectionDiv.style.display = 'inline-flex';
-			DataService.denyChallenge();
+			await DataService.denyChallenge();
 		}
 
 		//############# SOCKETIO ##################################################################################################

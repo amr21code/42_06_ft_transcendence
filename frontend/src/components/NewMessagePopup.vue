@@ -66,8 +66,8 @@ export default defineComponent({
 		}
 	},
 	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
+		async retrieveCurrentUser() {
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
 				// console.log(response.data);
@@ -77,7 +77,7 @@ export default defineComponent({
 			});
 		},
 
-        createNewChat(chatname_id : string, password : string, type : string) {
+        async createNewChat(chatname_id : string, password : string, type : string) {
             // console.log(this.user[0].userid);
             if (chatname_id === '' && type == 'join')
                 return ;
@@ -92,7 +92,7 @@ export default defineComponent({
                     break;
                 }
             }
-            DataService.createChat(chatname_id, password, type)
+            await DataService.createChat(chatname_id, password, type)
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
             })

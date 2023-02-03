@@ -149,8 +149,8 @@ export default defineComponent({
 	methods: {
 
 		// loads the current user who is logged in
-		retrieveCurrentUser() {
-			DataService.getUser()
+		async retrieveCurrentUser() {
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user_me = response.data;
 			})
@@ -159,8 +159,8 @@ export default defineComponent({
 			});
 		},
 
-		retrieveCurrentUsersInChat(chatid : number) {
-			DataService.getUsersInChat(chatid)
+		async retrieveCurrentUsersInChat(chatid : number) {
+			await DataService.getUsersInChat(chatid)
 			.then((response: ResponseData) => {
 				this.users = response.data;
 				this.checkIfAdmin();
@@ -172,16 +172,16 @@ export default defineComponent({
 			});
 		},
 
-		muteUser(userid : string, time : number){
-			DataService.muteUser(this.chat.chatid, userid, time);
-			this.retrieveCurrentUsersInChat(this.chat.chatid);
+		async muteUser(userid : string, time : number){
+			await DataService.muteUser(this.chat.chatid, userid, time);
+			await this.retrieveCurrentUsersInChat(this.chat.chatid);
 			SocketioService.refreshChats();
 			this.toggleMute(0);
 		},
 
-		banUser(userid : string, time : number){
-			DataService.banUser(this.chat.chatid, userid, time);
-			this.retrieveCurrentUsersInChat(this.chat.chatid);
+		async banUser(userid : string, time : number){
+			await DataService.banUser(this.chat.chatid, userid, time);
+			await this.retrieveCurrentUsersInChat(this.chat.chatid);
 			SocketioService.refreshChats();
 			this.toggleBan(0);
 		},
@@ -195,8 +195,8 @@ export default defineComponent({
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
-		changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
-			DataService.changeChatDetails(type, chatid, chatname, password)
+		async changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
+			await DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
 			})

@@ -71,7 +71,7 @@ export default defineComponent({
 		const toggleUsername = ref(false);
 
 		onMounted(async () => {
-			DataService.getUser()
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				user.value = response.data[0];
 				// console.log(response.data[0]);
@@ -95,8 +95,8 @@ export default defineComponent({
 	},
 
 	methods: {
-		retrieveCurrentUser() {
-			DataService.getUser()
+		async retrieveCurrentUser() {
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data[0];
 				// console.log(response.data[0]);

@@ -137,8 +137,8 @@ export default defineComponent({
 	methods: {
 
 		// loads the current user who is logged in
-		retrieveCurrentUser() {
-			DataService.getUser()
+		async retrieveCurrentUser() {
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data;
 			})
@@ -148,8 +148,8 @@ export default defineComponent({
 		},
 
 		// loads all the old messages from the db via API
-		retrieveCurrentMessages(chatid : number) {
-			DataService.getMessages(chatid)
+		async retrieveCurrentMessages(chatid : number) {
+			await DataService.getMessages(chatid)
 			.then((response: ResponseData) => {
 				this.db_messages = response.data;
 				this.$nextTick(() => {
@@ -177,8 +177,8 @@ export default defineComponent({
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
-		changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
-			DataService.changeChatDetails(type, chatid, chatname, password)
+		async changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
+			await DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
 			})

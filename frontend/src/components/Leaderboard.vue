@@ -39,11 +39,11 @@ import MatchHistoryPopup from './MatchHistoryPopup.vue'
 export default defineComponent({
 
 	components: { MatchHistoryPopup },
-	setup() {
+	async setup() {
 
 		const store = useUserDataStore();
 		onMounted(async () => {
-			DataService.getAll()
+			await DataService.getAll()
 			.then((response: ResponseData) => {
 				store.allUsers = response.data;
 			})
