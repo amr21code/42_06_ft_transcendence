@@ -88,7 +88,7 @@ export class UserService {
 				const status = await this.db.$queryRaw(
 					Prisma.sql`UPDATE public.users SET username=${newdata} WHERE userid=${userid}`
 					);
-				if (newdata = 'GuillaumeCalvi') {
+				if (newdata === 'GuillaumeCalvi') {
 					this.achieve.addAchieve(userid, 2);
 				}
 			} else {
