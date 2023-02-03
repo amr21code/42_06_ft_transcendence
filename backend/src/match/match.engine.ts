@@ -40,6 +40,7 @@ export function createGameState() {
 		scorePlayer1: 0,
 		scorePlayer2: 0,
 		drawLineWidth: 7,
+		prematureEnd: false,
 	}
 }
 

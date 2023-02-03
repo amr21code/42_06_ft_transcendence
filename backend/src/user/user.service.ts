@@ -78,6 +78,7 @@ export class UserService {
 
 	async changeUserData(userid: string, field: string, newdata: any)
 	{
+		// console.log("data", newdata);
 		if (field == 'username') {
 			const find = await this.db.$queryRaw(
 				Prisma.sql`SELECT COUNT(*) FROM public.users WHERE username=${newdata}`);

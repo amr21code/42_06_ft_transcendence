@@ -32,9 +32,11 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			const user = client.request.user;
 			if (user) {
 				const status = await this.userService.getUserData(user.userid, "user_status");
+				console.log("user status", status);
 				if (status[0].user_status == 3) {
 					this.matchService.deleteMatch(user.userid);
 				} else if (status[0].user_status == 2){	//end match, other player wins
+					console.log("user left");
 					const matchid = await this.matchService.listMatch(user.userid);
 					const opp = await this.matchService.getOpponent(user.userid, matchid[0].matchid);
 					this.server.to(opp[0].socket_token).emit('opponentLeft', matchid[0].matchid); // to MatchCourt
