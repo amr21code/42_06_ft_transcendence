@@ -267,12 +267,12 @@ export class MatchService {
 				winner = state.player1.userid;
 				loser = state.player2.userid;
 				if (state.scorePlayer2 == 0)
-					this.achieve.addAchieve(state.player2.userid, 1);
+					this.achieve.addAchieve(state.player1.userid, 1);
 			} else {
 				winner = state.player2.userid;
 				loser = state.player1.userid;
 				if (state.scorePlayer1 == 0)
-					this.achieve.addAchieve(state.player1.userid, 1);
+					this.achieve.addAchieve(state.player2.userid, 1);
 			}
 			console.log("Challenge", challenge);
 			if (challenge[0].challenge == 2){ //only count random games in wins/losses
