@@ -131,6 +131,7 @@ export default defineComponent({
 		this.retrieveCurrentUser();
 		this.retrieveCurrentUsersInChat(this.chat.chatid);
 		this.socket.on('refresh-chat', () => {
+			console.log("recieved refresh-chat");
 			this.retrieveCurrentUsersInChat(this.chat.chatid);
 		});
 	},
@@ -173,17 +174,28 @@ export default defineComponent({
 		},
 
 		muteUser(userid : string, time : number){
-			DataService.muteUser(this.chat.chatid, userid, time);
-			this.retrieveCurrentUsersInChat(this.chat.chatid);
-			SocketioService.refreshChats();
-			this.toggleMute(0);
+			DataService.muteUser(this.chat.chatid, userid, time)
+			.then((response: ResponseData) => {
+				this.retrieveCurrentUsersInChat(this.chat.chatid);
+				SocketioService.refreshChats();
+				this.toggleMute(0);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			
 		},
 
 		banUser(userid : string, time : number){
-			DataService.banUser(this.chat.chatid, userid, time);
-			this.retrieveCurrentUsersInChat(this.chat.chatid);
-			SocketioService.refreshChats();
-			this.toggleBan(0);
+			DataService.banUser(this.chat.chatid, userid, time)
+			.then((response: ResponseData) => {
+				this.retrieveCurrentUsersInChat(this.chat.chatid);
+				SocketioService.refreshChats();
+				this.toggleBan(0);
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 		},
 
 		checkIfAdmin() {
