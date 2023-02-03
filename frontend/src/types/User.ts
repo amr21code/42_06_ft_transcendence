@@ -9,6 +9,7 @@ interface IUser {
 	losses: string,
 	status: number, //0: admin, 1: member, 2: mute, 3: ban
 	bantime: Date,
+	paddlecolor: string,
 	// title: string,
 	// completed: boolean
 }
