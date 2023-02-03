@@ -7,7 +7,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 
 @Controller('users')
-//@UseGuards(AuthenticatedGuard)
+@UseGuards(AuthenticatedGuard)
 export class UserController {
 	constructor(private readonly userService: UserService){}
 
@@ -31,6 +31,32 @@ export class UserController {
 		}
 	}
 
+	@Get('pos/:userid?')
+	async getLeaderboardPos(@Req() request: Request, @Param('userid') userid) {
+		if (!userid)
+			userid = request.session.passport.user.userid;
+		try{
+			return await this.userService.getLeaderboardPos(userid);
+		} catch (error) {
+			throw new ForbiddenException('getLeaderboardPos failed');
+		}
+	}
+
+	@Post('upload')
+	@UseInterceptors(FileInterceptor('file', {
+		storage: diskStorage({
+			destination: './upload',
+			filename: (req, file, callback) => {
+				const ext = extname(file.originalname);
+				const filename = `${req.session.passport.user.userid}${ext}`;
+				callback(null, filename);
+			}
+		})
+	}))
+	async upload(@UploadedFile() file: Express.Multer.File){
+		console.log('file', file);
+	}
+
 	@Get(':userid')
 	async getOne(@Param('userid') userid) {
 		try {
@@ -40,7 +66,7 @@ export class UserController {
 			throw new ForbiddenException('getOne failed');
 		}
 	}
-	
+
 	@Get(':userid/:field/:new')
 	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Param('new') newdata) {
 		const user = request.session.passport.user.userid;
@@ -67,27 +93,4 @@ export class UserController {
 			}
 	}
 
-	@Get('leaderboardpos/:userid')
-	async getLeaderboardPos(@Param('userid') userid){
-		try{
-			await this.userService.getLeaderboardPos(userid);
-		} catch (error) {
-			throw new ForbiddenException('getLeaderboardPos failed');
-		}
-	}
-
-	@Post('upload')
-	@UseInterceptors(FileInterceptor('file', {
-		storage: diskStorage({
-			destination: './upload',
-			filename: (req, file, callback) => {
-				const ext = extname(file.originalname);
-				const filename = `${req.session.passport.user.userid}${ext}`;
-				callback(null, filename);
-			}
-		})
-	}))
-	async upload(@UploadedFile() file: Express.Multer.File){
-		console.log('file', file);
-	}
 }

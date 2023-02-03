@@ -28,7 +28,7 @@ export class UserService {
 			FROM public.users
 			WHERE wins > (SELECT wins FROM public.users WHERE userid = ${userid})`
 		);
-		return (pos + 1);
+		return (pos[0].count + BigInt(1));
 	}
 
 	async getMe(user: any) {

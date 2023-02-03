@@ -34,7 +34,7 @@ export class FriendlistService {
 						END as picurl, 
 						created, statusname from public.users
 						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
-						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ur ON fl.addresseeid = ur.userid
+						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ur ON fl.requesterid = ur.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ur.user_status
 				WHERE addresseeid=${userid})`
 				);
