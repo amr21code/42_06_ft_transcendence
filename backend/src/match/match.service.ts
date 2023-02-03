@@ -191,7 +191,7 @@ export class MatchService {
 		);
 		if (join[0].matchid == matchid) {
 			const opponent = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.user_match SET challenge=1 WHERE matchid=${matchid} AND userid=${userid};`
+				Prisma.sql`UPDATE public.user_match SET challenge=2 WHERE matchid=${matchid} AND userid=${userid};`
 			);
 			const matchstatus = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.match_history SET match_status=1 WHERE matchid=${matchid};`
