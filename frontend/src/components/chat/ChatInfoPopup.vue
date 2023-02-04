@@ -36,7 +36,7 @@
 					<th><div v-if="isAdmin === true">ban</div></th>
 					<th>challenge</th>
 					<th><div>make admin</div></th>
-					<th><div>add friend</div></th>
+					<!-- <th><div>add friend</div></th> -->
 				</tr>
 			</thead>
 			<div v-for="(user, index) in users" :key="index">
@@ -101,13 +101,14 @@
 								</div>
 							</td>
 <!---------------------- add friend ---------------------------------->
-							<td>
+							<!-- <td>
 								<div>
-									<img src="../../assets/addfriendicon.png" v-if="user.userid != user_me[0].userid">
-									<!-- <button v-if="user.userid != user_me[0].userid">add friend</button> -->
+									<img src="../../assets/addfriendicon.png" id="add-friend-button" @click="friendButtonAction(user.userid)" v-if="user.userid != user_me[0].userid">
+									<button v-if="user.userid != user_me[0].userid">add friend</button>
+									<button id="add-friend-button" @click="friendButtonAction(user.userid)" v-if="user.userid != user_me[0].userid">add friend</button>
 								</div>
-							</td>
-						</tr>
+							</td> -->
+						</tr> 
 					</tbody>
 				</div>
 			</div>
@@ -242,6 +243,29 @@ export default defineComponent({
         
 	},
     setup (props) {
+
+		// const friendButtonAction = async (userid: string) => {
+		// 	if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
+		// 		try {
+		// 				await DataService.requestFriend(userid);
+		// 		} catch {
+		// 			document.getElementById("add-friend-button")!.style.background = "#b04716";
+		// 			document.getElementById("add-friend-button")!.innerHTML = "error";
+		// 		}
+		// 		document.getElementById("add-friend-button")!.style.background = "#b04716";
+		// 		document.getElementById("add-friend-button")!.innerHTML = "pending";
+		// 	}
+		// 	else if (document.getElementById("add-friend-button")!.innerHTML === "confirm") {
+		// 		try {
+		// 				await DataService.confirmFriend(userid);
+		// 		} catch {
+		// 			document.getElementById("add-friend-button")!.style.background = "#b04716";
+		// 			document.getElementById("add-friend-button")!.innerHTML = "error";
+		// 		}
+		// 		document.getElementById("add-friend-button")!.style.background = "#00cc00";
+		// 		document.getElementById("add-friend-button")!.innerHTML = "friends";
+		// 	}
+		// }
 
 		const Mute = ref(0);
 		const toggleMute = (newValue : number) => {

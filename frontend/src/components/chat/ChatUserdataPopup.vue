@@ -113,7 +113,8 @@ export default defineComponent({
 	mounted () {
 		this.retrieveCurrentUser();
 		this.formatDate();
-	}
+	},
+
 })
 </script>
 
