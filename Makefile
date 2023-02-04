@@ -6,6 +6,7 @@ $(NAME):
 	@echo "Building Transcendence"
 	@mkdir -p ./docker/dbfolder
 	@docker compose -f $(YML) up -d
+	# @docker compose $(YML) up --build
 
 all: $(NAME)
 
