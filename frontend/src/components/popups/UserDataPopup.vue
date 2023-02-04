@@ -47,12 +47,12 @@
 			<div class="user-data-wrapper">
 				<div>select new avatar:</div>
 				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="avatar-photo">
-				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="avatar-photo">
-				<!-- <img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo"> -->
-				<!-- <img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo"> -->
-				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="avatar-photo">
-				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="avatar-photo">
-				<img @click="changeAvatar(5)" id="select-photo" src="../assets/icons8-plus-math-50.png" alt="avatar-photo" title="upload your own avatar">
+				<img @click="changeAvatar(0)" id="select-photo" src="../../assets/bitcoin-black-white.png" alt="avatar-photo">
+				<!-- <img @click="changeAvatar(1)" id="select-photo" src="../../assets/DefaultBoy.png" alt="avatar-photo"> -->
+				<!-- <img @click="changeAvatar(2)" id="select-photo" src="../../assets/DefaultGirl.png" alt="avatar-photo"> -->
+				<img @click="changeAvatar(3)" id="select-photo" src="../../assets/mrburns.png" alt="avatar-photo">
+				<img @click="changeAvatar(4)" id="select-photo" src="../../assets/gui.png" alt="avatar-photo">
+				<img @click="changeAvatar(5)" id="select-photo" src="../../assets/icons8-plus-math-50.png" alt="avatar-photo" title="upload your own avatar">
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
 			<div class="user-data-wrapper game-color-wrapper">
