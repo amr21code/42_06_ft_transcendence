@@ -129,7 +129,10 @@ export default defineComponent({
 	} */
 
 	.leaderboard-item img {
-		max-height: 30px;
+		height: calc(20px + 1.5625vw);
+		width: calc(20px + 1.5625vw);
+		object-fit: cover;
+		border-radius: 50%;
 	}
 
 </style>

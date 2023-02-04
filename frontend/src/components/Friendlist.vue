@@ -8,7 +8,7 @@
 				<th>Online Status</th>
 				<th>Friend Status</th>
 			</tr>
-			<tr class="friendlist-item" v-for="(friend, index) in store.friends" :key="index">
+			<tr class="friendlist-item" @click="toggleUserHistory(friend)" v-for="(friend, index) in store.friends" :key="index">
 				<td>
 					<img :src="friend.picurl">
 				</td>
@@ -22,18 +22,22 @@
 					{{ friend.friendstatus }}
 				</td>
 			</tr>
+			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
 		</table>
 	</div>
 </template>
 
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import DataService from '../services/DataService'
 import { useUserDataStore } from '../stores/myUserDataStore'
 import type { ResponseData } from '../types/ResponseData'
+import MatchHistoryPopup from './MatchHistoryPopup.vue'
 
 export default defineComponent({
+	
+	components: { MatchHistoryPopup },
 	props: {
 		userid : {
 			required: true,
@@ -52,7 +56,21 @@ export default defineComponent({
 				console.log(e);
 			});
 		});
-		return { store };
+
+		// for user info popup (wins/match history)
+		const showUserHistoryTrigger = ref(false);
+		const selectedUser = ref("");
+		const selectedUserPhoto = ref("");
+		const toggleUserHistory = (user: any) => {
+			showUserHistoryTrigger.value = true;
+			selectedUser.value = user.userid;
+			selectedUserPhoto.value = user.picurl;
+		}
+		const untoggleUserHistory = () => {
+			showUserHistoryTrigger.value = false;
+			selectedUser.value = "";
+		}
+		return { store, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser, selectedUserPhoto };
 	},
 })
 </script>
@@ -106,7 +124,10 @@ export default defineComponent({
 	}
 
 	.friendlist-item img {
-		max-height: 30px;
+		height: calc(20px + 1.5625vw);
+		width: calc(20px + 1.5625vw);
+		object-fit: cover;
+		border-radius: 50%;
 	}
 
 </style>
