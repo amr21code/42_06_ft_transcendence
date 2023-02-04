@@ -3,17 +3,24 @@
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ user.username }}'s user data</h2>
+			<div class="achievements">
+				<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
+					<a id="achievement-gui">the gui</a>
+				</div>
+				<div class="achievement-wrapper" title="Won a game 3:0">
+					<a id="achievement-tooEasy">too easy</a>
+				</div>
+				<div class="achievement-wrapper" title="Scored first goal in a match">
+					<a id="achievement-firstGoal">first blood</a>	
+				</div>
+			</div>
 			<div class="user-data-wrapper">
 				<div>intra name: </div>
 				<input disabled type="text" :value="user.userid" /> 
 			</div>
 			<div class="user-data-wrapper">
 				<div>user alias: </div>
-				<input disabled type="text" :value="user.username" v-if="toggleUsername === false"/>
-				<button @click="toggleChangeUsername()" v-if="toggleUsername === false">change</button>
-
-				<input type="text" v-model="newUsername" v-if="toggleUsername === true">
-				<button @click="(changeUsername(newUsername), toggleChangeUsername())" v-if="toggleUsername === true">submit</button>
+				<input type="text" @keyup.enter="changeUsername(newUsername)" :placeholder="user.username" v-model="newUsername"/>
 			</div>
 			<div class="user-data-wrapper">
 				<div>avatar:</div>
@@ -75,7 +82,6 @@ export default defineComponent({
 		const user = ref({} as IUser);
 		const memberSince = ref('');
 		const newUsername = ref('');
-		const toggleUsername = ref(false);
 
 		onMounted(async () => {
 			await DataService.getUser()
@@ -116,13 +122,10 @@ export default defineComponent({
 			memberSince.value = new Intl.DateTimeFormat('en-us').format(user.value.created);
 		}
 
-		const toggleChangeUsername = () => {
-			toggleUsername.value = !toggleUsername.value;
-		}
 
 		formatDate();
 
-		return { user, memberSince, toggleUsername, newUsername, toggleChangeUsername };
+		return { store, user, memberSince, newUsername };
 	},
 
 	methods: {
@@ -216,6 +219,39 @@ export default defineComponent({
 	text-align: center;
 }
 
+.achievements {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.achievement-wrapper {
+	display: inline-block;
+	justify-content: center;
+}
+
+.achievement-wrapper a {
+	width: 7rem;
+	margin: 0.5rem;
+	align-items: center;
+	background-color: var(--first-highlight-color);
+	border: 2px solid #000;
+	box-sizing: border-box;
+	color: #000;
+	font-family: monospace;
+	cursor: pointer;
+	display: inline-flex;
+	height: 36px;
+	justify-content: center;
+	padding: 0 17px;
+	text-align: center;
+	text-decoration: none;
+	transition: all .4s;
+	font-weight: 500;
+	white-space: nowrap;
+	opacity: 20%;
+}
+
 .user-data-wrapper {
 	margin-bottom: 10px;
 	margin-left: 0%;
@@ -273,7 +309,6 @@ export default defineComponent({
 }
 
 #select-color2 {
-	
 	background: var(--first-highlight-color);
 }
 
