@@ -32,6 +32,7 @@
 					<th>userid</th>
 					<th>username</th>
 					<th>statusname</th>
+					<!-- <th>onlinestatus</th> -->
 					<th><div v-if="isAdmin === true">mute</div></th>
 					<th><div v-if="isAdmin === true">ban</div></th>
 					<th>challenge</th>
@@ -111,11 +112,11 @@
 						</tr> 
 					</tbody>
 				</div>
+				<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()" :userid="user.userid"/>
 			</div>
 		</table>
 			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
         </div>
-		<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()"/>
     </div>
 </template>
 
