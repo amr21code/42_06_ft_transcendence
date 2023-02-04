@@ -82,7 +82,7 @@ export default defineComponent({
 		user : {
 			required: true,
 			type: Object as PropType<IUser>,
-			default: () => ({} as IUser)
+			// default: () => ({} as IUser)
 		},
 		userPhoto : { //delete
 			required: false,

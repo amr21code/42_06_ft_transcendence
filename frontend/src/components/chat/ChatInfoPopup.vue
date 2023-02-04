@@ -32,7 +32,7 @@
 					<th>userid</th>
 					<th>username</th>
 					<th>statusname</th>
-					<!-- <th>onlinestatus</th> -->
+					<!-- <th>onlinestatus</th>  {{ user.user_status }}-->
 					<th><div v-if="isAdmin === true">mute</div></th>
 					<th><div v-if="isAdmin === true">ban</div></th>
 					<th>challenge</th>
@@ -45,6 +45,7 @@
 					<tbody>
 						<tr class="info-item" >
 							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
+								{{ user.user_status }} <!-- when status === 1 show green dot else grey-->
 								{{ user.userid }}
 							</td>
 							<td @click="ChatUserdatatogglePopup()"> <!-- username -->
@@ -53,6 +54,7 @@
 							<td @click="ChatUserdatatogglePopup()"> <!-- statusname -->
 								{{ user.statusname }}
 							</td>
+							<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()" :user="user"/>
 <!---------------------- mute ---------------------------------->
 							<td>
 								<div v-if="user.userid != user_me[0].userid && isAdmin === true">
@@ -111,7 +113,6 @@
 							</td> -->
 						</tr> 
 					</tbody>
-					<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()" :user="user"/>
 				</div>
 			</div>
 		</table>
