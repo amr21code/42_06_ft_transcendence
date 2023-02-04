@@ -41,6 +41,9 @@ class DataService {
 	confirmFriend(userid: string) : Promise<any> {
 		return apiInstance.get("/fl/edit/" + userid + "/confirm");
 	}
+	removeFriend(userid: string) : Promise<any> {
+		return apiInstance.get("/fl/edit/" + userid + "/remove");
+	}
 	//  (actions: request, confirm, block, unblock, remove)
 
 
