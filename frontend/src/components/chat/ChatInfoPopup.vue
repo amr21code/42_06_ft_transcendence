@@ -32,11 +32,12 @@
 					<th>userid</th>
 					<th>username</th>
 					<th>statusname</th>
+					<!-- <th>onlinestatus</th>  {{ user.user_status }}-->
 					<th><div v-if="isAdmin === true">mute</div></th>
 					<th><div v-if="isAdmin === true">ban</div></th>
 					<th>challenge</th>
 					<th><div>make admin</div></th>
-					<th><div>add friend</div></th>
+					<!-- <th><div>add friend</div></th> -->
 				</tr>
 			</thead>
 			<div v-for="(user, index) in users" :key="index">
@@ -44,6 +45,7 @@
 					<tbody>
 						<tr class="info-item" >
 							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
+								{{ user.user_status }} <!-- when status === 1 show green dot else grey-->
 								{{ user.userid }}
 							</td>
 							<td @click="ChatUserdatatogglePopup()"> <!-- username -->
@@ -52,6 +54,7 @@
 							<td @click="ChatUserdatatogglePopup()"> <!-- statusname -->
 								{{ user.statusname }}
 							</td>
+							<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()" :user="user"/>
 <!---------------------- mute ---------------------------------->
 							<td>
 								<div v-if="user.userid != user_me[0].userid && isAdmin === true">
@@ -93,26 +96,28 @@
 									<img src="../../assets/challengeicon.png" @click="(challengeUser(user.userid), ChatInfotogglePopup)">
 								</div>
 							</td>
+<!---------------------- make admin ---------------------------------->
 							<td>
 								<div>
-									<img src="../../assets/adminicon.png" v-if="user.status != 0">
+									<img src="../../assets/adminicon.png" @click="makeAdmin(user.userid, chat.chatid)" v-if="user.status != 0">
 									<!-- <button v-if="user.status != 0 && user_me[0].userid">make admin</button> -->
 								</div>
 							</td>
-							<td>
+<!---------------------- add friend ---------------------------------->
+							<!-- <td>
 								<div>
-									<img src="../../assets/addfriendicon.png" v-if="user.userid != user_me[0].userid">
-									<!-- <button v-if="user.userid != user_me[0].userid">add friend</button> -->
+									<img src="../../assets/addfriendicon.png" id="add-friend-button" @click="friendButtonAction(user.userid)" v-if="user.userid != user_me[0].userid">
+									<button v-if="user.userid != user_me[0].userid">add friend</button>
+									<button id="add-friend-button" @click="friendButtonAction(user.userid)" v-if="user.userid != user_me[0].userid">add friend</button>
 								</div>
-							</td>
-						</tr>
+							</td> -->
+						</tr> 
 					</tbody>
 				</div>
 			</div>
 		</table>
 			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
         </div>
-		<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()"/>
     </div>
 </template>
 
@@ -216,6 +221,16 @@ export default defineComponent({
 			}
 		},
 
+		async makeAdmin(userid : string, chatid : number) {
+			await DataService.changeChatUserdata(userid, chatid, 0)
+			.then((response: ResponseData) => {
+				SocketioService.refreshChats();
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
 		async changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
 			await DataService.changeChatDetails(type, chatid, chatname, password)
@@ -230,6 +245,29 @@ export default defineComponent({
         
 	},
     setup (props) {
+
+		// const friendButtonAction = async (userid: string) => {
+		// 	if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
+		// 		try {
+		// 				await DataService.requestFriend(userid);
+		// 		} catch {
+		// 			document.getElementById("add-friend-button")!.style.background = "#b04716";
+		// 			document.getElementById("add-friend-button")!.innerHTML = "error";
+		// 		}
+		// 		document.getElementById("add-friend-button")!.style.background = "#b04716";
+		// 		document.getElementById("add-friend-button")!.innerHTML = "pending";
+		// 	}
+		// 	else if (document.getElementById("add-friend-button")!.innerHTML === "confirm") {
+		// 		try {
+		// 				await DataService.confirmFriend(userid);
+		// 		} catch {
+		// 			document.getElementById("add-friend-button")!.style.background = "#b04716";
+		// 			document.getElementById("add-friend-button")!.innerHTML = "error";
+		// 		}
+		// 		document.getElementById("add-friend-button")!.style.background = "#00cc00";
+		// 		document.getElementById("add-friend-button")!.innerHTML = "friends";
+		// 	}
+		// }
 
 		const Mute = ref(0);
 		const toggleMute = (newValue : number) => {
