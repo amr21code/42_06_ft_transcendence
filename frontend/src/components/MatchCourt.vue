@@ -217,9 +217,7 @@ export default defineComponent({
         };
 
         const paintPlayersAndBall = (state: any) => {
-			// scaleUpGameStateForPlayer(state);
-            ctx.fillStyle = "#b04716";
-            // ctx.fillStyle = store.user.paddlecolor;
+            ctx.fillStyle = "#" + store.user.paddlecolor;
             ctx.fillRect(state.player1.pos.x, state.player1.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.player2.pos.x, state.player2.pos.y, state.paddleWidth, state.paddleHeight);
             ctx.fillRect(state.ball.pos.x, state.ball.pos.y, state.ballSize, state.ballSize);
