@@ -94,11 +94,11 @@ export class ChatService {
 			var pwmatch = true;
 			if (result[0].passport)
 				pwmatch = await bcrypt.compare(pw, result[0].password);
-			console.log("res", result[0].password);
-			console.log("hash", pwHash);
-			console.log("match", pwmatch);
+			// console.log("res", result[0].password);
+			// console.log("hash", pwHash);
+			// console.log("match", pwmatch);
 			if (result[0].chatid == chatid && pwmatch) {
-				console.log("true");
+				// console.log("true");
 				const join = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_chat(
 						userid, chatid, status)

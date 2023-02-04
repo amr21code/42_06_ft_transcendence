@@ -19,7 +19,7 @@ export class ChatController {
 			const list = await this.chatService.listChats(user);
 			return list;
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('list chats');
 		}
 	}
 
@@ -30,7 +30,7 @@ export class ChatController {
 			const list = await this.chatService.listUserChats(user);
 			return list;
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('list user chats');
 		}
 	}
 
@@ -43,7 +43,7 @@ export class ChatController {
 			const join = await this.chatService.joinChat(user, chatid, pw);
 			return join;
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('join chat');
 		}
 	}
 
@@ -60,7 +60,7 @@ export class ChatController {
 			const msg = await this.chatService.changeChatDetails(details);
 			return { "msg" : "ok" };
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('create chat');
 		}
 	}
 	
@@ -71,7 +71,7 @@ export class ChatController {
 			const leave = await this.chatService.leaveChat(user, chatid);
 			return (leave);
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('leave chat');
 		}
 	}
 
@@ -82,7 +82,7 @@ export class ChatController {
 			const list = await this.chatService.listUsers(chatid);
 			return list;
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('list users of chat');
 		}
 	}
 
@@ -95,7 +95,7 @@ export class ChatController {
 			const msg = await this.chatService.addMessage(message);
 			return msg;
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('new message');
 		}
 	}
 
@@ -106,7 +106,7 @@ export class ChatController {
 			const list = await this.chatService.listMessages(user, chatid);
 			return list;
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('list messages chat');
 		}
 	}
 	
@@ -124,18 +124,22 @@ export class ChatController {
 			const msg = await this.chatService.changeChatDetails(details);
 			return msg;
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('change chat details');
 		}
 	}
 
 	@Post('user/status')
 	async changeUserStatus(@Body() details: ChatUserStatusDto, @Req() request: Request) {
-		const user = request.session.passport.user.userid;
-		const userstatus = await this.chatService.getUserStatus(user, details.chatid);
-		if (userstatus[0].status != 0)
-			throw new ForbiddenException();
-		const result = await this.chatService.changeUserStatus(details);
-		return {msg:"ok"};
+		try {
+			const user = request.session.passport.user.userid;
+			const userstatus = await this.chatService.getUserStatus(user, details.chatid);
+			if (userstatus[0].status != 0)
+				throw new ForbiddenException();
+			const result = await this.chatService.changeUserStatus(details);
+			return {msg:"ok"};
+		} catch (error) {
+			throw new ForbiddenException('change user status');
+		}
 	}
 
 	@Get('open/pm/:userid')
@@ -152,7 +156,7 @@ export class ChatController {
 			details.userid = user2[0].userid;
 			moduser = await this.chatService.changeUserStatus(details);
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('open pm');
 		}
 	}
 }
