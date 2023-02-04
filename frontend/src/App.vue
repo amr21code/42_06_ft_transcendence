@@ -1,5 +1,5 @@
 <template>
-<Suspense>
+<!-- <Suspense> -->
 	<div class="app">
 		<div class="content-wrap">
 			<header>
@@ -31,7 +31,7 @@
 			</footer>
 		</div>
 	</div>
-</Suspense>
+<!-- </Suspense> -->
 </template>
 
 

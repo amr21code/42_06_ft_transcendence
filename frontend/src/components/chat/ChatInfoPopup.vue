@@ -93,12 +93,14 @@
 									<img src="../../assets/challengeicon.png" @click="(challengeUser(user.userid), ChatInfotogglePopup)">
 								</div>
 							</td>
+<!---------------------- make admin ---------------------------------->
 							<td>
 								<div>
-									<img src="../../assets/adminicon.png" v-if="user.status != 0">
+									<img src="../../assets/adminicon.png" @click="makeAdmin(user.userid, chat.chatid)" v-if="user.status != 0">
 									<!-- <button v-if="user.status != 0 && user_me[0].userid">make admin</button> -->
 								</div>
 							</td>
+<!---------------------- add friend ---------------------------------->
 							<td>
 								<div>
 									<img src="../../assets/addfriendicon.png" v-if="user.userid != user_me[0].userid">
@@ -214,6 +216,16 @@ export default defineComponent({
 					if (user.statusname === 'admin')
 						this.isAdmin = true;
 			}
+		},
+
+		async makeAdmin(userid : string, chatid : number) {
+			await DataService.changeChatUserdata(userid, chatid, 0)
+			.then((response: ResponseData) => {
+				SocketioService.refreshChats();
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
