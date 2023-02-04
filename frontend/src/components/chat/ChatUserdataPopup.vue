@@ -2,7 +2,8 @@
 	<div class="popup" @keyup.esc="ChatUserdatatogglePopup()" tabindex="0">
 		<div class="popup-inner">
 			<slot />
-			<h2>{{ userid }}'s match history</h2>
+			<h2>{{ user.userid }}'s match history</h2>
+			{{ user }}
 			<div class="user-photo-div">
 				<div class="achievements">
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
@@ -25,7 +26,7 @@
 					</div> -->
 				</div>
 				<img :src="userPhoto">
-				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
+				<button id="add-friend-button" @click="friendButtonAction(user.userid)">add friend</button>
 			</div>
 
 			<!-- <table id="history-table">
@@ -69,6 +70,7 @@ import type { ResponseData } from '../../types/ResponseData'
 import type { ISingleMatchHistory } from '../../types/SingleMatchHistory'
 import type { IUser } from '../../types/User'
 import { useUserDataStore } from '../../stores/myUserDataStore'
+import type { PropType } from 'vue'
 
 export default defineComponent({
 
@@ -77,9 +79,10 @@ export default defineComponent({
 			required: true,
 			type: Function,
 		},
-		userid : {
+		user : {
 			required: true,
-			type: String,
+			type: Object as PropType<IUser>,
+			default: () => ({} as IUser)
 		},
 		userPhoto : { //delete
 			required: false,
@@ -118,43 +121,43 @@ export default defineComponent({
 		}
 		
 		onMounted(async () => {
-			await DataService.getMatchHistory(props.userid)
-			.then((response: ResponseData) => {
-				matchHistory.value = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+			// await DataService.getMatchHistory(props.user.userid)
+			// .then((response: ResponseData) => {
+			// 	matchHistory.value = response.data;
+			// })
+			// .catch((e: Error) => {
+			// 	console.log(e);
+			// });
 			
-			await DataService.getAchievements(props.userid)
-			.then((response: ResponseData) => {
-				for (var achievement of response.data) {
-					if (achievement.name == "the Gui") {
-						document.getElementById("achievement-gui")!.style.opacity = "100%";
-						document.getElementById("achievement-gui")!.style.background = "#00cc00";
-					}
-					if (achievement.name == "Too easy") {
-						document.getElementById("achievement-tooEasy")!.style.opacity = "100%";
-						document.getElementById("achievement-tooEasy")!.style.background = "#00cc00";
-					}
-					if (achievement.name == "First Blood") {
-						document.getElementById("achievement-firstGoal")!.style.opacity = "100%";
-						document.getElementById("achievement-firstGoal")!.style.background = "#00cc00";
-					}
-				}
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+			// await DataService.getAchievements(props.user.userid)
+			// .then((response: ResponseData) => {
+			// 	for (var achievement of response.data) {
+			// 		if (achievement.name == "the Gui") {
+			// 			document.getElementById("achievement-gui")!.style.opacity = "100%";
+			// 			document.getElementById("achievement-gui")!.style.background = "#00cc00";
+			// 		}
+			// 		if (achievement.name == "Too easy") {
+			// 			document.getElementById("achievement-tooEasy")!.style.opacity = "100%";
+			// 			document.getElementById("achievement-tooEasy")!.style.background = "#00cc00";
+			// 		}
+			// 		if (achievement.name == "First Blood") {
+			// 			document.getElementById("achievement-firstGoal")!.style.opacity = "100%";
+			// 			document.getElementById("achievement-firstGoal")!.style.background = "#00cc00";
+			// 		}
+			// 	}
+			// })
+			// .catch((e: Error) => {
+			// 	console.log(e);
+			// });
 
 			// dont show button, if it's yourself
-			if (props.userid === store.user.userid) {
+			if (props.user.userid === store.user.userid) {
 				document.getElementById("add-friend-button")!.style.display = "none";
 			}
 			
 			for (var friend of store.friends) {
 			
-				if (friend.userid === props.userid) {
+				if (friend.userid === props.user.userid) {
 					if (friend.friendstatus == "friends") {
 						document.getElementById("add-friend-button")!.style.background = "#00cc00";
 						document.getElementById("add-friend-button")!.innerHTML = "friends";

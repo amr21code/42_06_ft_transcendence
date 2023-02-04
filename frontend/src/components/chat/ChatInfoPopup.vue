@@ -111,8 +111,8 @@
 							</td> -->
 						</tr> 
 					</tbody>
+					<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()" :user="user"/>
 				</div>
-				<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()" :userid="user.userid"/>
 			</div>
 		</table>
 			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
