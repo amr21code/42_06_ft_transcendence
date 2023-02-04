@@ -3,56 +3,62 @@
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ user.username }}'s user data</h2>
-			<div class="achievements">
-				<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
-					<a id="achievement-gui">the gui</a>
-				</div>
-				<div class="achievement-wrapper" title="Won a game 3:0">
-					<a id="achievement-tooEasy">too easy</a>
-				</div>
-				<div class="achievement-wrapper" title="Scored first goal in a match">
-					<a id="achievement-firstGoal">first blood</a>	
+			<div class="user-data-wrapper">
+				<div class="center-user-summary">
+					<div id="leaderboard-position" title="leaderboard rank">{{ leaderboardRank }}</div>
+					<img id="user-photo" :src="user.picurl" alt="user-photo">
+					<div id="wins-vs-losses">
+						<div class="game-statistic">
+							<a> wins: {{ user.wins }} </a>
+						</div>
+						<div class="game-statistic">
+							<a> losses: {{ user.losses }} </a>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="user-data-wrapper">
-				<div>intra name: </div>
-				<input disabled type="text" :value="user.userid" /> 
+				<div class="achievements">
+					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
+						<a id="achievement-gui">the gui</a>
+					</div>
+					<div class="achievement-wrapper" title="Won a game 3:0">
+						<a id="achievement-tooEasy">too easy</a>
+					</div>
+					<div class="achievement-wrapper" title="Scored first goal in a match">
+						<a id="achievement-firstGoal">first blood</a>	
+					</div>
+				</div>
 			</div>
 			<div class="user-data-wrapper">
-				<div>user alias: </div>
-				<input type="text" @keyup.enter="changeUsername(newUsername)" :placeholder="user.username" v-model="newUsername"/>
-			</div>
-			<div class="user-data-wrapper">
-				<div>avatar:</div>
-				<img id="user-photo" :src="user.picurl" alt="user-photo">
+				<div class="naming-wrapper">
+					<div>intra name: </div>
+					<input disabled type="text" :value="user.userid" /> 
+				</div>
+				<div class="naming-wrapper">
+					<div>user alias: </div>
+					<input type="text" @keyup.enter="changeUsername(newUsername)" :placeholder="user.username" v-model="newUsername"/>
+				</div>
 			</div>
 			<div class="user-data-wrapper">
 				<div>select new avatar:</div>
 				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="avatar-photo">
 				<img @click="changeAvatar(0)" id="select-photo" src="../assets/bitcoin-black-white.png" alt="avatar-photo">
-				<img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo">
-				<img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo">
+				<!-- <img @click="changeAvatar(1)" id="select-photo" src="../assets/DefaultBoy.png" alt="avatar-photo"> -->
+				<!-- <img @click="changeAvatar(2)" id="select-photo" src="../assets/DefaultGirl.png" alt="avatar-photo"> -->
 				<img @click="changeAvatar(3)" id="select-photo" src="../assets/mrburns.png" alt="avatar-photo">
 				<img @click="changeAvatar(4)" id="select-photo" src="../assets/gui.png" alt="avatar-photo">
+				<img @click="changeAvatar(5)" id="select-photo" src="../assets/icons8-plus-math-50.png" alt="avatar-photo" title="upload your own avatar">
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
 			<div class="user-data-wrapper game-color-wrapper">
-				<div>select game color:</div>
+				<div>select paddle color:</div>
 				<div @click="changePaddleColor('ffffff')" class="select-color" id="select-color1"></div>
 				<div @click="changePaddleColor('b04716')" class="select-color" id="select-color2"></div>
 				<div @click="changePaddleColor('00cc00')" class="select-color" id="select-color3"></div>
 			</div>
 			<div class="user-data-wrapper">
 				<div>member since: {{ memberSince }}</div>
-			</div>
-			<div class="user-data-wrapper">
-				<div>wins: {{ user.wins }}</div>
-			</div>
-			<div class="user-data-wrapper">
-				<div>losses: {{ user.losses }}</div>
-			</div>
-			<div class="user-data-wrapper">
-				<div>achievements:</div>
 			</div>
 			<div class="user-data-wrapper">
 				<div>2-factor-authentication:</div>
@@ -82,12 +88,12 @@ export default defineComponent({
 		const user = ref({} as IUser);
 		const memberSince = ref('');
 		const newUsername = ref('');
+		const leaderboardRank = ref({} as number);
 
 		onMounted(async () => {
 			await DataService.getUser()
 			.then((response: ResponseData) => {
 				user.value = response.data[0];
-				// console.log(user);
 				if (user.value.paddlecolor === "ffffff") {
 					document.getElementById("select-color1")!.style.border = "2px solid white";
 					document.getElementById("select-color1")!.style.opacity = "100%";
@@ -116,6 +122,43 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
+			await DataService.getAchievements(user.value.userid)
+			.then((response: ResponseData) => {
+				for (var achievement of response.data) {
+					if (achievement.name == "the Gui") {
+						document.getElementById("achievement-gui")!.style.opacity = "100%";
+						document.getElementById("achievement-gui")!.style.background = "#00cc00";
+					}
+					else if (achievement.name == "Too easy") {
+						document.getElementById("achievement-tooEasy")!.style.opacity = "100%";
+						document.getElementById("achievement-tooEasy")!.style.background = "#00cc00";
+					}
+					else if (achievement.name == "First Blood") {
+						document.getElementById("achievement-firstGoal")!.style.opacity = "100%";
+						document.getElementById("achievement-firstGoal")!.style.background = "#00cc00";
+					}
+				}
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getLeaderboardPosition(user.value.userid)
+			.then((response: ResponseData) => {
+				console.log(response.data)
+				leaderboardRank.value = response.data
+				if (leaderboardRank.value === 1) {
+					document.getElementById("leaderboard-position")!.style.background = "gold";
+				}
+				else if (leaderboardRank.value === 2) {
+					document.getElementById("leaderboard-position")!.style.background = "silver";
+				}
+				else if (leaderboardRank.value === 3) {
+					document.getElementById("leaderboard-position")!.style.background = "bronce";
+				}
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 		});
 
 		const formatDate = () => {
@@ -125,7 +168,7 @@ export default defineComponent({
 
 		formatDate();
 
-		return { store, user, memberSince, newUsername };
+		return { store, user, leaderboardRank, memberSince, newUsername };
 	},
 
 	methods: {
@@ -219,15 +262,78 @@ export default defineComponent({
 	text-align: center;
 }
 
-.achievements {
+.user-data-wrapper {
+	margin-bottom: 0.5rem;
+	margin-left: 0%;
+}
+.center-user-summary {
+	text-align: center;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
+#user-photo {
+	width : 7rem;
+	height: 7rem;
+	object-fit: cover;
+	border-radius: 50%;
+	background: white;
+	margin: 3%;
+}
+
+#leaderboard-position {
+	width : 4rem;
+	height: 4rem;
+	object-fit: cover;
+	border-radius: 50%;
+	background: white;
+	margin: 3%;
+	color: var(--second-bg-color);
+	font-size: 2rem;
+	display: flex;
+	  justify-content: center;
+	  align-items: center;
+	cursor: pointer;
+	font-family: monospace;
+	font-weight: 600;
+}
+
+#wins-vs-losses {
+
+}
+
+.game-statistic a {
+	width: 7rem;
+	margin: 0.5rem;
+	align-items: center;
+	background-color: white;
+	border: 2px solid #000;
+	box-sizing: border-box;
+	color: #000;
+	font-family: monospace;
+	cursor: pointer;
+	display: inline-flex;
+	height: 36px;
+	justify-content: center;
+	padding: 0 17px;
+	text-align: center;
+	text-decoration: none;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.achievements {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: left;
+}
+
 .achievement-wrapper {
 	display: inline-block;
 	justify-content: center;
+	margin-bottom: 1rem;
 }
 
 .achievement-wrapper a {
@@ -252,20 +358,24 @@ export default defineComponent({
 	opacity: 20%;
 }
 
-.user-data-wrapper {
-	margin-bottom: 10px;
-	margin-left: 0%;
+
+
+
+.naming-wrapper {
+	display: flex;
+	align-items: center;
+	/* justify-content: center; */
+	margin-left: 0;
+}
+
+.naming-wrapper input {
+	width: 25%;
+	font-family: monospace;
+	margin: 0.5rem;
 }
 
 
-#user-photo {
-	width : 7rem;
-	height: 7rem;
-	object-fit: cover;
-	border-radius: 50%;
-	background: white;
-	margin: 3%;
-}
+
 
 #select-photo {
 	height: 70px;
@@ -273,8 +383,10 @@ export default defineComponent({
 	object-fit: cover;
 	cursor: pointer;
 	margin: 1rem;
+	margin-bottom: 0;
 	background: white;
 	border-radius: 50%;
+
 }
 
 #select-photo:hover {
@@ -286,6 +398,7 @@ export default defineComponent({
 	object-fit: cover;
 	cursor: pointer;
 	margin: 1rem;
+	margin-bottom: 0;
 	border: none;
 	border-radius: 50%;
 	display: inline-block;
@@ -317,5 +430,3 @@ export default defineComponent({
 }
 
 </style>
-
-<!-- member since, avatar auswahl, wins, losses, user status, achievements-->
