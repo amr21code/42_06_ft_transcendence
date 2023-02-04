@@ -226,6 +226,15 @@ export default defineComponent({
 #add-friend-button {
 	margin: 0.5rem;
 	width: 7rem;
+	/* color: white; */
+	/* background: rgb(121, 145, 254); */
+	background: var(--third-highlight-color);
+}
+
+#add-friend-button:hover {
+	border-color: white;
+	color: white;
+	/* fill: white; */
 }
 
 .achievement-wrapper {
