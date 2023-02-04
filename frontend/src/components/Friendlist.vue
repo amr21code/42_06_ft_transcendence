@@ -33,7 +33,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 import DataService from '../services/DataService'
 import { useUserDataStore } from '../stores/myUserDataStore'
 import type { ResponseData } from '../types/ResponseData'
-import MatchHistoryPopup from './MatchHistoryPopup.vue'
+import MatchHistoryPopup from './popups/MatchHistoryPopup.vue'
 
 export default defineComponent({
 	

@@ -77,10 +77,10 @@
 
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
-import DataService from '../services/DataService'
-import { useUserDataStore } from '../stores/myUserDataStore'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
+import DataService from '../../services/DataService'
+import { useUserDataStore } from '../../stores/myUserDataStore'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
 
 export default defineComponent({
 
@@ -318,10 +318,9 @@ export default defineComponent({
 
 }
 
-#wins-vs-losses {
-	/* outline: 3px solid red; */
-
-}
+/* #wins-vs-losses {
+	outline: 3px solid red;
+} */
 
 .game-statistic a {
 	width: 7rem;

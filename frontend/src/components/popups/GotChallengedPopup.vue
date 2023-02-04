@@ -19,9 +19,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import DataService from '../services/DataService'
-import SocketioService from '../services/SocketioService'
-import { useUserDataStore } from '../stores/myUserDataStore'
+import DataService from '../../services/DataService'
+import SocketioService from '../../services/SocketioService'
+import { useUserDataStore } from '../../stores/myUserDataStore'
 
 export default defineComponent({
 	name: "got-challenged-popup",

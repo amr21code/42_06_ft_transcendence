@@ -18,7 +18,7 @@
 import DataService from '../services/DataService'
 import { ref, defineComponent } from 'vue'
 import SocketioService from '../services/SocketioService.js'
-import MatchWaitPopup from './MatchWaitPopup.vue';
+import MatchWaitPopup from './popups/MatchWaitPopup.vue';
 import { useUserDataStore } from '../stores/myUserDataStore';
 
 export default defineComponent({

@@ -64,12 +64,12 @@
 
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { ISingleMatchHistory } from '../types/SingleMatchHistory'
-import type { IAchievements } from '../types/Achievements'
-import type { IUser } from '../types/User'
-import { useUserDataStore } from '../stores/myUserDataStore'
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { ISingleMatchHistory } from '../../types/SingleMatchHistory'
+import type { IAchievements } from '../../types/Achievements'
+import type { IUser } from '../../types/User'
+import { useUserDataStore } from '../../stores/myUserDataStore'
 
 export default defineComponent({
 
