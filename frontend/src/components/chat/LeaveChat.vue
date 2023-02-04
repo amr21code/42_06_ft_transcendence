@@ -18,11 +18,10 @@
 import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
-import type { IChats } from '../types/Chats'
-import SocketioService from '../services/SocketioService'
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
+import SocketioService from '../../services/SocketioService'
 
 
 export default defineComponent({
@@ -62,6 +61,7 @@ export default defineComponent({
 
         leaveChat(chatid : number) {
 			SocketioService.chatLeave(chatid);
+			SocketioService.refreshChats();
         },
 
         setSelectedWindow(selectedWindow : String){

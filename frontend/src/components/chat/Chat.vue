@@ -16,15 +16,17 @@
 			<!------------CHATS WHERE USER IS JOINED----------------------------------->
 			<div v-if="type === 'joined'">
 				<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
-					<a @click="handleClick('chatwindow', chat)" >
-						<div class="" >
-								<strong class="chat-chatid" >{{ chat.chatid }}</strong>
-								<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-								<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
-								<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
-								<a class="chat-typename-orange" v-if="chat.typename === 'private'" >{{ chat.typename }}</a>
-						</div>
-					</a>
+					<div v-if="chat.statusname !== 'ban'">
+						<a @click="handleClick('chatwindow', chat)">
+							<div class="" >
+									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
+									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+									<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
+									<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+									<a class="chat-typename-orange" v-if="chat.typename === 'private'" >{{ chat.typename }}</a>
+							</div>
+						</a>
+					</div>
 				</div>
 			</div>
 			<!------------CHATS WHERE USER IS NOT JOINED----------------------------------->
@@ -53,21 +55,22 @@
 			</div>
 		</div>
 	</div>
-
+	
+	<gotBannedPopup id="gotBannedPopup" v-if="gotBannedtrigger === true" :togglegotBanned="() => togglegotBanned()" :bantime="bantime" />
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
 				<a @click="handleClick('overview', 0), changeType('open')">
-					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
+					<img src="../../assets/chat-icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<a @click="handleClick('overview', 0), changeType('joined')">
-					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
+					<img src="../../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<a @click="togglePopup()">
-					<img src="../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
+					<img src="../../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'">
-					<img src="../assets/blackcross.png" alt="user-photo" width="35" height="40">
+					<img src="../../assets/blackcross.png" alt="user-photo" width="35" height="40">
 				</a>
 			</div>
 			<div style="clear: left"></div>
@@ -82,26 +85,28 @@
 
 
 <script lang="ts">
+//includes
 import ChatWindow from './ChatWindow.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
 import LeaveChatPopup from './LeaveChat.vue'
 import PwdPopup from './pwdPopup.vue'
+import gotBannedPopup from './gotBanned.vue'
 import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
-import type { IChats } from '../types/Chats'
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
+import type { IChats } from '../../types/Chats'
 
 //socket.io
-import SocketioService from '../services/SocketioService.js';
+import SocketioService from '../../services/SocketioService.js';
 
 type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
 	name: 'chat-module',
-	components: { ChatWindow, LeaveChatPopup, NewMessagePopup, PwdPopup },
+	components: { ChatWindow, LeaveChatPopup, NewMessagePopup, PwdPopup, gotBannedPopup },
 
 	data () {
 		return {
@@ -109,6 +114,7 @@ export default defineComponent({
 			chats: [] as IChats[],
 			openchats: [] as IChats[],
 			socket: SocketioService.socket,
+			bantime : 0 as number,
 		}
 	},
 
@@ -121,6 +127,15 @@ export default defineComponent({
 		this.socket.on('chat-leave', () => {
 			this.handleClick('overview', 0);
 		});
+
+		this.socket.on('got-banned', (data : any) => {
+			if (this.user[0].userid === data.userid)
+			{
+				this.handleClick('overview', 0);
+				this.bantime = data.time;
+				this.togglegotBanned();
+			}
+		})
 	},
 
 
@@ -199,6 +214,11 @@ export default defineComponent({
 			pwdPopup.value = !pwdPopup.value;
 		}
 
+		const gotBannedtrigger = ref(false);
+		const togglegotBanned = () => {
+			gotBannedtrigger.value = !gotBannedtrigger.value;
+		}
+
 		const joinchat = async (id : number, password ?: string) => {
 			if (password === undefined)
 				password = '';
@@ -212,9 +232,9 @@ export default defineComponent({
 		}
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger,
-				changeType, type, joinchat, togglePwdPopup, pwdPopup }
-	} //end of setup
-}) //end of defineComponent
+				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger }
+	}
+})
 </script>
 
 
@@ -256,11 +276,6 @@ export default defineComponent({
 		flex-direction: column-reverse; */
 }
 
-.user-photo {
-	float: left;
-	padding-top: 15px;
-}
-
 .chat-message-view {
 	background-color: rgb(0,0,0,0.4);
 	border: black solid 1px;
@@ -269,16 +284,6 @@ export default defineComponent({
 }
 .chat-message-view:hover {
 	background-color: rgb(0,0,0,0.3)
-}
-
-.chat-person-text {
-	color:rgb(224, 19, 19);
-	padding-left: 50px;
-}
-
-.chat-person-message {
-	color: black solid;
-	padding-left: 50px;
 }
 
 .chat-menu {

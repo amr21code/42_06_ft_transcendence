@@ -25,6 +25,9 @@ class DataService {
 	getAchievements(userid : string) {
 		return apiInstance.get('/achieve/show/' + userid);
 	}
+	getLeaderboardPosition(userid: string) {
+		return apiInstance.get('/users/pos/' + userid);
+	}
 
 	//################ FRIENDS ###########################################
 

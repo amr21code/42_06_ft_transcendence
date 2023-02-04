@@ -18,10 +18,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
-import SocketioService from '../services/SocketioService'
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
+import SocketioService from '../../services/SocketioService'
 
 export default defineComponent({
 	name: "pwdPopup",
