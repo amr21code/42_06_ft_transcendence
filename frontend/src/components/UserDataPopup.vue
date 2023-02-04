@@ -5,14 +5,18 @@
 			<h2>{{ user.username }}'s user data</h2>
 			<div class="user-data-wrapper">
 				<div class="center-user-summary">
-					<div id="leaderboard-position" title="leaderboard rank">{{ leaderboardRank }}</div>
-					<img id="user-photo" :src="user.picurl" alt="user-photo">
+					<div id="leaderboard-position-wrapper">
+						<div id="leaderboard-position" title="leaderboard rank">#{{ leaderboardRank }}</div>
+					</div>
+					<div>
+						<img id="user-photo" :src="user.picurl" alt="user-photo">
+					</div>
 					<div id="wins-vs-losses">
 						<div class="game-statistic">
-							<a> wins: {{ user.wins }} </a>
+							<a title="matches won"> won: {{ user.wins }} </a>
 						</div>
 						<div class="game-statistic">
-							<a> losses: {{ user.losses }} </a>
+							<a title="matches lost"> lost: {{ user.losses }} </a>
 						</div>
 					</div>
 				</div>
@@ -268,9 +272,15 @@ export default defineComponent({
 }
 .center-user-summary {
 	text-align: center;
-	display: flex;
+	/* display: flex; */
+	display: grid;
 	align-items: center;
+	justify-content: center; 
 	justify-content: center;
+
+	grid-template-columns: 1fr 1fr 1fr;
+	/* grid-template-columns: 25% 25% 25%; */
+	/* outline: 3px solid red; */
 }
 
 #user-photo {
@@ -282,9 +292,16 @@ export default defineComponent({
 	margin: 3%;
 }
 
+#leaderboard-position-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center; 
+	justify-content: center;
+}
+
 #leaderboard-position {
-	width : 4rem;
-	height: 4rem;
+	width : 5rem;
+	height: 5rem;
 	object-fit: cover;
 	border-radius: 50%;
 	background: white;
@@ -292,14 +309,17 @@ export default defineComponent({
 	color: var(--second-bg-color);
 	font-size: 2rem;
 	display: flex;
-	  justify-content: center;
-	  align-items: center;
+	justify-content: center;
+	align-items: center;
 	cursor: pointer;
 	font-family: monospace;
 	font-weight: 600;
+	/* outline: 3px solid red; */
+
 }
 
 #wins-vs-losses {
+	/* outline: 3px solid red; */
 
 }
 
@@ -317,7 +337,6 @@ export default defineComponent({
 	height: 36px;
 	justify-content: center;
 	padding: 0 17px;
-	text-align: center;
 	text-decoration: none;
 	font-weight: 500;
 	white-space: nowrap;
@@ -388,6 +407,8 @@ export default defineComponent({
 	border-radius: 50%;
 
 }
+
+/* HEEEEEEEEEEEEEEEEEEEEEEEEREEEEEEEE: MAYBE USE A 2x3 GRID??? */
 
 #select-photo:hover {
 	opacity: 50%;
