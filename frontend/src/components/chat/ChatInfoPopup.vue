@@ -32,15 +32,16 @@
 					<th>userid</th>
 					<th>username</th>
 					<th>statusname</th>
-					<th v-if="isAdmin === true">mute</th>
-					<th v-if="isAdmin === true">ban</th>
-					<th>invite</th>
+					<th><div v-if="isAdmin === true">mute</div></th>
+					<th><div v-if="isAdmin === true">ban</div></th>
+					<th>challenge</th>
+					<th><div>make admin</div></th>
+					<th><div>add friend</div></th>
 				</tr>
 			</thead>
 			<div v-for="(user, index) in users" :key="index">
 				<div  v-if="user.status != 3">
 					<tbody>
-				
 						<tr class="info-item" >
 							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
 								{{ user.userid }}
@@ -51,34 +52,58 @@
 							<td @click="ChatUserdatatogglePopup()"> <!-- statusname -->
 								{{ user.statusname }}
 							</td>
-							<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- mute -->
-								<button @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">mute</button>
-								<div v-if="Mute === index + 1">
-									<select v-model="mutetime" required>
-										<option value="10">10 minutes</option>
-										<option value="20">20 minutes</option>
-										<option value="30">30 minutes</option>
-										<option value="60">60 minutes</option>
-									</select>
-									<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 2">mute</button>
+<!---------------------- mute ---------------------------------->
+							<td>
+								<div v-if="user.userid != user_me[0].userid && isAdmin === true">
+									<img src="../../assets/muteicon.png" @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">
+									<!-- <button @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">mute</button> -->
+									<div v-if="Mute === index + 1">
+										<select v-model="mutetime" required>
+											<option value="10">10 minutes</option>
+											<option value="20">20 minutes</option>
+											<option value="30">30 minutes</option>
+											<option value="60">60 minutes</option>
+										</select>
+										<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 2">mute</button>
+									</div>
+									<button v-if="user.status === 2">-MUTED-</button>
 								</div>
-								<button v-if="user.status === 2">-MUTED-</button>
 							</td>
-							<td v-if="user.userid != user_me[0].userid && isAdmin === true"> <!-- ban -->
-								<button @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">ban</button>
-								<div v-if="Ban === index + 1">
-									<select v-model="bantime" required>
-										<option value="10">10 minutes</option>
-										<option value="20">20 minutes</option>
-										<option value="30">30 minutes</option>
-										<option value="60">60 minutes</option>
-									</select>
-									<button @click="banUser(user.userid, bantime)" v-if="user.status !== 3">ban</button>
+<!---------------------- ban ---------------------------------->
+							<td>
+								<div v-if="user.userid != user_me[0].userid && isAdmin === true">
+									<img src="../../assets/banicon.png" @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">
+									<!-- <button @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">ban</button> -->
+									<div v-if="Ban === index + 1">
+										<select v-model="bantime" required>
+											<option value="10">10 minutes</option>
+											<option value="20">20 minutes</option>
+											<option value="30">30 minutes</option>
+											<option value="60">60 minutes</option>
+										</select>
+										<button @click="banUser(user.userid, bantime)" v-if="user.status !== 3">ban</button>
+									</div>
+									<button v-if="user.status === 3">-BANNED-</button>
 								</div>
-								<button v-if="user.status === 3">-BANNED-</button>
 							</td>
-							<td v-if="user.userid != user_me[0].userid"> <!-- invite -->
-								<button @click="(challengeUser(user.userid), ChatInfotogglePopup)">challenge</button>
+<!---------------------- challenge ---------------------------------->
+							<td>
+								<div v-if="user.userid != user_me[0].userid">
+									<!-- <button @click="(challengeUser(user.userid), ChatInfotogglePopup)">challenge</button> -->
+									<img src="../../assets/challengeicon.png" @click="(challengeUser(user.userid), ChatInfotogglePopup)">
+								</div>
+							</td>
+							<td>
+								<div>
+									<img src="../../assets/adminicon.png" v-if="user.status != 0">
+									<!-- <button v-if="user.status != 0 && user_me[0].userid">make admin</button> -->
+								</div>
+							</td>
+							<td>
+								<div>
+									<img src="../../assets/addfriendicon.png" v-if="user.userid != user_me[0].userid">
+									<!-- <button v-if="user.userid != user_me[0].userid">add friend</button> -->
+								</div>
 							</td>
 						</tr>
 					</tbody>
@@ -261,6 +286,8 @@ export default defineComponent({
 		display: block;
 		position: relative;
 		scrollbar-gutter: stable both-edges;
+		table-layout: fixed;
+		/* width: 100%; */
 	}
 	
 	th {
@@ -273,6 +300,14 @@ export default defineComponent({
 	#info-table th, td {
 		padding: 20px 40px;
 		text-align: center;
+	}
+
+	.admin td {
+		width: 100%;
+		position:sticky;
+	}
+	.member td {
+		position:sticky;
 	}
 
 	/* hover effect on all but the first line */
