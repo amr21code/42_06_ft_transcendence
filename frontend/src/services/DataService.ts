@@ -41,6 +41,9 @@ class DataService {
 	confirmFriend(userid: string) : Promise<any> {
 		return apiInstance.get("/fl/edit/" + userid + "/confirm");
 	}
+	removeFriend(userid: string) : Promise<any> {
+		return apiInstance.get("/fl/edit/" + userid + "/remove");
+	}
 	//  (actions: request, confirm, block, unblock, remove)
 
 
@@ -86,12 +89,29 @@ class DataService {
 	async getMessages(chatid : number) : Promise<any> {
 		return apiInstance.get('/chat/list/messages/' + chatid);
 	}
+
 	leaveChat(chatid : number) : Promise<any> {
 		return apiInstance.get('/chat/leave/' + chatid)
 	}
+
+	changeChatUserdata(userid : string, chatid : number, status ?: number, time ?: number) {
+		if (status === undefined)
+			status = 0;
+			if (time === undefined)
+			time = 0;
+		return apiInstance.post('/chat/user/status', JSON.stringify({
+			userid: userid,
+			chatid: chatid,
+			status: status,
+			bantime: time
+		}),
+		{
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'}
+		})
+	}
+
 	muteUser(chatid : number, userid : string, time : number) : Promise<any> {
-		console.log("muteUser", chatid, userid, time);
-		//JSON object { userid: string; chatid: number; status: number; bantime: number; }
 		return apiInstance.post('/chat/user/status', JSON.stringify({
 			userid: userid,
 			chatid: chatid,
@@ -105,8 +125,6 @@ class DataService {
 	}
 
 	banUser(chatid : number, userid : string, time : number) : Promise<any> {
-		console.log("banUser", chatid, userid, time);
-		//JSON object { userid: string; chatid: number; status: number; bantime: number; }
 		return apiInstance.post('/chat/user/status', JSON.stringify({
 			userid: userid,
 			chatid: chatid,

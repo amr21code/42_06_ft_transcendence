@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, Session, UseGuards } from '@nestjs/common';
+import { Controller, ForbiddenException, Get, Req, Res, Session, UseGuards } from '@nestjs/common';
 import { FtAuthGuard } from './guards/guards';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -11,29 +11,36 @@ export class AuthController {
 	@Get('return')
 	@UseGuards(FtAuthGuard)
 	ftAuthCallback(@Res() res, @Req() request: Request, @Session() session: Record<string, any>) {
-		console.log('auth/return');
-
-		if (request.user["twofa"] == 1){
-			console.log("2fa");
-			res.redirect(`${this.config.get('TWOFA_URL')}`);
+		// console.log('auth/return');
+		try {
+			if (request.user["twofa"] == 1){
+				// console.log("2fa");
+				res.redirect(`${this.config.get('TWOFA_URL')}`);
+			}
+			else
+				res.redirect(`${this.config.get('FRONTEND_URL')}`);
+			return request.user;
+		} catch (error) {
+			throw new ForbiddenException('auth status');
 		}
-		else
-			res.redirect(`${this.config.get('FRONTEND_URL')}`);
-		return request.user;
 	}
 	
 	@Get('login')
 	@UseGuards(FtAuthGuard)
 	login() {
-		console.log("auth/login");
+		// console.log("auth/login");
 		return { msg: 'logged in!'};
 	}
 	
 	@Get('status')
 	user(@Req() request: Request) {
-		if (request.user)
-			return { msg: "authenticated" };
-		else 
-			return { msg: "not authenticated" };
+		try {
+			if (request.user)
+				return { msg: "authenticated" };
+			else 
+				return { msg: "not authenticated" };
+		} catch (error) {
+			throw new ForbiddenException('auth status');
+		}
 	}
 }

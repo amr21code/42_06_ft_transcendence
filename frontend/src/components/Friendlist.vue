@@ -3,9 +3,10 @@
 		<h2>friendlist</h2>
 		<table id="friendlist-table">
 			<tr>
-				<th>picture</th>
-				<th>name</th>
-				<th>status</th>
+				<th>Picture</th>
+				<th>Name</th>
+				<th>Online Status</th>
+				<th>Friend Status</th>
 			</tr>
 			<tr class="friendlist-item" v-for="(friend, index) in store.friends" :key="index">
 				<td>
@@ -16,6 +17,9 @@
 				</td>
 				<td>
 					{{ friend.statusname }}
+				</td>
+				<td>
+					{{ friend.friendstatus }}
 				</td>
 			</tr>
 		</table>
@@ -30,7 +34,13 @@ import { useUserDataStore } from '../stores/myUserDataStore'
 import type { ResponseData } from '../types/ResponseData'
 
 export default defineComponent({
-	async setup() {
+	props: {
+		userid : {
+			required: true,
+			type: String,
+		},
+	},
+	async setup(props) {	
 		const store = useUserDataStore();
 
 		onMounted(async () => {

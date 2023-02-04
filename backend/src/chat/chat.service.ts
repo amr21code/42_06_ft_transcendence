@@ -47,7 +47,7 @@ export class ChatService {
 		var list;
 		if (chatid) {
 			list = await this.db.$queryRaw(
-				Prisma.sql`SELECT uc.userid, u.username, uc.status, uc.bantime, usc.statusname, c.chatid, c.chat_name, ct.typename
+				Prisma.sql`SELECT uc.userid, u.username, u.user_status, uc.status, uc.bantime, usc.statusname, c.chatid, c.chat_name, ct.typename
 				FROM public.user_chat AS uc
 				LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
 				LEFT JOIN public.chat as c ON uc.chatid=c.chatid
@@ -94,11 +94,11 @@ export class ChatService {
 			var pwmatch = true;
 			if (result[0].passport)
 				pwmatch = await bcrypt.compare(pw, result[0].password);
-			console.log("res", result[0].password);
-			console.log("hash", pwHash);
-			console.log("match", pwmatch);
+			// console.log("res", result[0].password);
+			// console.log("hash", pwHash);
+			// console.log("match", pwmatch);
 			if (result[0].chatid == chatid && pwmatch) {
-				console.log("true");
+				// console.log("true");
 				const join = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_chat(
 						userid, chatid, status)

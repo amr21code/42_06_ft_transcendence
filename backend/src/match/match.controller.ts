@@ -11,26 +11,42 @@ export class MatchController {
 
 	@Get('list')
 	async listMatches() {
-		return this.matchService.listMatches();
+		try {
+			return this.matchService.listMatches();
+		} catch (error) {
+			throw new ForbiddenException('list matches');
+		}
 	}
 
 	@Get('open/:opponent?')
 	async openMatch(@Param('opponent') opponent, @Session() session: Record<string, any>) {
-		console.log("open match", opponent);
-		const open = await this.matchService.openMatch(session.passport.user.userid, 1, opponent);
+		try {
+			// console.log("open match", opponent);
+			const open = await this.matchService.openMatch(session.passport.user.userid, 1, opponent);
+		} catch (error) {
+			throw new ForbiddenException('open match');
+		}
 	}
 
 	@Get('opensingle')
 	async opensingleMatch(@Session() session: Record<string, any>) {
-		const open = await this.matchService.openSingleMatch(session.passport.user.userid, 1);
+		try {
+			const open = await this.matchService.openSingleMatch(session.passport.user.userid, 1);
+		} catch (error) {
+			throw new ForbiddenException('open single matche');
+		}
 	}
 
 	@Get('history/:userid?')
 	async showHistory(@Session() session: Record<string, any>, @Param('userid') userid) {
-		if (!userid)
-			userid = session.passport.user.userid;
-		const history = this.matchService.showHistory(userid);
-		return history;
+		try {
+			if (!userid)
+				userid = session.passport.user.userid;
+			const history = this.matchService.showHistory(userid);
+			return history;
+		} catch (error) {
+			throw new ForbiddenException('show history');
+		}
 	}
 
 	@Get('accept')
@@ -38,8 +54,8 @@ export class MatchController {
 		try {
 			const accept = await this.matchService.acceptMatch(session.passport.user.userid);
 		} catch (error) {
-			console.log("error!!!!");
-			throw new ForbiddenException();
+			// console.log("error!!!!");
+			throw new ForbiddenException('accept match');
 		}
 	}
 
@@ -48,7 +64,7 @@ export class MatchController {
 		try {
 			const del = await this.matchService.deleteMatch(session.passport.user.userid);
 		} catch (error) {
-			throw new ForbiddenException();
+			throw new ForbiddenException('delete match');
 		}
 	}
 
@@ -58,7 +74,7 @@ export class MatchController {
 			const match = await this.matchService.matchmaking(session.passport.user.userid);
 			return {"msg" : "ok" };
 		} catch (error) {
-			throw error;
+			throw new ForbiddenException('matchmaking');
 		}
 	}
 

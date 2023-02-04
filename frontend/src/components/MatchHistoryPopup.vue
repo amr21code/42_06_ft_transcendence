@@ -92,9 +92,6 @@ export default defineComponent({
 		// const myUser = ref({} as IUser);
 		const store = useUserDataStore();
 
-		
-
-		
 		const friendButtonAction = async (userid: string) => {
 			if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
 				try {
