@@ -32,7 +32,7 @@
 			<div class="user-data-wrapper game-color-wrapper">
 				<div>select game color:</div>
 				<div @click="changePaddleColor('ffffff')" class="select-color" id="select-color1"></div>
-				<div @click="changePaddleColor('444040')" class="select-color" id="select-color2"></div>
+				<div @click="changePaddleColor('b04716')" class="select-color" id="select-color2"></div>
 				<div @click="changePaddleColor('00cc00')" class="select-color" id="select-color3"></div>
 			</div>
 			<div class="user-data-wrapper">
@@ -83,17 +83,17 @@ export default defineComponent({
 				user.value = response.data[0];
 				// console.log(user);
 				if (user.value.paddlecolor === "ffffff") {
-					document.getElementById("select-color1")!.style.border = "2px solid black";
+					document.getElementById("select-color1")!.style.border = "2px solid white";
 					document.getElementById("select-color1")!.style.opacity = "100%";
 					document.getElementById("select-color2")!.style.border = "none";
 					document.getElementById("select-color2")!.style.opacity = "30%";
 					document.getElementById("select-color3")!.style.border = "none";
 					document.getElementById("select-color3")!.style.opacity = "30%";
 				}
-				else if (user.value.paddlecolor === "444040") {	
+				else if (user.value.paddlecolor === "b04716") {	
 					document.getElementById("select-color1")!.style.border = "none";
 					document.getElementById("select-color1")!.style.opacity = "30%";
-					document.getElementById("select-color2")!.style.border = "2px solid black";
+					document.getElementById("select-color2")!.style.border = "2px solid #b04716";
 					document.getElementById("select-color2")!.style.opacity = "100%";
 					document.getElementById("select-color3")!.style.border = "none";
 					document.getElementById("select-color3")!.style.opacity = "30%";
@@ -103,7 +103,7 @@ export default defineComponent({
 					document.getElementById("select-color1")!.style.opacity = "30%";
 					document.getElementById("select-color2")!.style.border = "none";
 					document.getElementById("select-color2")!.style.opacity = "30%";
-					document.getElementById("select-color3")!.style.border = "2px solid black";
+					document.getElementById("select-color3")!.style.border = "2px solid #00cc00";
 					document.getElementById("select-color3")!.style.opacity = "100%";
 				}
 			})
@@ -131,17 +131,17 @@ export default defineComponent({
 			.then((response: ResponseData) => {
 				this.user = response.data[0];
 				if (this.user.paddlecolor === "ffffff") {
-					document.getElementById("select-color1")!.style.border = "2px solid black";
+					document.getElementById("select-color1")!.style.border = "2px solid white";
 					document.getElementById("select-color1")!.style.opacity = "100%";
 					document.getElementById("select-color2")!.style.border = "none";
 					document.getElementById("select-color2")!.style.opacity = "30%";
 					document.getElementById("select-color3")!.style.border = "none";
 					document.getElementById("select-color3")!.style.opacity = "30%";
 				}
-				else if (this.user.paddlecolor === "444040") {	
+				else if (this.user.paddlecolor === "b04716") {	
 					document.getElementById("select-color1")!.style.border = "none";
 					document.getElementById("select-color1")!.style.opacity = "30%";
-					document.getElementById("select-color2")!.style.border = "2px solid black";
+					document.getElementById("select-color2")!.style.border = "2px solid #b04716";
 					document.getElementById("select-color2")!.style.opacity = "100%";
 					document.getElementById("select-color3")!.style.border = "none";
 					document.getElementById("select-color3")!.style.opacity = "30%";
@@ -151,7 +151,7 @@ export default defineComponent({
 					document.getElementById("select-color1")!.style.opacity = "30%";
 					document.getElementById("select-color2")!.style.border = "none";
 					document.getElementById("select-color2")!.style.opacity = "30%";
-					document.getElementById("select-color3")!.style.border = "2px solid black";
+					document.getElementById("select-color3")!.style.border = "2px solid #00cc00";
 					document.getElementById("select-color3")!.style.opacity = "100%";
 				}
 			})
@@ -256,22 +256,17 @@ export default defineComponent({
 	box-sizing: border-box;
 }
 
-/* ISSUE HERE */
 #select-color1:hover {
-	background-color: black;
-	opacity: 100%;
+	outline: 3px white solid;
 }
 
 #select-color2:hover {
-	background-color: black;
-	opacity: 100%;
+	outline: 3px #b04716 solid;
 }
 
 #select-color3:hover {
-	background-color: black;
-	opacity: 100%;
+	outline: 3px #00cc00 solid;
 }
-/* ISSUE ABOVE */
 
 #select-color1 {
 	background: white;
