@@ -12,7 +12,7 @@
 			<button class="ok-button" @click="showChangeNameField(), changeChatDetails(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
 			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
 			<a class="info-icon" @click="(ChatInfotogglePopup)">
-				<img src="../assets/info-icon.png" alt="user-photo" width="20" height="20">
+				<img src="../../assets/info-icon.png" alt="user-photo" width="20" height="20">
 			</a>
 		</div>
 
@@ -76,7 +76,7 @@
 			<div class="chat-write-and-send">
 				<form @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
 					<input placeholder="Write message here" v-model="message">
-					<img @click="sendMessage(curr_chat.chatid, message), submit()" src="../assets/send_icon.png" alt="user-photo" width="20" height="20">
+					<img @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
 			</div>
 
@@ -89,16 +89,16 @@
 import ChatInfoPopup from './ChatInfoPopup.vue'
 
 //for getting data from the backend
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
-import type { IMessages } from '../types/IMessages'
-import type { IChats } from '../types/Chats'
-import SocketioService from '../services/SocketioService'
-
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
+import type { IMessages } from '../../types/IMessages'
+import type { IChats } from '../../types/Chats'
+import SocketioService from '../../services/SocketioService'
 
 import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
+
 
 export default defineComponent({
 	name: 'ChatWindow',
@@ -114,11 +114,10 @@ export default defineComponent({
 		}
 	},
 
-	created () {
-		this.retrieveCurrentUser();
-		this.retrieveCurrentMessages(this.curr_chat.chatid);
+	async created () {
+		await this.retrieveCurrentUser();
+		await this.retrieveCurrentMessages(this.curr_chat.chatid);
 		this.socket.on('chat-message', (data: IMessages) => {
-			console.log("message recieved");
 			this.messages.push(data);
 			this.$nextTick(() => {
         		this.scrollToBottom();

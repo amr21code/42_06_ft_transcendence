@@ -61,16 +61,16 @@
 
 			<div class="chat-menu">
 				<a @click="handleClick('overview', 0), changeType('open')">
-					<img src="../assets/chat-icon.png" alt="user-photo" width="40" height="40">
+					<img src="../../assets/chat-icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<a @click="handleClick('overview', 0), changeType('joined')">
-					<img src="../assets/people_icon.png" alt="user-photo" width="40" height="40">
+					<img src="../../assets/people_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<a @click="togglePopup()">
-					<img src="../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
+					<img src="../../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
 				</a>
 				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'">
-					<img src="../assets/blackcross.png" alt="user-photo" width="35" height="40">
+					<img src="../../assets/blackcross.png" alt="user-photo" width="35" height="40">
 				</a>
 			</div>
 			<div style="clear: left"></div>
@@ -85,6 +85,7 @@
 
 
 <script lang="ts">
+//includes
 import ChatWindow from './ChatWindow.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
 import LeaveChatPopup from './LeaveChat.vue'
@@ -93,13 +94,13 @@ import gotBannedPopup from './gotBanned.vue'
 import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
-import type { IChats } from '../types/Chats'
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
+import type { IChats } from '../../types/Chats'
 
 //socket.io
-import SocketioService from '../services/SocketioService.js';
+import SocketioService from '../../services/SocketioService.js';
 
 type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
@@ -119,7 +120,6 @@ export default defineComponent({
 
 	created () {
 		this.socket.on('refresh-chat', () => {
-			// console.log("chats got refreshed");
 			this.retrieveCurrentChats();
 			this.retrieveOpenChats();
 		});
@@ -129,13 +129,11 @@ export default defineComponent({
 		});
 
 		this.socket.on('got-banned', (data : any) => {
-			// console.log("ban got triggert", this.user[0].userid, data.userid, data.time);
 			if (this.user[0].userid === data.userid)
 			{
 				this.handleClick('overview', 0);
 				this.bantime = data.time;
 				this.togglegotBanned();
-				// console.log('YOU GOT BANNED FROM THE CHANNEL');
 			}
 		})
 	},
@@ -235,8 +233,8 @@ export default defineComponent({
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger,
 				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger }
-	} //end of setup
-}) //end of defineComponent
+	}
+})
 </script>
 
 
@@ -278,11 +276,6 @@ export default defineComponent({
 		flex-direction: column-reverse; */
 }
 
-.user-photo {
-	float: left;
-	padding-top: 15px;
-}
-
 .chat-message-view {
 	background-color: rgb(0,0,0,0.4);
 	border: black solid 1px;
@@ -291,16 +284,6 @@ export default defineComponent({
 }
 .chat-message-view:hover {
 	background-color: rgb(0,0,0,0.3)
-}
-
-.chat-person-text {
-	color:rgb(224, 19, 19);
-	padding-left: 50px;
-}
-
-.chat-person-message {
-	color: black solid;
-	padding-left: 50px;
 }
 
 .chat-menu {

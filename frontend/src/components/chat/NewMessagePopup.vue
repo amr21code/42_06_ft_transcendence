@@ -46,10 +46,10 @@
 import { defineComponent, ref } from 'vue'
 
 //for getting data from the backend
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
-import SocketioService from '../services/SocketioService'
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
+import SocketioService from '../../services/SocketioService'
 
 
 export default defineComponent({
@@ -87,7 +87,7 @@ export default defineComponent({
                 chatname_id = 'public chat by ' + this.user[0].userid;
             var inputElements = document.getElementsByClassName('checkbox-input');
             for(var i=0; inputElements[i]; ++i){
-                if(inputElements[i].checked){ //this works and exists!!!
+                if(inputElements[i].checked){ //this exist and works!!!
                     type = 'private';
                     break;
                 }

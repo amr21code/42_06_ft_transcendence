@@ -15,9 +15,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import LoginService from '../services/LoginService'
-import DataService from '../services/DataService'
 import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
 
 export default defineComponent({
 	name: "login-popup",

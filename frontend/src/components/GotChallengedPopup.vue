@@ -20,8 +20,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
 import SocketioService from '../services/SocketioService'
 import { useUserDataStore } from '../stores/myUserDataStore'
 

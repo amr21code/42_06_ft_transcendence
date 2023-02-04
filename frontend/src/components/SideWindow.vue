@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import ChatWindow from '../components/Chat.vue'
+import ChatWindow from './chat/Chat.vue'
 import Leaderboard from '../components/Leaderboard.vue'
 import Friendlist from '../components/Friendlist.vue'
 import { useUserDataStore } from '../stores/myUserDataStore'

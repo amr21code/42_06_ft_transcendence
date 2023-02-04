@@ -2,9 +2,6 @@
     <div class="popup" @keyup.esc="(ChatInfotogglePopup)" tabindex="0">
         <div class="popup-inner">
             <h2>Info to chat[{{ chat.chatid }}]</h2>
-			<!-- {{ chat }} <br> -->
-			<!-- {{ users }} <br>  -->
-			<!-- <a>Change channel password:</a> -->
 			<div class="button-container" v-if="isAdmin === true">
 				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">Change name</button>
 				<div v-if="option === 1">
@@ -106,11 +103,11 @@ import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
 
 //for getting data from the backend
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
-import type { IChats } from '../types/Chats'
-import SocketioService from '../services/SocketioService'
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
+import type { IChats } from '../../types/Chats'
+import SocketioService from '../../services/SocketioService'
 
 
 export default defineComponent({
@@ -127,10 +124,10 @@ export default defineComponent({
 				default: () => ({} as IChats)
 			}
 	},
-	created () {
-		this.retrieveCurrentUser();
-		this.checkIfAdmin();
-		this.retrieveCurrentUsersInChat(this.chat.chatid);
+	async created () {
+		await this.retrieveCurrentUser();
+		await this.checkIfAdmin();
+		await this.retrieveCurrentUsersInChat(this.chat.chatid);
 		this.socket.on('refresh-chat', () => {
 			this.retrieveCurrentUsersInChat(this.chat.chatid);
 		});
@@ -165,11 +162,9 @@ export default defineComponent({
 			.then((response: ResponseData) => {
 				this.users = response.data;
 				this.checkIfAdmin();
-				// console.log(response.data);
 			})
 			.catch((e: Error) => {
 				console.log(e);
-				// this.retrieveCurrentUsersInChat(chatid);
 			});
 		},
 

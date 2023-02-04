@@ -44,9 +44,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import DataService from '../services/DataService'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
+import DataService from '../../services/DataService'
+import type { ResponseData } from '../../types/ResponseData'
+import type { IUser } from '../../types/User'
 
 export default defineComponent({
 	name: "ChatUserdataPopup",
