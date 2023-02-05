@@ -46,13 +46,16 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>select new avatar:</div>
-				<img @click="changeAvatar(42)" id="select-photo" :src="user.profilepic42" alt="avatar-photo">
-				<img @click="changeAvatar(0)" id="select-photo" src="../../assets/bitcoin-black-white.png" alt="avatar-photo">
+				<img @click="changeAvatar(42)" class="select-photo" :src="user.profilepic42" alt="avatar-photo">
+				<img @click="changeAvatar(0)" class="select-photo" src="../../assets/bitcoin-black-white.png" alt="avatar-photo">
 				<!-- <img @click="changeAvatar(1)" id="select-photo" src="../../assets/DefaultBoy.png" alt="avatar-photo"> -->
 				<!-- <img @click="changeAvatar(2)" id="select-photo" src="../../assets/DefaultGirl.png" alt="avatar-photo"> -->
-				<img @click="changeAvatar(3)" id="select-photo" src="../../assets/mrburns.png" alt="avatar-photo">
-				<img @click="changeAvatar(4)" id="select-photo" src="../../assets/gui.png" alt="avatar-photo">
-				<img @click="changeAvatar(5)" id="select-photo" src="../../assets/icons8-plus-math-50.png" alt="avatar-photo" title="upload your own avatar">
+				<img @click="changeAvatar(3)" class="select-photo" src="../../assets/mrburns.png" alt="avatar-photo">
+				<img @click="changeAvatar(4)" class="select-photo" src="../../assets/gui.png" alt="avatar-photo">
+				<label id="upload-photo-label">
+					<img @click="uploadAvatar()" class="select-photo" src="../../assets/icons8-plus-math-50.png" alt="avatar-upload" title="upload your own avatar">
+					<input type="file" name="" id=""/>
+				</label>
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
 			<div class="user-data-wrapper game-color-wrapper">
@@ -122,6 +125,13 @@ export default defineComponent({
 					document.getElementById("select-color3")!.style.border = "2px solid #00cc00";
 					document.getElementById("select-color3")!.style.opacity = "100%";
 				}
+				console.log("ANDI, dein Datum: ", user.value.created);
+				memberSince.value = new Intl.DateTimeFormat('en-us').format(user.value.created);
+				// var t = "2010-06-09 13:12:01".split(/[- :]/);
+
+				// console.log(today);
+				// console.log(today.toLocaleDateString("en-US"));
+				// console.log("formated date: ", memberSince.value);
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -165,12 +175,14 @@ export default defineComponent({
 			});
 		});
 
-		const formatDate = () => {
-			memberSince.value = new Intl.DateTimeFormat('en-us').format(user.value.created);
-		}
+		// const formatDate = () => {
+		// 	console.log("before date: ", user.value.created);
+		// 	memberSince.value = new Intl.DateTimeFormat('en-us').format(user.value.created);
+		// 	console.log("formated date: ", memberSince.value);
+		// }
 
 
-		formatDate();
+		// formatDate();
 
 		return { store, user, leaderboardRank, memberSince, newUsername };
 	},
@@ -218,6 +230,16 @@ export default defineComponent({
 
 		async changeAvatar(id : number) {
 			await DataService.changeAvatar(this.user.userid, id)
+			.then((response: ResponseData) => {
+				this.retrieveCurrentUser();
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+
+		async uploadAvatar() {
+			await DataService.uploadAvatar(this.user.userid)
 			.then((response: ResponseData) => {
 				this.retrieveCurrentUser();
 			})
@@ -395,7 +417,7 @@ export default defineComponent({
 
 
 
-#select-photo {
+.select-photo {
 	height: 70px;
 	width: 70px;
 	object-fit: cover;
@@ -404,10 +426,11 @@ export default defineComponent({
 	margin-bottom: 0;
 	background: white;
 	border-radius: 50%;
-
 }
 
-/* HEEEEEEEEEEEEEEEEEEEEEEEEREEEEEEEE: MAYBE USE A 2x3 GRID??? */
+input[type="file"] {
+    display: none;
+}
 
 #select-photo:hover {
 	opacity: 50%;
