@@ -15,46 +15,12 @@
 					<div class="achievement-wrapper" title="Scored first goal in a match">
 						<a id="achievement-firstGoal">first blood</a>	
 					</div>
-					<!-- <div class="achievement-wrapper" :title="achievements[0].description">
-						<a>{{ achievements[0].name }}</a>
-					</div>
-					<div class="achievement-wrapper" :title="achievements[1].description">
-						<a>{{ achievements[1].name }}</a>
-					</div>
-					<div class="achievement-wrapper" :title="achievements[2].description">
-						<a>{{ achievements[2].name }}</a>	
-					</div> -->
+
 				</div>
-				<img :src="curr_user.picurl">
+				<img id="user-photo" :src="user[0].picurl" alt="user-photo">
 				<button id="add-friend-button" @click="friendButtonAction(curr_user.userid)">add friend</button>
 			</div>
 
-			<!-- <table id="history-table">
-				<tr id="top-row">
-					<th>player1</th>
-					<th></th>
-					<th></th>
-					<th>player2</th>
-					<th>type</th>
-				</tr>
-				<tr class="history-item" v-for="(match) in matchHistory" :key="match.match_id">
-					<td>
-						{{ match.user1 }}
-					</td>
-					<td>
-						{{ match.user1_score }}
-					</td>
-					<td>
-						{{ match.user2_score }}
-					</td>
-					<td>
-						{{ match.user2 }}
-					</td>
-					<td>
-						{{ match.challenge === 1 ? "challenge" : "ladder" }}
-					</td>
-				</tr>
-			</table> -->
 			<button class="popup-close" @click="ChatUserdatatogglePopup()"> 
 				Close
 			</button>
@@ -84,19 +50,23 @@ export default defineComponent({
 			type: Object as PropType<IUser>,
 			// default: () => ({} as IUser)
 		},
-		// userPhoto : { //delete
-		// 	required: false,
-		// 	type: String,
-		// }
 	},
 	setup(props) {
+		const user = ref([] as IUser[]);
+		// const retrieveCurrentUser = async () => {
+		// 	await DataService.getUser()
+		// 	.then((response: ResponseData) => {
+		// 		user.value = response.data;
+		// 	})
+		// 	.catch((e: Error) => {
+		// 		console.log(e);
+		// 	});
+		// }
+
 		const matchHistory = ref([] as ISingleMatchHistory[]);
 		// const myUser = ref({} as IUser);
 		const store = useUserDataStore();
 
-		
-
-		
 		const friendButtonAction = async (userid: string) => {
 			if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
 				try {
@@ -121,34 +91,42 @@ export default defineComponent({
 		}
 		
 		onMounted(async () => {
-			// await DataService.getMatchHistory(props.user.userid)
-			// .then((response: ResponseData) => {
-			// 	matchHistory.value = response.data;
-			// })
-			// .catch((e: Error) => {
-			// 	console.log(e);
-			// });
+			await DataService.getUser()
+			.then((response: ResponseData) => {
+				user.value = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 			
-			// await DataService.getAchievements(props.user.userid)
-			// .then((response: ResponseData) => {
-			// 	for (var achievement of response.data) {
-			// 		if (achievement.name == "the Gui") {
-			// 			document.getElementById("achievement-gui")!.style.opacity = "100%";
-			// 			document.getElementById("achievement-gui")!.style.background = "#00cc00";
-			// 		}
-			// 		if (achievement.name == "Too easy") {
-			// 			document.getElementById("achievement-tooEasy")!.style.opacity = "100%";
-			// 			document.getElementById("achievement-tooEasy")!.style.background = "#00cc00";
-			// 		}
-			// 		if (achievement.name == "First Blood") {
-			// 			document.getElementById("achievement-firstGoal")!.style.opacity = "100%";
-			// 			document.getElementById("achievement-firstGoal")!.style.background = "#00cc00";
-			// 		}
-			// 	}
-			// })
-			// .catch((e: Error) => {
-			// 	console.log(e);
-			// });
+			await DataService.getMatchHistory(props.curr_user.userid)
+			.then((response: ResponseData) => {
+				matchHistory.value = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			
+			await DataService.getAchievements(props.curr_user.userid)
+			.then((response: ResponseData) => {
+				for (var achievement of response.data) {
+					if (achievement.name == "the Gui") {
+						document.getElementById("achievement-gui")!.style.opacity = "100%";
+						document.getElementById("achievement-gui")!.style.background = "#00cc00";
+					}
+					if (achievement.name == "Too easy") {
+						document.getElementById("achievement-tooEasy")!.style.opacity = "100%";
+						document.getElementById("achievement-tooEasy")!.style.background = "#00cc00";
+					}
+					if (achievement.name == "First Blood") {
+						document.getElementById("achievement-firstGoal")!.style.opacity = "100%";
+						document.getElementById("achievement-firstGoal")!.style.background = "#00cc00";
+					}
+				}
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 
 			// dont show button, if it's yourself
 			if (props.curr_user.userid === store.user.userid) {
@@ -179,7 +157,7 @@ export default defineComponent({
 			
 			
 		});
-		return { matchHistory, friendButtonAction };
+		return { matchHistory, friendButtonAction, user };
 	}
 })
 </script>
