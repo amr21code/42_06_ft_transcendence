@@ -6,6 +6,7 @@ import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { UserService } from 'src/user/user.service';
 import { state } from 'pactum';
 import { AchievementsService } from 'src/achievements/achievements.service';
+import { ForbiddenException } from '@nestjs/common';
 
 @WebSocketGateway(3002, {
 	cors: {
@@ -33,7 +34,19 @@ export class MatchGateway {
 
 	@SubscribeMessage('watchGame')
 	async watchGame(client: Socket, payload: any) {
-		client.join(payload);
+		try {
+
+			if (!payload) {
+				var random = await this.matchService.listMatchesStatus(1);
+				if (Object.keys(random).length > 0)
+					payload = random[0].matchid;
+				else
+					throw new ForbiddenException('no game active');
+			}
+			client.join(payload);
+		} catch (error) {
+			throw new ForbiddenException('watch game failed');
+		}
 	}
 
 	@SubscribeMessage('create-new-game')

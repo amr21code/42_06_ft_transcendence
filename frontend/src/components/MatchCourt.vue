@@ -137,6 +137,13 @@ export default defineComponent({
 			SocketioService.createNewGame(canvas);
 		};
 
+		const watchGame = () => {
+			socket.emit('watchGame');
+			// check that I cannot stear the paddle
+			// check what happens if watcher/player leaves the room
+			// check what happens if there is no game open? Message to user: no game
+		}
+
 
 		// ################# INIT CANVAS #######################
         const initCanvas = () => {
@@ -153,7 +160,7 @@ export default defineComponent({
 			joinMatchQueueBtn.addEventListener("click", joinMatchQueue);
             
 			// SPÄTER:
-			// watchMatchBtn.addEventListener("click", watchGame);
+			watchMatchBtn.addEventListener("click", watchGame);
         };
 
 
