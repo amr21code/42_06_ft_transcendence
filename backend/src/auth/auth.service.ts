@@ -32,11 +32,14 @@ export class AuthService {
 	
 	async findUser(userid: string)
 	{
-		const user = await this.db.users.findFirst({
-			where: {
-				userid: userid,
-			}
-		});
-		return user;
+		const user = await this.db.$queryRaw(
+			Prisma.sql`SELECT * FROM public.users WHERE userid=${userid};`
+		);
+		// const user = await this.db.users.findFirst({
+		// 	where: {
+		// 		userid: userid,
+		// 	}
+		// });
+		return user[0];
 	}
 }
