@@ -126,8 +126,6 @@ export default defineComponent({
 					document.getElementById("select-color3")!.style.border = "2px solid #00cc00";
 					document.getElementById("select-color3")!.style.opacity = "100%";
 				}
-				// console.log("ANDI, dein Datum: ", user.value.created);
-
 				memberSince.value = moment(String(user.value.created)).format('DD/MM/YYYY');
 			})
 			.catch((e: Error) => {
