@@ -21,6 +21,7 @@ sample data in database needed
 in frontend folder to install the vue server
 npm i vite
 npm install pinia
+npm install moment
 
 
 
