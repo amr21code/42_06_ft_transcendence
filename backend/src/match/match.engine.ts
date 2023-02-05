@@ -108,7 +108,7 @@ export function gameLoop(state: MatchGameStateDto) {
 			ball.vel.x = 1;
 			// player two scored
 			state.scorePlayer2++;
-			if (state.scorePlayer2 == 3) // game ends here
+			if (state.scorePlayer2 == 11) // game ends here
 				return 2;
 		}
 
@@ -118,7 +118,7 @@ export function gameLoop(state: MatchGameStateDto) {
 			ball.vel.x = -1;
 			// player one scored
 			state.scorePlayer1++;
-			if (state.scorePlayer1 == 3) // game ends here
+			if (state.scorePlayer1 == 11) // game ends here
 				return 1;
 		}
 
