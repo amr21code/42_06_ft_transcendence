@@ -53,5 +53,12 @@ export class ChatGateway {
 		client.emit('got-banned', data);
 	}
 
+	@SubscribeMessage('send-got-muted')
+	async gotMuted(client: Socket, data: Record<string, string>) {
+		console.log(data);
+		client.broadcast.emit('got-muted', data);
+		client.emit('got-muted', data);
+	}
+
 
 }

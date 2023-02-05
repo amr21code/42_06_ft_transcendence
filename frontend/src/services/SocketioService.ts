@@ -36,6 +36,10 @@ class SocketioService {
     this.socket.emit('send-got-banned', { userid, time });
   }
 
+  gotMuted(userid : string, time : number) {
+    this.socket.emit('send-got-muted', { userid, time });
+  }
+
   // user disconnected
   disconnect() {
     if (this.socket) {

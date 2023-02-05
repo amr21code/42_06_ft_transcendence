@@ -205,6 +205,7 @@ export default defineComponent({
 			await DataService.muteUser(this.chat.chatid, userid, time);
 			await this.retrieveCurrentUsersInChat(this.chat.chatid);
 			SocketioService.refreshChats();
+			SocketioService.gotMuted(userid, time);
 			this.toggleMute(0);
 		},
 
@@ -249,29 +250,6 @@ export default defineComponent({
 	},
     setup (props) {
 
-		// const friendButtonAction = async (userid: string) => {
-		// 	if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
-		// 		try {
-		// 				await DataService.requestFriend(userid);
-		// 		} catch {
-		// 			document.getElementById("add-friend-button")!.style.background = "#b04716";
-		// 			document.getElementById("add-friend-button")!.innerHTML = "error";
-		// 		}
-		// 		document.getElementById("add-friend-button")!.style.background = "#b04716";
-		// 		document.getElementById("add-friend-button")!.innerHTML = "pending";
-		// 	}
-		// 	else if (document.getElementById("add-friend-button")!.innerHTML === "confirm") {
-		// 		try {
-		// 				await DataService.confirmFriend(userid);
-		// 		} catch {
-		// 			document.getElementById("add-friend-button")!.style.background = "#b04716";
-		// 			document.getElementById("add-friend-button")!.innerHTML = "error";
-		// 		}
-		// 		document.getElementById("add-friend-button")!.style.background = "#00cc00";
-		// 		document.getElementById("add-friend-button")!.innerHTML = "friends";
-		// 	}
-		// }
-
 		const Mute = ref(0);
 		const toggleMute = (newValue : number) => {
 			console.log("toggleMute");
@@ -307,21 +285,13 @@ export default defineComponent({
 											paddlecolor: '',
 											user_status : 0,});
 		const sel_user = ref<IUser>(JSON.parse(NULL_USER));
-		const sel_user_picurl = ref('');
 		const ChatUserdatatogglePopup = async (selected_user : any) => {
 			// this.retrieveThisUser(sel_user.value.userid);
 			sel_user.value = selected_user;
-			await DataService.getThisUser(sel_user.value.userid)
-			.then((response: ResponseData) => {
-				sel_user_picurl.value = response.data.picurl;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			})
 			ChatUserdataPopupTrigger.value = !ChatUserdataPopupTrigger.value;
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option, ChatUserdatatogglePopup, ChatUserdataPopupTrigger, sel_user, sel_user_picurl }
+		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option, ChatUserdatatogglePopup, ChatUserdataPopupTrigger, sel_user }
 			
     }  
 
