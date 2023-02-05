@@ -84,6 +84,7 @@ import DataService from '../../services/DataService'
 import { useUserDataStore } from '../../stores/myUserDataStore'
 import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
+import moment from 'moment'
 
 export default defineComponent({
 
@@ -125,13 +126,9 @@ export default defineComponent({
 					document.getElementById("select-color3")!.style.border = "2px solid #00cc00";
 					document.getElementById("select-color3")!.style.opacity = "100%";
 				}
-				console.log("ANDI, dein Datum: ", user.value.created);
-				memberSince.value = new Intl.DateTimeFormat('en-us').format(user.value.created);
-				// var t = "2010-06-09 13:12:01".split(/[- :]/);
+				// console.log("ANDI, dein Datum: ", user.value.created);
 
-				// console.log(today);
-				// console.log(today.toLocaleDateString("en-US"));
-				// console.log("formated date: ", memberSince.value);
+				memberSince.value = moment(String(user.value.created)).format('DD/MM/YYYY');
 			})
 			.catch((e: Error) => {
 				console.log(e);
