@@ -10,6 +10,9 @@ class DataService {
 	getUser() : Promise<any> {
 		return apiInstance.get("/users/me");
 	}
+	getThisUser(userid : string) : Promise<any> {
+		return apiInstance.get('/users/' + userid);
+	}
 	getAll() : Promise<any> {
 		return apiInstance.get("/users/all");
 	}

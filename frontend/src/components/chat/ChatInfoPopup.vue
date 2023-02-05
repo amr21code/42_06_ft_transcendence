@@ -148,8 +148,8 @@ export default defineComponent({
 	components: { ChatUserdataPopup },
     props: {
 			['ChatInfotogglePopup']  : {
-			required: true,
-			type: Function
+				required: true,
+				type: Function
 			},
 			chat: {
 				required: true,
@@ -307,12 +307,21 @@ export default defineComponent({
 											paddlecolor: '',
 											user_status : 0,});
 		const sel_user = ref<IUser>(JSON.parse(NULL_USER));
-		const ChatUserdatatogglePopup = (selected_user : any) => {
+		const sel_user_picurl = ref('');
+		const ChatUserdatatogglePopup = async (selected_user : any) => {
+			// this.retrieveThisUser(sel_user.value.userid);
 			sel_user.value = selected_user;
+			await DataService.getThisUser(sel_user.value.userid)
+			.then((response: ResponseData) => {
+				sel_user_picurl.value = response.data.picurl;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			})
 			ChatUserdataPopupTrigger.value = !ChatUserdataPopupTrigger.value;
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option, ChatUserdatatogglePopup, ChatUserdataPopupTrigger, sel_user }
+		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option, ChatUserdatatogglePopup, ChatUserdataPopupTrigger, sel_user, sel_user_picurl }
 			
     }  
 

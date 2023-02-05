@@ -3,7 +3,11 @@
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ curr_user.userid }}'s match history</h2>
-			{{ curr_user }}
+			<!-- {{ curr_user }} -->
+			<div class="user-text">
+				<!-- <h3>userid: {{ curr_user.userid }}</h3> -->
+				<h3>username: {{ curr_user.username }}</h3>
+			</div>
 			<div class="user-photo-div">
 				<div class="achievements">
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
@@ -15,9 +19,8 @@
 					<div class="achievement-wrapper" title="Scored first goal in a match">
 						<a id="achievement-firstGoal">first blood</a>	
 					</div>
-
 				</div>
-				<img id="user-photo" :src="user[0].picurl" alt="user-photo">
+				<img id="user-photo" :src="curr_user.picurl" >
 				<button id="add-friend-button" @click="friendButtonAction(curr_user.userid)">add friend</button>
 			</div>
 
@@ -52,16 +55,6 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const user = ref([] as IUser[]);
-		// const retrieveCurrentUser = async () => {
-		// 	await DataService.getUser()
-		// 	.then((response: ResponseData) => {
-		// 		user.value = response.data;
-		// 	})
-		// 	.catch((e: Error) => {
-		// 		console.log(e);
-		// 	});
-		// }
 
 		const matchHistory = ref([] as ISingleMatchHistory[]);
 		// const myUser = ref({} as IUser);
@@ -91,13 +84,6 @@ export default defineComponent({
 		}
 		
 		onMounted(async () => {
-			await DataService.getUser()
-			.then((response: ResponseData) => {
-				user.value = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
 			
 			await DataService.getMatchHistory(props.curr_user.userid)
 			.then((response: ResponseData) => {
@@ -157,7 +143,7 @@ export default defineComponent({
 			
 			
 		});
-		return { matchHistory, friendButtonAction, user };
+		return { matchHistory, friendButtonAction };
 	}
 })
 </script>
@@ -187,6 +173,10 @@ export default defineComponent({
 }
 
 .popup-inner h2 {
+	text-align: center;
+}
+
+.user-text {
 	text-align: center;
 }
 
