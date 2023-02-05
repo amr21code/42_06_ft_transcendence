@@ -175,15 +175,6 @@ export default defineComponent({
 			});
 		});
 
-		// const formatDate = () => {
-		// 	console.log("before date: ", user.value.created);
-		// 	memberSince.value = new Intl.DateTimeFormat('en-us').format(user.value.created);
-		// 	console.log("formated date: ", memberSince.value);
-		// }
-
-
-		// formatDate();
-
 		return { store, user, leaderboardRank, memberSince, newUsername };
 	},
 
