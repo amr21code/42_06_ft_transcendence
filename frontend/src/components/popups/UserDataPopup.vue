@@ -53,8 +53,8 @@
 				<img @click="changeAvatar(3)" class="select-photo" src="../../assets/mrburns.png" alt="avatar-photo">
 				<img @click="changeAvatar(4)" class="select-photo" src="../../assets/gui.png" alt="avatar-photo">
 				<label id="upload-photo-label">
-					<img @click="uploadAvatar()" class="select-photo" src="../../assets/icons8-plus-math-50.png" alt="avatar-upload" title="upload your own avatar">
-					<input type="file" name="" id=""/>
+					<input type="file"  ref="file" @change="uploadAvatar()" name="" id=""/>
+					<img class="select-photo" src="../../assets/icons8-plus-math-50.png" alt="avatar-upload" title="upload your own avatar">
 				</label>
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
@@ -97,6 +97,7 @@ export default defineComponent({
 		const memberSince = ref('');
 		const newUsername = ref('');
 		const leaderboardRank = ref({} as number);
+		const file = ref(null);
 
 		onMounted(async () => {
 			await DataService.getUser()
@@ -126,8 +127,6 @@ export default defineComponent({
 					document.getElementById("select-color3")!.style.border = "2px solid #00cc00";
 					document.getElementById("select-color3")!.style.opacity = "100%";
 				}
-				// console.log("ANDI, dein Datum: ", user.value.created);
-
 				memberSince.value = moment(String(user.value.created)).format('DD/MM/YYYY');
 			})
 			.catch((e: Error) => {
@@ -172,16 +171,13 @@ export default defineComponent({
 			});
 		});
 
-		// const formatDate = () => {
-		// 	console.log("before date: ", user.value.created);
-		// 	memberSince.value = new Intl.DateTimeFormat('en-us').format(user.value.created);
-		// 	console.log("formated date: ", memberSince.value);
-		// }
+		const uploadAvatar = async() => {
+           // debugger;
+            console.log("selected file",file.value.files[0])
+            DataService.uploadAvatar(file.value.files[0]);
+        }
 
-
-		// formatDate();
-
-		return { store, user, leaderboardRank, memberSince, newUsername };
+		return { store, user, leaderboardRank, memberSince, newUsername, uploadAvatar, file };
 	},
 
 	methods: {
@@ -227,16 +223,6 @@ export default defineComponent({
 
 		async changeAvatar(id : number) {
 			await DataService.changeAvatar(this.user.userid, id)
-			.then((response: ResponseData) => {
-				this.retrieveCurrentUser();
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		},
-
-		async uploadAvatar() {
-			await DataService.uploadAvatar(this.user.userid)
 			.then((response: ResponseData) => {
 				this.retrieveCurrentUser();
 			})
@@ -425,9 +411,9 @@ export default defineComponent({
 	border-radius: 50%;
 }
 
-input[type="file"] {
+/* input[type="file"] {
     display: none;
-}
+} */
 
 #select-photo:hover {
 	opacity: 50%;
