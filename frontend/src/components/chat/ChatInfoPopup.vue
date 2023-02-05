@@ -45,7 +45,9 @@
 					<tbody>
 						<tr class="info-item" >
 							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
-								{{ user.user_status }} <!-- when status === 1 show green dot else grey-->
+								<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
+								<img src="../../assets/onlineicon.png" class="user_status-img" v-if="user.user_status === 1">
+								<!-- {{ user.user_status }} when status === 1 show green dot else grey -->
 								{{ user.userid }}
 							</td>
 							<td @click="ChatUserdatatogglePopup()"> <!-- username -->
@@ -91,7 +93,7 @@
 							</td>
 <!---------------------- challenge ---------------------------------->
 							<td>
-								<div v-if="user.userid != user_me[0].userid">
+								<div v-if="user.userid != user_me[0].userid && user.user_status === 1">
 									<!-- <button @click="(challengeUser(user.userid), ChatInfotogglePopup)">challenge</button> -->
 									<img src="../../assets/challengeicon.png" @click="(challengeUser(user.userid), ChatInfotogglePopup)">
 								</div>
@@ -307,6 +309,11 @@ export default defineComponent({
 
 
 <style scoped>
+
+.user_status-img {
+	width: 15px;
+	height: 15px;
+}
 
 .button-container{
 	text-align: center;
