@@ -19,8 +19,9 @@ class DataService {
 	changeAvatar(userid : string, id : number) {
 		return apiInstance.get('/users/' + userid + '/avatar/' + id);
 	}
-	uploadAvatar(userid : string) {
-		return apiInstance.post('/users/upload' + '/avatar/' + id);
+	uploadAvatar(file : any) {
+		console.log(file);
+		return apiInstance.post('/users/upload', file);
 	}
 	changePaddleColor(userid : string, color : string) {
 		return apiInstance.get('/users/' + userid + '/paddlecolor/' + color);
