@@ -44,9 +44,10 @@
 				<div  v-if="user.status != 3">
 					<tbody>
 						<tr class="info-item" >
-							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
-								<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
+							<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
 								<img src="../../assets/onlineicon.png" class="user_status-img" v-if="user.user_status === 1">
+							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
+								
 								<!-- {{ user.user_status }} when status === 1 show green dot else grey -->
 								{{ user.userid }}
 							</td>
@@ -313,6 +314,9 @@ export default defineComponent({
 .user_status-img {
 	width: 15px;
 	height: 15px;
+	/* align-items: center; */
+	padding-top: 100%;
+	padding-left: 100%;
 }
 
 .button-container{
@@ -327,19 +331,24 @@ export default defineComponent({
 		border-collapse: collapse;
 		overflow: auto;
 		max-height: 500px;
-		/* table-layout: fixed; */
 		display: block;
 		position: relative;
 		scrollbar-gutter: stable both-edges;
-		table-layout: fixed;
+		/* table-layout: fixed; */
 		/* width: 100%; */
 	}
 	
 	th {
+		table-layout: fixed;
+		width: 0%;
 		position: sticky;
 		top: 0;
 		background-color: var(--second-bg-color);
 		color: white;
+	}
+
+	td {
+		width: 14%;
 	}
 
 	#info-table th, td {
@@ -347,13 +356,13 @@ export default defineComponent({
 		text-align: center;
 	}
 
-	.admin td {
+	/* .admin td {
 		width: 100%;
 		position:sticky;
 	}
 	.member td {
 		position:sticky;
-	}
+	} */
 
 	/* hover effect on all but the first line */
 	#info-table tr:hover {
