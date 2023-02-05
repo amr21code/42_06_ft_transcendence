@@ -57,7 +57,7 @@
 	</div>
 	
 	<gotBannedPopup id="gotBannedPopup" v-if="gotBannedtrigger === true" :togglegotBanned="() => togglegotBanned()" :bantime="bantime" />
-	<gotMutedPopup id="gotMutedPopup" v-if="gotMutedtrigger === true" :togglegotMuted="() => togglegotMuted()" :mutetime="bantime" />
+	<gotMutedPopup id="gotMutedPopup" v-if="gotMutedtrigger === true" :togglegotMuted="() => togglegotMuted()" :mutetime="mutetime" />
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
@@ -117,6 +117,8 @@ export default defineComponent({
 			openchats: [] as IChats[],
 			socket: SocketioService.socket,
 			bantime : 0 as number,
+			mutetime: 0 as number,
+			muted: false as boolean
 		}
 	},
 
@@ -142,7 +144,8 @@ export default defineComponent({
 		this.socket.on('got-muted', (data : any) => {
 			if (this.user[0].userid === data.userid)
 			{
-				this.bantime = data.time;
+				this.mutetime = data.time;
+				this.muted = true;
 				this.togglegotMuted();
 			}
 		})
