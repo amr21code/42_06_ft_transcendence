@@ -2,8 +2,8 @@
 	<div class="popup" @keyup.esc="ChatUserdatatogglePopup()" tabindex="0">
 		<div class="popup-inner">
 			<slot />
-			<h2>{{ user.userid }}'s match history</h2>
-			{{ user }}
+			<h2>{{ curr_user.userid }}'s match history</h2>
+			{{ curr_user }}
 			<div class="user-photo-div">
 				<div class="achievements">
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
@@ -25,8 +25,8 @@
 						<a>{{ achievements[2].name }}</a>	
 					</div> -->
 				</div>
-				<img :src="userPhoto">
-				<button id="add-friend-button" @click="friendButtonAction(user.userid)">add friend</button>
+				<img :src="curr_user.picurl">
+				<button id="add-friend-button" @click="friendButtonAction(curr_user.userid)">add friend</button>
 			</div>
 
 			<!-- <table id="history-table">
@@ -79,15 +79,15 @@ export default defineComponent({
 			required: true,
 			type: Function,
 		},
-		user : {
+		curr_user : {
 			required: true,
 			type: Object as PropType<IUser>,
 			// default: () => ({} as IUser)
 		},
-		userPhoto : { //delete
-			required: false,
-			type: String,
-		}
+		// userPhoto : { //delete
+		// 	required: false,
+		// 	type: String,
+		// }
 	},
 	setup(props) {
 		const matchHistory = ref([] as ISingleMatchHistory[]);
@@ -151,13 +151,13 @@ export default defineComponent({
 			// });
 
 			// dont show button, if it's yourself
-			if (props.user.userid === store.user.userid) {
+			if (props.curr_user.userid === store.user.userid) {
 				document.getElementById("add-friend-button")!.style.display = "none";
 			}
 			
 			for (var friend of store.friends) {
 			
-				if (friend.userid === props.user.userid) {
+				if (friend.userid === props.curr_user.userid) {
 					if (friend.friendstatus == "friends") {
 						document.getElementById("add-friend-button")!.style.background = "#00cc00";
 						document.getElementById("add-friend-button")!.innerHTML = "friends";

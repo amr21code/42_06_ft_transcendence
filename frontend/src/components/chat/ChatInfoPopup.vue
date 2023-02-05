@@ -44,20 +44,20 @@
 				<div  v-if="user.status != 3">
 					<tbody>
 						<tr class="info-item" >
-							<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
-								<img src="../../assets/onlineicon.png" class="user_status-img" v-if="user.user_status === 1">
-							<td @click="ChatUserdatatogglePopup()"> <!-- userid -->
+							<td @click="ChatUserdatatogglePopup(user)"> <!-- userid -->
 								
+								<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
+								<img src="../../assets/onlineicon.png" class="user_status-img" v-if="user.user_status === 1">
 								<!-- {{ user.user_status }} when status === 1 show green dot else grey -->
 								{{ user.userid }}
 							</td>
-							<td @click="ChatUserdatatogglePopup()"> <!-- username -->
+							<td @click="ChatUserdatatogglePopup(user)"> <!-- username -->
 								{{ user.username }}
 							</td>
-							<td @click="ChatUserdatatogglePopup()"> <!-- statusname -->
+							<td @click="ChatUserdatatogglePopup(user)"> <!-- statusname -->
 								{{ user.statusname }}
 							</td>
-							<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup()" :user="user"/>
+							<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup(chat)" :curr_user="sel_user"/>
 <!---------------------- mute ---------------------------------->
 							<td>
 								<div v-if="user.userid != user_me[0].userid && isAdmin === true">
@@ -293,12 +293,26 @@ export default defineComponent({
 			option.value = i;
 		}
 
-		const ChatUserdataPopupTrigger = ref(false);	
-		const ChatUserdatatogglePopup = () => {
+		const ChatUserdataPopupTrigger = ref(false);
+		const NULL_USER = JSON.stringify( {	userid: '',
+											username: '',
+											picurl: '',
+											profilepic42: '',
+											created: 0,
+											statusname: '',
+											wins: '',
+											losses: '',
+											status: 0,
+											bantime: 0,
+											paddlecolor: '',
+											user_status : 0,});
+		const sel_user = ref<IUser>(JSON.parse(NULL_USER));
+		const ChatUserdatatogglePopup = (selected_user : any) => {
+			sel_user.value = selected_user;
 			ChatUserdataPopupTrigger.value = !ChatUserdataPopupTrigger.value;
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option, ChatUserdatatogglePopup, ChatUserdataPopupTrigger }
+		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option, ChatUserdatatogglePopup, ChatUserdataPopupTrigger, sel_user }
 			
     }  
 
@@ -314,9 +328,6 @@ export default defineComponent({
 .user_status-img {
 	width: 15px;
 	height: 15px;
-	/* align-items: center; */
-	padding-top: 100%;
-	padding-left: 100%;
 }
 
 .button-container{
