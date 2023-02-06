@@ -317,7 +317,7 @@ export class MatchService {
 				loserScore = state.scorePlayer1;
 			}
 			const challenge = await this.db.$queryRaw(
-			Prisma.sql`UPDATE public.user_match SET user_score=3
+			Prisma.sql`UPDATE public.user_match SET user_score=11
 			WHERE matchid=${matchid} AND userid=${winner} RETURNING challenge;`);
 			await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${loserScore} AS INTEGER)
