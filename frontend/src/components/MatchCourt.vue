@@ -42,6 +42,12 @@ export default defineComponent({
 				playerNumber = nbr;
 			console.log("your player number is: ", playerNumber);
 		}
+
+		const handleWatchError = (msg: string) => {
+			if (msg === 'failed') {
+				alert("There are no matches to watch right now. Try again later!");
+			}
+		}
 		
 		const handleGameState = (gameState: any) => {
 			
@@ -258,6 +264,7 @@ export default defineComponent({
 		const socket = SocketioService.socket;
 		socket.on('init', handlePlayerNumber);
 		socket.on("opponent-status", handleOpponentArrived);
+		socket.on('watchGame', handleWatchError);
 		socket.on('gameState', handleGameState);
 		socket.on('gameOver', handleGameOver);
 		socket.on('joinedEmptyGame', handleJoinedEmptyGame);
