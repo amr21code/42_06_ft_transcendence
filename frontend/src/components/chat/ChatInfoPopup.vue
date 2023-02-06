@@ -33,10 +33,10 @@
 					<th>username</th>
 					<th>statusname</th>
 					<!-- <th>onlinestatus</th>  {{ user.user_status }}-->
-					<th><div v-if="isAdmin === true">mute</div></th>
-					<th><div v-if="isAdmin === true">ban</div></th>
+					<th v-if="isAdmin === true">mute</th>
+					<th v-if="isAdmin === true">ban</th>
 					<th>challenge</th>
-					<th><div>make admin</div></th>
+					<th v-if="isAdmin === true">make admin</th>
 					<!-- <th><div>add friend</div></th> -->
 				</tr>
 			</thead>
@@ -58,10 +58,9 @@
 								{{ user.statusname }}
 							</td>
 							<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => toggleUserHistory(0)" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
-							<!-- <ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup(chat)" :curr_user="sel_user"/> -->
 <!---------------------- mute ---------------------------------->
-							<td>
-								<div v-if="user.userid != user_me[0].userid && isAdmin === true">
+							<td v-if="isAdmin === true">
+								<div v-if="user.userid != user_me[0].userid">
 									<img src="../../assets/muteicon.png" @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">
 									<!-- <button @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">mute</button> -->
 									<div v-if="Mute === index + 1">
@@ -77,8 +76,8 @@
 								</div>
 							</td>
 <!---------------------- ban ---------------------------------->
-							<td>
-								<div v-if="user.userid != user_me[0].userid && isAdmin === true">
+							<td v-if="isAdmin === true">
+								<div v-if="user.userid != user_me[0].userid">
 									<img src="../../assets/banicon.png" @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">
 									<!-- <button @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">ban</button> -->
 									<div v-if="Ban === index + 1">
@@ -101,9 +100,9 @@
 								</div>
 							</td>
 <!---------------------- make admin ---------------------------------->
-							<td>
+							<td v-if="isAdmin === true">
 								<div>
-									<img src="../../assets/adminicon.png" @click="makeAdmin(user.userid, chat.chatid)" v-if="user.status != 0">
+									<img src="../../assets/adminicon.png" @click="makeAdmin(user.userid, chat.chatid)" v-if="user.status !== 0">
 									<!-- <button v-if="user.status != 0 && user_me[0].userid">make admin</button> -->
 								</div>
 							</td>
@@ -131,7 +130,6 @@
 
 <script lang="ts">
 
-import ChatUserdataPopup from './ChatUserdataPopup.vue'
 
 import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
@@ -148,7 +146,7 @@ import { useUserDataStore } from '../../stores/myUserDataStore';
 
 export default defineComponent({
 	name: "ChatInfoPopup",
-	components: { ChatUserdataPopup, MatchHistoryPopup },
+	components: { MatchHistoryPopup },
     props: {
 			['ChatInfotogglePopup']  : {
 				required: true,
@@ -274,26 +272,6 @@ export default defineComponent({
 			option.value = i;
 		}
 
-		// const ChatUserdataPopupTrigger = ref(false);
-		// const NULL_USER = JSON.stringify( {	userid: '',
-		// 									username: '',
-		// 									picurl: '',
-		// 									profilepic42: '',
-		// 									created: 0,
-		// 									statusname: '',
-		// 									wins: '',
-		// 									losses: '',
-		// 									status: 0,
-		// 									bantime: 0,
-		// 									paddlecolor: '',
-		// 									user_status : 0,});
-		// const sel_user = ref<IUser>(JSON.parse(NULL_USER));
-		// const ChatUserdatatogglePopup = async (selected_user : any) => {
-		// 	// this.retrieveThisUser(sel_user.value.userid);
-		// 	sel_user.value = selected_user;
-		// 	ChatUserdataPopupTrigger.value = !ChatUserdataPopupTrigger.value;
-		// }
-
 		const showUserHistoryTrigger = ref(false);
 		const selectedUser = ref("");
 		const selectedUserPhoto = ref("");
@@ -306,8 +284,6 @@ export default defineComponent({
 			showUserHistoryTrigger.value = true;
 			selectedUser.value = user.userid;
 			selectedUserPhoto.value = user.picurl;
-			console.log("picurl:", selectedUserPhoto);
-
 		}
 
 		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option,
