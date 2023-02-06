@@ -53,14 +53,16 @@ export class ChatService {
 				LEFT JOIN public.chat as c ON uc.chatid=c.chatid
 				LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
 				LEFT JOIN (select userid, username, 
-					CASE 
-					WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL 
+				CASE 
+				WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL 
 					THEN profilepic42 
-					ELSE (select avatarurl from public.avatars where avatarid = avatar) 
-					END as picurl, user_status, created, statusname, wins, losses, paddlecolor FROM public.users
-					LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
-					LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as u ON u.userid=uc.userid
-				WHERE uc.chatid=CAST(${chatid} AS INTEGER)
+				WHEN avatar=2
+					THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
+				ELSE (select avatarurl from public.avatars where avatarid = avatar) 
+				END as picurl, user_status, created, statusname, wins, losses, paddlecolor FROM public.users
+				LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
+				LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as u ON u.userid=uc.userid
+				WHERE uc.chatid=${chatid} AND (status < 3 OR bantime < CURRENT_TIMESTAMP)
 				ORDER BY userid ASC`
 			);
 		// } else {
