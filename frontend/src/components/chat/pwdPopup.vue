@@ -6,13 +6,13 @@
 				<div>
 					<h2>Join protected chat[{{ curr_chatid }}]</h2>
 					<a>Enter a password</a><br>
-					<input type=password placeholder="password" v-model="password"> <!-- v-model="password"  -->
-					<button @click="joinchat(curr_chatid, password)" type="submit">submit</button> <!-- @click = join function  -->
+					<input type=password placeholder="password" v-model="password">
+					<button @click="joinchat(curr_chatid, password)" type="submit">submit</button>
+					<button @click="(togglePwdPopup)">close</button>
 				</div>
 			</div>
-			
 		</div>
-	</div>
+	</div> 
 </template>
 
 
@@ -49,25 +49,11 @@ export default defineComponent({
 			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.user = response.data[0];
-				console.log(response.data[0]);
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
 		},
-
-		// joinchat(id : number, password ?: string){
-		// 	if (password === undefined)
-		// 		password = '';
-		// 	DataService.createChat(String(id), password, 'join')
-        //     .then((response: ResponseData) => {
-        //         SocketioService.refreshChats();
-        //     })
-        //     .catch((e: Error) => {
-        //         console.log(e);
-        //     });
-		// }
-
 	},
 
 	mounted () {
