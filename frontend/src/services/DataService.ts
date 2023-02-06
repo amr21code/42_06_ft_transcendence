@@ -10,6 +10,9 @@ class DataService {
 	getUser() : Promise<any> {
 		return apiInstance.get("/users/me");
 	}
+	getThisUser(userid : string) : Promise<any> {
+		return apiInstance.get('/users/' + userid);
+	}
 	getAll() : Promise<any> {
 		return apiInstance.get("/users/all");
 	}
@@ -39,7 +42,7 @@ class DataService {
 		return apiInstance.get("/fl/show");
 	}
 	requestFriend(userid: string) : Promise<any> {
-		console.log("/fl/edit/" + userid + "/request");
+		// console.log("/fl/edit/" + userid + "/request");
 		return apiInstance.get("/fl/edit/" + userid + "/request");
 	}
 	confirmFriend(userid: string) : Promise<any> {

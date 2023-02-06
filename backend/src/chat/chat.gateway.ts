@@ -22,7 +22,10 @@ export class ChatGateway {
 		try {
 			// console.log("send-chat-message: ", message);
 			if (await this.chatService.addMessage(message))
+			{
 				client.broadcast.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
+				client.emit('chat-message', { username: message.username, userid: message.userid, chatid: message.chatid, message: message.message});
+			}
 		} catch (error) {
 			throw new WsException('add message in socketIO message-handler failed');
 		}
@@ -51,6 +54,13 @@ export class ChatGateway {
 		console.log(data);
 		client.broadcast.emit('got-banned', data);
 		client.emit('got-banned', data);
+	}
+
+	@SubscribeMessage('send-got-muted')
+	async gotMuted(client: Socket, data: Record<string, string>) {
+		console.log(data);
+		client.broadcast.emit('got-muted', data);
+		client.emit('got-muted', data);
 	}
 
 

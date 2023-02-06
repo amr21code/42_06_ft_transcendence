@@ -3,6 +3,7 @@
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ userid }}'s match history</h2>
+			<h3>{{ user.username }}</h3>
 			<div class="user-photo-div">
 				<div class="achievements">
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
@@ -24,7 +25,9 @@
 						<a>{{ achievements[2].name }}</a>	
 					</div> -->
 				</div>
-				<img :src="userPhoto">
+				<!-- {{ user }} -->
+				<img :src="userPhoto" v-if="userPhoto !== undefined">
+				<img :src="user[0].picurl" v-if="userPhoto === undefined">
 				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
 			</div>
 
@@ -67,7 +70,6 @@ import { ref, defineComponent, onMounted } from 'vue'
 import DataService from '../../services/DataService'
 import type { ResponseData } from '../../types/ResponseData'
 import type { ISingleMatchHistory } from '../../types/SingleMatchHistory'
-import type { IAchievements } from '../../types/Achievements'
 import type { IUser } from '../../types/User'
 import { useUserDataStore } from '../../stores/myUserDataStore'
 
@@ -83,12 +85,13 @@ export default defineComponent({
 			type: String,
 		},
 		userPhoto : {
-			required: true,
+			required: false,
 			type: String,
 		}
 	},
 	setup(props) {
 		const matchHistory = ref([] as ISingleMatchHistory[]);
+		const user = ref([] as IUser[]);
 		// const myUser = ref({} as IUser);
 		const store = useUserDataStore();
 
@@ -116,6 +119,16 @@ export default defineComponent({
 		}
 		
 		onMounted(async () => {
+
+			// const user = ref([] as IUser[]);
+			await DataService.getThisUser(props.userid)
+			.then((response: ResponseData) => {
+				user.value = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+
 			await DataService.getMatchHistory(props.userid)
 			.then((response: ResponseData) => {
 				matchHistory.value = response.data;
@@ -174,7 +187,7 @@ export default defineComponent({
 			
 			
 		});
-		return { matchHistory, friendButtonAction };
+		return { matchHistory, friendButtonAction, user };
 	}
 })
 </script>
