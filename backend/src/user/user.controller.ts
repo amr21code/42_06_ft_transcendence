@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { createBrotliCompress } from 'zlib';
 
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
@@ -51,7 +52,13 @@ export class UserController {
 				const filename = `${req.session.passport.user.userid}${ext}`;
 				callback(null, filename);
 			}
-		})
+		}),
+		fileFilter: (req, file, callback) =>{
+			if (!file.originalname.match(/\.png$/))
+				return callback(null, false);
+			return callback(null, true);
+			
+		}
 	}))
 	async upload(@UploadedFile() file: Express.Multer.File){
 		console.log('file', file);
@@ -92,5 +99,4 @@ export class UserController {
 				throw new ForbiddenException('getUserData failed');
 			}
 	}
-
 }
