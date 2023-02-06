@@ -57,7 +57,7 @@
 							<td @click="toggleUserHistory(user)"> <!-- statusname -->
 								{{ user.statusname }}
 							</td>
-							<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => toggleUserHistory(0)" :userid="selectedUser"/>
+							<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => toggleUserHistory(0)" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
 							<!-- <ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup(chat)" :curr_user="sel_user"/> -->
 <!---------------------- mute ---------------------------------->
 							<td>
@@ -295,7 +295,7 @@ export default defineComponent({
 
 		const showUserHistoryTrigger = ref(false);
 		const selectedUser = ref("");
-		// const selectedUserPhoto = ref("");
+		const selectedUserPhoto = ref("");
 		const toggleUserHistory = (user: any) => {
 			if (user === 0)
 			{
@@ -304,12 +304,12 @@ export default defineComponent({
 			}
 			showUserHistoryTrigger.value = true;
 			selectedUser.value = user.userid;
-			// selectedUserPhoto.value = user.picurl;
+			selectedUserPhoto.value = user.picurl;
 
 		}
 
 		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option,
-				toggleUserHistory, selectedUser, showUserHistoryTrigger }
+				toggleUserHistory, selectedUser, showUserHistoryTrigger, selectedUserPhoto }
 			
     }  
 

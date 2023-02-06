@@ -3,7 +3,6 @@
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ userid }}'s match history</h2>
-			<h3>{{ user.username }}</h3>
 			<div class="user-photo-div">
 				<div class="achievements">
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
@@ -26,8 +25,7 @@
 					</div> -->
 				</div>
 				<!-- {{ user }} -->
-				<img :src="userPhoto" v-if="userPhoto !== undefined">
-				<img :src="user[0].picurl" v-if="userPhoto === undefined">
+				<img :src="userPhoto">
 				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
 			</div>
 
@@ -85,13 +83,12 @@ export default defineComponent({
 			type: String,
 		},
 		userPhoto : {
-			required: false,
+			required: true,
 			type: String,
 		}
 	},
 	setup(props) {
 		const matchHistory = ref([] as ISingleMatchHistory[]);
-		const user = ref([] as IUser[]);
 		// const myUser = ref({} as IUser);
 		const store = useUserDataStore();
 
@@ -119,15 +116,6 @@ export default defineComponent({
 		}
 		
 		onMounted(async () => {
-
-			// const user = ref([] as IUser[]);
-			await DataService.getThisUser(props.userid)
-			.then((response: ResponseData) => {
-				user.value = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
 
 			await DataService.getMatchHistory(props.userid)
 			.then((response: ResponseData) => {
@@ -187,7 +175,7 @@ export default defineComponent({
 			
 			
 		});
-		return { matchHistory, friendButtonAction, user };
+		return { matchHistory, friendButtonAction };
 	}
 })
 </script>
