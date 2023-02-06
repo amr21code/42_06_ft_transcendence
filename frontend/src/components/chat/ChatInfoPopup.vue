@@ -143,6 +143,7 @@ import type { IUser } from '../../types/User'
 import type { IChats } from '../../types/Chats'
 import SocketioService from '../../services/SocketioService'
 import MatchHistoryPopup from '../popups/MatchHistoryPopup.vue'
+import { useUserDataStore } from '../../stores/myUserDataStore';
 
 
 export default defineComponent({
@@ -252,9 +253,9 @@ export default defineComponent({
 	},
     setup (props) {
 
+		const store = useUserDataStore();
 		const Mute = ref(0);
 		const toggleMute = (newValue : number) => {
-			console.log("toggleMute");
 			Mute.value = newValue;
 		}
 
@@ -305,6 +306,7 @@ export default defineComponent({
 			showUserHistoryTrigger.value = true;
 			selectedUser.value = user.userid;
 			selectedUserPhoto.value = user.picurl;
+			console.log("picurl:", selectedUserPhoto);
 
 		}
 
