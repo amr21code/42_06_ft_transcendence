@@ -39,18 +39,9 @@ import MatchHistoryPopup from './popups/MatchHistoryPopup.vue'
 export default defineComponent({
 
 	components: { MatchHistoryPopup },
-	async setup() {
+	setup() {
 
 		const store = useUserDataStore();
-		onMounted(async () => {
-			await DataService.getAll()
-			.then((response: ResponseData) => {
-				store.allUsers = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		});
 
 		const usersByWins = computed(() => {
 			return [...store.allUsers].sort((a: IUser, b: IUser) => {

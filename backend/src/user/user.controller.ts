@@ -45,7 +45,7 @@ export class UserController {
 	@Post('upload')
 	@UseInterceptors(FileInterceptor('file', {
 		storage: diskStorage({
-			destination: './upload',
+			destination: './upload/',
 			filename: (req, file, callback) => {
 				const ext = extname(file.originalname);
 				const filename = `${req.session.passport.user.userid}${ext}`;

@@ -48,12 +48,12 @@
 				<div>select new avatar:</div>
 				<img @click="changeAvatar(42)" class="select-photo" :src="user.profilepic42" alt="avatar-photo">
 				<img @click="changeAvatar(0)" class="select-photo" src="../../assets/bitcoin-black-white.png" alt="avatar-photo">
-				<!-- <img @click="changeAvatar(1)" id="select-photo" src="../../assets/DefaultBoy.png" alt="avatar-photo"> -->
-				<!-- <img @click="changeAvatar(2)" id="select-photo" src="../../assets/DefaultGirl.png" alt="avatar-photo"> -->
 				<img @click="changeAvatar(3)" class="select-photo" src="../../assets/mrburns.png" alt="avatar-photo">
 				<img @click="changeAvatar(4)" class="select-photo" src="../../assets/gui.png" alt="avatar-photo">
+				<!-- <img @click="changeAvatar(1)" id="select-photo" src="../../assets/DefaultBoy.png" alt="avatar-photo"> -->
+				<!-- <img @click="changeAvatar(2)" id="select-photo" src="../../assets/DefaultGirl.png" alt="avatar-photo"> -->
 				<label id="upload-photo-label">
-					<input type="file"  ref="file" @change="uploadAvatar()" name="" id=""/>
+					<input type="file" ref="file" @change="uploadAvatar()" name="" id=""/>
 					<img class="select-photo" src="../../assets/icons8-plus-math-50.png" alt="avatar-upload" title="upload your own avatar">
 				</label>
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
@@ -84,7 +84,7 @@ import DataService from '../../services/DataService'
 import { useUserDataStore } from '../../stores/myUserDataStore'
 import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
-// import moment from 'moment'
+import moment from 'moment'
 
 export default defineComponent({
 
@@ -172,8 +172,6 @@ export default defineComponent({
 		});
 
 		const uploadAvatar = async() => {
-           // debugger;
-            console.log("selected file",file.value.files[0])
             DataService.uploadAvatar(file.value.files[0]);
         }
 
@@ -411,9 +409,9 @@ export default defineComponent({
 	border-radius: 50%;
 }
 
-/* input[type="file"] {
+input[type="file"] {
     display: none;
-} */
+}
 
 #select-photo:hover {
 	opacity: 50%;
@@ -456,3 +454,7 @@ export default defineComponent({
 }
 
 </style>
+
+function moment(arg0: string) {
+  throw new Error('Function not implemented.')
+}

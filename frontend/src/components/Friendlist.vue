@@ -38,24 +38,9 @@ import MatchHistoryPopup from './popups/MatchHistoryPopup.vue'
 export default defineComponent({
 	
 	components: { MatchHistoryPopup },
-	props: {
-		userid : {
-			required: true,
-			type: String,
-		},
-	},
-	async setup(props) {	
-		const store = useUserDataStore();
 
-		onMounted(async () => {
-			await DataService.getFriends()
-			.then((response: ResponseData) => {
-				store.friends = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		});
+	setup() {	
+		const store = useUserDataStore();
 
 		// for user info popup (wins/match history)
 		const showUserHistoryTrigger = ref(false);
