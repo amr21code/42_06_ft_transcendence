@@ -124,7 +124,18 @@ export default defineComponent({
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
 				}
-				document.getElementById("add-friend-button")!.style.background = "#00cc00";
+				document.getElementById("add-friend-button")!.style.background = "#a8b8fd";
+				document.getElementById("add-friend-button")!.innerHTML = "add friend";
+				document.getElementById("block-user-button")!.style.display = "block";
+			}
+			else if (document.getElementById("add-friend-button")!.innerHTML === "friends") {
+				try {
+					await DataService.removeFriend(userid);
+				} catch {
+					document.getElementById("add-friend-button")!.style.background = "#b04716";
+					document.getElementById("add-friend-button")!.innerHTML = "error";
+				}
+				document.getElementById("add-friend-button")!.style.background = "#a8b8fd";
 				document.getElementById("add-friend-button")!.innerHTML = "add friend";
 				document.getElementById("block-user-button")!.style.display = "block";
 			}
@@ -189,11 +200,12 @@ export default defineComponent({
 			// dont show button, if it's yourself
 			if (props.userid === store.user.userid) {
 				document.getElementById("add-friend-button")!.style.display = "none";
+				document.getElementById("block-user-button")!.style.display = "none";
 			}
 			
 			for (var friend of store.friends) {
 				if (friend.userid === props.userid) {
-					if (friend.friendstatus == "friends") {
+					if (friend.friendstatus === "friends") {
 						document.getElementById("add-friend-button")!.style.background = "#00cc00";
 						document.getElementById("add-friend-button")!.innerHTML = "friends";
 						document.getElementById("block-user-button")!.style.display = "none";
