@@ -53,7 +53,7 @@
 				<img @click="changeAvatar(3)" class="select-photo" src="../../assets/mrburns.png" alt="avatar-photo">
 				<img @click="changeAvatar(4)" class="select-photo" src="../../assets/gui.png" alt="avatar-photo">
 				<label id="upload-photo-label">
-					<input type="file"  ref="file" @change="uploadAvatar()" name="" id=""/>
+					<input type="file" ref="file" @change="uploadAvatar()" name="" id=""/>
 					<img class="select-photo" src="../../assets/icons8-plus-math-50.png" alt="avatar-upload" title="upload your own avatar">
 				</label>
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
@@ -172,8 +172,6 @@ export default defineComponent({
 		});
 
 		const uploadAvatar = async() => {
-           // debugger;
-            console.log("selected file",file.value.files[0])
             DataService.uploadAvatar(file.value.files[0]);
         }
 

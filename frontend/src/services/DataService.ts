@@ -22,9 +22,16 @@ class DataService {
 	changeAvatar(userid : string, id : number) {
 		return apiInstance.get('/users/' + userid + '/avatar/' + id);
 	}
-	uploadAvatar(file : any) {
-		console.log(file);
-		return apiInstance.post('/users/upload', file);
+	uploadAvatar(file : File) {
+		var formData = new FormData();
+    	formData.append('file', file);
+		return apiInstance.post('/users/upload', formData,  
+		{
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+			// withCredentials: true,
+		});
 	}
 	changePaddleColor(userid : string, color : string) {
 		return apiInstance.get('/users/' + userid + '/paddlecolor/' + color);
