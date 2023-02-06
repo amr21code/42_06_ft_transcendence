@@ -117,9 +117,9 @@ export default defineComponent({
 			alert("This game is full and in progress");
 		}
 
-		const handleOpponentLeft = (matchid:number) => {
+		const handleOpponentLeft = (matchid:number, userid: string) => {
 			socket.emit('opponentLeft',matchid);
-			alert("Your Opponent Left, you win!");
+			alert("One Player Left the game, "+userid+" wins!");
 			reset();
 		}
 

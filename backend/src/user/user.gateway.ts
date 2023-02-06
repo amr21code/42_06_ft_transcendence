@@ -39,7 +39,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 					console.log("user left");
 					const matchid = await this.matchService.listMatch(user.userid);
 					const opp = await this.matchService.getOpponent(user.userid, matchid[0].matchid);
-					this.server.to(opp[0].socket_token).emit('opponentLeft', matchid[0].matchid); // to MatchCourt
+					this.server.to(matchid[0].matchid).emit('opponentLeft', matchid[0].matchid, user.userid); // to MatchCourt
 
 					//update game 
 				}
