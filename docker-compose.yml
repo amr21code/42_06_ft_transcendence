@@ -23,6 +23,8 @@ services:
     ports:
     - 3000:3000
     - 3002:3002
+    volumes:
+    - web:/usr/src/app/upload/
     restart: unless-stopped
     depends_on:
       - db
@@ -34,6 +36,8 @@ services:
     - external
     ports:
     - 5173:5173
+    volumes:
+    - web:/usr/src/app/src/upload/
     restart: unless-stopped
     depends_on:
       - db
@@ -50,3 +54,9 @@ volumes:
       type: none
       o: bind
       device: ${PWD}/docker/dbfolder
+  web:
+    driver: local
+    driver_opts: 
+      type: none
+      o: bind
+      device: ${PWD}/docker/webfolder

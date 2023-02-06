@@ -40,8 +40,8 @@
 									<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
 								</div>
 							</a>
+							<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => togglePwdPopup()" :curr_chatid="chat.chatid" />
 							<a @click="togglePwdPopup()" v-if="chat.typename === 'protected'"> <!--const joinchat = (id : number, password ?: string) =>{-->
-								<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => togglePwdPopup()" :curr_chatid="chat.chatid" />
 								<div class="" >
 									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 									<a class="chat-chatname">{{ chat.chat_name }}</a><br>

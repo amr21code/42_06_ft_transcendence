@@ -15,6 +15,12 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	@WebSocketServer()
 	public server: Server;
 
+	@SubscribeMessage('send-userdata-refresh')
+	async userdataRefresh(client: any) {
+		client.broadcast.emit('userdata-refresh');
+		client.emit('userdata-refresh');
+	}
+
 	@SubscribeMessage('user')
 	async handleConnection(client: any) {
 		if (client.request.user) {
