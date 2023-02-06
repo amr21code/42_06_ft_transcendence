@@ -7,8 +7,8 @@
 					<h1>The Pong Game</h1>
 				</div>
 				<div class="top-nav">
-					<a class="menuOption" id="playSelected" @click="handleClick('play')">play</a>
-					<a class="menuOption" id="watchSelected" @click="handleClick('watch')">watch</a>
+					<a class="menuOption" id="gameSelected" @click="handleClick('game')">game</a>
+					<!-- <a class="menuOption" id="watchSelected" @click="handleClick('watch')">watch</a> -->
 					<a class="menuOption" id="chatSelected" @click="handleClick('chat')">chat</a>
 					<a class="menuOption" id="leaderboardSelected" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friendsSelected" @click="handleClick('friends')">friends</a>
@@ -97,6 +97,18 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
+
+			if (store.selected === 'game')
+				document.getElementById("gameSelected")!.style.backgroundColor = "#b04716";
+			// if (store.selected === 'watch')
+			// 	document.getElementById("watchSelected")!.style.backgroundColor = "#b04716";
+			if (store.selected === 'chat')
+				document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
+			if (store.selected === 'leaderboard')
+				document.getElementById("leaderboardSelected")!.style.backgroundColor = "#b04716";
+			if (store.selected === 'friends')
+				document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
+
 		});
 
 		const loggedIn = ref(true); // CHANGE THIS BACK TO FALSE
@@ -117,7 +129,7 @@ export default defineComponent({
 		}
 
 		// for side window selection
-		store.selected = 'play';
+		store.selected = 'game';
 		const handleClick = (term: SelectedSideWindow) => {
 			store.selected = term;
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
@@ -125,10 +137,10 @@ export default defineComponent({
 				element.style.backgroundColor = "#444040";
 			});
 			// selected menu highlighting below
-			if (store.selected === 'play')
-				document.getElementById("playSelected")!.style.backgroundColor = "#b04716";
-			if (store.selected === 'watch')
-				document.getElementById("watchSelected")!.style.backgroundColor = "#b04716";
+			if (store.selected === 'game')
+				document.getElementById("gameSelected")!.style.backgroundColor = "#b04716";
+			// if (store.selected === 'watch')
+			// 	document.getElementById("watchSelected")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'chat')
 				document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'leaderboard')
@@ -137,7 +149,8 @@ export default defineComponent({
 				document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
 
 
-			if (store.selected === 'play' || store.selected === 'watch') {
+			// if (store.selected === 'play' || store.selected === 'watch') {
+			if (store.selected === 'game') {
 				document.documentElement.style.setProperty("--leftofgame_fr", "0.2fr");
 				document.documentElement.style.setProperty("--game_fr", "1fr");
 				document.documentElement.style.setProperty("--sidewindow_fr", "0.2fr");
@@ -171,6 +184,7 @@ export default defineComponent({
 	},
 	mounted () {
 		this.checkAuthStatus();
+		
 	}
 });
 </script>
@@ -212,6 +226,7 @@ export default defineComponent({
 		color: black;
 		
 	}
+
 	.logged-photo {
 		float: right;
 		padding: 3px;

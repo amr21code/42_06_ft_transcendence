@@ -1,2 +1,2 @@
-type SelectedSideWindow = 'chat' | 'leaderboard' | 'play' | 'watch' | 'friends';
+type SelectedSideWindow = 'chat' | 'leaderboard' | 'game' | 'friends';
 export type {SelectedSideWindow};
