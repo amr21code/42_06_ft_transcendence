@@ -186,18 +186,16 @@ export class MatchGateway {
 				// console.log("key down:" ,client.number);
 				if (client.number === 1) {
 					if (vel === 1) {
-						if (MatchGateway[roomNumber].player1.y_vel >= 1)
-							MatchGateway[roomNumber].player1.y_vel += (vel);
-						// else if (MatchGateway[roomNumber].player1.y_vel <= -1)
-						// 	MatchGateway[roomNumber].player1.y_vel = vel;
+						if (MatchGateway[roomNumber].player1.y_vel >= 1) {
+							MatchGateway[roomNumber].player1.y_vel *= 2;
+						}
 						else
 							MatchGateway[roomNumber].player1.y_vel = vel;
 					}
 					else if (vel === -1) {
-						if (MatchGateway[roomNumber].player1.y_vel <= -1)
-							MatchGateway[roomNumber].player1.y_vel += (vel);
-						// else if (MatchGateway[roomNumber].player1.y_vel <= -1)
-						// 	MatchGateway[roomNumber].player1.y_vel = vel;
+						if (MatchGateway[roomNumber].player1.y_vel <= -1) {
+							MatchGateway[roomNumber].player1.y_vel *= 2;
+						}
 						else
 							MatchGateway[roomNumber].player1.y_vel = vel;
 					}
