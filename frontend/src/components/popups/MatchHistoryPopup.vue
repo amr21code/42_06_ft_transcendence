@@ -171,9 +171,6 @@ export default defineComponent({
 					}
 				}
 			}
-			
-			
-			
 		});
 		return { matchHistory, friendButtonAction };
 	}

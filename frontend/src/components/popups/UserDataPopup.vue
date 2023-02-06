@@ -85,6 +85,7 @@ import { useUserDataStore } from '../../stores/myUserDataStore'
 import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
 import moment from 'moment'
+import SocketioService from '../../services/SocketioService.js';
 
 export default defineComponent({
 
@@ -98,6 +99,7 @@ export default defineComponent({
 		const newUsername = ref('');
 		const leaderboardRank = ref({} as number);
 		const file = ref(null);
+		const socket = SocketioService.socket;
 
 		onMounted(async () => {
 			await DataService.getUser()
@@ -175,7 +177,7 @@ export default defineComponent({
             DataService.uploadAvatar(file.value.files[0]);
         }
 
-		return { store, user, leaderboardRank, memberSince, newUsername, uploadAvatar, file };
+		return { store, user, leaderboardRank, memberSince, newUsername, uploadAvatar, file, socket };
 	},
 
 	methods: {
@@ -217,12 +219,14 @@ export default defineComponent({
 			await DataService.changeUsername(this.user.userid, newUsername);
 			this.newUsername = '';
 			this.retrieveCurrentUser();
+			this.socket.emit('send-userdata-refresh');
 		},
 
 		async changeAvatar(id : number) {
 			await DataService.changeAvatar(this.user.userid, id)
 			.then((response: ResponseData) => {
 				this.retrieveCurrentUser();
+				this.socket.emit('send-userdata-refresh');
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -233,6 +237,7 @@ export default defineComponent({
 			await DataService.changePaddleColor(this.user.userid, color)
 			.then((response: ResponseData) => {
 				this.retrieveCurrentUser();
+				this.socket.emit('send-userdata-refresh');
 			})
 			.catch((e: Error) => {
 				console.log(e);
