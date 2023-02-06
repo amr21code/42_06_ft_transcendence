@@ -58,6 +58,12 @@ class DataService {
 	removeFriend(userid: string) : Promise<any> {
 		return apiInstance.get("/fl/edit/" + userid + "/remove");
 	}
+	blockUser(userid: string) : Promise<any> {
+		return apiInstance.get("/fl/edit/" + userid + "/block");
+	}
+	unblockUser(userid: string) : Promise<any> {
+		return apiInstance.get("/fl/edit/" + userid + "/unblock");
+	}
 	//  (actions: request, confirm, block, unblock, remove)
 
 

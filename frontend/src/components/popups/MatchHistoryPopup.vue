@@ -26,7 +26,9 @@
 				</div>
 				<!-- {{ user }} -->
 				<img :src="userPhoto">
+
 				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
+				<button id="block-user-button" @click="blockButtonAction(userid)">block user</button>
 			</div>
 
 			<table id="history-table">
@@ -95,23 +97,72 @@ export default defineComponent({
 		const friendButtonAction = async (userid: string) => {
 			if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
 				try {
-						await DataService.requestFriend(userid);
+					await DataService.requestFriend(userid);
 				} catch {
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
 				}
 				document.getElementById("add-friend-button")!.style.background = "#b04716";
 				document.getElementById("add-friend-button")!.innerHTML = "pending";
+				document.getElementById("block-user-button")!.style.display = "none";
 			}
 			else if (document.getElementById("add-friend-button")!.innerHTML === "confirm") {
 				try {
-						await DataService.confirmFriend(userid);
+					await DataService.confirmFriend(userid);
 				} catch {
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
 				}
 				document.getElementById("add-friend-button")!.style.background = "#00cc00";
 				document.getElementById("add-friend-button")!.innerHTML = "friends";
+				document.getElementById("block-user-button")!.style.display = "none";
+			}
+			else if (document.getElementById("add-friend-button")!.innerHTML === "pending") {
+				try {
+					await DataService.removeFriend(userid);
+				} catch {
+					document.getElementById("add-friend-button")!.style.background = "#b04716";
+					document.getElementById("add-friend-button")!.innerHTML = "error";
+				}
+				document.getElementById("add-friend-button")!.style.background = "#a8b8fd";
+				document.getElementById("add-friend-button")!.innerHTML = "add friend";
+				document.getElementById("block-user-button")!.style.display = "block";
+			}
+			else if (document.getElementById("add-friend-button")!.innerHTML === "friends") {
+				try {
+					await DataService.removeFriend(userid);
+				} catch {
+					document.getElementById("add-friend-button")!.style.background = "#b04716";
+					document.getElementById("add-friend-button")!.innerHTML = "error";
+				}
+				document.getElementById("add-friend-button")!.style.background = "#a8b8fd";
+				document.getElementById("add-friend-button")!.innerHTML = "add friend";
+				document.getElementById("block-user-button")!.style.display = "block";
+			}
+		}
+
+		const blockButtonAction = async (userid: string) => {
+			if (document.getElementById("block-user-button")!.innerHTML === "block user") {
+				try {
+					await DataService.blockUser(userid);
+				} catch {
+					document.getElementById("block-user-button")!.style.background = "#b04716";
+					document.getElementById("block-user-button")!.innerHTML = "error";
+				}
+				document.getElementById("block-user-button")!.innerHTML = "blocked";
+				document.getElementById("block-user-button")!.style.background = "#000000";
+				document.getElementById("block-user-button")!.style.color = "#ffffff";
+			}
+			else if (document.getElementById("block-user-button")!.innerHTML === "blocked") {
+				try {
+					await DataService.unblockUser(userid);
+				} catch {
+					document.getElementById("block-user-button")!.style.background = "#b04716";
+					document.getElementById("block-user-button")!.innerHTML = "error";
+				}
+				document.getElementById("block-user-button")!.innerHTML = "block user";
+				document.getElementById("block-user-button")!.style.background = "#ffffff";
+				document.getElementById("block-user-button")!.style.color = "#000000";
 			}
 		}
 		
@@ -149,17 +200,17 @@ export default defineComponent({
 			// dont show button, if it's yourself
 			if (props.userid === store.user.userid) {
 				document.getElementById("add-friend-button")!.style.display = "none";
+				document.getElementById("block-user-button")!.style.display = "none";
 			}
 			
 			for (var friend of store.friends) {
-			
 				if (friend.userid === props.userid) {
-					if (friend.friendstatus == "friends") {
+					if (friend.friendstatus === "friends") {
 						document.getElementById("add-friend-button")!.style.background = "#00cc00";
 						document.getElementById("add-friend-button")!.innerHTML = "friends";
+						document.getElementById("block-user-button")!.style.display = "none";
 					}
-					console.log(friend)
-					if (friend.friendstatus == "requested") {
+					else if (friend.friendstatus == "requested") {
 						if (friend.addresseeid === store.user.userid) {
 							document.getElementById("add-friend-button")!.style.background = "#b04716";
 							document.getElementById("add-friend-button")!.innerHTML = "confirm";
@@ -168,11 +219,15 @@ export default defineComponent({
 							document.getElementById("add-friend-button")!.style.background = "#b04716";
 							document.getElementById("add-friend-button")!.innerHTML = "pending";
 						}
+						document.getElementById("block-user-button")!.style.display = "none";
 					}
+					// else if (friend.friendstatus == "blocked") {
+					// 	document.getElementById("add-friend-button")!.display = "none";
+					// }
 				}
 			}
 		});
-		return { matchHistory, friendButtonAction };
+		return { matchHistory, friendButtonAction, blockButtonAction };
 	}
 })
 </script>
@@ -232,7 +287,16 @@ export default defineComponent({
 #add-friend-button:hover {
 	border-color: white;
 	color: white;
-	/* fill: white; */
+}
+
+#block-user-button {
+	color: black;
+	background: white;
+}
+
+#block-user-button:hover {
+	border-color: white;
+	/* color: white; */
 }
 
 .achievement-wrapper {
