@@ -44,20 +44,21 @@
 				<div  v-if="user.status != 3">
 					<tbody>
 						<tr class="info-item" >
-							<td @click="ChatUserdatatogglePopup(user)"> <!-- userid -->
+							<td @click="toggleUserHistory(user)"> <!-- userid -->
 								
 								<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
 								<img src="../../assets/onlineicon.png" class="user_status-img" v-if="user.user_status === 1">
 								<!-- {{ user.user_status }} when status === 1 show green dot else grey -->
 								{{ user.userid }}
 							</td>
-							<td @click="ChatUserdatatogglePopup(user)"> <!-- username -->
+							<td @click="toggleUserHistory(user)"> <!-- username -->
 								{{ user.username }}
 							</td>
-							<td @click="ChatUserdatatogglePopup(user)"> <!-- statusname -->
+							<td @click="toggleUserHistory(user)"> <!-- statusname -->
 								{{ user.statusname }}
 							</td>
-							<ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup(chat)" :curr_user="sel_user"/>
+							<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => toggleUserHistory(0)" :userid="selectedUser"/>
+							<!-- <ChatUserdataPopup v-if="ChatUserdataPopupTrigger === true" :ChatUserdatatogglePopup="() => ChatUserdatatogglePopup(chat)" :curr_user="sel_user"/> -->
 <!---------------------- mute ---------------------------------->
 							<td>
 								<div v-if="user.userid != user_me[0].userid && isAdmin === true">
@@ -141,11 +142,12 @@ import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
 import type { IChats } from '../../types/Chats'
 import SocketioService from '../../services/SocketioService'
+import MatchHistoryPopup from '../popups/MatchHistoryPopup.vue'
 
 
 export default defineComponent({
 	name: "ChatInfoPopup",
-	components: { ChatUserdataPopup },
+	components: { ChatUserdataPopup, MatchHistoryPopup },
     props: {
 			['ChatInfotogglePopup']  : {
 				required: true,
@@ -271,27 +273,43 @@ export default defineComponent({
 			option.value = i;
 		}
 
-		const ChatUserdataPopupTrigger = ref(false);
-		const NULL_USER = JSON.stringify( {	userid: '',
-											username: '',
-											picurl: '',
-											profilepic42: '',
-											created: 0,
-											statusname: '',
-											wins: '',
-											losses: '',
-											status: 0,
-											bantime: 0,
-											paddlecolor: '',
-											user_status : 0,});
-		const sel_user = ref<IUser>(JSON.parse(NULL_USER));
-		const ChatUserdatatogglePopup = async (selected_user : any) => {
-			// this.retrieveThisUser(sel_user.value.userid);
-			sel_user.value = selected_user;
-			ChatUserdataPopupTrigger.value = !ChatUserdataPopupTrigger.value;
+		// const ChatUserdataPopupTrigger = ref(false);
+		// const NULL_USER = JSON.stringify( {	userid: '',
+		// 									username: '',
+		// 									picurl: '',
+		// 									profilepic42: '',
+		// 									created: 0,
+		// 									statusname: '',
+		// 									wins: '',
+		// 									losses: '',
+		// 									status: 0,
+		// 									bantime: 0,
+		// 									paddlecolor: '',
+		// 									user_status : 0,});
+		// const sel_user = ref<IUser>(JSON.parse(NULL_USER));
+		// const ChatUserdatatogglePopup = async (selected_user : any) => {
+		// 	// this.retrieveThisUser(sel_user.value.userid);
+		// 	sel_user.value = selected_user;
+		// 	ChatUserdataPopupTrigger.value = !ChatUserdataPopupTrigger.value;
+		// }
+
+		const showUserHistoryTrigger = ref(false);
+		const selectedUser = ref("");
+		// const selectedUserPhoto = ref("");
+		const toggleUserHistory = (user: any) => {
+			if (user === 0)
+			{
+				showUserHistoryTrigger.value = false;
+				return ;
+			}
+			showUserHistoryTrigger.value = true;
+			selectedUser.value = user.userid;
+			// selectedUserPhoto.value = user.picurl;
+
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option, ChatUserdatatogglePopup, ChatUserdataPopupTrigger, sel_user }
+		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option,
+				toggleUserHistory, selectedUser, showUserHistoryTrigger }
 			
     }  
 
