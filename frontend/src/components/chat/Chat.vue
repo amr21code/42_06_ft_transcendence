@@ -147,6 +147,7 @@ export default defineComponent({
 				this.mutetime = data.time;
 				this.muted = true;
 				this.togglegotMuted();
+				setTimeout(function(){ console.log("hi");}, this.mutetime * 100); //1000 //need to set this.muted = false;
 			}
 		})
 	},

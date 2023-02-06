@@ -170,7 +170,7 @@ export default defineComponent({
 				time : new Date(),
 				statuscode: "0"
 			}
-			this.messages.push(data);
+			// this.messages.push(data);
 			this.scrollToBottom();
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
 		},
@@ -190,8 +190,11 @@ export default defineComponent({
 		scrollToBottom() {
 			this.$nextTick(() => {
 				const chat = this.$refs.chatEnd as any;
-				chat.scrollTop = chat.scrollHeight;
-				chat.scrollIntoView({ behavior: 'smooth' });
+				if (chat !== undefined)
+				{
+					chat.scrollTop = chat.scrollHeight;
+					chat.scrollIntoView({ behavior: 'smooth' });
+				}
       		});
 		},
 	},
