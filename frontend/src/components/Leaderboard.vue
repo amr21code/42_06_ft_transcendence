@@ -64,6 +64,11 @@ export default defineComponent({
 			selectedUser.value = "";
 		}
 
+		onMounted(async () => {
+			await store.getUser();
+			await store.getAllUsers();
+		});
+
 		return { store, usersByWins, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser, selectedUserPhoto };
 	},
 })

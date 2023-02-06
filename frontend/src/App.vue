@@ -118,8 +118,6 @@ export default defineComponent({
 			// selected menu highlighting below
 			if (store.selected === 'game')
 				document.getElementById("gameSelected")!.style.backgroundColor = "#b04716";
-			// if (store.selected === 'watch')
-			// 	document.getElementById("watchSelected")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'chat')
 				document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'leaderboard')
