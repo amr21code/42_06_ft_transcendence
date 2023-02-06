@@ -50,8 +50,11 @@ export default defineComponent({
 		}
 		
 		const handleGameState = (gameState: any) => {
-			
 			if (!gameState) {
+				return;
+			}
+			else if (gameState.prematureEnd){
+				reset();
 				return;
 			}
 
@@ -119,8 +122,9 @@ export default defineComponent({
 
 		const handleOpponentLeft = (matchid:number, userid: string) => {
 			socket.emit('opponentLeft',matchid);
-			alert("One Player Left the game, "+userid+" wins!");
+			console.log("opponent left");
 			reset();
+			alert(userid +" left the game, opponent wins!");
 		}
 
 		const reset = () => {
