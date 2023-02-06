@@ -52,7 +52,14 @@ export class ChatService {
 				LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
 				LEFT JOIN public.chat as c ON uc.chatid=c.chatid
 				LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-				LEFT JOIN public.users as u ON u.userid=uc.userid
+				LEFT JOIN (select userid, username, 
+					CASE 
+					WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL 
+					THEN profilepic42 
+					ELSE (select avatarurl from public.avatars where avatarid = avatar) 
+					END as picurl,created, statusname, wins, losses, paddlecolor FROM public.users
+					LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
+					LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as u ON u.userid=uc.userid
 				WHERE uc.chatid=CAST(${chatid} AS INTEGER)
 				ORDER BY userid ASC`
 			);
