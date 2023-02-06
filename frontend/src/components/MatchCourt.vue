@@ -192,14 +192,14 @@ export default defineComponent({
 			state.canvasWidth = state.canvasWidth / 200 * canvas.width;
 			
 			// static stuff (no movement involved)
-			state.paddleWidth = state.canvasWidth / 25;
-			state.paddleHeight = state.canvasHeight / 4;
-			state.ballSize = state.canvasWidth / 25;
-			state.wallOffset = state.canvasWidth / 25;
+			state.paddleWidth = state.canvasWidth / 50;
+			state.paddleHeight = state.canvasHeight / 6;
+			state.ballSize = state.canvasWidth / 50;
+			state.wallOffset = state.canvasWidth / 50;
 			state.player1.pos.x = state.wallOffset;
 			state.player2.pos.x = state.canvasWidth - (state.wallOffset + state.paddleWidth);
-			state.paddleSpeed = state.canvasHeight / 75;
-			state.ballSpeed = state.canvasHeight / 7
+			state.paddleSpeed = state.canvasHeight / 50;
+			state.ballSpeed = state.canvasHeight / 75;
 			
 			// dynamic stuff (movement involved)
 			state.player1.pos.y = state.player1.pos.y / 120 * canvas.height;

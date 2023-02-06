@@ -105,21 +105,21 @@ export function gameLoop(state: MatchGameStateDto) {
 		//check left canvas bounds
 		if (ball.pos.x <= 0) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
-			ball.vel.x = 1;
+			ball.vel.x = -1;
 			// player two scored
 			state.scorePlayer2++;
-			if (state.scorePlayer2 == 11) // game ends here
-				return 2;
+			// if (state.scorePlayer2 == 11) // game ends here
+			// 	return 2;
 		}
 
 		//check right canvas bounds
 		if (ball.pos.x + state.ballSize >= state.canvasWidth) {
 			ball.pos.x = state.canvasWidth / 2 - state.ballSize / 2;
-			ball.vel.x = -1;
+			ball.vel.x = 1;
 			// player one scored
 			state.scorePlayer1++;
-			if (state.scorePlayer1 == 11) // game ends here
-				return 1;
+			// if (state.scorePlayer1 == 11) // game ends here
+			// 	return 1;
 		}
 
 		//check playerOne collision
