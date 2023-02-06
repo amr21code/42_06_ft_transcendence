@@ -14,21 +14,13 @@
 					<div class="achievement-wrapper" title="Scored first goal in a match">
 						<a id="achievement-firstGoal">first blood</a>	
 					</div>
-					<!-- <div class="achievement-wrapper" :title="achievements[0].description">
-						<a>{{ achievements[0].name }}</a>
-					</div>
-					<div class="achievement-wrapper" :title="achievements[1].description">
-						<a>{{ achievements[1].name }}</a>
-					</div>
-					<div class="achievement-wrapper" :title="achievements[2].description">
-						<a>{{ achievements[2].name }}</a>	
-					</div> -->
 				</div>
 				<!-- {{ user }} -->
 				<img :src="userPhoto">
-
-				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
-				<button id="block-user-button" @click="blockButtonAction(userid)">block user</button>
+				<!-- <div class="friend-block-buttons"> -->
+						<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
+						<button id="block-user-button" @click="blockButtonAction(userid)">block user</button>
+				<!-- </div> -->
 			</div>
 
 			<table id="history-table">
@@ -298,6 +290,14 @@ export default defineComponent({
 	border-color: white;
 	/* color: white; */
 }
+
+
+/* .friend-block-buttons {
+	outline: 2px red solid;
+	display: block;
+} */
+
+
 
 .achievement-wrapper {
 	text-align: left;
