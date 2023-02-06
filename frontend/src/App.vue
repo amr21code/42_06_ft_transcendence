@@ -76,39 +76,18 @@ export default defineComponent({
 
 		// read all necessary data into the store
 		onMounted(async () => {
-			await DataService.getUser()
-			.then((response: ResponseData) => {
-				store.user = response.data[0];
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			await DataService.getFriends()
-			.then((response: ResponseData) => {
-				store.friends = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			await DataService.getAll()
-			.then((response: ResponseData) => {
-				store.allUsers = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+			await store.getUser();
+			await store.getFriends();
+			await store.getAllUsers();
 
 			if (store.selected === 'game')
 				document.getElementById("gameSelected")!.style.backgroundColor = "#b04716";
-			// if (store.selected === 'watch')
-			// 	document.getElementById("watchSelected")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'chat')
 				document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'leaderboard')
 				document.getElementById("leaderboardSelected")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'friends')
 				document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
-
 		});
 
 		const loggedIn = ref(true); // CHANGE THIS BACK TO FALSE
