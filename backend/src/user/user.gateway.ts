@@ -15,6 +15,12 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	@WebSocketServer()
 	public server: Server;
 
+	@SubscribeMessage('send-userdata-refresh')
+	async userdataRefresh(client: any) {
+		client.broadcast.emit('userdata-refresh');
+		client.emit('userdata-refresh');
+	}
+
 	@SubscribeMessage('user')
 	async handleConnection(client: any) {
 		if (client.request.user) {
@@ -39,7 +45,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 					console.log("user left");
 					const matchid = await this.matchService.listMatch(user.userid);
 					const opp = await this.matchService.getOpponent(user.userid, matchid[0].matchid);
-					this.server.to(opp[0].socket_token).emit('opponentLeft', matchid[0].matchid); // to MatchCourt
+					this.server.to(matchid[0].matchid).emit('opponentLeft', matchid[0].matchid, user.userid); // to MatchCourt
 
 					//update game 
 				}

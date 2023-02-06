@@ -185,8 +185,19 @@ export class MatchGateway {
 				const vel = getUpdatedVelocity(keyInt);
 				// console.log("key down:" ,client.number);
 				if (client.number === 1) {
-					if (vel) {
-						MatchGateway[roomNumber].player1.y_vel = vel;
+					if (vel === 1) {
+						if (MatchGateway[roomNumber].player1.y_vel >= 1) {
+							MatchGateway[roomNumber].player1.y_vel *= 2;
+						}
+						else
+							MatchGateway[roomNumber].player1.y_vel = vel;
+					}
+					else if (vel === -1) {
+						if (MatchGateway[roomNumber].player1.y_vel <= -1) {
+							MatchGateway[roomNumber].player1.y_vel *= 2;
+						}
+						else
+							MatchGateway[roomNumber].player1.y_vel = vel;
 					}
 					else {
 						MatchGateway[roomNumber].player1.y_vel = 0;
@@ -255,8 +266,10 @@ export class MatchGateway {
 		try {
 			MatchGateway[roomNumber].prematureEnd = true;
 			await this.matchService.endMatch(roomNumber, MatchGateway[roomNumber], client.request.session.passport.user.userid);
-			await this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
-			await this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
+			if (client.request.session.passport.user.userid == MatchGateway[roomNumber].player1.userid)
+				await this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
+			else if (client.request.session.passport.user.userid == MatchGateway[roomNumber].player2.userid)
+				await this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
 		} catch (error) {
 			throw new WsException('opponent left failed');
 		}
