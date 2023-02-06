@@ -16,17 +16,16 @@
 			<!------------CHATS WHERE USER IS JOINED----------------------------------->
 			<div v-if="type === 'joined'">
 				<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
-					<div v-if="chat.statusname !== 'ban'">
 						<a @click="handleClick('chatwindow', chat)">
 							<div class="" >
 									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-									<a class="chat-typename-green" v-if="chat.typename === 'public' || chat.typename === 'direct'" >{{ chat.typename }}</a>
+									<a class="chat-typename-green" v-if="(chat.typename === 'public' || chat.typename === 'direct')" >{{ chat.typename }}</a>
 									<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
 									<a class="chat-typename-orange" v-if="chat.typename === 'private'" >{{ chat.typename }}</a>
+									<a class="chat-stausname-red" v-if="chat.statusname === 'ban'" >BANNED</a>
 							</div>
 						</a>
-					</div>
 				</div>
 			</div>
 			<!------------CHATS WHERE USER IS NOT JOINED----------------------------------->
@@ -215,6 +214,8 @@ export default defineComponent({
         const NULL_CHAT = JSON.stringify( {chatid: 0,    chat_name: "no chat", typename: "no chat", status: 0 });
         const sel_chat = ref<IChats>(JSON.parse(NULL_CHAT));
         const handleClick = (term: SelectedChat, selected_chat: any) => {
+			if (selected_chat.statusname === 'ban')
+				return ;
             sel_chat.value = selected_chat;
             if (selected_chat === 0) {
                 const NULL_CHAT = JSON.stringify( {chatid: 0,    chat_name: "no chat", typename: "no chat", status: 0 });
@@ -270,20 +271,29 @@ export default defineComponent({
 }
 
 .chat-chatname {
+	float: left;
 	color: black;
-	padding-left: 20%;
+	padding-left: 10%;
 }
 
 .chat-typename-green {
+	float: left;
 	color: green;
 }
 
 .chat-typename-red {
+	float: left;
 	color: red;
 }
 
 .chat-typename-orange {
+	float: left;
 	color: orangered;
+}
+
+.chat-stausname-red {
+	color: red;
+
 }
 
 .chat-overview {
@@ -300,6 +310,8 @@ export default defineComponent({
 	border: black solid 1px;
 	color: black;
 	padding: 10px;
+	width: auto;
+	height: 30px;
 }
 .chat-message-view:hover {
 	background-color: rgb(0,0,0,0.3)
