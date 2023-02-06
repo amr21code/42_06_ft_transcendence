@@ -41,7 +41,7 @@
 				</tr>
 			</thead>
 			<div v-for="(user, index) in users" :key="index">
-				<div  v-if="user.status != 3">
+				<!-- <div  v-if="user.status != 3"> -->
 					<tbody>
 						<tr class="info-item" >
 							<td @click="toggleUserHistory(user)"> <!-- userid -->
@@ -116,7 +116,7 @@
 							</td> -->
 						</tr> 
 					</tbody>
-				</div>
+				<!-- </div> -->
 			</div>
 		</table>
 			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
