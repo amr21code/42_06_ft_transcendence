@@ -74,6 +74,7 @@ export default defineComponent({
 	setup() {
 		const store = useUserDataStore();
 
+		// read all necessary data into the store
 		onMounted(async () => {
 			await DataService.getUser()
 			.then((response: ResponseData) => {
@@ -85,6 +86,13 @@ export default defineComponent({
 			await DataService.getFriends()
 			.then((response: ResponseData) => {
 				store.friends = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getAll()
+			.then((response: ResponseData) => {
+				store.allUsers = response.data;
 			})
 			.catch((e: Error) => {
 				console.log(e);

@@ -84,7 +84,7 @@ import DataService from '../../services/DataService'
 import { useUserDataStore } from '../../stores/myUserDataStore'
 import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
-// import moment from 'moment'
+import moment from 'moment'
 
 export default defineComponent({
 
@@ -456,3 +456,7 @@ export default defineComponent({
 }
 
 </style>
+
+function moment(arg0: string) {
+  throw new Error('Function not implemented.')
+}
