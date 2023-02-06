@@ -78,7 +78,7 @@
 <!---------------------- ban ---------------------------------->
 							<td v-if="isAdmin === true">
 								<div v-if="user.userid != user_me[0].userid">
-									<img src="../../assets/banicon.png" @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">
+									<img src="../../assets/banicon.png" @click="(toggleBan(index + 1))" v-if="Ban == 0">
 									<!-- <button @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">ban</button> -->
 									<div v-if="Ban === index + 1">
 										<select v-model="bantime" required>
@@ -87,9 +87,9 @@
 											<option value="30">30 minutes</option>
 											<option value="60">60 minutes</option> -->
 										</select>
-										<button @click="banUser(user.userid, bantime)" v-if="user.status !== 3">ban</button>
+										<button @click="banUser(user.userid, bantime)">ban</button>
 									</div>
-									<button v-if="user.status === 3">-BANNED-</button>
+									<!-- <button v-if="user.status === 3">-BANNED-</button> -->
 								</div>
 							</td>
 <!---------------------- challenge ---------------------------------->
