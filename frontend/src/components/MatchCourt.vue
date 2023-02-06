@@ -34,6 +34,7 @@ export default defineComponent({
 		let watchMatchBtn: any;
 		let playerNumber: number;
 		let matchWaitPopup: any;
+		let gameOver: boolean;
 		const opponentArrived = ref(false);
 		
 		// #################  HANDLERS #######################
@@ -53,7 +54,7 @@ export default defineComponent({
 			if (!gameState) {
 				return;
 			}
-			else if (gameState.prematureEnd){
+			else if (gameState.prematureEnd || gameOver){
 				reset();
 				return;
 			}
@@ -123,6 +124,7 @@ export default defineComponent({
 		const handleOpponentLeft = (matchid:number, userid: string) => {
 			socket.emit('opponentLeft',matchid);
 			console.log("opponent left");
+			gameOver = true;
 			reset();
 			alert(userid +" left the game, opponent wins!");
 		}
