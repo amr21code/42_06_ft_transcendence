@@ -143,6 +143,7 @@ import type { IUser } from '../../types/User'
 import type { IChats } from '../../types/Chats'
 import SocketioService from '../../services/SocketioService'
 import MatchHistoryPopup from '../popups/MatchHistoryPopup.vue'
+import { useUserDataStore } from '../../stores/myUserDataStore';
 
 
 export default defineComponent({
@@ -252,6 +253,7 @@ export default defineComponent({
 	},
     setup (props) {
 
+		const store = useUserDataStore();
 		const Mute = ref(0);
 		const toggleMute = (newValue : number) => {
 			console.log("toggleMute");
@@ -308,7 +310,7 @@ export default defineComponent({
 
 		}
 
-		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option,
+		return { store, toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option,
 				toggleUserHistory, selectedUser, showUserHistoryTrigger }
 			
     }  
