@@ -109,17 +109,17 @@ export class MatchGateway {
 			// MatchGateway[roomNumber].canvasWidth = canvasData[1];
 			MatchGateway[roomNumber].canvasHeight = 120;
 			MatchGateway[roomNumber].canvasWidth = 200;
-			MatchGateway[roomNumber].paddleWidth = MatchGateway[roomNumber].canvasWidth / 25;
-			MatchGateway[roomNumber].paddleHeight = MatchGateway[roomNumber].canvasHeight / 4;
-			MatchGateway[roomNumber].ballSize = MatchGateway[roomNumber].canvasWidth / 25;
-			MatchGateway[roomNumber].wallOffset = MatchGateway[roomNumber].canvasWidth / 25;
+			MatchGateway[roomNumber].paddleWidth = MatchGateway[roomNumber].canvasWidth / 50;
+			MatchGateway[roomNumber].paddleHeight = MatchGateway[roomNumber].canvasHeight / 6;
+			MatchGateway[roomNumber].ballSize = MatchGateway[roomNumber].canvasWidth / 50;
+			MatchGateway[roomNumber].wallOffset = MatchGateway[roomNumber].canvasWidth / 50;
 			MatchGateway[roomNumber].player1.pos.x = MatchGateway[roomNumber].wallOffset;
 			MatchGateway[roomNumber].player1.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].paddleHeight / 2;
 			MatchGateway[roomNumber].player2.pos.x = MatchGateway[roomNumber].canvasWidth - (MatchGateway[roomNumber].wallOffset + MatchGateway[roomNumber].paddleWidth);
 			MatchGateway[roomNumber].player2.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].paddleHeight / 2;
 			MatchGateway[roomNumber].ball.pos.x = MatchGateway[roomNumber].canvasWidth / 2 - MatchGateway[roomNumber].ballSize / 2;
 			MatchGateway[roomNumber].ball.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].ballSize / 2;
-			MatchGateway[roomNumber].paddleSpeed = MatchGateway[roomNumber].canvasHeight / 75;
+			MatchGateway[roomNumber].paddleSpeed = MatchGateway[roomNumber].canvasHeight / 50;
 			MatchGateway[roomNumber].ballSpeed = MatchGateway[roomNumber].canvasHeight / 75;
 			// console.log("canvas height: ", canvasData[0], " ballSpeed: " ,MatchGateway[roomNumber].ballSpeed)
 			var randomDirection = Math.floor(Math.random() * 2) + 1;

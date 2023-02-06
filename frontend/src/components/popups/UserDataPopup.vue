@@ -395,6 +395,7 @@ export default defineComponent({
 	margin: 0.5rem;
 }
 
+::placeholder{ opacity: 0.4 }
 
 
 

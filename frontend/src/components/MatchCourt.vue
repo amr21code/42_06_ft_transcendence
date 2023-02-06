@@ -42,6 +42,12 @@ export default defineComponent({
 				playerNumber = nbr;
 			console.log("your player number is: ", playerNumber);
 		}
+
+		const handleWatchError = (msg: string) => {
+			if (msg === 'failed') {
+				alert("There are no matches to watch right now. Try again later!");
+			}
+		}
 		
 		const handleGameState = (gameState: any) => {
 			
@@ -186,14 +192,14 @@ export default defineComponent({
 			state.canvasWidth = state.canvasWidth / 200 * canvas.width;
 			
 			// static stuff (no movement involved)
-			state.paddleWidth = state.canvasWidth / 25;
-			state.paddleHeight = state.canvasHeight / 4;
-			state.ballSize = state.canvasWidth / 25;
-			state.wallOffset = state.canvasWidth / 25;
+			state.paddleWidth = state.canvasWidth / 50;
+			state.paddleHeight = state.canvasHeight / 6;
+			state.ballSize = state.canvasWidth / 50;
+			state.wallOffset = state.canvasWidth / 50;
 			state.player1.pos.x = state.wallOffset;
 			state.player2.pos.x = state.canvasWidth - (state.wallOffset + state.paddleWidth);
-			state.paddleSpeed = state.canvasHeight / 75;
-			state.ballSpeed = state.canvasHeight / 7
+			state.paddleSpeed = state.canvasHeight / 50;
+			state.ballSpeed = state.canvasHeight / 75;
 			
 			// dynamic stuff (movement involved)
 			state.player1.pos.y = state.player1.pos.y / 120 * canvas.height;
@@ -258,6 +264,7 @@ export default defineComponent({
 		const socket = SocketioService.socket;
 		socket.on('init', handlePlayerNumber);
 		socket.on("opponent-status", handleOpponentArrived);
+		socket.on('watchGame', handleWatchError);
 		socket.on('gameState', handleGameState);
 		socket.on('gameOver', handleGameOver);
 		socket.on('joinedEmptyGame', handleJoinedEmptyGame);
