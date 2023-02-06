@@ -75,9 +75,16 @@ export default defineComponent({
 		const store = useUserDataStore();
 
 		onMounted(async () => {
-			DataService.getUser()
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				store.user = response.data[0];
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getFriends()
+			.then((response: ResponseData) => {
+				store.friends = response.data;
 			})
 			.catch((e: Error) => {
 				console.log(e);
