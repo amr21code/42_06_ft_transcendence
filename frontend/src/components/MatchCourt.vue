@@ -73,14 +73,14 @@ export default defineComponent({
 				// DataService.gameOver(gameState, playerNumber);
 				if (playerNumber === 1)
 					alert("You win! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
-				else
+				else if (playerNumber === 2)
 					alert("You lose! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 			}
 			else if (gameState.scorePlayer2 == 3) {
 				// DataService.gameOver(gameState, playerNumber);
 				if (playerNumber === 1)
 					alert("You lose! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
-				else
+				else if (playerNumber === 2)
 					alert("You win! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 			}
 			playerNumber = 0;
