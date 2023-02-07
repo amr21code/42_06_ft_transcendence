@@ -99,7 +99,7 @@
 <!---------------------- make admin ---------------------------------->
 							<td>
 								<div v-if="permission === 0">
-									<img src="../../assets/adminicon.png" @click="makeAdmin(user.userid, chat.chatid)" v-if="user.status !== 0">
+									<img src="../../assets/adminicon.png" @click="makeAdmin(user.userid, chat.chatid)" v-if="user.status > 1">
 									<!-- <button v-if="user.status != 0 && user_me[0].userid">make admin</button> -->
 								</div>
 							</td>
