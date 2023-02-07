@@ -10,6 +10,7 @@
 			</div>
 		</div>
 		<canvas style="display:none" ref="matchCourtRef" id="matchScreen"></canvas>
+			<button style="display:none" id="leave-match-button">leave game</button>
 	</div>
 </template>
 
@@ -31,11 +32,13 @@ export default defineComponent({
 		let ctx: any;
 		let matchSelectionDiv: any;
 		let joinMatchQueueBtn: any;
+		let leaveMatchButton: any;
 		let watchMatchBtn: any;
 		let playerNumber: number;
 		let matchWaitPopup: any;
 		let gameOver: boolean;
 		const opponentArrived = ref(false);
+		let spectatorLeftMatch = false;
 		
 		// #################  HANDLERS #######################
         const handlePlayerNumber = (nbr: number) => {
@@ -54,12 +57,18 @@ export default defineComponent({
 			if (!gameState) {
 				return;
 			}
-			else if (gameState.prematureEnd || gameOver){
+			else if (gameState.prematureEnd || gameOver) {
 				reset();
 				return;
 			}
+			else if (spectatorLeftMatch) {
+				// if (store.user.userid === gameState.player1.userid || store.user.userid === gameState.player2.userid)
+				// 	socket.emit("playerLeft", gameState);
+				// else
+				socket.emit("spectatorLeftMatch", gameState);
+				return;
+			}
 
-			//console.log("game starts");
 			canvas.style.display = 'block';
 			matchWaitPopup.style.display = 'none';
 			matchSelectionDiv.style.display = 'none';
@@ -93,8 +102,6 @@ export default defineComponent({
 
 
 		const handleOpponentArrived = (data: any) => {
-			console.log("opponent arrived")
-			console.log(data)
 			opponentArrived.value = data.data; 
 			if (!opponentArrived.value){
 				matchSelectionDiv.style.display = 'none';
@@ -122,7 +129,7 @@ export default defineComponent({
 		}
 
 		const handleOpponentLeft = (matchid:number, userid: string) => {
-			socket.emit('opponentLeft',matchid);
+			socket.emit('opponentLeft', matchid);
 			console.log("opponent left");
 			gameOver = true;
 			reset();
@@ -134,6 +141,7 @@ export default defineComponent({
 			matchSelectionDiv.style.display = "inline-flex";
 			canvas.style.display = "none";
 			matchWaitPopup.style.display = "none";
+			leaveMatchButton.style.display = "none";
 		}
 
 
@@ -143,17 +151,22 @@ export default defineComponent({
 		};
 
 		const joinMatchQueue = () => {
-			// DataService.joinMatchQueue();
-			
-			// sets opponentStatus
+			gameOver = false;
 			SocketioService.createNewGame(canvas);
 		};
 
 		const watchGame = () => {
+			spectatorLeftMatch = false;
 			socket.emit('watchGame');
+			leaveMatchButton.style.display = "block";
 			// check that I cannot stear the paddle
 			// check what happens if watcher/player leaves the room
 			// check what happens if there is no game open? Message to user: no game
+		}
+
+		const spectatorLeavesMatch = () => {
+			spectatorLeftMatch = true;
+			reset();
 		}
 
 
@@ -163,6 +176,7 @@ export default defineComponent({
 			joinMatchQueueBtn = document.getElementById("joinMatchQueueBtn");
 			watchMatchBtn = document.getElementById("watchMatchBtn");
 			matchWaitPopup = document.getElementById("MatchWaitPopup");
+			leaveMatchButton = document.getElementById("leave-match-button");
 			canvas = document.getElementById("matchScreen");
             ctx = canvas.getContext("2d");
 
@@ -170,9 +184,8 @@ export default defineComponent({
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
 			joinMatchQueueBtn.addEventListener("click", joinMatchQueue);
-            
-			// SPÄTER:
 			watchMatchBtn.addEventListener("click", watchGame);
+			leaveMatchButton.addEventListener("click", spectatorLeavesMatch);
         };
 
 
@@ -294,12 +307,18 @@ export default defineComponent({
 <style scoped>
 	#matchScreen {
 		width: 80%;
+		margin-left: 10%;
+		margin-right: 10%;
 		aspect-ratio: 5/3;
 		background: white;
 		min-width: 200px; /*FIND DYNAMIC WAY*/
 		/* outline: 10px solid red; */
 		border-radius: 2px;
 		/* margin: 30px; */
+	}
+
+	#leave-match-button {
+		margin: 2rem auto;
 	}
 
 	#matchSelectionDiv {
