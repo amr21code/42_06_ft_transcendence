@@ -73,14 +73,14 @@ export default defineComponent({
 			}
 			gameState = JSON.parse(gameState);
 			requestAnimationFrame(() => paintGame(gameState)); // kommt raus
-			if (gameState.scorePlayer1 == 3) {
+			if (gameState.scorePlayer1 == 11) {
 				// DataService.gameOver(gameState, playerNumber);
 				if (playerNumber === 1)
 					alert("You win! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 				else if (playerNumber === 2)
 					alert("You lose! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
 			}
-			else if (gameState.scorePlayer2 == 3) {
+			else if (gameState.scorePlayer2 == 11) {
 				// DataService.gameOver(gameState, playerNumber);
 				if (playerNumber === 1)
 					alert("You lose! " + gameState.scorePlayer1 + ":" + gameState.scorePlayer2);
