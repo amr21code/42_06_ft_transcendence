@@ -11,11 +11,11 @@ export class ChatDto {
 
 	@IsString()
 	@Length(3, 20)
-	@Matches('^[a-zA-Z0-9}$')
+	@Matches('^[a-zA-Z0-9_ ]$')
 	chat_name: string;
 	
 	@IsString()
 	@Length(3, 20)
-	@Matches('^[a-zA-Z0-9}$')
+	@Matches('^[a-zA-Z0-9]$')
 	password: string;
 }
