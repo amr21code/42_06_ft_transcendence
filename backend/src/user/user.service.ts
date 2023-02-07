@@ -20,8 +20,7 @@ export class UserService {
 			END as picurl,created, statusname, wins, losses, paddlecolor FROM public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
-			WHERE wins > 0 OR losses > 0
-			ORDER BY wins, losses`
+			ORDER BY wins DESC, losses ASC, created DESC`
 			);
 		return (user);
 	}
@@ -29,7 +28,7 @@ export class UserService {
 	async getLeaderboardPos(userid: string){
 		const pos = await this.db.$queryRaw<number>(
 			Prisma.sql`SELECT row_num FROM 
-			(SELECT ROW_NUMBER() OVER() AS row_num, userid FROM public.users WHERE wins > 0 OR losses > 0 ORDER BY wins, losses) as leaderboard WHERE userid=${userid}`
+			(SELECT ROW_NUMBER() OVER() AS row_num, userid FROM public.users WHERE wins > 0 OR losses > 0 ORDER BY wins DESC, losses ASC) as leaderboard WHERE userid=${userid}`
 		);
 		console.log("leader pos", pos);
 		if (Object.keys(pos).length == 0)
