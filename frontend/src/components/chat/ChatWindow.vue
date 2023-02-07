@@ -98,6 +98,7 @@ import SocketioService from '../../services/SocketioService'
 
 import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
+import type { IFriend } from '@/types/Friend'
 
 
 export default defineComponent({
@@ -107,6 +108,7 @@ export default defineComponent({
 	data () {
 		return {
 			user: [] as IUser[],
+			friends: [] as IFriend[],
 			db_messages: [] as IMessages[],
 			message: '' as String,
 			messages: [] as IMessages[],
@@ -116,8 +118,18 @@ export default defineComponent({
 
 	async created () {
 		await this.retrieveCurrentUser();
+		await this.retrieveFriendlist();
 		await this.retrieveCurrentMessages(this.curr_chat.chatid);
 		this.socket.on('chat-message', (data: IMessages) => {
+
+			//check here if the incomming message is from someone who I have blocked
+			for (var friend of this.friends)
+			{
+				if (friend.userid === data.userid)
+					if (friend.friendstatus == "blocked")
+						return ;
+			}
+
 			this.messages.push(data);
 			this.$nextTick(() => {
         		this.scrollToBottom();
@@ -154,6 +166,16 @@ export default defineComponent({
 				this.$nextTick(() => {
         			this.scrollToBottom();
      			});
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		},
+
+		async retrieveFriendlist() {
+			await DataService.getFriends()
+			.then((response: ResponseData) => {
+				this.friends = response.data;
 			})
 			.catch((e: Error) => {
 				console.log(e);
