@@ -135,7 +135,7 @@ class DataService {
 		return apiInstance.post('/chat/user/status', JSON.stringify({
 			userid: userid,
 			chatid: chatid,
-			status: 2,
+			status: 3,
 			bantime: time
 		}), 
 		{
@@ -148,7 +148,7 @@ class DataService {
 		return apiInstance.post('/chat/user/status', JSON.stringify({
 			userid: userid,
 			chatid: chatid,
-			status: 3,
+			status: 4,
 			bantime: time,
 		}), 
 		{
