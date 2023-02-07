@@ -145,10 +145,10 @@ export class MatchGateway {
 				client.emit('joinedEmptyGame');
 				return;
 			}
-			else if (numClients > 1) {
-				client.emit('tooManyPlayers');
-				return;
-			}
+			// else if (numClients > 1) {
+			// 	client.emit('tooManyPlayers');
+			// 	return;
+			// }
 			//if (client.number != 1)
 			//{
 				client.join(roomNumber);
@@ -276,10 +276,11 @@ export class MatchGateway {
 	}
 
 	@SubscribeMessage('spectatorLeftMatch') 
-	async leaveGameSpectator(client: any, gameState: MatchGameStateDto) {
+	async leaveGameSpectator(client: Socket, gameState: MatchGameStateDto) {
 		try {
 			const matchidLeft = await this.matchService.listActiveMatch(gameState.player1.userid);
-			this.server.socketsLeave(matchidLeft[0].matchid);
+			// this.server.socketsLeave(matchidLeft[0].matchid);
+			client.leave(matchidLeft[0].matchid);
 		}
 		catch (error) {
 			throw new WsException('spectatorLeftMatch failed');

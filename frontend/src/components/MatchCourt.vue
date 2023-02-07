@@ -57,15 +57,15 @@ export default defineComponent({
 			if (!gameState) {
 				return;
 			}
-			else if (gameState.prematureEnd || gameOver) {
-				reset();
-				return;
-			}
 			else if (spectatorLeftMatch) {
 				// if (store.user.userid === gameState.player1.userid || store.user.userid === gameState.player2.userid)
 				// 	socket.emit("playerLeft", gameState);
 				// else
 				socket.emit("spectatorLeftMatch", gameState);
+				return;
+			}
+			else if (gameState.prematureEnd || gameOver) {
+				reset();
 				return;
 			}
 
@@ -123,10 +123,10 @@ export default defineComponent({
 			alert("You joined an empty room. WTF, how did you do that?");
 		}
 
-		const handleTooManyPlayers = () => {
-			reset();
-			alert("This game is full and in progress");
-		}
+		// const handleTooManyPlayers = () => {
+		// 	reset();
+		// 	alert("This game is full and in progress");
+		// }
 
 		const handleOpponentLeft = (matchid:number, userid: string) => {
 			socket.emit('opponentLeft', matchid);
@@ -152,6 +152,7 @@ export default defineComponent({
 
 		const joinMatchQueue = () => {
 			gameOver = false;
+			spectatorLeftMatch = false;
 			SocketioService.createNewGame(canvas);
 		};
 
@@ -287,7 +288,7 @@ export default defineComponent({
 		socket.on('gameState', handleGameState);
 		socket.on('gameOver', handleGameOver);
 		socket.on('joinedEmptyGame', handleJoinedEmptyGame);
-		socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
+		// socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
 		socket.on('joinGame', handleJoinGame);
 		socket.on('opponentLeft', handleOpponentLeft);
 		////############# SOCKETIO #############
