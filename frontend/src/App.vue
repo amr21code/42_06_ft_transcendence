@@ -106,7 +106,6 @@ export default defineComponent({
 			// only run API calls if successfully logged in
 			if (loggedIn.value === true)
 			{
-
 				await store.getUser();
 				await store.getFriends();
 				await store.getAllUsers();

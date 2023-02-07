@@ -144,6 +144,7 @@ export default defineComponent({
 				document.getElementById("block-user-button")!.innerHTML = "blocked";
 				document.getElementById("block-user-button")!.style.background = "#000000";
 				document.getElementById("block-user-button")!.style.color = "#ffffff";
+				document.getElementById("add-friend-button")!.style.display = "none";
 			}
 			else if (document.getElementById("block-user-button")!.innerHTML === "blocked") {
 				try {
@@ -155,6 +156,7 @@ export default defineComponent({
 				document.getElementById("block-user-button")!.innerHTML = "block user";
 				document.getElementById("block-user-button")!.style.background = "#ffffff";
 				document.getElementById("block-user-button")!.style.color = "#000000";
+				document.getElementById("add-friend-button")!.style.display = "block";
 			}
 		}
 		
@@ -213,9 +215,21 @@ export default defineComponent({
 						}
 						document.getElementById("block-user-button")!.style.display = "none";
 					}
-					// else if (friend.friendstatus == "blocked") {
-					// 	document.getElementById("add-friend-button")!.display = "none";
-					// }
+					else if (friend.friendstatus == "blocked") {
+						if (friend.requesterid === store.user.userid) {
+							document.getElementById("add-friend-button")!.style.display = "none";
+							document.getElementById("block-user-button")!.innerHTML = "blocked";
+							document.getElementById("block-user-button")!.style.background = "#000000";
+							document.getElementById("block-user-button")!.style.color = "#ffffff";
+						}
+						else {
+							document.getElementById("add-friend-button")!.style.display = "none";
+							document.getElementById("block-user-button")!.innerHTML = "you're blocked";
+							document.getElementById("block-user-button")!.style.background = "#000000";
+							document.getElementById("block-user-button")!.style.color = "#ffffff";
+							(document.getElementById("block-user-button") as HTMLButtonElement).disabled = true;
+						}
+					}
 				}
 			}
 		});
