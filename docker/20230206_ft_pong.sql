@@ -73,7 +73,7 @@ CREATE TABLE public.chat (
     type integer DEFAULT 0 NOT NULL,
     password character varying(100),
     chatid integer NOT NULL,
-    chat_name character varying(20) DEFAULT 'yet another chat'::character varying NOT NULL
+    chat_name character varying(30) DEFAULT 'yet another chat'::character varying NOT NULL
 );
 
 

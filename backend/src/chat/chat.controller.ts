@@ -144,9 +144,11 @@ export class ChatController {
 
 	@Get('open/pm/:userid')
 	async openPM(@Req() request: Request, @Param('userid') userid) {
-		try {
+		// try {
 			const user1 = request.session.passport.user.userid;
 			const user2 = await this.userService.getOne(userid);
+			const ret1 = await this.userService.showUserRelationshipStatus(user1, user2[0].userid);
+			console.log("open pm", ret1);
 			await this.chatService.checkPMChat(user1, user2[0].userid);
 			const joinresult = await this.chatService.joinChat(user1);
 			const chatdetails = await this.chatService.createPMChatDto(user1, user2[0].userid, joinresult);
@@ -155,8 +157,8 @@ export class ChatController {
 			var moduser = await this.chatService.changeUserStatus(details);
 			details.userid = user2[0].userid;
 			moduser = await this.chatService.changeUserStatus(details);
-		} catch (error) {
-			throw new ForbiddenException('open pm');
-		}
+		// } catch (error) {
+		// 	throw new ForbiddenException('open pm');
+		// }
 	}
 }

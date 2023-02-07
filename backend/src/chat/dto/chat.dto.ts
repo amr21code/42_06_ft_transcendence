@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, Length, Matches } from "class-validator";
 
 export class ChatDto {
 	@IsNumber()
@@ -10,9 +10,12 @@ export class ChatDto {
 	chatid: number;
 
 	@IsString()
-	@IsNotEmpty()
+	@Length(3, 20)
+	@Matches('^[a-zA-Z0-9}$')
 	chat_name: string;
-
+	
 	@IsString()
+	@Length(3, 20)
+	@Matches('^[a-zA-Z0-9}$')
 	password: string;
 }

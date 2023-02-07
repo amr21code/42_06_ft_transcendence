@@ -180,4 +180,41 @@ export class UserService {
 			);
 		}
 	}
+
+	async showUserRelationshipStatus(userid1: string, userid2: string) {
+		const user = await this.db.$queryRaw(
+			Prisma.sql`(SELECT fl.statuscode
+				FROM public.friends as fl
+				LEFT JOIN public.friendship_codes as fc ON fc.statuscode = fl.statuscode
+				LEFT JOIN (SELECT userid, username, user_status,  
+					CASE 
+						WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN 
+						profilepic42 
+						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
+						END as picurl, 
+						created, statusname from public.users
+						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
+						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ua ON fl.addresseeid = ua.userid
+				LEFT JOIN public.online_status as os ON os.statuscode=ua.user_status
+				WHERE fl.requesterid=${userid1} AND fl.addresseeid=${userid2})
+				UNION
+				(SELECT fl2.statuscode
+				FROM public.friends as fl2
+				LEFT JOIN public.friendship_codes as fc ON fc.statuscode = fl2.statuscode
+				LEFT JOIN (SELECT userid, username, user_status,  
+					CASE 
+						WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN 
+						profilepic42 
+						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
+						END as picurl, 
+						created, statusname from public.users
+						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
+						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ur ON fl2.requesterid = ur.userid
+				LEFT JOIN public.online_status as os ON os.statuscode=ur.user_status
+				WHERE fl2.addresseeid=${userid2} AND fl2.requesterid=${userid1})`
+				);
+				console.log(user);
+		return (user);
+	}
+
 }

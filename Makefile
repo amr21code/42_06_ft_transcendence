@@ -4,10 +4,8 @@ YMLDB =     ./docker-compose_db.yml
 
 $(NAME):
 	@echo "Building Transcendence"
-	# @mkdir -p ./docker/dbfolder
-	# @mkdir -p ./docker/webfolder
 	@docker compose -f $(YML) up -d
-	# @docker compose $(YML) up --build
+	@docker compose $(YML) up --build
 
 all: $(NAME)
 
@@ -27,7 +25,6 @@ eval:
 .PHONY: stop contrm imagerm volrm netrm clean test eval
 
 db: 
-	@mkdir -p ./docker/dbfolder
 	@docker compose -f $(YMLDB) up -d
 
 clean: stop contrm

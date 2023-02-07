@@ -8,7 +8,7 @@ export class FriendlistService {
 
 	async showFL(userid: string) {
 		const user = await this.db.$queryRaw(
-			Prisma.sql`(SELECT fl.addresseeid as userid, fl.addresseeid, ua.username as username, os.statusname, fc.statusname as friendstatus, ua.picurl
+			Prisma.sql`(SELECT fl.addresseeid as userid, fl.addresseeid, ua.username as username, os.statusname, fc.statusname as friendstatus, ua.picurl, fl.requesterid
 				FROM public.friends as fl
 				LEFT JOIN public.friendship_codes as fc ON fc.statuscode = fl.statuscode
 				LEFT JOIN (SELECT userid, username, user_status,  
@@ -23,7 +23,7 @@ export class FriendlistService {
 				LEFT JOIN public.online_status as os ON os.statuscode=ua.user_status
 				WHERE fl.requesterid=${userid})
 				UNION
-(SELECT fl.requesterid as friendid, fl.addresseeid, ur.username as friendname, os.statusname, fc.statusname as friendstatus, ur.picurl
+(SELECT fl.requesterid as friendid, fl.addresseeid, ur.username as friendname, os.statusname, fc.statusname as friendstatus, ur.picurl, fl.requesterid
 				FROM public.friends as fl
 				LEFT JOIN public.friendship_codes as fc ON fc.statuscode = fl.statuscode
 				LEFT JOIN (SELECT userid, username, user_status,  
