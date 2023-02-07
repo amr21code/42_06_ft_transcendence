@@ -106,7 +106,6 @@ export default defineComponent({
 			// only run API calls if successfully logged in
 			if (loggedIn.value === true)
 			{
-
 				await store.getUser();
 				await store.getFriends();
 				await store.getAllUsers();
@@ -135,7 +134,6 @@ export default defineComponent({
 		}
 
 		// for side window selection
-		store.selected = 'game';
 		const handleClick = (term: SelectedSideWindow) => {
 			store.selected = term;
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
