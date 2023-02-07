@@ -45,6 +45,7 @@ networks:
   external:
     driver: bridge
 
+volumes:
   web:
     driver: local
     driver_opts: 
