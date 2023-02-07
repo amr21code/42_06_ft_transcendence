@@ -13,7 +13,7 @@ export const useUserDataStore = defineStore('store', {
 		loggedIn: true,
 		userDataPopupTrigger: false,
 		gotChallengedPopupTrigger: false,
-		selected: {} as SelectedSideWindow,
+		selected: 'game' as SelectedSideWindow,
 	}),
 	actions: {
 		async getUser() {

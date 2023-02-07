@@ -134,7 +134,6 @@ export default defineComponent({
 		}
 
 		// for side window selection
-		store.selected = 'game';
 		const handleClick = (term: SelectedSideWindow) => {
 			store.selected = term;
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
