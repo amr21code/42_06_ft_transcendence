@@ -49,7 +49,7 @@
 				<img @click="changeAvatar(42)" class="select-photo" :src="user.profilepic42" alt="avatar-photo">
 				<img @click="changeAvatar(0)" class="select-photo" src="../../avatars/bitcoin.png" alt="avatar-photo">
 				<label id="upload-photo-label">
-					<input type="file" ref="file" @change="uploadAvatar()" name="" id="2"/>
+					<input type="file" accept=".png" ref="file" @change="uploadAvatar()" name="" id="2"/>
 					<img class="select-photo" src="../../assets/plus_icon.png" alt="avatar-upload" title="upload your own avatar">
 				</label>
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
