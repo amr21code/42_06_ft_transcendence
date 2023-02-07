@@ -26,7 +26,7 @@
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
 						<a id="achievement-gui">the gui</a>
 					</div>
-					<div class="achievement-wrapper" title="Won a game 3:0">
+					<div class="achievement-wrapper" title="Won a game 11:0">
 						<a id="achievement-tooEasy">too easy</a>
 					</div>
 					<div class="achievement-wrapper" title="Scored first goal in a match">
