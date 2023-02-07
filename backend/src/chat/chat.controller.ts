@@ -133,7 +133,7 @@ export class ChatController {
 		try {
 			const user = request.session.passport.user.userid;
 			const userstatus = await this.chatService.getUserStatus(user, details.chatid);
-			if (userstatus[0].status != 0)
+			if (userstatus[0].status > 1)
 				throw new ForbiddenException();
 			const result = await this.chatService.changeUserStatus(details);
 			return {msg:"ok"};
