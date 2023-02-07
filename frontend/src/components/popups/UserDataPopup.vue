@@ -52,7 +52,7 @@
 				<!-- <img @click="changeAvatar(1)" id="select-photo" src="../../assets/DefaultBoy.png" alt="avatar-photo"> -->
 				<!-- <img @click="changeAvatar(2)" id="select-photo" src="../../assets/DefaultGirl.png" alt="avatar-photo"> -->
 				<label id="upload-photo-label">
-					<input type="file" ref="file" @change="uploadAvatar()" name="" id="2"/>
+					<input type="file" accept=".png" ref="file" @change="uploadAvatar()" name="" id="2"/>
 					<img class="select-photo" src="../../assets/plus_icon.png" alt="avatar-upload" title="upload your own avatar">
 				</label>
 				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
