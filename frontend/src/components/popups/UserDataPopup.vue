@@ -46,13 +46,13 @@
 			</div>
 			<div class="user-data-wrapper">
 				<div>select new avatar:</div>
-				<img @click="changeAvatar(42)" class="select-photo" :src="user.profilepic42" alt="avatar-photo">
-				<img @click="changeAvatar(0)" class="select-photo" src="../../avatars/bitcoin.png" alt="avatar-photo">
+				<img @click="changeAvatar(42)" class="select-photo" :src="user.profilepic42" alt="avatar-default">
+				<img @click="changeAvatar(0)" class="select-photo" src="../../avatars/bitcoin.png" alt="avatar-upload" id="avatar-bitcoin">
+				<img @click="changeAvatar(1)" class="select-photo" src="../../avatars/mrburns.png" alt="avatar-upload" id="avatar-mrburns">
 				<label id="upload-photo-label">
 					<input type="file" accept=".png" ref="file" @change="uploadAvatar()" name="" id="2"/>
-					<img class="select-photo" src="../../assets/plus_icon.png" alt="avatar-upload" title="upload your own avatar">
+					<img class="select-photo" src="../../assets/plus_icon.png" alt="avatar-upload-button" title="upload your own avatar">
 				</label>
-				<!-- <a v-if="toggleAvatar === true">Hier könnte Ihre Werbung stehen!</a> -->
 			</div>
 			<div class="user-data-wrapper game-color-wrapper">
 				<div>select paddle color:</div>
@@ -88,7 +88,6 @@ export default defineComponent({
 	props: ['toggleUserDataPopup'],
 
 	setup() {
-		// ADD STORE HERE!
 		const store = useUserDataStore();
 		const user = ref({} as IUser);
 		const memberSince = ref('');
@@ -170,7 +169,15 @@ export default defineComponent({
 		});
 
 		const uploadAvatar = async() => {
-            DataService.uploadAvatar(file.value.files[0]);
+            await DataService.uploadAvatar(file.value.files[0]);
+			await DataService.changeAvatar(store.user.userid, 2)
+			.then(() => {
+				store.getUser();
+				socket.emit('send-userdata-refresh');
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
         }
 
 		return { store, user, leaderboardRank, memberSince, newUsername, uploadAvatar, file, socket };
@@ -276,15 +283,11 @@ export default defineComponent({
 }
 .center-user-summary {
 	text-align: center;
-	/* display: flex; */
 	display: grid;
 	align-items: center;
 	justify-content: center; 
 	justify-content: center;
-
 	grid-template-columns: 1fr 1fr 1fr;
-	/* grid-template-columns: 25% 25% 25%; */
-	/* outline: 3px solid red; */
 }
 
 #user-photo {
@@ -319,7 +322,6 @@ export default defineComponent({
 	font-family: monospace;
 	font-weight: 600;
 	/* outline: 3px solid red; */
-
 }
 
 /* #wins-vs-losses {
