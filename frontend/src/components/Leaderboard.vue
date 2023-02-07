@@ -43,11 +43,12 @@ export default defineComponent({
 
 		const store = useUserDataStore();
 
-		const usersByWins = computed(() => {
-			return [...store.allUsers].sort((a: IUser, b: IUser) => {
-				return a.wins > b.wins ? -1: 1;
-			})
-		});
+		// const usersByWins = computed(() => {
+		// 	return [...store.allUsers].sort((a: IUser, b: IUser) => {
+		// 		return a.wins > b.wins ? -1: 1;
+		// 	})
+		// });
+		const usersByWins = store.allUsers;
 			
 		// for user info popup (wins/match history)
 		const showUserHistoryTrigger = ref(false);
