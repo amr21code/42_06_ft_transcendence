@@ -10,8 +10,6 @@ services:
     - external
     ports:
     - 5432:5432
-    volumes:
-    - db:/tmp
     env_file:
     - .env
 
@@ -48,12 +46,6 @@ networks:
     driver: bridge
 
 volumes:
-  db:
-    driver: local
-    driver_opts: 
-      type: none
-      o: bind
-      device: ${PWD}/docker/dbfolder
   web:
     driver: local
     driver_opts: 

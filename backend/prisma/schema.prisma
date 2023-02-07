@@ -25,7 +25,7 @@ model chat {
   type          Int             @default(0)
   password      String?         @db.VarChar(100)
   chatid        Int             @id(map: "pk_chat") @default(autoincrement())
-  chat_name     String          @default("yet another chat") @db.VarChar(20)
+  chat_name     String          @default("yet another chat") @db.VarChar(30)
   chat_type     chat_type       @relation(fields: [type], references: [typeid], onDelete: Cascade, map: "fk_chat_chat_type")
   chat_messages chat_messages[]
   user_chat     user_chat[]
