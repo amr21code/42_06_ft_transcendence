@@ -211,9 +211,9 @@ export class UserService {
 						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ur ON fl2.requesterid = ur.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ur.user_status
-				WHERE fl2.addresseeid=${userid2} AND fl2.requesterid=${userid1})`
+				WHERE fl2.addresseeid=${userid1} AND fl2.requesterid=${userid2})`
 				);
-				console.log(user);
+				// console.log(user[0].statuscode);
 		return (user);
 	}
 

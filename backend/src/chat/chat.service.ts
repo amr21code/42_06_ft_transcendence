@@ -37,7 +37,7 @@ export class ChatService {
 			LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
 			LEFT JOIN public.chat as c ON uc.chatid=c.chatid
 			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-			WHERE uc.userid=${userid} AND (uc.status < 3 OR uc.bantime < CURRENT_TIMESTAMP)
+			WHERE uc.userid=${userid} AND (uc.status < 4 OR uc.bantime < CURRENT_TIMESTAMP)
 			ORDER BY chatid ASC`
 		);
 		return list;
@@ -62,7 +62,7 @@ export class ChatService {
 				END as picurl, user_status, created, statusname, wins, losses, paddlecolor FROM public.users
 				LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 				LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as u ON u.userid=uc.userid
-				WHERE uc.chatid=CAST(${chatid} AS INTEGER) AND (status < 3 OR bantime < CURRENT_TIMESTAMP)
+				WHERE uc.chatid=CAST(${chatid} AS INTEGER) AND (status < 4 OR bantime < CURRENT_TIMESTAMP)
 				ORDER BY userid ASC`
 			);
 		// } else {
@@ -103,15 +103,11 @@ export class ChatService {
 			var pwmatch = true;
 			if (result[0].passport)
 				pwmatch = await bcrypt.compare(pw, result[0].password);
-			// console.log("res", result[0].password);
-			// console.log("hash", pwHash);
-			// console.log("match", pwmatch);
 			if (result[0].chatid == chatid && pwmatch) {
-				// console.log("true");
 				const join = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_chat(
 						userid, chatid, status)
-						VALUES (${userid}, CAST(${chatid} AS INTEGER), 1);`
+						VALUES (${userid}, CAST(${chatid} AS INTEGER), 2);`
 						);
 				return ({msg: 'ok'});
 			} else {
@@ -159,13 +155,13 @@ export class ChatService {
 	async addMessage(message: ChatMessageDto) {
 		const user = await this.db.$queryRaw(
 			Prisma.sql`SELECT status FROM user_chat
-			WHERE userid=${message.userid} AND chatid=${message.chatid} AND (status < 2 OR bantime < CURRENT_TIMESTAMP)`
+			WHERE userid=${message.userid} AND chatid=${message.chatid} AND (status < 3 OR bantime < CURRENT_TIMESTAMP)`
 		);
 		console.log(user);
-		if (user[0].status >= 2) {
+		if (user[0].status >= 3) {
 			const userDto = await this.createPMUserDto(message.userid, message.chatid);
 			userDto.bantime = 0;
-			userDto.status = 1;
+			userDto.status = 2;
 			await this.changeUserStatus(userDto);
 		}
 		if (Object.keys(user).length == 0)
@@ -238,7 +234,7 @@ export class ChatService {
 	async createPMUserDto(userid: string, chatid: number) {
 		var details = JSON.stringify({
 			userid: userid,
-			status: 1,
+			status: 2,
 			bantime: 0,
 			chatid: chatid,
 		});

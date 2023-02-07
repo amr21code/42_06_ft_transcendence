@@ -133,7 +133,7 @@ export class ChatController {
 		try {
 			const user = request.session.passport.user.userid;
 			const userstatus = await this.chatService.getUserStatus(user, details.chatid);
-			if (userstatus[0].status != 0)
+			if (userstatus[0].status > 1)
 				throw new ForbiddenException();
 			const result = await this.chatService.changeUserStatus(details);
 			return {msg:"ok"};
@@ -144,21 +144,26 @@ export class ChatController {
 
 	@Get('open/pm/:userid')
 	async openPM(@Req() request: Request, @Param('userid') userid) {
-		// try {
+		try {
 			const user1 = request.session.passport.user.userid;
 			const user2 = await this.userService.getOne(userid);
-			const ret1 = await this.userService.showUserRelationshipStatus(user1, user2[0].userid);
-			console.log("open pm", ret1);
-			await this.chatService.checkPMChat(user1, user2[0].userid);
-			const joinresult = await this.chatService.joinChat(user1);
-			const chatdetails = await this.chatService.createPMChatDto(user1, user2[0].userid, joinresult);
-			const modchat = await this.chatService.changeChatDetails(chatdetails);
-			var details = await this.chatService.createPMUserDto(user1, joinresult);
-			var moduser = await this.chatService.changeUserStatus(details);
-			details.userid = user2[0].userid;
-			moduser = await this.chatService.changeUserStatus(details);
-		// } catch (error) {
-		// 	throw new ForbiddenException('open pm');
-		// }
+			const statuscode = await this.userService.showUserRelationshipStatus(user1, user2[0].userid);
+			// console.log("open pm", statuscode);
+			if (Object.keys(statuscode).length == 0 || (Object.keys(statuscode).length == 1 && statuscode[0].statuscode != 2)) {
+				await this.chatService.checkPMChat(user1, user2[0].userid);
+				const joinresult = await this.chatService.joinChat(user1);
+				const chatdetails = await this.chatService.createPMChatDto(user1, user2[0].userid, joinresult);
+				const modchat = await this.chatService.changeChatDetails(chatdetails);
+				var details = await this.chatService.createPMUserDto(user1, joinresult);
+				var moduser = await this.chatService.changeUserStatus(details);
+				details.userid = user2[0].userid;
+				moduser = await this.chatService.changeUserStatus(details);
+				return {'msg': 'ok'};
+			} else {
+				throw new ForbiddenException();
+			}
+		} catch (error) {
+			throw new ForbiddenException('open pm');
+		}
 	}
 }
