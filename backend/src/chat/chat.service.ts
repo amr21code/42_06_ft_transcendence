@@ -62,7 +62,7 @@ export class ChatService {
 				END as picurl, user_status, created, statusname, wins, losses, paddlecolor FROM public.users
 				LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 				LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as u ON u.userid=uc.userid
-				WHERE uc.chatid=${chatid} AND (status < 3 OR bantime < CURRENT_TIMESTAMP)
+				WHERE uc.chatid=CAST(${chatid} AS INTEGER) AND (status < 3 OR bantime < CURRENT_TIMESTAMP)
 				ORDER BY userid ASC`
 			);
 		// } else {
