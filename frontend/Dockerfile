@@ -2,8 +2,8 @@ FROM 	node:current-bullseye-slim
 
 WORKDIR /usr/src/app
 COPY . .
-COPY images/bitcoin.png src/avatars/
-COPY images/mrburns.png src/avatars/
+COPY images/bitcoin.png src/avatars/bitcoin.png
+COPY images/mrburns.png src/avatars/mrburns.png
 
 RUN npm install
 
