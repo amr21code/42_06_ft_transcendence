@@ -274,4 +274,15 @@ export class MatchGateway {
 			throw new WsException('opponent left failed');
 		}
 	}
+
+	@SubscribeMessage('spectatorLeftMatch') 
+	async leaveGameSpectator(client: any, gameState: MatchGameStateDto) {
+		try {
+			const matchidLeft = await this.matchService.listActiveMatch(gameState.player1.userid);
+			this.server.socketsLeave(matchidLeft[0].matchid);
+		}
+		catch (error) {
+			throw new WsException('spectatorLeftMatch failed');
+		}
+	}
 }
