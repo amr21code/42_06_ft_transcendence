@@ -36,7 +36,7 @@
 					<th v-if="permission < 2">mute</th>
 					<th v-if="permission < 2">ban</th>
 					<th>challenge</th>
-					<th v-if="permission < 2">make admin</th>
+					<th v-if="permission === 0">make admin</th>
 					<!-- <th><div>add friend</div></th> -->
 				</tr>
 			</thead>
@@ -58,7 +58,7 @@
 <!---------------------- mute ---------------------------------->
 							<td v-if="permission < 2">
 								<div v-if="user.userid != user_me[0].userid">
-									<img src="../../assets/muteicon.png" @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 3">
+									<img src="../../assets/muteicon.png" @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 3 && user.status !== 0">
 									<!-- <button @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 3">mute</button> -->
 									<div v-if="Mute === index + 1">
 										<select v-model="mutetime" required>
@@ -74,7 +74,7 @@
 							</td>
 <!---------------------- ban ---------------------------------->
 							<td v-if="permission < 2">
-								<div v-if="user.userid != user_me[0].userid">
+								<div v-if="user.userid != user_me[0].userid && user.status !== 0">
 									<img src="../../assets/banicon.png" @click="(toggleBan(index + 1))" v-if="Ban === 0">
 									<!-- <button @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">ban</button> -->
 									<div v-if="Ban === index + 1">
@@ -97,8 +97,8 @@
 								</div>
 							</td>
 <!---------------------- make admin ---------------------------------->
-							<td v-if="permission === 0">
-								<div>
+							<td>
+								<div v-if="permission === 0">
 									<img src="../../assets/adminicon.png" @click="makeAdmin(user.userid, chat.chatid)" v-if="user.status !== 0">
 									<!-- <button v-if="user.status != 0 && user_me[0].userid">make admin</button> -->
 								</div>
