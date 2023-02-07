@@ -315,6 +315,7 @@ export default defineComponent({
 		border-radius: 15px;
 		padding: 3px;
 		margin-right: 35px;
+		text-align: left;
 	}
 	
 	.message-sent {
