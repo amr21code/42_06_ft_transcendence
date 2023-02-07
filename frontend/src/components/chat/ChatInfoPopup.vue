@@ -2,7 +2,7 @@
     <div class="popup" @keyup.esc="(ChatInfotogglePopup)" tabindex="0">
         <div class="popup-inner">
             <h2>Info to chat[{{ chat.chatid }}]</h2>
-			<div class="button-container" v-if="isAdmin === true">
+			<div class="button-container" v-if="permission === 0">
 				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">Change name</button>
 				<div v-if="option === 1">
 					<input type="text" placeholder="Enter new chatname"  v-model="newChatname">
@@ -33,22 +33,19 @@
 					<th>username</th>
 					<th>statusname</th>
 					<!-- <th>onlinestatus</th>  {{ user.user_status }}-->
-					<th v-if="isAdmin === true">mute</th>
-					<th v-if="isAdmin === true">ban</th>
+					<th v-if="permission < 2">mute</th>
+					<th v-if="permission < 2">ban</th>
 					<th>challenge</th>
-					<th v-if="isAdmin === true">make admin</th>
+					<th v-if="permission < 2">make admin</th>
 					<!-- <th><div>add friend</div></th> -->
 				</tr>
 			</thead>
 			<div v-for="(user, index) in users" :key="index">
-				<!-- <div  v-if="user.status != 3"> -->
 					<tbody>
 						<tr class="info-item" >
-							<td @click="toggleUserHistory(user)"> <!-- userid -->
-								
+							<td @click="toggleUserHistory(user)"> <!-- userid -->								
 								<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
 								<img src="../../assets/onlineicon.png" class="user_status-img" v-if="user.user_status === 1">
-								<!-- {{ user.user_status }} when status === 1 show green dot else grey -->
 								{{ user.userid }}
 							</td>
 							<td @click="toggleUserHistory(user)"> <!-- username -->
@@ -59,10 +56,10 @@
 							</td>
 							<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => toggleUserHistory(0)" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
 <!---------------------- mute ---------------------------------->
-							<td v-if="isAdmin === true">
+							<td v-if="permission < 2">
 								<div v-if="user.userid != user_me[0].userid">
-									<img src="../../assets/muteicon.png" @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">
-									<!-- <button @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 2">mute</button> -->
+									<img src="../../assets/muteicon.png" @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 3">
+									<!-- <button @click="(toggleMute(index + 1))" v-if="Mute === 0 && user.status !== 3">mute</button> -->
 									<div v-if="Mute === index + 1">
 										<select v-model="mutetime" required>
 											<option value="10">10 minutes</option>
@@ -70,15 +67,15 @@
 											<option value="30">30 minutes</option>
 											<option value="60">60 minutes</option> -->
 										</select>
-										<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 2">mute</button>
+										<button @click="muteUser(user.userid, mutetime)" v-if="user.status !== 3">mute</button>
 									</div>
-									<button v-if="user.status === 2">-MUTED-</button>
+									<button v-if="user.status === 3">-MUTED-</button>
 								</div>
 							</td>
 <!---------------------- ban ---------------------------------->
-							<td v-if="isAdmin === true">
+							<td v-if="permission < 2">
 								<div v-if="user.userid != user_me[0].userid">
-									<img src="../../assets/banicon.png" @click="(toggleBan(index + 1))" v-if="Ban == 0">
+									<img src="../../assets/banicon.png" @click="(toggleBan(index + 1))" v-if="Ban === 0">
 									<!-- <button @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">ban</button> -->
 									<div v-if="Ban === index + 1">
 										<select v-model="bantime" required>
@@ -100,7 +97,7 @@
 								</div>
 							</td>
 <!---------------------- make admin ---------------------------------->
-							<td v-if="isAdmin === true">
+							<td v-if="permission === 0">
 								<div>
 									<img src="../../assets/adminicon.png" @click="makeAdmin(user.userid, chat.chatid)" v-if="user.status !== 0">
 									<!-- <button v-if="user.status != 0 && user_me[0].userid">make admin</button> -->
@@ -160,7 +157,7 @@ export default defineComponent({
 	},
 	async created () {
 		await this.retrieveCurrentUser();
-		await this.checkIfAdmin();
+		await this.checkPermission();
 		await this.retrieveCurrentUsersInChat(this.chat.chatid);
 		this.socket.on('refresh-chat', () => {
 			this.retrieveCurrentUsersInChat(this.chat.chatid);
@@ -173,7 +170,7 @@ export default defineComponent({
             socket: SocketioService.socket,
 			mutetime: 10,
 			bantime : 10,
-			isAdmin: false as boolean,
+			permission: 2 as number,
 			newChatname: '' as string,
 			newChatpassword: '' as string,
 		}
@@ -195,7 +192,7 @@ export default defineComponent({
 			await DataService.getUsersInChat(chatid)
 			.then((response: ResponseData) => {
 				this.users = response.data;
-				this.checkIfAdmin();
+				this.checkPermission();
 			})
 			.catch((e: Error) => {
 				console.log(e);
@@ -218,11 +215,22 @@ export default defineComponent({
 			this.toggleBan(0);
 		},
 
-		async checkIfAdmin() {
+		async checkPermission() {
 			for (var user of this.users) {
 				if (this.user_me[0].userid === user.userid)
+				{
+					if (user.statusname === 'owner')
+						this.permission = 0;
 					if (user.statusname === 'admin')
-						this.isAdmin = true;
+						this.permission = 1;
+					if (user.statusname === 'member')
+						this.permission = 2;
+					if (user.statusname === 'muted')
+						this.permission = 3;
+					if (user.statusname === 'ban')
+						this.permission = 4;
+				}
+					
 			}
 		},
 
