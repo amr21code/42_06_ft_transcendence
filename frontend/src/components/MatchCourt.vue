@@ -187,6 +187,12 @@ export default defineComponent({
 			joinMatchQueueBtn.addEventListener("click", joinMatchQueue);
 			watchMatchBtn.addEventListener("click", watchGame);
 			leaveMatchButton.addEventListener("click", spectatorLeavesMatch);
+
+			window.addEventListener("keydown", function(e) {
+				if(["ArrowUp","ArrowDown"].indexOf(e.code) > -1) {
+					e.preventDefault();
+				}
+			}, false);
         };
 
 
