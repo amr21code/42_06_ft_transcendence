@@ -83,26 +83,44 @@ export default defineComponent({
 	setup() {
 		const store = useUserDataStore();
 
-		// read all necessary data into the store
-		onMounted(async () => {
-			await store.getUser();
-			await store.getFriends();
-			await store.getAllUsers();
-
-			if (store.selected === 'game')
-				document.getElementById("gameSelected")!.style.backgroundColor = "#b04716";
-			if (store.selected === 'chat')
-				document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
-			if (store.selected === 'leaderboard')
-				document.getElementById("leaderboardSelected")!.style.backgroundColor = "#b04716";
-			if (store.selected === 'friends')
-				document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
-		});
-
-		const loggedIn = ref(true); // CHANGE THIS BACK TO FALSE
+		const loggedIn = ref(false);
 		const toggleLoginPopup = () => {
 			loggedIn.value = !loggedIn.value;
 		}
+
+		onMounted(async () => {
+			await DataService.getAuthStatus()
+			.then((authStatus: any) => {
+				if (authStatus.data.msg !== 'authenticated') {
+					loggedIn.value = false;
+				}
+				else {
+					loggedIn.value = true;
+				}
+				console.log('Your authentication status is: ', authStatus.data.msg);
+			})
+			.catch((e: Error) => {
+				console.log("Error occured in getAuthStatus", e);
+			})
+
+			// only run API calls if successfully logged in
+			if (loggedIn.value === true)
+			{
+
+				await store.getUser();
+				await store.getFriends();
+				await store.getAllUsers();
+				
+				if (store.selected === 'game')
+					document.getElementById("gameSelected")!.style.backgroundColor = "#b04716";
+				if (store.selected === 'chat')
+					document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
+				if (store.selected === 'leaderboard')
+					document.getElementById("leaderboardSelected")!.style.backgroundColor = "#b04716";
+				if (store.selected === 'friends')
+					document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
+			}
+		});
 
 		// for user data popup (user data)
 		const userDataPopupTrigger = ref(false);
@@ -150,28 +168,6 @@ export default defineComponent({
 		
 		return { store, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
-
-	methods: {
-		checkAuthStatus() {
-			DataService.getAuthStatus()
-			.then((authStatus: any) => {
-				if (authStatus.data.msg !== 'authenticated') { // HERE COMES SESSIONID LATER
-					this.loggedIn = false;
-				}
-				else {
-					this.loggedIn = true;
-				}
-				console.log('Your authentication status is: ', authStatus.data.msg);
-			})
-			.catch((e: Error) => {
-				console.log("Error occured in getAuthStatus", e);
-			})
-		},
-	},
-	mounted () {
-		this.checkAuthStatus();
-		
-	}
 });
 </script>
 
