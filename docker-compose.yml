@@ -37,7 +37,7 @@ services:
     ports:
     - 5173:5173
     volumes:
-    - web:/usr/src/app/src/upload/
+    - web:/usr/src/app/src/avatars/
     restart: unless-stopped
     depends_on:
       - db

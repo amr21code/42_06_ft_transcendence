@@ -73,7 +73,7 @@ CREATE TABLE public.chat (
     type integer DEFAULT 0 NOT NULL,
     password character varying(100),
     chatid integer NOT NULL,
-    chat_name character varying(100) DEFAULT 'yet another chat'::character varying NOT NULL
+    chat_name character varying(20) DEFAULT 'yet another chat'::character varying NOT NULL
 );
 
 
@@ -299,7 +299,7 @@ ALTER TABLE public.user_status_chat OWNER TO pong;
 -- Name: TABLE user_status_chat; Type: COMMENT; Schema: public; Owner: pong
 --
 
-COMMENT ON TABLE public.user_status_chat IS '0 admin\n1 member\n2 muted\n3 ban';
+COMMENT ON TABLE public.user_status_chat IS '0 owner\n1 admin\n2 member\n3 muted\n4 ban';
 
 
 --
@@ -318,7 +318,8 @@ CREATE TABLE public.users (
     access_token character varying(100),
     losses integer DEFAULT 0 NOT NULL,
     socket_token character varying(100),
-    wins integer DEFAULT 0 NOT NULL
+    wins integer DEFAULT 0 NOT NULL,
+    paddlecolor character varying(6) DEFAULT 'ffffff'::character varying NOT NULL
 );
 
 
@@ -425,8 +426,10 @@ COPY public.achievements (achievementid, achievementname, achievementdescription
 --
 
 COPY public.avatars (avatarurl, avatarname, avatarid) FROM stdin;
-/src/assets/bitcoin-black-white.png	Bitcoin-Logo	0
 \N	42 Profile Picture	42
+/src/avatars/bitcoin.png	Bitcoin-Logo	0
+/src/avatars/	custom	2
+/src/avatars/mrburns.png	Mr Burns	1
 \.
 
 
@@ -540,10 +543,11 @@ COPY public.user_match (userid, matchid, user_score, challenge, timeout) FROM st
 --
 
 COPY public.user_status_chat (statusid, statusname) FROM stdin;
-0	admin
-1	member
-2	muted
-3	ban
+0	owner
+1	admin
+2	member
+3	muted
+4	ban
 \.
 
 
@@ -551,7 +555,7 @@ COPY public.user_status_chat (statusid, statusname) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: pong
 --
 
-COPY public.users (userid, username, twofa, created, user_status, profilepic42, avatar, twofasecret, access_token, losses, socket_token, wins) FROM stdin;
+COPY public.users (userid, username, twofa, created, user_status, profilepic42, avatar, twofasecret, access_token, losses, socket_token, wins, paddlecolor) FROM stdin;
 \.
 
 
@@ -567,28 +571,28 @@ COPY public.users_achievements (userid, achievementid, count, id) FROM stdin;
 -- Name: chat_chatid_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.chat_chatid_seq', 37, true);
+SELECT pg_catalog.setval('public.chat_chatid_seq', 62, true);
 
 
 --
 -- Name: chat_messages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.chat_messages_id_seq', 9, true);
+SELECT pg_catalog.setval('public.chat_messages_id_seq', 24, true);
 
 
 --
 -- Name: match_history_matchid_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.match_history_matchid_seq', 8, true);
+SELECT pg_catalog.setval('public.match_history_matchid_seq', 66, true);
 
 
 --
 -- Name: users_achievements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.users_achievements_id_seq', 3, true);
+SELECT pg_catalog.setval('public.users_achievements_id_seq', 12, true);
 
 
 --
