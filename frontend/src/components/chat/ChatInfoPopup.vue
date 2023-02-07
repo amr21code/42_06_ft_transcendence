@@ -235,7 +235,7 @@ export default defineComponent({
 		},
 
 		async makeAdmin(userid : string, chatid : number) {
-			await DataService.changeChatUserdata(userid, chatid, 0)
+			await DataService.changeChatUserdata(userid, chatid, 1)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
 			})
