@@ -1,5 +1,5 @@
 <template>
-	<div v-if="store.selected !== 'play' && store.selected !== 'watch'" class="side-window-wrapper">
+	<div v-if="store.selected !== 'play' as SelectedSideWindow && store.selected !== 'watch' as SelectedSideWindow" class="side-window-wrapper">
 		<ChatWindow v-if="store.selected === 'chat'" />
 		<Leaderboard v-if="store.selected === 'leaderboard'"/>
 		<Friendlist v-if="store.selected === 'friends'"/>
@@ -13,6 +13,7 @@ import ChatWindow from './chat/Chat.vue'
 import Leaderboard from '../components/Leaderboard.vue'
 import Friendlist from '../components/Friendlist.vue'
 import { useUserDataStore } from '../stores/myUserDataStore'
+import type { SelectedSideWindow } from '@/types/SelectedSideWindow'
 
 export default defineComponent({
 	name: 'side-window',

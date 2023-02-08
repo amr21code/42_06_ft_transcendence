@@ -75,7 +75,7 @@
 			
 			<div class="chat-write-and-send">
 				<form @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
-					<input placeholder="Write message here" v-model="message">
+					<input class="input-message" placeholder="Write message here" v-model="message">
 					<img @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="user-photo" width="20" height="20">
 				</form>
 			</div>
@@ -255,6 +255,12 @@ export default defineComponent({
 
 <style scoped>
 
+
+	.input-message {
+		width: 80%;
+		float: left;
+		clear: both;
+	}
 	.wrapper {
 		max-width: 100%;
 		min-height: 100%;
@@ -338,13 +344,12 @@ export default defineComponent({
 	}
 	
 	.chat-write-and-send {
-		border: black solid 3px;
-		padding: 3px;
+		padding: 5px;
 	}
 	.chat-write-and-send img {
-		margin: 2px;
+
 		float: right;
-		padding: 3px;
+		padding: 5px;
 		cursor: pointer;
 	}
 	
