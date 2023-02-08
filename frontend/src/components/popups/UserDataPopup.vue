@@ -172,8 +172,8 @@ export default defineComponent({
             await DataService.uploadAvatar(file.value.files[0]);
 			await DataService.changeAvatar(store.user.userid, 2)
 			.then(() => {
-				store.getUser();
 				socket.emit('send-userdata-refresh');
+				store.getUser();
 			})
 			.catch((e: Error) => {
 				console.log(e);

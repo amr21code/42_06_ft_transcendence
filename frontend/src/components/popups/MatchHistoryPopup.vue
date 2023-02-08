@@ -64,6 +64,7 @@ import type { ResponseData } from '../../types/ResponseData'
 import type { ISingleMatchHistory } from '../../types/SingleMatchHistory'
 import type { IUser } from '../../types/User'
 import { useUserDataStore } from '../../stores/myUserDataStore'
+import SocketioService from '@/services/SocketioService'
 
 export default defineComponent({
 
@@ -85,11 +86,13 @@ export default defineComponent({
 		const matchHistory = ref([] as ISingleMatchHistory[]);
 		// const myUser = ref({} as IUser);
 		const store = useUserDataStore();
+		const socket = SocketioService.socket;
 
 		const friendButtonAction = async (userid: string) => {
 			if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
 				try {
 					await DataService.requestFriend(userid);
+					socket.emit('send-userdata-refresh');
 				} catch {
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
@@ -101,6 +104,7 @@ export default defineComponent({
 			else if (document.getElementById("add-friend-button")!.innerHTML === "confirm") {
 				try {
 					await DataService.confirmFriend(userid);
+					socket.emit('send-userdata-refresh');
 				} catch {
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
@@ -112,6 +116,7 @@ export default defineComponent({
 			else if (document.getElementById("add-friend-button")!.innerHTML === "pending") {
 				try {
 					await DataService.removeFriend(userid);
+					socket.emit('send-userdata-refresh');
 				} catch {
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
@@ -123,6 +128,7 @@ export default defineComponent({
 			else if (document.getElementById("add-friend-button")!.innerHTML === "friends") {
 				try {
 					await DataService.removeFriend(userid);
+					socket.emit('send-userdata-refresh');
 				} catch {
 					document.getElementById("add-friend-button")!.style.background = "#b04716";
 					document.getElementById("add-friend-button")!.innerHTML = "error";
@@ -137,6 +143,7 @@ export default defineComponent({
 			if (document.getElementById("block-user-button")!.innerHTML === "block user") {
 				try {
 					await DataService.blockUser(userid);
+					socket.emit('send-userdata-refresh');
 				} catch {
 					document.getElementById("block-user-button")!.style.background = "#b04716";
 					document.getElementById("block-user-button")!.innerHTML = "error";
@@ -149,6 +156,7 @@ export default defineComponent({
 			else if (document.getElementById("block-user-button")!.innerHTML === "blocked") {
 				try {
 					await DataService.unblockUser(userid);
+					socket.emit('send-userdata-refresh');
 				} catch {
 					document.getElementById("block-user-button")!.style.background = "#b04716";
 					document.getElementById("block-user-button")!.innerHTML = "error";

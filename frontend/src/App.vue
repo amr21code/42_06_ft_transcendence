@@ -74,6 +74,20 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
+			DataService.getFriends()
+			.then((response: ResponseData) => {
+				this.store.friends = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			DataService.getAll()
+			.then((response: ResponseData) => {
+				this.store.allUsers = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
 		})
 	},
 	beforeUnmount() {

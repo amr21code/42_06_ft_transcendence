@@ -33,6 +33,7 @@ import { defineComponent, ref, onMounted } from 'vue'
 import { useUserDataStore } from '../stores/myUserDataStore'
 import type { ResponseData } from '../types/ResponseData'
 import MatchHistoryPopup from './popups/MatchHistoryPopup.vue'
+import SocketioService from '@/services/SocketioService'
 
 export default defineComponent({
 	
@@ -40,12 +41,14 @@ export default defineComponent({
 
 	setup() {	
 		const store = useUserDataStore();
+		const socket = SocketioService.socket;
 
 		// for user info popup (wins/match history)
 		const showUserHistoryTrigger = ref(false);
 		const selectedUser = ref("");
 		const selectedUserPhoto = ref("");
 		const toggleUserHistory = (user: any) => {
+			socket.emit('send-userdata-refresh');
 			showUserHistoryTrigger.value = true;
 			selectedUser.value = user.userid;
 			selectedUserPhoto.value = user.picurl;
