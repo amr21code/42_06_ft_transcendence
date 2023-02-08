@@ -1,9 +1,11 @@
 <template>
-	<div class="popup" tabindex="0">
+	<div class="popup" @keyup.esc="untoggleTwoFaPopup" tabindex="0">
 		<div class="popup-inner">
 			<slot/>
 			<h2>Using Google 2FA</h2>
+			<img :src="TwoFaQrCode" alt="qrCode" />
 			<input type="text" @keyup.enter="submitTwoFaSecret()" v-model="enteredSecret" placeholder="Enter your verification code">
+			<button class="untoggleTwoFaPopupButton" @click="untoggleTwoFaPopup">Quit</button>
 		</div>
 	</div>
 </template>
@@ -16,20 +18,27 @@ import { useUserDataStore } from '../../stores/myUserDataStore';
 
 export default defineComponent({
 
-	props: ['toggleTwoFaPopup'],
+	props: ['untoggleTwoFaPopup', 'updateTwoFaButton'],
 
 	setup(props) {
+		const store = useUserDataStore();
+		const TwoFaQrCode = ref('');
 		const enteredSecret = ref('');
+		
+		onMounted(async () => {
+			TwoFaQrCode.value = await DataService.getTwoFaQrCode();
+		});
 
 		const submitTwoFaSecret = async () => {
-			if (await DataService.submitTwoFaAlreadyRegistered(enteredSecret.value)) {
-				props.toggleTwoFaPopup();
+			if (await DataService.submitTwoFaSecret(enteredSecret.value)) {
+				props.updateTwoFaButton();
+				props.untoggleTwoFaPopup();
 			}
 			else
 				alert('Verification code was wrong, please try again');
 		}
 
-		return { enteredSecret, submitTwoFaSecret }
+		return { TwoFaQrCode, enteredSecret, submitTwoFaSecret }
 	}
 })
 </script>

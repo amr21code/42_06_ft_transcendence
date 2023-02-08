@@ -68,6 +68,15 @@ class DataService {
 		}
 	}
 
+	async submitTwoFaAlreadyRegistered(secret: string) {
+		try {
+			await apiInstance.get('/2fa/authenticate/' + secret);
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+
 	//################ FRIENDS ###########################################
 
 	getFriends() : Promise<any> {

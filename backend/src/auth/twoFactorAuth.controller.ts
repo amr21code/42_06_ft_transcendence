@@ -40,16 +40,14 @@ export class TwoFactorAuthenticationController {
 @Get('authenticate/:secret')
   @UseGuards(AuthenticatedGuard)
   async authenticate(
-    @Req() request: Request, @Param('secret') secret: string
+    @Session() session: Record<string, any>, @Param('secret') secret: string
   ) {
-    const user = await this.userService.getMe(request.user);
-    const twofasecret = await this.userService.getUserData(user[0].userid, 'twofasecret')
+    const twofasecret = await this.userService.getUserData(session.passport.user.userid, 'twofasecret')
     const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthenticationCodeValid(
       secret, twofasecret
     );
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
-    return request.user;
   }
 }

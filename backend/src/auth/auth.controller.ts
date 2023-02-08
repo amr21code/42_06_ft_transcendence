@@ -13,12 +13,7 @@ export class AuthController {
 	ftAuthCallback(@Res() res, @Req() request: Request, @Session() session: Record<string, any>) {
 		// console.log('auth/return');
 		try {
-			if (request.user["twofa"] == 1){
-				// console.log("2fa");
-				res.redirect(`${this.config.get('TWOFA_URL')}`);
-			}
-			else
-				res.redirect(`${this.config.get('FRONTEND_URL')}`);
+			res.redirect(`${this.config.get('FRONTEND_URL')}`);
 			return request.user;
 		} catch (error) {
 			throw new ForbiddenException('auth status');

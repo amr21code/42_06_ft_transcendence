@@ -63,7 +63,7 @@
 			<div class="user-data-wrapper">
 				<div>2-factor-authentication:
 					<button id="2fa-button" @click="toggleTwoFaPopup()">Activate Google 2FA</button>
-					<TwoFaPopup v-if="showTwoFaTrigger === true" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" :updateTwoFaButton="() => updateTwoFaButton()"/>
+					<TwoFaRegisterPopup v-if="showTwoFaTrigger === true" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" :updateTwoFaButton="() => updateTwoFaButton()"/>
 				</div>
 			</div>
 			<div class="user-data-wrapper">
@@ -85,12 +85,12 @@ import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
 import moment from 'moment'
 import SocketioService from '../../services/SocketioService.js';
-import TwoFaPopup from './TwoFaPopup.vue'
+import TwoFaRegisterPopup from './TwoFaRegisterPopup.vue'
 
 
 export default defineComponent({
 
-	components: { TwoFaPopup },
+	components: { TwoFaRegisterPopup },
 	props: ['toggleUserDataPopup'],
 
 	setup() {
