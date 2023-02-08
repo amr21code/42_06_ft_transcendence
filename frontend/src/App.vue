@@ -19,6 +19,7 @@
 			</header>
 			<!-- enforce this properly!-->
 			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
+			<TwoFaPopup id="TwoFaPopup" v-if="store.user.twofa === 1" :toggleTwoFaPopup="() => toggleTwoFaPopup()" />
 			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 			<gotChallengedPopup id="gotChallengedPopup" v-if="gotChallengedPopupTrigger === true" :toggleGotChallengedPopup="() => toggleGotChallengedPopup()" :challenger="challenger"/>
 			<div class="game-part-screen">
@@ -45,6 +46,7 @@ import SideWindow from './components/SideWindow.vue'
 import LoginPopup from './components/popups/LoginPopup.vue'
 import UserDataPopup from './components/popups/UserDataPopup.vue'
 import gotChallengedPopup from './components/popups/GotChallengedPopup.vue'
+import TwoFaPopup from './components/popups/TwoFaPopup.vue'
 import LoggingService from './services/LoggingService'
 
 import SocketioService from './services/SocketioService.js'
@@ -54,7 +56,7 @@ export default defineComponent({
 
 	name: 'App',
 	el: "#app",
-	components: { LoginPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
+	components: { LoginPopup, TwoFaPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
 	data () {
 		return {
 			socket: SocketioService.setupSocketConnection(),
@@ -100,6 +102,11 @@ export default defineComponent({
 		const loggedIn = ref(false);
 		const toggleLoginPopup = () => {
 			loggedIn.value = !loggedIn.value;
+		}
+
+		// const twoFaActivated = ref(false);
+		const toggleTwoFaPopup = () => {
+			document.getElementById("TwoFaPopup")!.style.display = "none";
 		}
 
 		onMounted(async () => {
@@ -178,7 +185,7 @@ export default defineComponent({
 			}
 		};
 		
-		return { store, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
+		return { store, toggleTwoFaPopup, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
 </script>
