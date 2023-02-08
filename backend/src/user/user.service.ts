@@ -27,8 +27,8 @@ export class UserService {
 
 	async getLeaderboardPos(userid: string){
 		const pos = await this.db.$queryRaw<number>(
-			Prisma.sql`SELECT row_num FROM 
-			(SELECT ROW_NUMBER() OVER() AS row_num, userid FROM public.users ORDER BY wins DESC, losses ASC, created ASC) as leaderboard WHERE userid=${userid}`
+			Prisma.sql`SELECT row_num FROM (SELECT ROW_NUMBER() OVER() AS row_num, userid  FROM 
+			(SELECT userid, wins, losses FROM public.users ORDER BY wins DESC) as leaderboard) as leaderboard2 WHERE userid=${userid}`
 		);
 		console.log("leader pos", pos);
 		if (Object.keys(pos).length == 0)
