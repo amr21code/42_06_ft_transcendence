@@ -352,7 +352,7 @@ export default defineComponent({
 	padding-top: 0;
 	border-collapse: collapse;
 	overflow-y: auto;
-	max-height: 500px;
+	max-height: 250px;
 	table-layout: fixed;
 	display: block;
 	position: relative;

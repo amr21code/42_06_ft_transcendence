@@ -255,6 +255,11 @@ export default defineComponent({
 
 <style scoped>
 
+	.wrapper {
+		max-width: 100%;
+		min-height: 100%;
+	}
+
 	.info-icon{
 		padding-left: 15%;
 	}
@@ -289,6 +294,7 @@ export default defineComponent({
 
 	.messages-wrapper {
 		max-width: 340px;
+		min-width: 340px;
 	}
 
 	.message-text {
