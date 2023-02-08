@@ -87,9 +87,6 @@ export default defineComponent({
 	margin-left: 0%;
 }
 
-.two-fa-wrapper {
-}
-
 #qr-code {
 	text-align: center;
 }

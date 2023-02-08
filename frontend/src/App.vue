@@ -7,11 +7,11 @@
 					<h1>The Pong Game</h1>
 				</div>
 				<div class="top-nav">
-					<a class="menuOption" id="gameSelected" @click="handleClick('game')">game</a>
+					<a class="menuOption" id="game" @click="handleClick('game')">game</a>
 					<!-- <a class="menuOption" id="watchSelected" @click="handleClick('watch')">watch</a> -->
-					<a class="menuOption" id="chatSelected" @click="handleClick('chat')">chat</a>
-					<a class="menuOption" id="leaderboardSelected" @click="handleClick('leaderboard')">leaderboard</a>
-					<a class="menuOption" id="friendsSelected" @click="handleClick('friends')">friends</a>
+					<a class="menuOption" id="chat" @click="handleClick('chat')">chat</a>
+					<a class="menuOption" id="leaderboard" @click="handleClick('leaderboard')">leaderboard</a>
+					<a class="menuOption" id="friends" @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
 						<img :src="store.user.picurl" alt="user-photo" width="40" height="40"> 
 					</div>
@@ -132,14 +132,46 @@ export default defineComponent({
 				await store.getAllUsers();
 				
 				if (store.selected === 'game')
-					document.getElementById("gameSelected")!.style.backgroundColor = "#b04716";
+					document.getElementById("game")!.style.backgroundColor = "#b04716";
 				if (store.selected === 'chat')
-					document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
+					document.getElementById("chat")!.style.backgroundColor = "#b04716";
 				if (store.selected === 'leaderboard')
-					document.getElementById("leaderboardSelected")!.style.backgroundColor = "#b04716";
+					document.getElementById("leaderboard")!.style.backgroundColor = "#b04716";
 				if (store.selected === 'friends')
-					document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
+					document.getElementById("friends")!.style.backgroundColor = "#b04716";
 			}
+
+			// overwrite default behavior of back/forward button in browser
+			let menuOptions = Array.from(document.getElementsByClassName("menuOption"));
+			const selectMenuOption = (id: SelectedSideWindow) => {
+				store.selected = id;
+				menuOptions.forEach(option => {
+					(option as HTMLElement).style.backgroundColor = "#444040";
+				});
+				if (store.selected === 'game')
+					document.getElementById("game")!.style.backgroundColor = "#b04716";
+				if (store.selected === 'chat')
+					document.getElementById("chat")!.style.backgroundColor = "#b04716";
+				if (store.selected === 'leaderboard')
+					document.getElementById("leaderboard")!.style.backgroundColor = "#b04716";
+				if (store.selected === 'friends')
+					document.getElementById("friends")!.style.backgroundColor = "#b04716";
+			}
+
+			menuOptions.forEach(option => {
+				let id = option.id as SelectedSideWindow;
+				option.addEventListener('click', e => {
+					history.pushState({id}, '', './' + id);
+					selectMenuOption(id);
+				});
+			});
+
+			window.addEventListener('popstate', e => {
+				if (e.state !== null)
+					selectMenuOption(e.state.id);
+				else
+					selectMenuOption('game');
+			})
 		});
 
 		// for user data popup (user data)
@@ -163,13 +195,13 @@ export default defineComponent({
 			});
 			// selected menu highlighting below
 			if (store.selected === 'game')
-				document.getElementById("gameSelected")!.style.backgroundColor = "#b04716";
+				document.getElementById("game")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'chat')
-				document.getElementById("chatSelected")!.style.backgroundColor = "#b04716";
+				document.getElementById("chat")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'leaderboard')
-				document.getElementById("leaderboardSelected")!.style.backgroundColor = "#b04716";
+				document.getElementById("leaderboard")!.style.backgroundColor = "#b04716";
 			if (store.selected === 'friends')
-				document.getElementById("friendsSelected")!.style.backgroundColor = "#b04716";
+				document.getElementById("friends")!.style.backgroundColor = "#b04716";
 
 
 			// if (store.selected === 'play' || store.selected === 'watch') {
@@ -184,7 +216,9 @@ export default defineComponent({
 				document.documentElement.style.setProperty("--sidewindow_fr", "1fr");
 			}
 		};
-		
+
+
+
 		return { store, toggleTwoFaPopup, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
@@ -265,8 +299,6 @@ export default defineComponent({
 		aspect-ratio: 5/3;
 		min-width: 66%;
 	}
-
-
 
 	footer {
 		text-align: center;
