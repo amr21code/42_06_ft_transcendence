@@ -14,26 +14,28 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import DataService from '../../services/DataService';
+import { useUserDataStore } from '../../stores/myUserDataStore';
 
 export default defineComponent({
 
-	props: ['untoggleTwoFaPopup'],
+	props: ['untoggleTwoFaPopup', 'updateTwoFaButton'],
 
-	setup() {
+	setup(props) {
+		const store = useUserDataStore();
 		const TwoFaQrCode = ref('');
 		const enteredSecret = ref('');
 		
 		onMounted(async () => {
 			TwoFaQrCode.value = await DataService.getTwoFaQrCode();
-			console.log("called: ", TwoFaQrCode.value);
-			// (document.getElementById("qr-code") as HTMLImageElement).src = TwoFaQrCode.value;
 		});
 
 		const submitTwoFaSecret = async () => {
-			if (await DataService.submitTwoFaSecret(enteredSecret.value))
-				alert('2fa worked');
+			if (await DataService.submitTwoFaSecret(enteredSecret.value)) {
+				props.updateTwoFaButton();
+				props.untoggleTwoFaPopup();
+			}
 			else
-				alert('2fa didnt work');
+				alert('Verification code was wrong, please try again');
 		}
 
 		return { TwoFaQrCode, enteredSecret, submitTwoFaSecret }

@@ -1,4 +1,4 @@
-import {  ClassSerializerInterceptor, Controller, Get, UseInterceptors, Res, UseGuards, Req, UnauthorizedException, Param} from '@nestjs/common';
+import {  ClassSerializerInterceptor, Controller, Get, UseInterceptors, Res, UseGuards, Req, UnauthorizedException, Param, Session} from '@nestjs/common';
 import { TwoFactorAuthenticationService } from './twoFactorAuth.service';
 import { Response } from 'express';
 import { Request } from 'express';
@@ -19,21 +19,22 @@ export class TwoFactorAuthenticationController {
     const { otpauthUrl } = await this.twoFactorAuthService.generateTwoFactorAuthenticationSecret(request);
     console.log("generate 2fa secret");
     return this.twoFactorAuthService.pipeQrCodeStream(response, otpauthUrl);
+	// return (otpauthUrl);
   }
 
   @Get('turn-on/:secret')
   @UseGuards(AuthenticatedGuard)
   async turnOnTwoFactorAuthentication(
-    @Req() request: Request, @Param('secret') secret: string
+    @Session() session: Record<string, any>, @Param('secret') secret: string
   ) {
+	const twoFaSecret = await this.userService.getUserData(session.passport.user.userid, 'twofasecret');
     const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthenticationCodeValid(
-      secret, request.user
+      secret, twoFaSecret
     );
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
-	const user = await this.userService.getMe(request.user);
-	await this.userService.changeUserData(user[0].userid, "twofa", 1);
+	await this.userService.changeUserData(session.passport.user.userid, "twofa", 1);
   }
 
 @Get('authenticate/:secret')

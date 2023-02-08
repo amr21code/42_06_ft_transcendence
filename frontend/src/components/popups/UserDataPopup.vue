@@ -63,7 +63,7 @@
 			<div class="user-data-wrapper">
 				<div>2-factor-authentication:
 					<button id="2fa-button" @click="toggleTwoFaPopup()">Activate Google 2FA</button>
-					<TwoFaPopup v-if="showTwoFaTrigger === true" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" />
+					<TwoFaPopup v-if="showTwoFaTrigger === true" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" :updateTwoFaButton="() => updateTwoFaButton()"/>
 				</div>
 			</div>
 			<div class="user-data-wrapper">
@@ -110,6 +110,12 @@ export default defineComponent({
 
 		const untoggleTwoFaPopup = () => {
 			showTwoFaTrigger.value = false;
+		}
+
+		const updateTwoFaButton = async () => {
+			await store.getUser();
+			document.getElementById("2fa-button")!.innerHTML = "2FA activated";
+			(document.getElementById("2fa-button") as HTMLButtonElement).disabled = true;
 		}
 		// 2FA END
 
@@ -182,6 +188,10 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
+			if (store.user.twofa) {
+				document.getElementById("2fa-button")!.innerHTML = "2FA activated";
+				(document.getElementById("2fa-button") as HTMLButtonElement).disabled = true;
+			}
 		});
 
 		const uploadAvatar = async() => {
@@ -196,7 +206,7 @@ export default defineComponent({
 			});
         }
 
-		return { store, showTwoFaTrigger, toggleTwoFaPopup, untoggleTwoFaPopup, user, leaderboardRank, memberSince, newUsername, uploadAvatar, file, socket };
+		return { store, showTwoFaTrigger, toggleTwoFaPopup, untoggleTwoFaPopup, updateTwoFaButton, user, leaderboardRank, memberSince, newUsername, uploadAvatar, file, socket };
 	},
 
 	methods: {
