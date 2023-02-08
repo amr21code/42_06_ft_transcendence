@@ -88,6 +88,7 @@ export default defineComponent({
 		const store = useUserDataStore();
 		const socket = SocketioService.socket;
 
+
 		const friendButtonAction = async (userid: string) => {
 			if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
 				try {
@@ -170,6 +171,7 @@ export default defineComponent({
 		
 		onMounted(async () => {
 
+			console.log("leaderboard");
 			await DataService.getMatchHistory(props.userid)
 			.then((response: ResponseData) => {
 				matchHistory.value = response.data;
@@ -177,7 +179,6 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
-			
 			await DataService.getAchievements(props.userid)
 			.then((response: ResponseData) => {
 				for (var achievement of response.data) {

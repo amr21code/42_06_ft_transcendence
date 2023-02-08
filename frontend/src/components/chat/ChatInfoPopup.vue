@@ -40,21 +40,19 @@
 					<!-- <th><div>add friend</div></th> -->
 				</tr>
 			</thead>
-			<div v-for="(user, index) in users" :key="index">
 					<tbody>
-						<tr class="info-item" >
-							<td @click="toggleUserHistory(user)"> <!-- userid -->								
+						<tr class="info-item" @click="toggleUserHistory(user)" v-for="(user, index) in users" :key="user.userid">
+							<td > <!-- userid -->								
 								<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
 								<img src="../../assets/onlineicon.png" class="user_status-img" v-if="user.user_status === 1">
 								{{ user.userid }}
 							</td>
-							<td @click="toggleUserHistory(user)"> <!-- username -->
+							<td> <!-- username -->
 								{{ user.username }}
 							</td>
-							<td @click="toggleUserHistory(user)"> <!-- statusname -->
+							<td> <!-- statusname -->
 								{{ user.statusname }}
 							</td>
-							<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => toggleUserHistory(0)" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
 <!---------------------- mute ---------------------------------->
 							<td v-if="permission < 2">
 								<div v-if="user.userid != user_me[0].userid">
@@ -111,10 +109,10 @@
 									<button id="add-friend-button" @click="friendButtonAction(user.userid)" v-if="user.userid != user_me[0].userid">add friend</button>
 								</div>
 							</td> -->
-						</tr> 
+						</tr>
+						<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
 					</tbody>
 				<!-- </div> -->
-			</div>
 		</table>
 			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
         </div>
@@ -275,6 +273,11 @@ export default defineComponent({
 			props.ChatInfotogglePopup();
 		}
 
+		const untoggleUserHistory = () => {
+			showUserHistoryTrigger.value = false;
+			selectedUser.value = "";
+		}
+
 		const option = ref(0);
 		const toggleOption = (i : number) => {
 			option.value = i;
@@ -295,7 +298,7 @@ export default defineComponent({
 		}
 
 		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option,
-				toggleUserHistory, selectedUser, showUserHistoryTrigger, selectedUserPhoto }
+				toggleUserHistory, untoggleUserHistory, selectedUser, showUserHistoryTrigger, selectedUserPhoto }
 			
     }  
 
