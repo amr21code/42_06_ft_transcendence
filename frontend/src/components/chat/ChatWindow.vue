@@ -287,6 +287,10 @@ export default defineComponent({
 		float: right;
 	}
 
+	.messages-wrapper {
+		max-width: 340px;
+	}
+
 	.message-text {
 		padding-left: 1%;
 		font-weight: normal;
