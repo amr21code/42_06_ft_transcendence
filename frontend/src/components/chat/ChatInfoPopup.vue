@@ -41,16 +41,16 @@
 				</tr>
 			</thead>
 					<tbody>
-						<tr class="info-item" @click="toggleUserHistory(user)" v-for="(user, index) in users" :key="user.userid">
-							<td > <!-- userid -->								
+						<tr class="info-item" v-for="(user, index) in users" :key="user.userid">
+							<td @click="toggleUserHistory(user)"> <!-- userid -->								
 								<img src="../../assets/offlineicon.png" class="user_status-img" v-if="user.user_status === 0">
 								<img src="../../assets/onlineicon.png" class="user_status-img" v-if="user.user_status === 1">
 								{{ user.userid }}
 							</td>
-							<td> <!-- username -->
+							<td @click="toggleUserHistory(user)"> <!-- username -->
 								{{ user.username }}
 							</td>
-							<td> <!-- statusname -->
+							<td @click="toggleUserHistory(user)"> <!-- statusname -->
 								{{ user.statusname }}
 							</td>
 <!---------------------- mute ---------------------------------->
