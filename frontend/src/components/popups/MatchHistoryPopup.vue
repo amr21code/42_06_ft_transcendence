@@ -171,7 +171,6 @@ export default defineComponent({
 		
 		onMounted(async () => {
 
-			console.log("leaderboard");
 			await DataService.getMatchHistory(props.userid)
 			.then((response: ResponseData) => {
 				matchHistory.value = response.data;
