@@ -88,7 +88,6 @@ export default defineComponent({
 		const store = useUserDataStore();
 		const socket = SocketioService.socket;
 
-
 		const friendButtonAction = async (userid: string) => {
 			if (document.getElementById("add-friend-button")!.innerHTML === "add friend") {
 				try {
@@ -178,8 +177,17 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log(e);
 			});
+
+			document.getElementById("achievement-gui")!.style.opacity = "20%";
+			document.getElementById("achievement-gui")!.style.background = '#B04716';
+			document.getElementById("achievement-tooEasy")!.style.opacity = "20%";
+			document.getElementById("achievement-tooEasy")!.style.background = '#B04716';
+			document.getElementById("achievement-firstGoal")!.style.opacity = "20%";
+			document.getElementById("achievement-firstGoal")!.style.background = '#B04716';
+
 			await DataService.getAchievements(props.userid)
 			.then((response: ResponseData) => {
+				console.log("resp", response);
 				for (var achievement of response.data) {
 					if (achievement.name == "the Gui") {
 						document.getElementById("achievement-gui")!.style.opacity = "100%";
