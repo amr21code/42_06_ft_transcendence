@@ -61,10 +61,13 @@
 				<div @click="changePaddleColor('00cc00')" class="select-color" id="select-color3"></div>
 			</div>
 			<div class="user-data-wrapper">
-				<div>member since: {{ memberSince }}</div>
+				<div>2-factor-authentication:
+					<button id="2fa-button" @click="toggleTwoFaPopup()">Activate Google 2FA</button>
+					<TwoFaPopup v-if="showTwoFaTrigger === true" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" />
+				</div>
 			</div>
 			<div class="user-data-wrapper">
-				<div>2-factor-authentication:</div>
+				<div>member since: {{ memberSince }}</div>
 			</div>
 			<button class="popup-close" @click="toggleUserDataPopup"> 
 				Close
@@ -82,9 +85,12 @@ import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
 import moment from 'moment'
 import SocketioService from '../../services/SocketioService.js';
+import TwoFaPopup from './TwoFaPopup.vue'
+
 
 export default defineComponent({
 
+	components: { TwoFaPopup },
 	props: ['toggleUserDataPopup'],
 
 	setup() {
@@ -95,6 +101,17 @@ export default defineComponent({
 		const leaderboardRank = ref({} as number);
 		const file = ref(null);
 		const socket = SocketioService.socket;
+
+		// 2FA START
+		const showTwoFaTrigger = ref(false);
+		const toggleTwoFaPopup = () => {
+			showTwoFaTrigger.value = true;
+		}
+
+		const untoggleTwoFaPopup = () => {
+			showTwoFaTrigger.value = false;
+		}
+		// 2FA END
 
 		onMounted(async () => {
 			await DataService.getUser()
@@ -151,7 +168,6 @@ export default defineComponent({
 			});
 			await DataService.getLeaderboardPosition(user.value.userid)
 			.then((response: ResponseData) => {
-				console.log(response.data)
 				leaderboardRank.value = response.data
 				if (leaderboardRank.value === 1) {
 					document.getElementById("leaderboard-position")!.style.background = "gold";
@@ -180,7 +196,7 @@ export default defineComponent({
 			});
         }
 
-		return { store, user, leaderboardRank, memberSince, newUsername, uploadAvatar, file, socket };
+		return { store, showTwoFaTrigger, toggleTwoFaPopup, untoggleTwoFaPopup, user, leaderboardRank, memberSince, newUsername, uploadAvatar, file, socket };
 	},
 
 	methods: {

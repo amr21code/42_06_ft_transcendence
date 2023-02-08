@@ -43,6 +43,31 @@ class DataService {
 		return apiInstance.get('/users/pos/' + userid);
 	}
 
+	//################ 2FA ###########################################
+	
+	getTwoFaQrCode() : Promise<string> {
+		return apiInstance.get('/2fa/generate',  {
+			withCredentials: true,
+			responseType: 'blob',
+		})
+		.then((res) => {
+			return URL.createObjectURL(res.data)
+		})
+		.catch((error) => {
+		if (typeof error.response === 'undefined') throw error;
+			throw new Error(error.response.data.message);
+		});
+	}
+
+	async submitTwoFaSecret(secret: string) {
+		try {
+			await apiInstance.get('/2fa/turn-on/' + secret);
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+
 	//################ FRIENDS ###########################################
 
 	getFriends() : Promise<any> {
