@@ -172,6 +172,10 @@ export default defineComponent({
 				else
 					selectMenuOption('game');
 			})
+
+			// make /game default path
+			history.pushState("game", '', './game');
+			document.getElementById("game")!.style.backgroundColor = "#b04716";
 		});
 
 		// for user data popup (user data)
@@ -217,8 +221,7 @@ export default defineComponent({
 			}
 		};
 
-
-
+		
 		return { store, toggleTwoFaPopup, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
