@@ -4,8 +4,8 @@
 			<slot />
 			<div class="password-text-wrapper">
 				<div>
-					<h2>Join protected chat[{{ curr_chatid }}]</h2>
-					<a>Enter a password</a><br>
+					<h2>join protected chat[{{ curr_chatid }}]</h2>
+					<a>enter a password</a><br>
 					<input type=password placeholder="password" v-model="password">
 					<button @click="joinchat(curr_chatid, password)" type="submit">submit</button>
 					<button @click="(togglePwdPopup)">close</button>
