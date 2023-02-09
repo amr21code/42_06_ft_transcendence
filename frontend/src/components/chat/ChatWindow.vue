@@ -199,12 +199,12 @@ export default defineComponent({
 		async changeChatDetails (type : string, chatid : number, chatname : string, password : string) {
 			await DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
+				this.curr_chat.chat_name = chatname;
 				SocketioService.refreshChats();
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
-			this.curr_chat.chat_name = chatname;
 		},
 		
 		scrollToBottom() {
