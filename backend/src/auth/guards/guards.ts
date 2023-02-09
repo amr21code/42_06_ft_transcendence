@@ -35,7 +35,6 @@ export class AuthenticatedGuard implements CanActivate {
 				throw new ForbiddenException();
 			}
 		} catch (error) {
-			request.isUnauthenticated();
 			throw new ForbiddenException();
 		}
 	}
