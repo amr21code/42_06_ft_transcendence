@@ -200,6 +200,8 @@ export class UserService {
 					CASE 
 						WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN 
 						profilepic42 
+						WHEN avatar=2
+						THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
 						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 						END as picurl, 
 						created, statusname from public.users
@@ -215,6 +217,8 @@ export class UserService {
 					CASE 
 						WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN 
 						profilepic42 
+						WHEN avatar=2
+						THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
 						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 						END as picurl, 
 						created, statusname from public.users
