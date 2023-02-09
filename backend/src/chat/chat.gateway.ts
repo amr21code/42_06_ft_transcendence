@@ -4,15 +4,15 @@ import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from 'src/chat/chat.service';
 import { ChatMessageDto } from './dto';
-import { FtAuthGuard } from 'src/auth/guards/guards';
+import { AuthenticatedGuard } from 'src/auth/guards/guards';
 
-@UseGuards(FtAuthGuard)
 @WebSocketGateway(3002, {cors: {
 	origin: `${process.env.FRONTEND_URL}`,
 	methods: ["GET", "POST"],
 	credentials: true,
 }
 })
+@UseGuards(AuthenticatedGuard)
 export class ChatGateway {
 	constructor(private readonly userService: UserService, private readonly chatService: ChatService) {
 	}

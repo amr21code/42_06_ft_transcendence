@@ -5,7 +5,7 @@ import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { UserService } from 'src/user/user.service';
 import { AchievementsService } from 'src/achievements/achievements.service';
-import { FtAuthGuard } from 'src/auth/guards/guards';
+import { AuthenticatedGuard } from 'src/auth/guards/guards';
 import { UseGuards } from '@nestjs/common';
 
 @WebSocketGateway(3002, {
@@ -16,7 +16,7 @@ import { UseGuards } from '@nestjs/common';
 	}
 })
 
-@UseGuards(FtAuthGuard)
+@UseGuards(AuthenticatedGuard)
 export class MatchGateway {
 
 	@WebSocketServer()
