@@ -90,8 +90,12 @@ export class ChatService {
 		}
 		const result = await this.db.$queryRaw(
 			Prisma.sql`SELECT chatid, password FROM public.chat
-			WHERE chatid=CAST(${chatid} AS INTEGER)`
+			WHERE chatid=${chatid}`
 		);
+		// const result = await this.db.$queryRaw(
+		// 	Prisma.sql`SELECT chatid, password FROM public.chat
+		// 	WHERE chatid=CAST(${chatid} AS INTEGER)`
+		// );
 		const banned = await this.db.$queryRaw(
 			Prisma.sql`SELECT * FROM public.user_chat
 			WHERE userid=${userid} AND chatid=CAST(${chatid} AS INTEGER)`

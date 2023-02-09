@@ -35,7 +35,7 @@ export class ChatController {
 	}
 
 	@Get('join/:chatid/:pw?')
-	async joinChat(@Req() request: Request, @Param('chatid') chatid, @Param('pw') pw?) {
+	async joinChat(@Req() request: Request, @Param('chatid') chatid: number, @Param('pw') pw?) {
 		if (!pw)
 			pw = '';
 		try {
