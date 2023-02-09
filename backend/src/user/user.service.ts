@@ -20,7 +20,7 @@ export class UserService {
 			END as picurl,created, statusname, wins, losses, paddlecolor FROM public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
-			ORDER BY wins DESC, losses ASC, created ASC`
+			ORDER BY wins DESC, losses ASC, created ASC;`
 			);
 		return (user);
 	}
@@ -28,7 +28,7 @@ export class UserService {
 	async getLeaderboardPos(userid: string){
 		const pos = await this.db.$queryRaw<number>(
 			Prisma.sql`SELECT row_num FROM (SELECT ROW_NUMBER() OVER() AS row_num, userid  FROM 
-			(SELECT userid, wins, losses FROM public.users ORDER BY wins DESC) as leaderboard) as leaderboard2 WHERE userid=${userid}`
+			(SELECT userid, wins, losses FROM public.users ORDER BY wins DESC) as leaderboard) as leaderboard2 WHERE userid=${userid};`
 		);
 		console.log("leader pos", pos);
 		if (Object.keys(pos).length == 0)
@@ -50,7 +50,7 @@ export class UserService {
 				created, statusname, wins, losses, profilepic42, paddlecolor, twofa from public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
-			WHERE userid=${user.userid}`
+			WHERE userid=${user.userid};`
 			);
 		return (meuser);
 	}
@@ -68,7 +68,7 @@ export class UserService {
 				created, statusname, wins, losses, paddlecolor from public.users
 			LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 			LEFT JOIN public.avatars as A ON users.avatar = A.avatarid
-			WHERE userid=${userid}`
+			WHERE userid=${userid};`
 			);
 		return (user);
 	}
@@ -91,12 +91,12 @@ export class UserService {
 		// console.log("data", newdata);
 		if (field == 'username') {
 			const find = await this.db.$queryRaw(
-				Prisma.sql`SELECT COUNT(*) FROM public.users WHERE username=${newdata}`);
+				Prisma.sql`SELECT COUNT(*) FROM public.users WHERE username=${newdata};`);
 			//console.log(find);
 			if (find[0].count == 0){
 				console.log("changing username")
 				const status = await this.db.$queryRaw(
-					Prisma.sql`UPDATE public.users SET username=${newdata} WHERE userid=${userid}`
+					Prisma.sql`UPDATE public.users SET username=${newdata} WHERE userid=${userid};`
 					);
 				if (newdata === 'GuillaumeCalvi') {
 					this.achieve.addAchieve(userid, 2);
@@ -106,31 +106,31 @@ export class UserService {
 			}
 		} else if (field == 'user_status'){
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET user_status=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET user_status=CAST(${newdata} AS INTEGER) WHERE userid=${userid};`
 				);
 		} else if (field == 'twofa') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET twofa=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET twofa=CAST(${newdata} AS INTEGER) WHERE userid=${userid};`
 				);
 		} else if (field == 'avatar') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET avatar=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET avatar=CAST(${newdata} AS INTEGER) WHERE userid=${userid};`
 				);
 		}else if (field == 'twofa') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET twofa=CAST(${newdata} AS INTEGER) WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET twofa=CAST(${newdata} AS INTEGER) WHERE userid=${userid};`
 				);
 		}else if (field == 'twofasecret') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET twofasecret=${newdata} WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET twofasecret=${newdata} WHERE userid=${userid};`
 				);
 		}else if (field == 'socket_token') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET socket_token=${newdata} WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET socket_token=${newdata} WHERE userid=${userid};`
 				);
 		}else if (field == 'paddlecolor') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET paddlecolor=${newdata} WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET paddlecolor=${newdata} WHERE userid=${userid};`
 				);
 		}
 	}
@@ -140,39 +140,39 @@ export class UserService {
 		var status = userid;
 		if (field == 'username') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT username FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT username FROM public.users WHERE userid=${userid};`
 				);
 		} else if (field == 'user_status'){
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT user_status FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT user_status FROM public.users WHERE userid=${userid};`
 				);
 		} else if (field == 'wins') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT wins FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT wins FROM public.users WHERE userid=${userid};`
 				);
 		} else if (field == 'losses') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT losses FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT losses FROM public.users WHERE userid=${userid};`
 				);
 		} else if (field == 'avatar') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT avatar FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT avatar FROM public.users WHERE userid=${userid};`
 				);
 		}else if (field == 'twofa') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT twofa FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT twofa FROM public.users WHERE userid=${userid};`
 				);
 		}else if (field == 'twofasecret') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT twofasecret FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT twofasecret FROM public.users WHERE userid=${userid};`
 				);
 		}else if (field == 'socket_token') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT socket_token FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT socket_token FROM public.users WHERE userid=${userid};`
 				);
 		}else if (field == 'paddlecolor') {
 			status = await this.db.$queryRaw(
-				Prisma.sql`SELECT paddlecolor FROM public.users WHERE userid=${userid}`
+				Prisma.sql`SELECT paddlecolor FROM public.users WHERE userid=${userid};`
 				);
 		}
 		return status;
@@ -182,11 +182,11 @@ export class UserService {
 		var WinOrLossNumber = Number(this.getUserData(userid, wl)) + 1;
 		if (wl == 'wins') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET wins=${WinOrLossNumber} WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET wins=${WinOrLossNumber} WHERE userid=${userid};`
 			);
 		} else if (wl == 'losses') {
 			const status = await this.db.$queryRaw(
-				Prisma.sql`UPDATE public.users SET losses=${WinOrLossNumber} WHERE userid=${userid}`
+				Prisma.sql`UPDATE public.users SET losses=${WinOrLossNumber} WHERE userid=${userid};`
 			);
 		}
 	}
@@ -200,6 +200,8 @@ export class UserService {
 					CASE 
 						WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN 
 						profilepic42 
+						WHEN avatar=2
+						THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
 						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 						END as picurl, 
 						created, statusname from public.users
@@ -215,13 +217,15 @@ export class UserService {
 					CASE 
 						WHEN (select avatarurl from public.avatars where avatarid = avatar) IS NULL THEN 
 						profilepic42 
+						WHEN avatar=2
+						THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
 						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 						END as picurl, 
 						created, statusname from public.users
 						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ur ON fl2.requesterid = ur.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ur.user_status
-				WHERE fl2.addresseeid=${userid1} AND fl2.requesterid=${userid2})`
+				WHERE fl2.addresseeid=${userid1} AND fl2.requesterid=${userid2});`
 				);
 				// console.log(user[0].statuscode);
 		return (user);

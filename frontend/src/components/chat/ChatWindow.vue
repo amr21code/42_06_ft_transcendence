@@ -7,8 +7,8 @@
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
 			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
-			<a @click="showChangeNameField()" class="chat-chatname" v-if="showinput === false">{{ curr_chat.chat_name }}</a>
-			<input v-if="showinput === true" placeholder="enter new name" v-model="newName">
+			<a class="chat-chatname">{{ curr_chat.chat_name }}</a>
+			<!-- <input v-if="showinput === true" placeholder="enter new name" v-model="newName"> -->
 			<button class="ok-button" @click="showChangeNameField(), changeChatDetails(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
 			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
 			<a class="info-icon" @click="(ChatInfotogglePopup)">
@@ -212,7 +212,7 @@ export default defineComponent({
 		scrollToBottom() {
 			this.$nextTick(() => {
 				const chat = this.$refs.chatEnd as any;
-				if (chat !== undefined)
+				if (chat !== undefined && chat.scrollHeight !== undefined)
 				{
 					chat.scrollTop = chat.scrollHeight;
 					chat.scrollIntoView({ behavior: 'smooth' });
