@@ -389,6 +389,8 @@ export default defineComponent({
 	}
 
 	.send-message-icon {
+		filter: invert(100%);
+		-webkit-filter: invert(100%);
 		cursor: pointer;
 		height: calc(5px + 1.5625vw);
 		width: calc(5px + 1.5625vw);
@@ -397,8 +399,8 @@ export default defineComponent({
 
 	.send-message-icon:hover {
 		transition: all .4s;
-		filter: invert(100%);
-		-webkit-filter: invert(100%);
+		filter: invert(0%);
+		-webkit-filter: invert(0%);
 	}
 
 </style>

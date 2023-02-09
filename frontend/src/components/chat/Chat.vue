@@ -342,6 +342,8 @@ export default defineComponent({
 }
 
 .chat-menu-icon {
+	filter: invert(100%);
+	-webkit-filter: invert(100%);
 	margin: calc(-10px + 1.5625vw) calc(-1px + 1.5625vw);
 	margin-top: calc(-5px + 1.5625vw);
 	height: calc(15px + 1.5625vw);
@@ -351,8 +353,8 @@ export default defineComponent({
 
 .chat-menu-icon:hover {
 	transition: all .4s;
-	filter: invert(100%);
-	-webkit-filter: invert(100%);
+	filter: invert(0%);
+	-webkit-filter: invert(0%);
 }
 
 </style>
