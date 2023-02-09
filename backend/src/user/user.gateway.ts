@@ -2,8 +2,10 @@ import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGa
 import { Server } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
 import { UserService } from './user.service';
-import { ForbiddenException } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
+import { FtAuthGuard } from 'src/auth/guards/guards';
 
+@UseGuards(FtAuthGuard)
 @WebSocketGateway(3002, {cors: {
 	origin: `${process.env.FRONTEND_URL}`,
 	methods: ["GET", "POST"],

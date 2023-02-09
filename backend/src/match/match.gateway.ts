@@ -4,9 +4,9 @@ import { MatchService } from './match.service';
 import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { UserService } from 'src/user/user.service';
-import { state } from 'pactum';
 import { AchievementsService } from 'src/achievements/achievements.service';
-import { ForbiddenException } from '@nestjs/common';
+import { FtAuthGuard } from 'src/auth/guards/guards';
+import { UseGuards } from '@nestjs/common';
 
 @WebSocketGateway(3002, {
 	cors: {
@@ -16,6 +16,7 @@ import { ForbiddenException } from '@nestjs/common';
 	}
 })
 
+@UseGuards(FtAuthGuard)
 export class MatchGateway {
 
 	@WebSocketServer()
@@ -30,7 +31,6 @@ export class MatchGateway {
 
 
 	constructor(private readonly matchService: MatchService, private readonly userService: UserService,  private readonly achieve: AchievementsService) { }
-
 
 	@SubscribeMessage('watchGame')
 	async watchGame(client: Socket, payload: any) {

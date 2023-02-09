@@ -1,12 +1,12 @@
-import { ForbiddenException, } from '@nestjs/common';
-import {  SubscribeMessage, WebSocketGateway, WsException} from '@nestjs/websockets';
+import { UseGuards, } from '@nestjs/common';
+import { SubscribeMessage, WebSocketGateway, WsException} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from 'src/chat/chat.service';
 import { ChatMessageDto } from './dto';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { FtAuthGuard } from 'src/auth/guards/guards';
 
-
+@UseGuards(FtAuthGuard)
 @WebSocketGateway(3002, {cors: {
 	origin: `${process.env.FRONTEND_URL}`,
 	methods: ["GET", "POST"],
