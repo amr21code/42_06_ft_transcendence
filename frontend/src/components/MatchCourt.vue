@@ -49,6 +49,7 @@ export default defineComponent({
 
 		const handleWatchError = (msg: string) => {
 			if (msg === 'failed') {
+				leaveMatchButton.style.display = "none";
 				alert("There are no matches to watch right now. Try again later!");
 			}
 		}
