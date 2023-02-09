@@ -38,7 +38,7 @@
 						<strong >{{ message.username }}</strong>
 					</div>
 					<div class="message-text">
-						<a >{{ message.message }}</a>
+						{{ message.message }}
 					</div>
 				</div>
 				<!--message recv-->
@@ -266,6 +266,7 @@ export default defineComponent({
 	.wrapper {
 		max-width: 100%;
 		min-height: 100%;
+		border: 6px solid var(--second-bg-color);
 	}
 
 	.wrapper h2 {
@@ -331,13 +332,14 @@ export default defineComponent({
 	/* ######## MESSAGES VIEW ####################################### */
 	
 	.messages-wrapper {
-		max-width: 340px;
-		min-width: 340px;
+		/* max-width: 340px;
+		min-width: 340px; */
+		max-width: 100%;
 	}
 
 	.message-text {
 		padding-left: 1%;
-		font-weight: normal;
+		word-break: break-all;
 	}
 
 	.message-username {
@@ -347,28 +349,31 @@ export default defineComponent({
 
 	.chat-message-view {
 		background: white;
-		border: black solid 3px;
 		height: 300px;
 		overflow-y: scroll;
 		scrollbar-color: black solid;
 		scrollbar-width: thin;
 	}
 	.message-recv {
-		background-color: rgb(155, 155, 160);
-		color: black;
-		border-radius: 15px;
-		padding: 3px;
-		margin-right: 35px;
 		text-align: left;
+		color: black;
+		max-width: 80%;
+		background-color: rgb(155, 155, 160);
+		border-radius: 4px;
+		margin: 4px;
+		margin-right: 20%;
+		padding: 1%;
 	}
 	
 	.message-sent {
 		text-align: right;
-		background-color: rgb(106, 106, 109);
 		color: black;
-		border-radius: 15px;
-		padding: 3px;
-		margin-left: 35px;
+		max-width: 80%;
+		background-color: rgb(106, 106, 109);
+		border-radius: 4px;
+		margin: 4px;
+		margin-left: 20%;
+		padding: 2%;
 	}
 	
 	.chat-write-and-send-wrapper {
