@@ -55,6 +55,7 @@ export default defineComponent({
 		}
 		
 		const handleGameState = (gameState: any) => {
+			console.log("gamestate always");
 			if (!gameState) {
 				return;
 			}
@@ -69,7 +70,7 @@ export default defineComponent({
 				reset();
 				return;
 			}
-
+			console.log("gamestate after leave");
 			canvas.style.display = 'block';
 			matchWaitPopup.style.display = 'none';
 			matchSelectionDiv.style.display = 'none';

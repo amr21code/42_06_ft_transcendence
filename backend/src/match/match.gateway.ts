@@ -281,6 +281,7 @@ export class MatchGateway {
 			const matchidLeft = await this.matchService.listActiveMatch(gameState.player1.userid);
 			// this.server.socketsLeave(matchidLeft[0].matchid);
 			client.leave(matchidLeft[0].matchid);
+			console.log("matchid", matchidLeft[0].matchid);
 		}
 		catch (error) {
 			throw new WsException('spectatorLeftMatch failed');
