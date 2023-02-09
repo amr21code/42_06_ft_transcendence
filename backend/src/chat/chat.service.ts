@@ -145,6 +145,7 @@ export class ChatService {
 
 	async leaveChat(userid: string, chatid: number) {
 		const result = await this.listUsers(chatid);
+		console.log("leave chat list users", result, userid, chatid);
 		var size = Object.keys(result).length;
 		if (size == 1) {
 			console.log("deleting chat");
