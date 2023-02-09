@@ -78,7 +78,6 @@ export default defineComponent({
 		},
 
         async createNewChat(chatname_id : string, password : string, type : string) {
-            // console.log(this.user[0].userid);
             if (chatname_id === '' && type == 'join')
                 return ;
             if (chatname_id === '' && type == 'dm')

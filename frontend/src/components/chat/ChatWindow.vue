@@ -317,6 +317,7 @@ export default defineComponent({
 	}
 	
 	.chat-message-view {
+		background: white;
 		border: black solid 3px;
 		height: 300px;
 		overflow-y: scroll;

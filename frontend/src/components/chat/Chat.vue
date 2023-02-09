@@ -265,6 +265,8 @@ export default defineComponent({
 	max-height: 100%;
 	max-width: 100%;
 	min-width: 100%;
+	background: var(--second-bg-color);
+	color: white;
 }
 .chat-chatid {
 	float: left;
@@ -302,6 +304,7 @@ export default defineComponent({
 	overflow-y: scroll;
 	scrollbar-color: rebeccapurple green;
 	scrollbar-width: thin;
+	background: white;
 	/* display: flex;
 	flex-direction: column-reverse; */
 }
