@@ -73,12 +73,10 @@
 
 <!--------------FOOTER------------------------------------------------------------------------------------>
 			
-			<div class="chat-write-and-send">
-				<form @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
-					<input class="input-message" placeholder="Write message here" v-model="message">
-					<img @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="user-photo" width="20" height="20">
-				</form>
-			</div>
+		<form class="chat-write-and-send-wrapper" @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
+			<input class="input-message" placeholder="Write message here" v-model="message">
+			<img class="send-message-icon" @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="send-icon">
+		</form>
 
 	</div>
 
@@ -343,26 +341,36 @@ export default defineComponent({
 		margin-left: 35px;
 	}
 	
-	.chat-write-and-send {
-		padding: 5px;
-	}
-	.chat-write-and-send img {
-
-		float: right;
-		padding: 5px;
-		cursor: pointer;
+	.chat-write-and-send-wrapper {
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow-y: hidden; 
+		background-color: var(--second-bg-color); 
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+		
 	}
 	
-	.chat-menu {
-		background-color: var(--second-bg-color);
-		color: white;
-		text-align: center;
+	.input-message {
+		width: 75%;
+		margin: 1%;
 	}
-	.chat-menu img {
-		margin: 5px 20px;
+
+	.send-message-icon {
 		cursor: pointer;
+		height: calc(5px + 1.5625vw);
+		width: calc(5px + 1.5625vw);
+		margin: 1%;
 	}
-	.chat-menu img:hover {
-		background-color: rgb(0,0,0,0.3)
+
+
+	.send-message-icon:hover {
+		transition: all .4s;
+		filter: invert(100%);
+		-webkit-filter: invert(100%);
 	}
+	
+
 </style>
