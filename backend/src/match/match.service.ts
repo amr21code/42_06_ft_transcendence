@@ -75,7 +75,7 @@ export class MatchService {
 			LEFT JOIN (SELECT um.userid, u2.username, um.matchid, um.user_score FROM public.user_match as um
 			LEFT JOIN public.users AS u2 ON um.userid=u2.userid) AS um2 ON um1.matchid=um2.matchid AND um1.userid<>um2.userid
 			LEFT JOIN public.match_history AS mh ON mh.matchid=um1.matchid
-			WHERE mh.match_status=0 AND um1.userid=${userid};`
+			WHERE mh.match_status=0 AND um1.userid=${userid} AND um1.challenge<3 AND um2.challenge<3;`
 		);
 		return match;
 	}
