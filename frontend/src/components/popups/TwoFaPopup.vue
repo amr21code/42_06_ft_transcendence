@@ -4,6 +4,7 @@
 			<slot/>
 			<h2>Using Google 2FA</h2>
 			<input type="text" @keyup.enter="submitTwoFaSecret()" v-model="enteredSecret" placeholder="Enter your verification code">
+			<button id="submit-button" @click="submitTwoFaSecret()">Submit</button>
 		</div>
 	</div>
 </template>
@@ -70,6 +71,10 @@ export default defineComponent({
 .user-data-wrapper {
 	margin-bottom: 10px;
 	margin-left: 0%;
+}
+
+#submit-button {
+	margin-top: 0.5rem;
 }
 
 button {
