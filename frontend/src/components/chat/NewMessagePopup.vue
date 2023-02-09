@@ -21,7 +21,7 @@
             </div>
 
             <!-- <form action="" id="myForm" name="myForm" > -->
-            <input class="" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'">(optional)</a>
+            <input class="" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'"></a>
             <input class="" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'" required>
             <input class="" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'" required>
             

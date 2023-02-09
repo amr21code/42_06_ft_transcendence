@@ -122,6 +122,7 @@ model users {
   socket_token                       String?              @db.VarChar(100)
   wins                               Int                  @default(0)
   paddlecolor                        String               @default("ffffff") @db.VarChar(6)
+  twofalogin                         Int                  @default(0)
   chat_messages                      chat_messages[]
   friends_friends_requesteridTousers friends[]            @relation("friends_requesteridTousers")
   friends_friends_addresseeidTousers friends[]            @relation("friends_addresseeidTousers")

@@ -29,7 +29,7 @@ export class TwoFactorAuthenticationController {
   ) {
 	const twoFaSecret = await this.userService.getUserData(session.passport.user.userid, 'twofasecret');
     const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthenticationCodeValid(
-      secret, twoFaSecret
+		session.passport.user.userid, secret, twoFaSecret
     );
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
@@ -44,7 +44,7 @@ export class TwoFactorAuthenticationController {
   ) {
     const twofasecret = await this.userService.getUserData(session.passport.user.userid, 'twofasecret')
     const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthenticationCodeValid(
-      secret, twofasecret
+		session.passport.user.userid, secret, twofasecret
     );
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');

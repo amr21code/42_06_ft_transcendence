@@ -23,6 +23,13 @@ export class AuthenticatedGuard implements CanActivate {
 			const session = JSON.parse(request.sessionStore.sessions[request.sessionID]).passport.user;
 			const user = await this.authService.findUser(session.userid);
 			if (session.access_token == user.access_token) {
+				if (session.twofa == 1) {
+					if (session.twofalogin == 1) {
+						return request.isAuthenticated()
+					} else {
+						throw new ForbiddenException();		
+					}
+				}
 				return request.isAuthenticated()
 			} else {
 				throw new ForbiddenException();
