@@ -245,6 +245,7 @@ export default defineComponent({
 			await DataService.createChat(String(id), password, 'join')
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
+				togglePopup();
             })
             .catch((e: Error) => {
                 console.log(e);
