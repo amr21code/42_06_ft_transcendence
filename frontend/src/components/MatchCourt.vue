@@ -62,7 +62,7 @@ export default defineComponent({
 				// if (store.user.userid === gameState.player1.userid || store.user.userid === gameState.player2.userid)
 				// 	socket.emit("playerLeft", gameState);
 				// else
-				socket.emit("spectatorLeftMatch", gameState);
+				//socket.emit("spectatorLeftMatch", gameState);
 				return;
 			}
 			else if (gameState.prematureEnd || gameOver) {
@@ -167,6 +167,7 @@ export default defineComponent({
 
 		const spectatorLeavesMatch = () => {
 			spectatorLeftMatch = true;
+			socket.emit("spectatorLeftMatch");
 			reset();
 		}
 

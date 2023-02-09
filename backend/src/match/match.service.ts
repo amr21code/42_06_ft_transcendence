@@ -56,6 +56,18 @@ export class MatchService {
 		return match;
 	}
 
+	async listWatching(userid: string) {
+		const match = await this.db.$queryRaw(
+			Prisma.sql`SELECT userid, matchid FROM public.user_match
+			WHERE challenge=3 AND userid=${userid};`
+		);
+		await this.db.$queryRaw(
+			Prisma.sql`DELETE FROM public.user_match
+			WHERE challenge=3 AND userid=${userid};`
+		);
+		return match;
+	}
+
 	async showHistory(userid: string) {
 		const match = await this.db.$queryRaw(
 			Prisma.sql`SELECT mh.matchid, mh.match_status, u1.username as user1, um1.user_score as user1_score, um2.username as user2, um2.user_score AS user2_score, um1.challenge FROM public.user_match as um1
@@ -240,6 +252,14 @@ export class MatchService {
 			return true;
 		else 
 			return false;
+	}
+
+	async joinWatch(userid: string, matchid: number){
+	
+		 await this.db.$queryRaw(
+			Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
+			VALUES (${userid}, ${matchid}, 3)
+			RETURNING matchid;`);
 	}
 
 	async getOpponent(userid: string, matchid: number){
