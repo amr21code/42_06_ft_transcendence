@@ -88,6 +88,7 @@ export class ChatService {
 		if (pw) {
 			var pwHash = await bcrypt.hash(pw, 10);
 		}
+		console.log("chat join", userid, chatid, pw);
 		const result = await this.db.$queryRaw(
 			Prisma.sql`SELECT chatid, password FROM public.chat
 			WHERE chatid=CAST(${chatid} AS INTEGER);`
