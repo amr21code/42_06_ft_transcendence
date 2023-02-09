@@ -15,12 +15,9 @@
 						<a id="achievement-firstGoal">first blood</a>	
 					</div>
 				</div>
-				<!-- {{ user }} -->
 				<img :src="userPhoto">
-				<!-- <div class="friend-block-buttons"> -->
-						<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
-						<button id="block-user-button" @click="blockButtonAction(userid)">block user</button>
-				<!-- </div> -->
+				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
+				<button id="block-user-button" @click="blockButtonAction(userid)">block user</button>
 			</div>
 
 			<table id="history-table">

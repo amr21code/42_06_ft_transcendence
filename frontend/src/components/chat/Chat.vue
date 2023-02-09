@@ -61,16 +61,16 @@
 
 			<div class="chat-menu">
 				<a @click="handleClick('overview', 0), changeType('open')" title="all open chat rooms">
-					<img class="chat-menu-icon" src="../../assets/chat-icon.png" alt="open-chats-icon">
+					<img class="chat-menu-icon" src="../../assets/search-chat-icon.png" alt="open-chats-icon">
 				</a>
 				<a @click="handleClick('overview', 0), changeType('joined')" title="all chat rooms you joined">
-					<img class="chat-menu-icon" src="../../assets/people_icon.png" alt="joined-chats-icon">
+					<img class="chat-menu-icon" src="../../assets/all-chats-icon.png" alt="joined-chats-icon">
 				</a>
 				<a @click="togglePopup()" title="create a new chat">
-					<img class="chat-menu-icon" src="../../assets/new-message_icon.png" alt="new-chat-icon">
+					<img class="chat-menu-icon" src="../../assets/create-chat-icon.png" alt="new-chat-icon">
 				</a>
 				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'" title="leave chat">
-					<img class="chat-menu-icon" src="../../assets/blackcross.png" alt="leave-chat-icon">
+					<img class="chat-menu-icon" src="../../assets/leave-chat-icon.png" alt="leave-chat-icon">
 				</a>
 			</div>
 			<div style="clear: left"></div>
@@ -330,19 +330,23 @@ export default defineComponent({
 
 .chat-menu {
 	text-align: center;
-	display: grid;
+	display: flex;
 	align-items: center;
-	justify-content: center; 
-	grid-template-columns: 1fr 1fr 1fr;
+	justify-content: center;
+	overflow-y: hidden; 
 }
 
 .chat-menu-icon {
+	margin: calc(-10px + 1.5625vw) calc(-1px + 1.5625vw);
+	margin-top: calc(-5px + 1.5625vw);
 	height: calc(15px + 1.5625vw);
 	width: calc(15px + 1.5625vw);
 	cursor: pointer;
 }
 
 .chat-menu-icon:hover {
-	background-color: rgb(0,0,0,0.3);
+	transition: all .4s;
+	filter: invert(100%);
+	-webkit-filter: invert(100%);
 }
 </style>
