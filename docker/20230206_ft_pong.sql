@@ -507,6 +507,7 @@ COPY public.match_status (statuscode, statusname) FROM stdin;
 0	finished
 1	active
 2	waiting for players
+3	watching
 \.
 
 
