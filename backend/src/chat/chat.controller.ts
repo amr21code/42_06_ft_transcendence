@@ -38,13 +38,13 @@ export class ChatController {
 	async joinChat(@Req() request: Request, @Param('chatid') chatid: number, @Param('pw') pw?) {
 		if (!pw)
 			pw = '';
-		// try {
+		try {
 			const user = request.session.passport.user.userid;
 			const join = await this.chatService.joinChat(user, chatid, pw);
 			return join;
-		// } catch (error) {
-		// 	throw new ForbiddenException('join chat');
-		// }
+		} catch (error) {
+			throw new ForbiddenException('join chat');
+		}
 	}
 
 	@Post('create')

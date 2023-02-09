@@ -67,7 +67,7 @@ export class ChatService {
 				LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 				LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as u ON u.userid=uc.userid
 				WHERE uc.chatid=CAST(${chatid} AS INTEGER) AND (status < 4 OR bantime < CURRENT_TIMESTAMP)
-				ORDER BY userid ASC`
+				ORDER BY userid ASC;`
 			);
 		// } else {
 			// list = await this.db.$queryRaw(
@@ -90,7 +90,7 @@ export class ChatService {
 		}
 		const result = await this.db.$queryRaw(
 			Prisma.sql`SELECT chatid, password FROM public.chat
-			WHERE chatid=${chatid}`
+			WHERE chatid=CAST(${chatid} AS INTEGER);`
 		);
 		// const result = await this.db.$queryRaw(
 		// 	Prisma.sql`SELECT chatid, password FROM public.chat
@@ -98,7 +98,7 @@ export class ChatService {
 		// );
 		const banned = await this.db.$queryRaw(
 			Prisma.sql`SELECT * FROM public.user_chat
-			WHERE userid=${userid} AND chatid=CAST(${chatid} AS INTEGER)`
+			WHERE userid=${userid} AND chatid=CAST(${chatid} AS INTEGER);`
 		);
 		if (Object.keys(banned).length == 1) {
 			if (banned[0].bantime < (Date.now() / 1000)) {
