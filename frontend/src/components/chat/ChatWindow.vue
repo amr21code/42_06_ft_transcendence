@@ -212,7 +212,7 @@ export default defineComponent({
 		scrollToBottom() {
 			this.$nextTick(() => {
 				const chat = this.$refs.chatEnd as any;
-				if (chat !== undefined)
+				if (chat !== undefined && chat.scrollHeight !== undefined)
 				{
 					chat.scrollTop = chat.scrollHeight;
 					chat.scrollIntoView({ behavior: 'smooth' });
