@@ -112,11 +112,14 @@ export default defineComponent({
 		onMounted(async () => {
 			await DataService.getAuthStatus()
 			.then((authStatus: any) => {
-				if (authStatus.data.msg !== 'authenticated') {
-					loggedIn.value = false;
+				if (authStatus.data.msg === '2fa') {
+					toggleTwoFaPopup();
+				}
+				if (authStatus.data.msg === 'authenticated') {
+					loggedIn.value = true;
 				}
 				else {
-					loggedIn.value = true;
+					loggedIn.value = false;
 				}
 				console.log('Your authentication status is: ', authStatus.data.msg);
 			})
