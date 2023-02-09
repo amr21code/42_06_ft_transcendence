@@ -319,7 +319,8 @@ CREATE TABLE public.users (
     losses integer DEFAULT 0 NOT NULL,
     socket_token character varying(100),
     wins integer DEFAULT 0 NOT NULL,
-    paddlecolor character varying(6) DEFAULT 'ffffff'::character varying NOT NULL
+    paddlecolor character varying(6) DEFAULT 'ffffff'::character varying NOT NULL,
+	twofalogin integer DEFAULT 0 NOT NULL
 );
 
 
