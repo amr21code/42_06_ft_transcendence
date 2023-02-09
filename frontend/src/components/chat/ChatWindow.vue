@@ -365,12 +365,10 @@ export default defineComponent({
 		margin: 1%;
 	}
 
-
 	.send-message-icon:hover {
 		transition: all .4s;
 		filter: invert(100%);
 		-webkit-filter: invert(100%);
 	}
-	
 
 </style>
