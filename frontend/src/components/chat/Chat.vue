@@ -9,8 +9,8 @@
 		
 		<div v-if="selected === 'overview'">
 			<h2>chat overview</h2>
-			<a v-if="type === 'joined'">This are the chats that you already joined</a>
-			<a v-if="type === 'open'">This are the chats that you can join</a>
+			<a v-if="type === 'joined'">Click to see messages</a>
+			<a v-if="type === 'open'">Click to join a chat</a>
 			 <div class="chat-overview">
 
 			<!------------CHATS WHERE USER IS JOINED----------------------------------->
@@ -18,12 +18,12 @@
 				<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
 						<a @click="handleClick('chatwindow', chat)">
 							<div class="" >
-									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
-									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
-									<a class="chat-typename-green" v-if="(chat.typename === 'public' || chat.typename === 'direct')" >{{ chat.typename }}</a>
-									<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
-									<a class="chat-typename-orange" v-if="chat.typename === 'private'" >{{ chat.typename }}</a>
-									<!-- <a class="chat-stausname-red" v-if="chat.statusname === 'ban'" >BANNED</a> -->
+								<a class="chat-chatid" >Room {{ chat.chatid }}</a>
+								<strong class="chat-chatname">{{ chat.chat_name }}</strong><br>
+								<a class="chat-typename-green" v-if="(chat.typename === 'public' || chat.typename === 'direct')" >{{ chat.typename }}</a>
+								<a class="chat-typename-red" v-if="chat.typename === 'protected'" >{{ chat.typename }}</a>
+								<a class="chat-typename-orange" v-if="chat.typename === 'private'" >{{ chat.typename }}</a>
+								<!-- <a class="chat-stausname-red" v-if="chat.statusname === 'ban'" >BANNED</a> -->
 							</div>
 						</a>
 				</div>
@@ -35,8 +35,8 @@
 						<div class="">
 							<a @click="joinchat(chat.chatid)" v-if="chat.typename === 'public'">
 								<div class="" >
-									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
-									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
+									<a class="chat-chatid" >Room {{ chat.chatid }}</a>
+									<strong class="chat-chatname">{{ chat.chat_name }}</strong><br>
 									<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
 								</div>
 							</a>
@@ -268,29 +268,28 @@ export default defineComponent({
 }
 .chat-chatid {
 	float: left;
-	color: white;
-	background-color: black;
-	border: 5%;
+	color: black;
+	width: 100%;
 }
 
 .chat-chatname {
-	float: left;
+	/* float: left; */
 	color: black;
-	padding-left: 10%;
+	/* padding-left: 10%; */
 }
 
 .chat-typename-green {
-	float: left;
+	/* float: left; */
 	color: green;
 }
 
 .chat-typename-red {
-	float: left;
+	/* float: left; */
 	color: red;
 }
 
 .chat-typename-orange {
-	float: left;
+	/* float: left; */
 	color: orangered;
 }
 
@@ -299,21 +298,23 @@ export default defineComponent({
 }
 
 .chat-overview {
-		height: 340px;
-		overflow-y: scroll;
-		scrollbar-color: rebeccapurple green;
-		scrollbar-width: thin;
-		/* display: flex;
-		flex-direction: column-reverse; */
+	height: 50vh;
+	overflow-y: scroll;
+	scrollbar-color: rebeccapurple green;
+	scrollbar-width: thin;
+	/* display: flex;
+	flex-direction: column-reverse; */
 }
 
 .chat-message-view {
 	background-color: rgb(0,0,0,0.4);
 	border: black solid 1px;
 	color: black;
-	padding: 10px;
+	/* padding: 10px; */
 	width: auto;
-	height: 30px;
+	height: auto;
+	text-align: center;
+	/* height: 30px; */
 }
 
 .chat-message-view:hover {
@@ -350,4 +351,5 @@ export default defineComponent({
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
+
 </style>

@@ -11,9 +11,9 @@
             <a class="info-text">Enter the chatid that you want to join, create a new chat either private, with (public) or without
                 (protected) a password or enter a userid in order to create a direct chat.</a>
             <div class="button-box">
-                <button class="" @click="(changeShowInput('group'))">Groupchat</button>
-                <button class="" @click="(changeShowInput('dm'))">Directchat</button>
-                <button class="" @click="(changeShowInput('join'))">Join</button>
+                <button class="select-button" @click="(changeShowInput('group'))">Groupchat</button>
+                <button class="select-button" @click="(changeShowInput('dm'))">Directchat</button>
+                <button class="select-button" @click="(changeShowInput('join'))">Join</button>
             </div>
             <!-- <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe> -->
             <div class="checkbox-label" v-if="showinput === 'group'">
@@ -128,7 +128,8 @@ export default defineComponent({
 <style scoped>
 
 .button-box {
-    padding: 20px 20px
+    padding: 20px 0px;
+	align-content: center;
 }
 
 .checkbox-label {
@@ -151,9 +152,8 @@ export default defineComponent({
 .popup-inner {
 	background-color: var(--second-bg-color);
 	padding: 1rem 2rem;
-	/* border-radius: 10%; */
 	border-radius: 2px;
-    max-width: 400px;
+	max-width: 60vw;
 }
 
 .popup-inner h2 {
@@ -172,5 +172,9 @@ export default defineComponent({
 
 .popup-close {
     color: black;
+}
+
+.select-button {
+	margin: 5px;
 }
 </style>
