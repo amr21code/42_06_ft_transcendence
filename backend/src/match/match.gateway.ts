@@ -42,6 +42,7 @@ export class MatchGateway {
 				else
 					throw new WsException('no game active');
 			}
+			console.log("watchgame", payload);
 			client.join(payload);
 		} catch (error) {
 			client.emit('watchGame', 'failed');
@@ -279,6 +280,7 @@ export class MatchGateway {
 	async leaveGameSpectator(client: Socket, gameState: MatchGameStateDto) {
 		try {
 			const matchidLeft = await this.matchService.listActiveMatch(gameState.player1.userid);
+			console.log("check matchid", matchidLeft);
 			// this.server.socketsLeave(matchidLeft[0].matchid);
 			client.leave(matchidLeft[0].matchid);
 			console.log("matchid", matchidLeft[0].matchid);
