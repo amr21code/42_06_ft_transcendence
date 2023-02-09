@@ -1,24 +1,24 @@
 <template>
     <div class="popup" @keyup.esc="(ChatInfotogglePopup)" tabindex="0">
         <div class="popup-inner">
-            <h2>info to chat[{{ chat.chatid }}]</h2>
+            <h2>info for chat '{{ chat.chat_name }}'</h2>
 			<div class="button-container" v-if="permission === 0">
-				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">Change name</button>
+				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">change name</button>
 				<div v-if="option === 1">
 					<input type="text" placeholder="Enter new chatname"  v-model="newChatname">
 					<button @click="changeChatDetails(chat.typename, chat.chatid, newChatname, chat.password), toggleOption(0)">submit</button>
 				</div>
 
-				<button @click="toggleOption(2)" class="option-button" v-if="option === 0 && chat.typename === 'protected'">Remove password</button>
+				<button @click="toggleOption(2)" class="option-button" v-if="option === 0 && chat.typename === 'protected'">remove password</button>
 				<div v-if="option === 2">
 					<a>you are about to remove the password.</a><br>
-					<a>this makes the Chat public. Are you sure?</a><br>
-					<button class="option-button" @click="changeChatDetails('public', chat.chatid, chat.chat_name, ''), toggleOption(0)">Yes</button>
-					<button class="option-button" @click="toggleOption(0)">No</button>
+					<a>this makes the chat public. are you sure?</a><br>
+					<button class="option-button" @click="changeChatDetails('public', chat.chatid, chat.chat_name, ''), toggleOption(0)">yes</button>
+					<button class="option-button" @click="toggleOption(0)">no</button>
 				</div>
 
 
-				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">Change password</button>
+				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">change password</button>
 				<div v-if="option === 3">
 					<input type="text" placeholder="Enter new chatpassword"  v-model="newChatpassword">
 					<button @click="changeChatDetails(chat.typename, chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
@@ -114,7 +114,7 @@
 					</tbody>
 				<!-- </div> -->
 		</table>
-			<button class="popup-close" @click="(ChatInfotogglePopup)">Close</button>
+			<button class="popup-close" @click="(ChatInfotogglePopup)">close</button>
         </div>
     </div>
 </template>
