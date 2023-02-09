@@ -8,7 +8,6 @@
 				</div>
 				<div class="top-nav">
 					<a class="menuOption" id="game" @click="handleClick('game')">game</a>
-					<!-- <a class="menuOption" id="watchSelected" @click="handleClick('watch')">watch</a> -->
 					<a class="menuOption" id="chat" @click="handleClick('chat')">chat</a>
 					<a class="menuOption" id="leaderboard" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friends" @click="handleClick('friends')">friends</a>
@@ -224,17 +223,10 @@ export default defineComponent({
 				document.documentElement.style.setProperty("--sidewindow_fr", "1fr");
 			}
 		};
-
-		
 		return { store, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
 </script>
-
-<!-- if session cookie-> /auth/status -> 'authenticated' -> popup weg-->
-<!-- 'not authenticated' ->cookie löschen-->
-<!-- if not cookie-> popup -->
-<!-- NEXT: Andi gibt mir statt 'authenticated' die SESSIONID und ich sende die weiter -->
 
 
 <style scoped>
@@ -298,7 +290,6 @@ export default defineComponent({
 		max-height: 70vh;
 		margin: 50px;
 		margin-top: 50px;
-		/* background: red; */
 		align-items:center;
 	}
 	
@@ -309,15 +300,10 @@ export default defineComponent({
 
 	footer {
 		text-align: center;
-		/* background-color: var(--second-bg-color); */
-		/* padding: 10px; */
 		padding-top: 4px;
 		padding-bottom: 4px;
-
 		position: fixed;
 		bottom: 0;
 		width: 100%;
-		/* background: blue; */
-		/* height: 1rem; */
 	}
 </style>
