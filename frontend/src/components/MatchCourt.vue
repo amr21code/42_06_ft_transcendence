@@ -273,7 +273,7 @@ export default defineComponent({
 			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
        
 			fontSize = canvas.height / 8;
-			ctx.font = (fontSize|0) + 'px monspace';
+			ctx.font = (fontSize|0) + 'px monospace';
 			const biggerMeasureAscent = ctx.measureText(state.player1.userid).actualBoundingBoxAscent > ctx.measureText(state.player2.userid).actualBoundingBoxAscent ? ctx.measureText(state.player1.userid).actualBoundingBoxAscent : ctx.measureText(state.player2.userid).actualBoundingBoxAscent;
 			const biggerMeasureDescent = ctx.measureText(state.player1.userid).actualBoundingBoxDescent > ctx.measureText(state.player2.userid).actualBoundingBoxDescent ? ctx.measureText(state.player1.userid).actualBoundingBoxDescent : ctx.measureText(state.player2.userid).actualBoundingBoxDescent;
 			ctx.fillText(state.player1.userid, (canvas.width / 4 - (ctx.measureText(state.player1.userid).width / 2)), (canvas.height - canvas.height / 6) + ((biggerMeasureAscent + biggerMeasureDescent) / 2));
