@@ -18,9 +18,9 @@
 				</div>
 			</header>
 			<!-- enforce this properly!-->
-			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
+			<LoginPopup id="LoginPopup" v-if="loggedIn === 'not authenticated'" :toggleLoginPopup="() => toggleLoginPopup()" />
 			<!-- <TwoFaPopup id="TwoFaPopup" v-if="store.user.twofa === 1" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" /> -->
-			<TwoFaPopup id="TwoFaPopup" style="display:none" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" />
+			<TwoFaPopup id="TwoFaPopup" v-if="loggedIn === '2fa'" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" :twoFaSuccess="() => twoFaSuccess()"/>
 			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 			<gotChallengedPopup id="gotChallengedPopup" v-if="gotChallengedPopupTrigger === true" :toggleGotChallengedPopup="() => toggleGotChallengedPopup()" :challenger="challenger"/>
 			<div class="game-part-screen">
@@ -100,9 +100,9 @@ export default defineComponent({
 	setup() {
 		const store = useUserDataStore();
 
-		const loggedIn = ref(false);
+		const loggedIn = ref('not authenticated');
 		const toggleLoginPopup = () => {
-			loggedIn.value = !loggedIn.value;
+			loggedIn.value = 'authenticated';
 		}
 
 		// const twoFaActivated = ref(false);
@@ -114,18 +114,14 @@ export default defineComponent({
 			document.getElementById("TwoFaPopup")!.style.display = "block";
 		}
 
+		const twoFaSuccess = () => {
+			loggedIn.value = 'authenticated';
+		}
+
 		onMounted(async () => {
 			await DataService.getAuthStatus()
 			.then((authStatus: any) => {
-				if (authStatus.data.msg === '2fa') {
-					toggleTwoFaPopup();
-				}
-				if (authStatus.data.msg === 'authenticated') {
-					loggedIn.value = true;
-				}
-				else {
-					loggedIn.value = false;
-				}
+				loggedIn.value = authStatus.data.msg;
 				console.log('Your authentication status is: ', authStatus.data.msg);
 			})
 			.catch((e: Error) => {
@@ -133,7 +129,7 @@ export default defineComponent({
 			})
 
 			// only run API calls if successfully logged in
-			if (loggedIn.value === true)
+			if (loggedIn.value === 'authenticated')
 			{
 				await store.getUser();
 				await store.getFriends();
@@ -230,7 +226,7 @@ export default defineComponent({
 		};
 
 		
-		return { store, untoggleTwoFaPopup, toggleTwoFaPopup, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
+		return { store, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
 </script>

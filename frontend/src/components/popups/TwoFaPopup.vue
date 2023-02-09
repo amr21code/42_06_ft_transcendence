@@ -17,7 +17,7 @@ import { useUserDataStore } from '../../stores/myUserDataStore';
 
 export default defineComponent({
 
-	props: ['untoggleTwoFaPopup'],
+	props: ['untoggleTwoFaPopup', 'twoFaSuccess'],
 
 	setup(props) {
 		const enteredSecret = ref('');
@@ -25,6 +25,7 @@ export default defineComponent({
 		const submitTwoFaSecret = async () => {
 			if (await DataService.submitTwoFaAlreadyRegistered(enteredSecret.value)) {
 				props.untoggleTwoFaPopup();
+				props.twoFaSuccess();
 			}
 			else
 				alert('Verification code was wrong, please try again');
