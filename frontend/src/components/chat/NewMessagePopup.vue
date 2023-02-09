@@ -95,7 +95,7 @@ export default defineComponent({
             await DataService.createChat(chatname_id, password, type)
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
-                this.props.togglePopup();
+                this.togglePopup();
             })
             .catch((e: Error) => {
                 this.invalid = true;
