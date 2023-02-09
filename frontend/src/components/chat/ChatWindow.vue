@@ -6,14 +6,21 @@
 
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
-			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
-			<a class="chat-chatname">{{ curr_chat.chat_name }}</a>
-			<!-- <input v-if="showinput === true" placeholder="enter new name" v-model="newName"> -->
-			<button class="ok-button" @click="showChangeNameField(), changeChatDetails(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
-			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
-			<a class="info-icon" @click="(ChatInfotogglePopup)">
-				<img src="../../assets/info-icon.png" alt="user-photo" width="20" height="20">
-			</a>
+			<div class="channel-info-wrapper">
+
+				<h3 class="chat-chatid" >{{ curr_chat.chatid }}</h3>
+				<h3 class="chat-chatname">{{ curr_chat.chat_name }}</h3>
+				<!-- <input v-if="showinput === true" placeholder="enter new name" v-model="newName"> -->
+				
+				<a class="info-icon-wrapper" @click="(ChatInfotogglePopup)">
+					<img id="info-icon" src="../../assets/info-icon-new.png" alt="user-photo" width="20" height="20">
+				</a>
+			</div>
+			
+			<div class="name-approve-button-wrapper">
+				<button class="ok-button" @click="showChangeNameField(), changeChatDetails(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
+				<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
+			</div>
 		</div>
 
 		<ChatInfoPopup id="ChatInfoPopup" v-if="ChatInfoTrigger === true" :ChatInfotogglePopup="() => ChatInfotogglePopup()" :chat="curr_chat" />
@@ -254,48 +261,75 @@ export default defineComponent({
 <style scoped>
 
 
-	.input-message {
-		width: 80%;
-		float: left;
-		clear: both;
-	}
+/* ######## GLOBAL ####################################### */
+
 	.wrapper {
 		max-width: 100%;
 		min-height: 100%;
 	}
 
-	.info-icon{
-		padding-left: 15%;
-	}
-	.ok-button {
-		width: 20px;
-		height: 20px;
+	.wrapper h2 {
+		margin: 0.5rem;
 	}
 
-	.cancel-button {
-		width: 45px;
-		height: 20px;
-		color: black;
+/* ######## TOP BAR ####################################### */
+	.chat-top-bar {
+		background-color: var(--second-bg-color);
+		color: white;
+	}
+
+	.chat-top-bar h3 {
+		padding: 0;
+		margin: 0;
+	}
+
+	.channel-info-wrapper {
+		text-align: center;
+		display: grid;
+		align-items: center;
+		justify-content: center; 
+		grid-template-columns: 1fr 1fr 1fr;
 	}
 
 	.chat-chatid {
-		float: left;
 		color: white;
-		padding-left: 5%;
 	}
 
 	.chat-chatname {
 		color: white;
-		/* padding-left: 20%; */
-		float: middle;
 	}
 
-	.chat-typename {
-		color: lightgreen;
-		padding-right: 5%;
-		float: right;
+	.name-approve-button-wrapper {
+		margin: 0.25rem;
+	}
+	
+	.ok-button {
+		margin-right: 0.5rem; /*so that the buttons don't touch*/
+		width: 25%;
+	}
+	
+	.cancel-button {
+		width: 25%;
+	}
+	
+	#info-icon {
+		/* border: 3px solid green; */
+		filter: invert(100%);
+		-webkit-filter: invert(100%);
+		height: calc(5px + 1.5625vw);
+		width: calc(5px + 1.5625vw);
+		cursor: pointer;
 	}
 
+	#info-icon:hover {
+		transition: all .4s;
+		filter: invert(0%);
+		-webkit-filter: invert(0%);
+	}
+	
+	
+	/* ######## MESSAGES VIEW ####################################### */
+	
 	.messages-wrapper {
 		max-width: 340px;
 		min-width: 340px;
@@ -305,17 +339,12 @@ export default defineComponent({
 		padding-left: 1%;
 		font-weight: normal;
 	}
+
 	.message-username {
 		color: black;
 		padding-left: 1%;
 	}
-	.chat-top-bar {
-		background-color: var(--second-bg-color);
-		color: white;
-		padding-top: 2%;
-		padding-bottom: 2%;
-	}
-	
+
 	.chat-message-view {
 		background: white;
 		border: black solid 3px;
