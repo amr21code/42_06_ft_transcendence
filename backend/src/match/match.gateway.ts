@@ -284,6 +284,7 @@ export class MatchGateway {
 			// this.server.socketsLeave(matchidLeft[0].matchid);
 			client.leave(matchidLeft[0].matchid);
 			console.log("matchid", matchidLeft[0].matchid);
+			client.emit('reset');
 		}
 		catch (error) {
 			throw new WsException('spectatorLeftMatch failed');

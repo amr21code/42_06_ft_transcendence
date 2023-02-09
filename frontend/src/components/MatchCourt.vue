@@ -168,7 +168,7 @@ export default defineComponent({
 		const spectatorLeavesMatch = () => {
 			spectatorLeftMatch = true;
 			socket.emit("spectatorLeftMatch");
-			reset();
+			//reset();
 		}
 
 
@@ -298,6 +298,7 @@ export default defineComponent({
 		// socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
 		socket.on('joinGame', handleJoinGame);
 		socket.on('opponentLeft', handleOpponentLeft);
+		socket.on('reset', reset);
 		////############# SOCKETIO #############
 
         return { canvas, opponentArrived, initCanvas, paintGame, removeMatchWaitPopup };
