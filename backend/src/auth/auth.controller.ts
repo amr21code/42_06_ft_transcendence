@@ -28,11 +28,19 @@ export class AuthController {
 	}
 	
 	@Get('status')
-	user(@Req() request: Request) {
+	user(@Req() request: Request, @Session() session: Record<string, any>) {
 		try {
 			if (request.user)
-				return { msg: "authenticated" };
-			else 
+				if (session.passport.user.twofa == 1) {
+					if (session.passport.user.twofalogin == 1) {
+						return { msg: "authenticated" };
+					} else {
+						return { msg: "2fa" };
+					}
+				} else {
+					return { msg: "authenticated" };
+				}
+			else
 				return { msg: "not authenticated" };
 		} catch (error) {
 			throw new ForbiddenException('auth status');
