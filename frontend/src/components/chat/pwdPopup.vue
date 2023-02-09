@@ -61,7 +61,7 @@ export default defineComponent({
 
 	},
 
-	setup () {
+	setup (props) {
 		const joinchat = async (id : number, password ?: string) =>{
 			if (password === undefined)
 				password = '';
