@@ -38,7 +38,7 @@ export default defineComponent({
 		let matchWaitPopup: any;
 		let gameOver: boolean;
 		const opponentArrived = ref(false);
-		let spectatorLeftMatch = false;
+		//let spectatorLeftMatch = false;
 		
 		// #################  HANDLERS #######################
         const handlePlayerNumber = (nbr: number) => {
@@ -59,13 +59,13 @@ export default defineComponent({
 			if (!gameState) {
 				return;
 			}
-			else if (spectatorLeftMatch) {
-				// if (store.user.userid === gameState.player1.userid || store.user.userid === gameState.player2.userid)
-				// 	socket.emit("playerLeft", gameState);
-				// else
-				socket.emit("spectatorLeftMatch", gameState);
-				return;
-			}
+			//else if (spectatorLeftMatch) {
+			//	// if (store.user.userid === gameState.player1.userid || store.user.userid === gameState.player2.userid)
+			//	// 	socket.emit("playerLeft", gameState);
+			//	// else
+			//	socket.emit("spectatorLeftMatch", gameState);
+			//	return;
+			//}
 			else if (gameState.prematureEnd || gameOver) {
 				reset();
 				return;
@@ -154,12 +154,12 @@ export default defineComponent({
 
 		const joinMatchQueue = () => {
 			gameOver = false;
-			spectatorLeftMatch = false;
+			//spectatorLeftMatch = false;
 			SocketioService.createNewGame(canvas);
 		};
 
 		const watchGame = () => {
-			spectatorLeftMatch = false;
+			//spectatorLeftMatch = false;
 			socket.emit('watchGame');
 			leaveMatchButton.style.display = "block";
 			// check that I cannot stear the paddle
@@ -168,7 +168,8 @@ export default defineComponent({
 		}
 
 		const spectatorLeavesMatch = () => {
-			spectatorLeftMatch = true;
+			//spectatorLeftMatch = true;
+			socket.emit("spectatorLeftMatch");
 			reset();
 		}
 

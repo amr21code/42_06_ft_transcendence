@@ -43,6 +43,7 @@ export class MatchGateway {
 					throw new WsException('no game active');
 			}
 			client.join(payload);
+			await this.matchService.joinWatch(client.request.session.passport.user.userid, payload);
 		} catch (error) {
 			client.emit('watchGame', 'failed');
 			throw new WsException('watch game failed');
@@ -276,9 +277,9 @@ export class MatchGateway {
 	}
 
 	@SubscribeMessage('spectatorLeftMatch') 
-	async leaveGameSpectator(client: Socket, gameState: MatchGameStateDto) {
+	async leaveGameSpectator(client: Socket) {
 		try {
-			const matchidLeft = await this.matchService.listActiveMatch(gameState.player1.userid);
+			const matchidLeft = await this.matchService.listWatching(client.request.session.passport.user.userid);
 			// this.server.socketsLeave(matchidLeft[0].matchid);
 			client.leave(matchidLeft[0].matchid);
 			console.log("matchid", matchidLeft[0].matchid);
