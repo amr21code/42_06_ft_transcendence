@@ -267,7 +267,7 @@ export default defineComponent({
             ctx.fillStyle = "#444040";
 			ctx.textalign = "center";
 			var fontSize = canvas.height / 2.5;
-			ctx.font = (fontSize|0) + 'px monspace';
+			ctx.font = (fontSize|0) + 'px monospace';
 
 			ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
 			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
