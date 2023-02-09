@@ -12,7 +12,7 @@ import { AuthenticatedGuard } from 'src/auth/guards/guards';
 	credentials: true,
 }
 })
-@UseGuards(AuthenticatedGuard)
+// @UseGuards(AuthenticatedGuard)
 export class ChatGateway {
 	constructor(private readonly userService: UserService, private readonly chatService: ChatService) {
 	}

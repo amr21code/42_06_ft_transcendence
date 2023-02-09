@@ -15,8 +15,7 @@ import { UseGuards } from '@nestjs/common';
 		credentials: true,
 	}
 })
-
-@UseGuards(AuthenticatedGuard)
+// @UseGuards(AuthenticatedGuard)
 export class MatchGateway {
 
 	@WebSocketServer()
