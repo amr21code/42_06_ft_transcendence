@@ -84,10 +84,11 @@ export class ChatService {
 		return list;
 	}
 
-	async joinChat(userid: string, chatid?: number, pw?: string) {
+	async joinChat(userid: string, chatid_string?: string, pw?: string) {
 		if (pw) {
 			var pwHash = await bcrypt.hash(pw, 10);
 		}
+		var chatid = parseInt(chatid_string, 10);
 		console.log("chat join", userid, chatid, pw);
 		const result = await this.db.$queryRaw(
 			Prisma.sql`SELECT chatid, password FROM public.chat
