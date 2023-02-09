@@ -60,17 +60,17 @@
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
 			<div class="chat-menu">
-				<a @click="handleClick('overview', 0), changeType('open')">
-					<img src="../../assets/chat-icon.png" alt="user-photo" width="40" height="40">
+				<a @click="handleClick('overview', 0), changeType('open')" title="all open chat rooms">
+					<img class="chat-menu-icon" src="../../assets/chat-icon.png" alt="open-chats-icon">
 				</a>
-				<a @click="handleClick('overview', 0), changeType('joined')">
-					<img src="../../assets/people_icon.png" alt="user-photo" width="40" height="40">
+				<a @click="handleClick('overview', 0), changeType('joined')" title="all chat rooms you joined">
+					<img class="chat-menu-icon" src="../../assets/people_icon.png" alt="joined-chats-icon">
 				</a>
-				<a @click="togglePopup()">
-					<img src="../../assets/new-message_icon.png" alt="user-photo" width="40" height="40">
+				<a @click="togglePopup()" title="create a new chat">
+					<img class="chat-menu-icon" src="../../assets/new-message_icon.png" alt="new-chat-icon">
 				</a>
-				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'">
-					<img src="../../assets/blackcross.png" alt="user-photo" width="35" height="40">
+				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'" title="leave chat">
+					<img class="chat-menu-icon" src="../../assets/blackcross.png" alt="leave-chat-icon">
 				</a>
 			</div>
 			<div style="clear: left"></div>
@@ -295,7 +295,6 @@ export default defineComponent({
 
 .chat-stausname-red {
 	color: red;
-
 }
 
 .chat-overview {
@@ -315,6 +314,7 @@ export default defineComponent({
 	width: auto;
 	height: 30px;
 }
+
 .chat-message-view:hover {
 	background-color: rgb(0,0,0,0.3)
 }
@@ -327,12 +327,22 @@ export default defineComponent({
 	width: 100%;
 	overflow: auto;
 }
-.chat-menu img {
-	margin: 5px 20px;
-	cursor: pointer;
-	float: left;
+
+.chat-menu {
+	text-align: center;
+	display: grid;
+	align-items: center;
+	justify-content: center; 
+	grid-template-columns: 1fr 1fr 1fr;
 }
-.chat-menu img:hover {
-	background-color: rgb(0,0,0,0.3)
+
+.chat-menu-icon {
+	height: calc(15px + 1.5625vw);
+	width: calc(15px + 1.5625vw);
+	cursor: pointer;
+}
+
+.chat-menu-icon:hover {
+	background-color: rgb(0,0,0,0.3);
 }
 </style>
