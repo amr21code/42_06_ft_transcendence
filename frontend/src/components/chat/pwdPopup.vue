@@ -68,7 +68,7 @@ export default defineComponent({
 			await DataService.createChat(String(id), password, 'join')
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
-				this.props.togglePwdPopup();
+				props.togglePwdPopup();
             })
             .catch((e: Error) => {
                 console.log(e);
