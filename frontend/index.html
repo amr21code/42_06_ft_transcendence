@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" id="changingFavicon" type="image/ico" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <title>PONG</title> -->
   </head>
@@ -14,8 +14,14 @@
 
 <script>
 
-  window.onblur = function () { document.title = 'Play with me😏'; }
-  
-  window.onfocus = function () { document.title = 'PONG'; }
+	window.onblur = function () {
+		document.title = 'Play with me😏';
+		// changingFavicon.href = "/public/favicon.ico";
+	}
+
+	window.onfocus = function () { 
+		document.title = 'PONG';
+		// changingFavicon.href = "/public/favicon-inactive.ico";
+	}
   
 </script>

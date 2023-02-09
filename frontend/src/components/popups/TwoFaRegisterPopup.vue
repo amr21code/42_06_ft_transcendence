@@ -3,8 +3,14 @@
 		<div class="popup-inner">
 			<slot/>
 			<h2>Using Google 2FA</h2>
-			<img :src="TwoFaQrCode" alt="qrCode" />
-			<input type="text" @keyup.enter="submitTwoFaSecret()" v-model="enteredSecret" placeholder="Enter your verification code">
+			<div id="two-fa-wrapper">
+				<div id="qr-code">
+					<img :src="TwoFaQrCode" alt="qrCode" />
+				</div>
+				<div id="verification-input">
+					<input type="text" @keyup.enter="submitTwoFaSecret()" v-model="enteredSecret" placeholder="Enter your verification code">
+				</div>
+			</div>
 			<button class="untoggleTwoFaPopupButton" @click="untoggleTwoFaPopup">Quit</button>
 		</div>
 	</div>
@@ -81,8 +87,17 @@ export default defineComponent({
 	margin-left: 0%;
 }
 
+#qr-code {
+	text-align: center;
+}
+
+#verification-input {
+	text-align: center;
+}
+
 button {
 	margin: 0 auto;
+	margin-top: 2rem;
 	display: block;
 }
 </style>
