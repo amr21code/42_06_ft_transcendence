@@ -9,9 +9,10 @@
 				</div>
 				<div id="verification-input">
 					<input type="text" @keyup.enter="submitTwoFaSecret()" v-model="enteredSecret" placeholder="Enter your verification code">
+					<button id="submit-button" @click="submitTwoFaSecret()">Submit</button>
 				</div>
 			</div>
-			<button class="untoggleTwoFaPopupButton" @click="untoggleTwoFaPopup">Quit</button>
+			<button id="quit-button" class="untoggleTwoFaPopupButton" @click="untoggleTwoFaPopup">Quit</button>
 		</div>
 	</div>
 </template>
@@ -95,9 +96,16 @@ export default defineComponent({
 	text-align: center;
 }
 
+#submit-button {
+	margin-top: 0.5rem;
+}
+
+#quit-button {
+	margin-top: 2rem;
+}
+
 button {
 	margin: 0 auto;
-	margin-top: 2rem;
 	display: block;
 }
 </style>
