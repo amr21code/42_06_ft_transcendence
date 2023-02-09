@@ -5,6 +5,7 @@ import { ChatMessageDto } from './dto';
 import { ChatDto } from './dto/chat.dto';
 import { ChatUserStatusDto } from './dto/chatuserstatus.dto';
 import * as bcrypt from 'bcrypt';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class ChatService {
@@ -145,8 +146,10 @@ export class ChatService {
 
 	async leaveChat(userid: string, chatid: number) {
 		const result = await this.listUsers(chatid);
-		console.log("leave chat list users", result, userid, chatid);
-		var size = Object.keys(result).length;
+		if (result)
+			var size = Object.keys(result).length;
+		else
+			return 0;
 		if (size == 1) {
 			console.log("deleting chat");
 			const del = await this.db.$queryRaw(
