@@ -5,7 +5,7 @@
 			<h2>welcome to ft_pong</h2>
 			<p>please sign in with your 42 account first</p>
 			<button class="login_button">
-				<a :href="apiLink42" @click="callLoginApi">Sign in with 42</a>
+				<a :href="apiLink42" >Sign in with 42</a>
 			</button>
 		</div>
 	</div>
@@ -14,8 +14,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import LoginService from '../../services/LoginService'
-import type { ResponseData } from '../../types/ResponseData'
 
 export default defineComponent({
 	name: "login-popup",
@@ -24,17 +22,8 @@ export default defineComponent({
 	
 	setup() {
 		const apiLink42 = import.meta.env.VITE_API_42_URL;
-		const callLoginApi = () => {
-			LoginService.login()
-			.then((response: ResponseData)=> {
-
-				console.log(response.data);
-			})
-			.catch((e: Error) => {
-				console.log("Error in login process", e)
-			});	
-		}
-		return { apiLink42, callLoginApi }
+	
+		return { apiLink42 }
 	}
 })
 </script>
