@@ -187,7 +187,7 @@ export class MatchService {
 		const join = await this.db.$queryRaw(
 			Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
 			VALUES (${userid}, ${matchid}, 2)
-			RETURNING matchid`
+			RETURNING matchid;`
 		);
 		if (join[0].matchid == matchid) {
 			const opponent = await this.db.$queryRaw(
@@ -292,7 +292,7 @@ export class MatchService {
 				console.log("loss", loser);
 				await this.db.$queryRaw(
 						Prisma.sql`UPDATE public.users SET losses=CAST(${loss[0].losses} AS INTEGER)
-						WHERE userid=${loser}`);
+						WHERE userid=${loser};`);
 				// end loser update
 			}
 			
@@ -331,7 +331,7 @@ export class MatchService {
 				win[0].wins = win[0].wins + 1;
 				await this.db.$queryRaw(
 					Prisma.sql`UPDATE public.users SET wins=CAST(${win[0].wins} AS INTEGER)
-					WHERE userid=${winner}`);
+					WHERE userid=${winner};`);
 				// end winner update
 				// begin loser update
 				var loss= await this.db.$queryRaw<number>(
@@ -340,12 +340,12 @@ export class MatchService {
 				console.log("loss", loser);
 				await this.db.$queryRaw(
 						Prisma.sql`UPDATE public.users SET losses=CAST(${loss[0].losses} AS INTEGER)
-						WHERE userid=${loser}`);
+						WHERE userid=${loser};`);
 				// end loser update
 			}
 			const match = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.match_history SET match_status=0
-				WHERE matchid=${matchid}`);
+				WHERE matchid=${matchid};`);
 		} catch (error) {
 			throw new ForbiddenException();
 		}

@@ -14,7 +14,7 @@ export class ChatService {
 		const status = await this.db.$queryRaw(
 			Prisma.sql`SELECT status
 			FROM public.user_chat 
-			WHERE chatid=CAST(${chatid} AS INTEGER) AND userid=${userid}`
+			WHERE chatid=CAST(${chatid} AS INTEGER) AND userid=${userid};`
 		);
 		return status;
 	}
@@ -24,7 +24,7 @@ export class ChatService {
 			Prisma.sql`SELECT DISTINCT c.chatid, chat_name, ct.typename
 			FROM public.chat AS c
 			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-			WHERE c.type<2 AND  c.chatid NOT IN (SELECT chatid FROM public.user_chat WHERE userid=${userid})`
+			WHERE c.type<2 AND  c.chatid NOT IN (SELECT chatid FROM public.user_chat WHERE userid=${userid});`
 			//`SELECT c.chatid, chat_name, ct.typename, uc.status, uc.userid
 			//FROM public.chat AS c
 			//LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
@@ -42,7 +42,7 @@ export class ChatService {
 			LEFT JOIN public.chat as c ON uc.chatid=c.chatid
 			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
 			WHERE uc.userid=${userid} AND (uc.status < 4 OR uc.bantime < CURRENT_TIMESTAMP)
-			ORDER BY chatid ASC`
+			ORDER BY chatid ASC;`
 		);
 		return list;
 	}
@@ -163,7 +163,7 @@ export class ChatService {
 	async addMessage(message: ChatMessageDto) {
 		const user = await this.db.$queryRaw(
 			Prisma.sql`SELECT status FROM user_chat
-			WHERE userid=${message.userid} AND chatid=${message.chatid} AND (status < 3 OR bantime < CURRENT_TIMESTAMP)`
+			WHERE userid=${message.userid} AND chatid=${message.chatid} AND (status < 3 OR bantime < CURRENT_TIMESTAMP);`
 		);
 		console.log(user);
 		if (user[0].status >= 3) {
@@ -189,7 +189,7 @@ export class ChatService {
 			LEFT JOIN public.users as u ON u.userid=cm.userid
 			LEFT JOIN public.friends as fl ON cm.userid=fl.addresseeid AND fl.requesterid=${userid}
 			WHERE chatid=CAST(${chatid} AS INTEGER) AND fl.statuscode IS DISTINCT FROM '2'
-			ORDER BY cm.time ASC`
+			ORDER BY cm.time ASC;`
 		);
 		return list;
 	}
