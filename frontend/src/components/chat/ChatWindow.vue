@@ -81,10 +81,9 @@
 <!--------------FOOTER------------------------------------------------------------------------------------>
 			
 		<form class="chat-write-and-send-wrapper" @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
-			<input class="input-message" placeholder="Write message here" v-model="message">
-			<img class="send-message-icon" @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="send-icon">
+			<input class="input-message" placeholder="press enter to send" v-model="message" @keyup.enter="sendMessage(curr_chat.chatid, message), submit()">
+			<!-- <img class="send-message-icon" @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="send-icon"> -->
 		</form>
-
 	</div>
 
 </template>
@@ -103,7 +102,7 @@ import SocketioService from '../../services/SocketioService'
 
 import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
-import type { IFriend } from '@/types/Friend'
+import type { IFriend } from '../../types/Friend'
 
 
 export default defineComponent({

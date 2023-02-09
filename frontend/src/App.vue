@@ -19,7 +19,8 @@
 			</header>
 			<!-- enforce this properly!-->
 			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
-			<TwoFaPopup id="TwoFaPopup" v-if="store.user.twofa === 1" :toggleTwoFaPopup="() => toggleTwoFaPopup()" />
+			<!-- <TwoFaPopup id="TwoFaPopup" v-if="store.user.twofa === 1" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" /> -->
+			<TwoFaPopup id="TwoFaPopup" style="display:none" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" />
 			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 			<gotChallengedPopup id="gotChallengedPopup" v-if="gotChallengedPopupTrigger === true" :toggleGotChallengedPopup="() => toggleGotChallengedPopup()" :challenger="challenger"/>
 			<div class="game-part-screen">
@@ -105,8 +106,12 @@ export default defineComponent({
 		}
 
 		// const twoFaActivated = ref(false);
-		const toggleTwoFaPopup = () => {
+		const untoggleTwoFaPopup = () => {
 			document.getElementById("TwoFaPopup")!.style.display = "none";
+		}
+
+		const toggleTwoFaPopup = () => {
+			document.getElementById("TwoFaPopup")!.style.display = "block";
 		}
 
 		onMounted(async () => {
@@ -225,7 +230,7 @@ export default defineComponent({
 		};
 
 		
-		return { store, toggleTwoFaPopup, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
+		return { store, untoggleTwoFaPopup, toggleTwoFaPopup, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
 </script>

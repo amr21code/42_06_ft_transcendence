@@ -1,7 +1,7 @@
 <template>
     <div class="popup" @keyup.esc="(ChatInfotogglePopup)" tabindex="0">
         <div class="popup-inner">
-            <h2>Info to chat[{{ chat.chatid }}]</h2>
+            <h2>info to chat[{{ chat.chatid }}]</h2>
 			<div class="button-container" v-if="permission === 0">
 				<button @click="toggleOption(1)" class="option-button" v-if="option === 0">Change name</button>
 				<div v-if="option === 1">
@@ -11,8 +11,8 @@
 
 				<button @click="toggleOption(2)" class="option-button" v-if="option === 0 && chat.typename === 'protected'">Remove password</button>
 				<div v-if="option === 2">
-					<a>You are about to remove the password.</a><br>
-					<a>This makes the Chat public. Are you sure?</a><br>
+					<a>you are about to remove the password.</a><br>
+					<a>this makes the Chat public. Are you sure?</a><br>
 					<button class="option-button" @click="changeChatDetails('public', chat.chatid, chat.chat_name, ''), toggleOption(0)">Yes</button>
 					<button class="option-button" @click="toggleOption(0)">No</button>
 				</div>
