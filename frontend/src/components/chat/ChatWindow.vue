@@ -17,10 +17,10 @@
 				</a>
 			</div>
 			
-			<div class="name-approve-button-wrapper">
+			<!-- <div class="name-approve-button-wrapper">
 				<button class="ok-button" @click="showChangeNameField(), changeChatDetails(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
 				<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
-			</div>
+			</div> -->
 		</div>
 
 		<ChatInfoPopup id="ChatInfoPopup" v-if="ChatInfoTrigger === true" :ChatInfotogglePopup="() => ChatInfotogglePopup()" :chat="curr_chat" />
@@ -81,7 +81,7 @@
 <!--------------FOOTER------------------------------------------------------------------------------------>
 			
 		<form class="chat-write-and-send-wrapper" @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
-			<input class="input-message" placeholder="press enter to send" v-model="message" @keyup.enter="sendMessage(curr_chat.chatid, message), submit()">
+			<input class="input-message" type="text" placeholder="press enter to send" v-model="message" @keyup.enter="sendMessage(curr_chat.chatid, message), submit()">
 			<!-- <img class="send-message-icon" @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="send-icon"> -->
 		</form>
 	</div>
@@ -263,9 +263,11 @@ export default defineComponent({
 /* ######## GLOBAL ####################################### */
 
 	.wrapper {
-		max-width: 100%;
-		min-height: 100%;
-		border: 6px solid var(--second-bg-color);
+		max-width: 90%;
+		margin-left: 5%;
+		margin-right: 5%;
+		height: 100%;
+		/* border: 10px solid var(--second-bg-color); */
 	}
 
 	.wrapper h2 {
@@ -276,6 +278,9 @@ export default defineComponent({
 	.chat-top-bar {
 		background-color: var(--second-bg-color);
 		color: white;
+		border: 2px solid grey;
+		margin-bottom: 0.5rem;
+		height:100%;
 	}
 
 	.chat-top-bar h3 {
@@ -289,6 +294,7 @@ export default defineComponent({
 		align-items: center;
 		justify-content: center; 
 		grid-template-columns: 1fr 1fr 1fr;
+		height: 100%;
 	}
 
 	.chat-chatid {
@@ -311,13 +317,20 @@ export default defineComponent({
 	.cancel-button {
 		width: 25%;
 	}
+
+	.info-icon-wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+	}
 	
 	#info-icon {
-		/* border: 3px solid green; */
 		filter: invert(100%);
 		-webkit-filter: invert(100%);
-		height: calc(5px + 1.5625vw);
-		width: calc(5px + 1.5625vw);
+		height: calc(2px + 1.5625vw);
+		width: calc(2px + 1.5625vw);
+		padding: calc(-20px + 1.5625vw);
 		cursor: pointer;
 		transition: .4s;
 	}
@@ -329,6 +342,19 @@ export default defineComponent({
 	
 	
 	/* ######## MESSAGES VIEW ####################################### */
+	.chat-message-view {
+		background: white;
+		background: var(--second-bg-color);
+		height: 300px;
+		overflow-y: scroll;
+		border: 2px solid grey;
+	}
+
+	.chat-message-view::-webkit-scrollbar {
+		display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+	}
 	
 	.messages-wrapper {
 		/* max-width: 340px;
@@ -342,36 +368,30 @@ export default defineComponent({
 	}
 
 	.message-username {
-		color: black;
+		color: white;
 		padding-left: 1%;
 	}
 
-	.chat-message-view {
-		background: white;
-		height: 300px;
-		overflow-y: scroll;
-		scrollbar-color: black solid;
-		scrollbar-width: thin;
-	}
+
 	.message-recv {
 		text-align: left;
-		color: black;
-		max-width: 80%;
+		color: white;
+		max-width: 60%;
 		background-color: rgb(155, 155, 160);
 		border-radius: 4px;
-		margin: 4px;
-		margin-right: 20%;
+		margin: 6px;
+		margin-right: 40%;
 		padding: 1%;
 	}
 	
 	.message-sent {
 		text-align: right;
-		color: black;
-		max-width: 80%;
-		background-color: rgb(106, 106, 109);
+		color: white;
+		max-width: 60%;
+		background-color: rgb(97, 97, 237);
 		border-radius: 4px;
-		margin: 4px;
-		margin-left: 20%;
+		margin: 6px;
+		margin-left: 40%;
 		padding: 2%;
 	}
 	
@@ -390,6 +410,17 @@ export default defineComponent({
 	.input-message {
 		width: 75%;
 		margin: 1%;
+	}
+
+	input[type="text"] {
+		background-color : var(--second-bg-color); 
+		border: 2px solid grey;
+		border-radius: 2px;
+		color: white;
+	}
+
+	input[type="text"]:focus {
+		outline: 2px solid grey;
 	}
 
 	.send-message-icon {
