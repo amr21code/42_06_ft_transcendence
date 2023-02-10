@@ -86,7 +86,7 @@ export class UserController {
 				throw new ForbiddenException('changeUserData failed');
 			}
 		}
-		
+
 		@Get(':userid/:field')
 		async getUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field) {
 		const user = request.session.passport.user.userid;
