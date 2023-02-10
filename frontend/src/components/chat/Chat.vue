@@ -8,10 +8,10 @@
 
 		
 		<div v-if="selected === 'overview'">
-			<h2>chat overview</h2>
-			<a v-if="type === 'joined'">Click to see messages</a>
-			<a v-if="type === 'open'">Click to join a chat</a>
-			 <div class="chat-overview">
+			<!-- <h2>chat overview</h2> -->
+			<h2 v-if="type === 'joined'">Click chat to show messages</h2>
+			<h2 v-if="type === 'open'">Select a room to join</h2>
+			<div class="chat-overview">
 
 			<!------------CHATS WHERE USER IS JOINED----------------------------------->
 			<div v-if="type === 'joined'">
@@ -266,8 +266,9 @@ export default defineComponent({
 
 .chat-wrapper {
 	max-height: 100%;
-	max-width: 100%;
-	min-width: 100%;
+	width: 100%;
+	margin-right: 5%;
+	margin-left: 5%;
 	background: var(--second-bg-color);
 	color: white;
 }
@@ -286,20 +287,24 @@ export default defineComponent({
 .chat-typename-green {
 	/* float: left; */
 	color: green;
+	font-weight: 900;
 }
 
 .chat-typename-red {
 	/* float: left; */
 	color: red;
+	font-weight: 900;
 }
 
 .chat-typename-orange {
 	/* float: left; */
 	color: orangered;
+	font-weight: 900;
 }
 
 .chat-stausname-red {
 	color: red;
+	font-weight: 900;
 }
 
 .chat-overview {
@@ -307,17 +312,32 @@ export default defineComponent({
 	overflow-y: scroll;
 	scrollbar-color: rebeccapurple green;
 	scrollbar-width: thin;
-	background: white;
+	background: var(--second-bg-color);
+	border: 2px solid rgb(155, 155, 160);
+	width: 90%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 	/* display: flex;
 	flex-direction: column-reverse; */
 }
 
+.chat-overview::-webkit-scrollbar {
+	display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+}
+
 .chat-message-view {
-	background-color: rgb(0,0,0,0.4);
-	border: black solid 1px;
+	background-color: rgb(155, 155, 160);
+	/* border: black solid 1px; */
 	color: black;
 	/* padding: 10px; */
-	width: auto;
+	width: 90%;
+	margin: 2%;
+	margin-left: 5%;
+	margin-right: 5%;
 	height: auto;
 	text-align: center;
 	transition: .4s;
@@ -332,9 +352,8 @@ export default defineComponent({
 	background-color: var(--second-bg-color);
 	color: white;
 	text-align: center;
-	max-height: 50px;
+	/* max-height: 50px; */
 	width: 100%;
-	overflow: auto;
 }
 
 .chat-menu {
@@ -342,14 +361,15 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	overflow-y: hidden; 
+	overflow-y: hidden;
 }
 
 .chat-menu-icon {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
-	margin: calc(-10px + 1.5625vw) calc(-1px + 1.5625vw);
-	margin-top: calc(-5px + 1.5625vw);
+	-webkit-filter: invert();
+	margin: 0 calc(-1px + 1.5625vw);
+	margin-bottom: 0.5rem;
 	height: calc(15px + 1.5625vw);
 	width: calc(15px + 1.5625vw);
 	cursor: pointer;

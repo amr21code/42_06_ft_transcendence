@@ -81,7 +81,7 @@
 <!--------------FOOTER------------------------------------------------------------------------------------>
 			
 		<form class="chat-write-and-send-wrapper" @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
-			<input class="input-message" type="text" placeholder="press enter to send" v-model="message" @keyup.enter="sendMessage(curr_chat.chatid, message), submit()">
+			<input id="input-message" type="text" autofocus="true" placeholder="press enter to send" v-model="message" @keyup.enter="sendMessage(curr_chat.chatid, message), submit()">
 			<!-- <img class="send-message-icon" @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="send-icon"> -->
 		</form>
 	</div>
@@ -100,7 +100,7 @@ import type { IMessages } from '../../types/IMessages'
 import type { IChats } from '../../types/Chats'
 import SocketioService from '../../services/SocketioService'
 
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import type { PropType } from 'vue'
 import type { IFriend } from '../../types/Friend'
 
@@ -247,8 +247,9 @@ export default defineComponent({
 			ChatInfoTrigger.value = !ChatInfoTrigger.value;
 			return ChatInfoTrigger.value;
 		}
-
-
+		onMounted(() => {
+			document.getElementById('input-message')!.focus;
+		});
 		return { message, submit, showChangeNameField, showinput, newName, ChatInfoTrigger, ChatInfotogglePopup }
 	}
 
@@ -263,7 +264,7 @@ export default defineComponent({
 /* ######## GLOBAL ####################################### */
 
 	.wrapper {
-		max-width: 90%;
+		width: 90%;
 		margin-left: 5%;
 		margin-right: 5%;
 		height: 100%;
@@ -277,8 +278,9 @@ export default defineComponent({
 /* ######## TOP BAR ####################################### */
 	.chat-top-bar {
 		background-color: var(--second-bg-color);
+		background-color: rgb(155, 155, 160);
 		color: white;
-		border: 2px solid grey;
+		/* border: 2px solid rgb(155, 155, 160); */
 		margin-bottom: 0.5rem;
 		height:100%;
 	}
@@ -347,7 +349,9 @@ export default defineComponent({
 		background: var(--second-bg-color);
 		height: 300px;
 		overflow-y: scroll;
-		border: 2px solid grey;
+		border: 2px solid  rgb(155, 155, 160);
+		margin-top: 1rem;
+		margin-bottom: 1rem;
 	}
 
 	.chat-message-view::-webkit-scrollbar {
@@ -402,25 +406,24 @@ export default defineComponent({
 		justify-content: center;
 		overflow-y: hidden; 
 		background-color: var(--second-bg-color); 
-		padding-top: 0.5rem;
+		/* padding-top: 0.5rem; */
 		padding-bottom: 0.5rem;
-		
 	}
 	
-	.input-message {
+	#input-message {
 		width: 75%;
-		margin: 1%;
 	}
 
 	input[type="text"] {
 		background-color : var(--second-bg-color); 
-		border: 2px solid grey;
+		border: 2px solid  rgb(155, 155, 160);
 		border-radius: 2px;
 		color: white;
+		margin-bottom: 1rem;
 	}
 
 	input[type="text"]:focus {
-		outline: 2px solid grey;
+		outline: 2px solid  rgb(155, 155, 160);
 	}
 
 	.send-message-icon {
