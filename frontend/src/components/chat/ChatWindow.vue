@@ -74,7 +74,7 @@
 					</div>
 				</div>
 			</div>
-
+			
 			<div ref="chatEnd"></div>
 		</div>
 
@@ -135,9 +135,9 @@ export default defineComponent({
 			}
 
 			this.messages.push(data);
-			this.$nextTick(() => {
-        		this.scrollToBottom();
-     		});
+			// this.$nextTick(() => {
+        	// 	this.scrollToBottom();
+     		// });
 		});
 	},
 
@@ -197,8 +197,10 @@ export default defineComponent({
 				statuscode: "0"
 			}
 			// this.messages.push(data);
-			this.scrollToBottom();
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
+			// this.$nextTick(() => {
+        	// 		this.scrollToBottom();
+     		// 	});
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
@@ -215,9 +217,11 @@ export default defineComponent({
 		
 		scrollToBottom() {
 			this.$nextTick(() => {
+				// console.log("sio_length: ", this.messages.length);
+				// console.log("db_length: ", this.db_messages.length);
+				// if (this.db_messages.length + this.message.length > 10)
 				const chat = this.$refs.chatEnd as any;
-				// console.log("scrolly molly", chat);
-				if (chat !== undefined && chat.scrollHeight !== undefined)
+				if (chat !== null && chat.scrollHeight !== undefined && this.$refs.chatEnd)
 				{
 					chat.scrollTop = chat.scrollHeight;
 					chat.scrollIntoView({ behavior: 'smooth' });
