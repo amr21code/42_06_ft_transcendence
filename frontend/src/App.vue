@@ -37,7 +37,7 @@
 
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useUserDataStore } from './stores/myUserDataStore'
 import type { SelectedSideWindow } from './types/SelectedSideWindow'
 import type { ResponseData } from './types/ResponseData'
@@ -54,7 +54,6 @@ import DataService from './services/DataService'
 
 export default defineComponent({
 
-	name: 'App',
 	el: "#app",
 	components: { LoginPopup, TwoFaPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
 	// data () {
@@ -92,9 +91,9 @@ export default defineComponent({
 		// 	});
 		// })
 	// },
-	beforeUnmount() {
-		SocketioService.disconnect();
-	},
+	// beforeUnmount() {
+	// 	SocketioService.disconnect();
+	// },
 	
 	setup() {
 		const store = useUserDataStore();
@@ -105,6 +104,8 @@ export default defineComponent({
 		const toggleLoginPopup = () => {
 			loggedIn.value = 'authenticated';
 		}
+
+// ################## 2FA ###########################################################
 
 		// const twoFaActivated = ref(false);
 		const untoggleTwoFaPopup = () => {
@@ -118,6 +119,8 @@ export default defineComponent({
 		const twoFaSuccess = () => {
 			loggedIn.value = 'authenticated';
 		}
+
+// ################## AUTHENTICATION & API CALLS ####################################
 
 		onMounted(async () => {
 			await DataService.getAuthStatus()
@@ -163,7 +166,9 @@ export default defineComponent({
 					document.getElementById("friends")!.style.backgroundColor = "#b04716";
 			}
 
-			menuOptions.forEach(option => {
+// ################## FORWARD/BACK BUTTONS & FANCY URLS ####################################
+
+menuOptions.forEach(option => {
 				var id = option.id as SelectedSideWindow;
 				option.addEventListener('click', e => {
 					history.pushState({id}, '', './' + id);
@@ -182,20 +187,23 @@ export default defineComponent({
 			history.pushState("game", '', './game');
 			document.getElementById("game")!.style.backgroundColor = "#b04716";
 		});
-
+		
+// ######################################## POPUPS ##############################################
+		
 		// for user data popup (user data)
 		const userDataPopupTrigger = ref(false);
 		const toggleUserDataPopup = () => {
 			userDataPopupTrigger.value = !userDataPopupTrigger.value;
 		}
-
+		
 		// for user data popup (user data)
 		const gotChallengedPopupTrigger = ref(false);
 		const toggleGotChallengedPopup = () => {
 			gotChallengedPopupTrigger.value = !gotChallengedPopupTrigger.value;
 		}
 
-		// for side window selection
+// ################################## WINDOW SELECTION ###########################################
+
 		const handleClick = (term: SelectedSideWindow) => {
 			store.selected = term;
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
@@ -213,7 +221,6 @@ export default defineComponent({
 				document.getElementById("friends")!.style.backgroundColor = "#b04716";
 
 
-			// if (store.selected === 'play' || store.selected === 'watch') {
 			if (store.selected === 'game') {
 				document.documentElement.style.setProperty("--leftofgame_fr", "0.2fr");
 				document.documentElement.style.setProperty("--game_fr", "1fr");
@@ -226,11 +233,13 @@ export default defineComponent({
 			}
 		};
 
-		// ################## SOCKETIO ####################################
+// ######################################## SOCKETIO ####################################
+		
 		socket.on('challengeRequest', (userid : string) => {
 			challenger.value = userid;
 			toggleGotChallengedPopup();
 		});
+
 		socket.on('userdata-refresh', async () => {
 			await DataService.getUser()
 			.then((response: ResponseData) => {
@@ -254,6 +263,8 @@ export default defineComponent({
 				console.log(e);
 			});
 		});
+
+// ################################### EXPORT ####################################
 
 		return { store, challenger, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
