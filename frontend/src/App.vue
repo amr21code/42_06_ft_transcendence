@@ -57,47 +57,49 @@ export default defineComponent({
 	name: 'App',
 	el: "#app",
 	components: { LoginPopup, TwoFaPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
-	data () {
-		return {
-			socket: SocketioService.setupSocketConnection(),
-			challenger : '',
-		}
-	},
-	created () {
-		this.socket.on('challengeRequest', (userid : string) => {
-			this.challenger = userid;
-			this.toggleGotChallengedPopup();
-		});
-		this.socket.on('userdata-refresh', () => {
-			DataService.getUser()
-			.then((response: ResponseData) => {
-				this.store.user = response.data[0];
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			DataService.getFriends()
-			.then((response: ResponseData) => {
-				this.store.friends = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			DataService.getAll()
-			.then((response: ResponseData) => {
-				this.store.allUsers = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		})
-	},
+	// data () {
+	// 	return {
+	// 		socket: SocketioService.setupSocketConnection(),
+	// 		challenger : '',
+	// 	}
+	// },
+	// created () {
+		// this.socket.on('challengeRequest', (userid : string) => {
+		// 	this.challenger = userid;
+		// 	this.toggleGotChallengedPopup();
+		// });
+		// this.socket.on('userdata-refresh', () => {
+		// 	DataService.getUser()
+		// 	.then((response: ResponseData) => {
+		// 		this.store.user = response.data[0];
+		// 	})
+		// 	.catch((e: Error) => {
+		// 		console.log(e);
+		// 	});
+		// 	DataService.getFriends()
+		// 	.then((response: ResponseData) => {
+		// 		this.store.friends = response.data;
+		// 	})
+		// 	.catch((e: Error) => {
+		// 		console.log(e);
+		// 	});
+		// 	DataService.getAll()
+		// 	.then((response: ResponseData) => {
+		// 		this.store.allUsers = response.data;
+		// 	})
+		// 	.catch((e: Error) => {
+		// 		console.log(e);
+		// 	});
+		// })
+	// },
 	beforeUnmount() {
 		SocketioService.disconnect();
 	},
 	
 	setup() {
 		const store = useUserDataStore();
+		const socket = SocketioService.setupSocketConnection();
+		const challenger = ref('');
 
 		const loggedIn = ref('not authenticated');
 		const toggleLoginPopup = () => {
@@ -223,7 +225,37 @@ export default defineComponent({
 				document.documentElement.style.setProperty("--sidewindow_fr", "1fr");
 			}
 		};
-		return { store, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
+
+		// ################## SOCKETIO ####################################
+		socket.on('challengeRequest', (userid : string) => {
+			challenger.value = userid;
+			toggleGotChallengedPopup();
+		});
+		socket.on('userdata-refresh', async () => {
+			await DataService.getUser()
+			.then((response: ResponseData) => {
+				store.user = response.data[0];
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getFriends()
+			.then((response: ResponseData) => {
+				store.friends = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getAll()
+			.then((response: ResponseData) => {
+				store.allUsers = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		});
+
+		return { store, challenger, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
 </script>
