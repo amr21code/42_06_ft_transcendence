@@ -11,7 +11,6 @@ import { AuthenticatedGuard } from 'src/auth/guards/guards';
 	credentials: true,
 }
 })
-// @UseGuards(AuthenticatedGuard)
 export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	constructor (private readonly userService: UserService, private readonly matchService: MatchService) {}
 
@@ -25,6 +24,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	@SubscribeMessage('user')
+	@UseGuards(AuthenticatedGuard)
 	async handleConnection(client: any) {
 		try {
 			if (client.request.user) {

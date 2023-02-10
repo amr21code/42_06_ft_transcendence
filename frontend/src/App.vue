@@ -68,22 +68,22 @@ export default defineComponent({
 			this.challenger = userid;
 			this.toggleGotChallengedPopup();
 		});
-		this.socket.on('userdata-refresh', () => {
-			DataService.getUser()
+		this.socket.on('userdata-refresh', async () => {
+			await DataService.getUser()
 			.then((response: ResponseData) => {
 				this.store.user = response.data[0];
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
-			DataService.getFriends()
+			await DataService.getFriends()
 			.then((response: ResponseData) => {
 				this.store.friends = response.data;
 			})
 			.catch((e: Error) => {
 				console.log(e);
 			});
-			DataService.getAll()
+			await DataService.getAll()
 			.then((response: ResponseData) => {
 				this.store.allUsers = response.data;
 			})
