@@ -172,7 +172,7 @@ export default defineComponent({
 				matchHistory.value = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 
 			document.getElementById("achievement-gui")!.style.opacity = "20%";
@@ -184,7 +184,7 @@ export default defineComponent({
 
 			await DataService.getAchievements(props.userid)
 			.then((response: ResponseData) => {
-				console.log("resp", response);
+				// console.log("resp", response);
 				for (var achievement of response.data) {
 					if (achievement.name == "the Gui") {
 						document.getElementById("achievement-gui")!.style.opacity = "100%";
@@ -201,7 +201,7 @@ export default defineComponent({
 				}
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 
 			// dont show button, if it's yourself

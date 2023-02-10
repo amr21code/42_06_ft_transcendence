@@ -158,7 +158,7 @@ export default defineComponent({
 				this.user = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -168,7 +168,7 @@ export default defineComponent({
 				this.chats = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			})
 		},
 
@@ -178,7 +178,7 @@ export default defineComponent({
 				this.openchats = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			})
 		},
 
@@ -256,7 +256,7 @@ export default defineComponent({
 				untogglePopup();
             })
             .catch((e: Error) => {
-                console.log(e);
+                // console.log(e);
             });
 		}
 

@@ -182,7 +182,7 @@ export default defineComponent({
 				this.user_me = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -193,7 +193,7 @@ export default defineComponent({
 				this.checkPermission();
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -238,7 +238,7 @@ export default defineComponent({
 				SocketioService.refreshChats();
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -247,11 +247,13 @@ export default defineComponent({
 			await DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
+				this.checkPermission();
+				this.chat.chat_name = chatname;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
-			this.chat.chat_name = chatname;
+			
 		},
         
 	},

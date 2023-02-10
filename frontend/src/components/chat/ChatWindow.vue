@@ -158,7 +158,7 @@ export default defineComponent({
 				this.user = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -172,7 +172,7 @@ export default defineComponent({
      			});
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -182,7 +182,7 @@ export default defineComponent({
 				this.friends = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -209,7 +209,7 @@ export default defineComponent({
 				SocketioService.refreshChats();
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 		

@@ -69,11 +69,11 @@ export default defineComponent({
 		async retrieveCurrentUser() {
 			await DataService.getUser()
 			.then((response: ResponseData) => {
-				props.user = response.data;
+				this.user = response.data;
 				// console.log(response.data);
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -98,7 +98,7 @@ export default defineComponent({
             })
             .catch((e: Error) => {
                 this.invalid = true;
-                console.log(e);
+                // console.log(e);
             });
         }
         

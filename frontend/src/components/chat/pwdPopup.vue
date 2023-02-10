@@ -52,7 +52,7 @@ export default defineComponent({
 				this.user = response.data[0];
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 	},
@@ -76,7 +76,7 @@ export default defineComponent({
             })
             .catch((e: Error) => {
 				error.value = true;
-                console.log(e);
+                // console.log(e);
             });
 		}
 

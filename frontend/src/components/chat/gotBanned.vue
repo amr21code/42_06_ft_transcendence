@@ -52,7 +52,7 @@ export default defineComponent({
 				console.log(response.data[0]);
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
