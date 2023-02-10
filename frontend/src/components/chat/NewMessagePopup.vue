@@ -25,7 +25,7 @@
             <input class="" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'" required>
             <input class="" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'" required>
             
-            <input class="" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join'"><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
+            <input class="" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join' "><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
                 
             <div class="button-box">
                 <button class="submit-button" name="submit" v-if="showinput" @click="createNewChat(chatname, password, showinput)">submit</button>

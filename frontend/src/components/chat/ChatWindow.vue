@@ -216,6 +216,7 @@ export default defineComponent({
 		scrollToBottom() {
 			this.$nextTick(() => {
 				const chat = this.$refs.chatEnd as any;
+				// console.log("scrolly molly", chat);
 				if (chat !== undefined && chat.scrollHeight !== undefined)
 				{
 					chat.scrollTop = chat.scrollHeight;
