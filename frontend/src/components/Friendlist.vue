@@ -2,7 +2,7 @@
 	<div class="friendlist-wrapper">
 		<h2>friendlist</h2>
 		<table id="friendlist-table">
-			<tr>
+			<tr id="top-row">
 				<th>Picture</th>
 				<th>Name</th>
 				<th>Online Status</th>
@@ -72,6 +72,8 @@ export default defineComponent({
 	.friendlist-wrapper {
 		width: 100%;
 		padding: 0;
+		background: var(--second-bg-color);
+		color: white;
 	}
 	
 	#friendlist-table {
@@ -89,6 +91,9 @@ export default defineComponent({
 	#friendlist-table tr {
 		border: var(--second-bg-color) 3px solid;
 		transition: .4s;
+		background: white;
+		border-bottom: 2px solid var(--second-bg-color);
+		color: var(--second-bg-color);
 	}
 
 	#friendlist-table th {
@@ -96,6 +101,10 @@ export default defineComponent({
 		top: 0;
 		background-color: var(--second-bg-color);
 		color: white;
+	}
+
+	#top-row {
+		border: 2px solid white !important;
 	}
 
 	#friendlist-table th, td {
