@@ -91,10 +91,10 @@ export default defineComponent({
 		// 	});
 		// })
 	// },
-	// beforeUnmount() {
-	// 	SocketioService.disconnect();
-	// },
-	
+	beforeUnmount() {
+		SocketioService.disconnect();
+	},
+
 	setup() {
 		const store = useUserDataStore();
 		const socket = SocketioService.setupSocketConnection();
@@ -168,7 +168,7 @@ export default defineComponent({
 
 // ################## FORWARD/BACK BUTTONS & FANCY URLS ####################################
 
-menuOptions.forEach(option => {
+			menuOptions.forEach(option => {
 				var id = option.id as SelectedSideWindow;
 				option.addEventListener('click', e => {
 					history.pushState({id}, '', './' + id);
