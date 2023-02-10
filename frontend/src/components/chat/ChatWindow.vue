@@ -278,9 +278,9 @@ export default defineComponent({
 /* ######## TOP BAR ####################################### */
 	.chat-top-bar {
 		background-color: var(--second-bg-color);
-		background-color: rgb(155, 155, 160);
+		background-color: var(--costum-grey);
 		color: white;
-		/* border: 2px solid rgb(155, 155, 160); */
+		/* border: 2px solid var(--costum-grey); */
 		margin-bottom: 0.5rem;
 		height:100%;
 	}
@@ -349,7 +349,7 @@ export default defineComponent({
 		background: var(--second-bg-color);
 		height: 300px;
 		overflow-y: scroll;
-		border: 2px solid  rgb(155, 155, 160);
+		border: 2px solid  var(--costum-grey);
 		margin-top: 1rem;
 		margin-bottom: 1rem;
 	}
@@ -381,7 +381,7 @@ export default defineComponent({
 		text-align: left;
 		color: white;
 		max-width: 60%;
-		background-color: rgb(155, 155, 160);
+		background-color: var(--costum-grey);
 		border-radius: 4px;
 		margin: 6px;
 		margin-right: 40%;
@@ -416,14 +416,14 @@ export default defineComponent({
 
 	input[type="text"] {
 		background-color : var(--second-bg-color); 
-		border: 2px solid  rgb(155, 155, 160);
+		border: 2px solid  var(--costum-grey);
 		border-radius: 2px;
 		color: white;
 		margin-bottom: 1rem;
 	}
 
 	input[type="text"]:focus {
-		outline: 2px solid  rgb(155, 155, 160);
+		outline: 2px solid  var(--costum-grey);
 	}
 
 	.send-message-icon {

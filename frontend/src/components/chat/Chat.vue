@@ -313,7 +313,7 @@ export default defineComponent({
 	scrollbar-color: rebeccapurple green;
 	scrollbar-width: thin;
 	background: var(--second-bg-color);
-	border: 2px solid rgb(155, 155, 160);
+	border: 2px solid var(--costum-grey);
 	width: 90%;
 	margin-left: 5%;
 	margin-right: 5%;
@@ -330,7 +330,7 @@ export default defineComponent({
 }
 
 .chat-message-view {
-	background-color: rgb(155, 155, 160);
+	background-color: var(--costum-grey);
 	/* border: black solid 1px; */
 	color: black;
 	/* padding: 10px; */
@@ -345,7 +345,7 @@ export default defineComponent({
 }
 
 .chat-message-view:hover {
-	background-color: rgb(0,0,0,0.3)
+	opacity: 50%;
 }
 
 .chat-menu {
