@@ -32,22 +32,23 @@ export class TwoFactorAuthenticationController {
 		session.passport.user.userid, secret, twoFaSecret
     );
     if (!isCodeValid) {
-      throw new UnauthorizedException('Wrong authentication code');
+		throw new UnauthorizedException('Wrong authentication code');
     }
 	await this.userService.changeUserData(session.passport.user.userid, "twofa", 1);
+	session.passport.user.twofa = 1;
   }
 
-@Get('authenticate/:secret')
-  @UseGuards(AuthenticatedGuard)
-  async authenticate(
-    @Session() session: Record<string, any>, @Param('secret') secret: string
-  ) {
-    const twofasecret = await this.userService.getUserData(session.passport.user.userid, 'twofasecret')
-    const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthenticationCodeValid(
-		session.passport.user.userid, secret, twofasecret
-    );
-    if (!isCodeValid) {
-      throw new UnauthorizedException('Wrong authentication code');
-    }
-  }
+	@Get('authenticate/:secret')
+  	async authenticate(
+    @Session() session: Record<string, any>, @Param('secret') secret: string) {
+    	const twofasecret = await this.userService.getUserData(session.passport.user.userid, 'twofasecret')
+    	const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthenticationCodeValid(
+			session.passport.user.userid, secret, twofasecret
+    	);
+    	if (!isCodeValid) {
+      		throw new UnauthorizedException('Wrong authentication code');
+    	}
+		// await this.userService.changeUserData(session.passport.user.userid, "twofalogin", 1);
+		session.passport.user.twofalogin = 1;
+  	}
 }

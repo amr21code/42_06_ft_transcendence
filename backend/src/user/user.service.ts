@@ -136,6 +136,10 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET twofalogin=${newdata} WHERE userid=${userid};`
 				);
+		}else if (field == 'access_token') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET access_token=${newdata} WHERE userid=${userid};`
+				);
 		}
 	}
 
