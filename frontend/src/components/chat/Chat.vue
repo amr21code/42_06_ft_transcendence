@@ -41,7 +41,7 @@
 								</div>
 							</a>
 							<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => togglePwdPopup()" :curr_chatid="chat.chatid" />
-							<a @click="togglePwdPopup()" v-if="chat.typename === 'protected'"> <!--const joinchat = (id : number, password ?: string) =>{-->
+							<a @click="togglePwdPopup()" v-if="chat.typename === 'protected'">
 								<div class="" >
 									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
@@ -146,7 +146,6 @@ export default defineComponent({
 				this.mutetime = data.time;
 				this.muted = true;
 				this.togglegotMuted();
-				setTimeout(function(){ console.log("hi");}, this.mutetime * 100); //1000 //need to set this.muted = false;
 			}
 		})
 	},
@@ -199,6 +198,10 @@ export default defineComponent({
 			popupTrigger.value = !popupTrigger.value;
 		}
 
+		const untogglePopup = () => {
+			popupTrigger.value = false;
+		}
+
 		const LeaveChatTrigger = ref(false);
 		const LeaveChattogglePopup = () => {
 			LeaveChatTrigger.value = !LeaveChatTrigger.value;
@@ -245,7 +248,7 @@ export default defineComponent({
 			await DataService.createChat(String(id), password, 'join')
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
-				togglePopup();
+				untogglePopup();
             })
             .catch((e: Error) => {
                 console.log(e);
