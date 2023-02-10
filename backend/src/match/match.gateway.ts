@@ -7,6 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { AchievementsService } from 'src/achievements/achievements.service';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
 import { UseGuards } from '@nestjs/common';
+import { TwoFactorAuthenticationService } from 'src/auth/twoFactorAuth.service';
 
 @WebSocketGateway(3002, {
 	cors: {
@@ -29,11 +30,13 @@ export class MatchGateway {
 	}
 
 
-	constructor(private readonly matchService: MatchService, private readonly userService: UserService,  private readonly achieve: AchievementsService) { }
+	constructor(private readonly matchService: MatchService, private readonly userService: UserService,  private readonly achieve: AchievementsService, private readonly twoFAService: TwoFactorAuthenticationService) { }
 
 	@SubscribeMessage('watchGame')
 	async watchGame(client: Socket, payload: any) {
 		try {
+			if (!this.twoFAService.socketIO2fa(client))
+				throw new WsException('no 2fa authenticated');
 			if (!payload) {
 				var random = await this.matchService.listMatchesStatus(1);
 				if (Object.keys(random).length > 0)
@@ -53,6 +56,8 @@ export class MatchGateway {
 	@SubscribeMessage('create-new-game')
 	async createNewGame(client: Socket, opponent: any) {
 		try {
+			if (!this.twoFAService.socketIO2fa(client))
+				throw new WsException('no 2fa authenticated');
 			var matchid;
 			console.log("create game opp", opponent);
 			const userid = client.request.session.passport.user.userid;

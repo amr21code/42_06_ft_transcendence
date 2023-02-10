@@ -24,8 +24,8 @@ export class AuthenticatedGuard implements CanActivate {
 			const user = await this.authService.findUser(session.userid);
 			if (session.access_token == user.access_token) {
 				console.log(user.userid, "twofa", session.twofa, "twofalogin", session.twofalogin);
-				if (session.twofa == 1) {
-					if (session.twofalogin == 1) {
+				if (session.twofa === 1) {
+					if (session.twofalogin === 1) {
 						return request.isAuthenticated()
 					} else {
 						throw new ForbiddenException();		

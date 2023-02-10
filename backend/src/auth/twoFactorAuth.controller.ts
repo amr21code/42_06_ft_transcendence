@@ -48,7 +48,7 @@ export class TwoFactorAuthenticationController {
     	if (!isCodeValid) {
       		throw new UnauthorizedException('Wrong authentication code');
     	}
-		// await this.userService.changeUserData(session.passport.user.userid, "twofalogin", 1);
+		await this.userService.changeUserData(session.passport.user.userid, "twofalogin", 1);
 		session.passport.user.twofalogin = 1;
   	}
 }

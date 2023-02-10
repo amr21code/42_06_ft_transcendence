@@ -4,7 +4,7 @@ import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { ChatService } from 'src/chat/chat.service';
 import { ChatMessageDto } from './dto';
-import { AuthenticatedGuard } from 'src/auth/guards/guards';
+import { TwoFactorAuthenticationService } from 'src/auth/twoFactorAuth.service';
 
 @WebSocketGateway(3002, {cors: {
 	origin: `${process.env.FRONTEND_URL}`,
@@ -14,12 +14,14 @@ import { AuthenticatedGuard } from 'src/auth/guards/guards';
 })
 // @UseGuards(AuthenticatedGuard)
 export class ChatGateway {
-	constructor(private readonly userService: UserService, private readonly chatService: ChatService) {
+	constructor(private readonly userService: UserService, private readonly chatService: ChatService, private readonly twoFAService: TwoFactorAuthenticationService) {
 	}
 
 	@SubscribeMessage('send-chat-message')
 	async handleMessage(client: Socket, message: ChatMessageDto) {
 		try {
+			if (!this.twoFAService.socketIO2fa(client))
+				throw new WsException('no 2fa authenticated');
 			// console.log("send-chat-message: ", message);
 			if (message.message != '') {
 				if (await this.chatService.addMessage(message))
@@ -35,6 +37,8 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-refresh')
 	async refreshChat(client: Socket) {
+		if (!this.twoFAService.socketIO2fa(client))
+			throw new WsException('no 2fa authenticated');
 		client.broadcast.emit('refresh-chat');
 		client.emit('refresh-chat');
 	}
@@ -43,6 +47,8 @@ export class ChatGateway {
 	@SubscribeMessage('send-chat-leave')
 	async leaveChat(client: Socket, message: Record<string, number>) {
 		try {
+			if (!this.twoFAService.socketIO2fa(client))
+				throw new WsException('no 2fa authenticated');
 			this.chatService.leaveChat(client.request.session.passport.user.userid, message.chatid);
 			client.emit('refresh-chat');
 			client.emit('chat-leave');
@@ -53,6 +59,8 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-got-banned')
 	async gotBanned(client: Socket, data: Record<string, string>) {
+		if (!this.twoFAService.socketIO2fa(client))
+			throw new WsException('no 2fa authenticated');
 		console.log(data);
 		client.broadcast.emit('got-banned', data);
 		client.emit('got-banned', data);
@@ -60,6 +68,8 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-got-muted')
 	async gotMuted(client: Socket, data: Record<string, string>) {
+		if (!this.twoFAService.socketIO2fa(client))
+			throw new WsException('no 2fa authenticated');
 		console.log(data);
 		client.broadcast.emit('got-muted', data);
 		client.emit('got-muted', data);

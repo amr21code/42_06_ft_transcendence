@@ -35,11 +35,6 @@ export class AuthService {
 		const user = await this.db.$queryRaw(
 			Prisma.sql`SELECT * FROM public.users WHERE userid=${userid};`
 		);
-		// const user = await this.db.users.findFirst({
-		// 	where: {
-		// 		userid: userid,
-		// 	}
-		// });
 		return user[0];
 	}
 }

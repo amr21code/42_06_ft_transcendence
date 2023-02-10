@@ -4,6 +4,7 @@ import { authenticator } from 'otplib';
 import { UserService } from '../user/user.service';
 import { Request } from 'express';
 import { toFileStream } from 'qrcode';
+import { Socket } from 'socket.io';
  
 @Injectable()
 export class TwoFactorAuthenticationService {
@@ -37,4 +38,19 @@ export class TwoFactorAuthenticationService {
    public async pipeQrCodeStream(stream: any, otpauthUrl: string) {
     return toFileStream(stream, otpauthUrl);
   }
+
+
+  	async socketIO2fa(client: any) {
+		// if (client.request.user.userid)
+		console.log(client.request.user.userid, "twofa", client.request.user.twofa, "twofalogin", client.request.user.twofalogin);
+		if (client.request.user.twofa === 1) {
+			if (client.request.user.twofalogin === 0) {
+				client.emit('2fa');
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return true;
+	}
 }

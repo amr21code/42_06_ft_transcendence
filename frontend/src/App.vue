@@ -120,6 +120,7 @@ export default defineComponent({
 			loggedIn.value = 'authenticated';
 		}
 
+
 // ################## AUTHENTICATION & API CALLS ####################################
 
 		onMounted(async () => {
@@ -131,6 +132,19 @@ export default defineComponent({
 			.catch((e: Error) => {
 				console.log("Error occured in getAuthStatus", e);
 			})
+
+
+
+
+
+			socket.on('2fa', () => {
+				loggedIn.value = '2fa';
+				// toggleTwoFaPopup();
+			});
+
+
+
+
 
 			// only run API calls if successfully logged in
 			if (loggedIn.value === 'authenticated')
