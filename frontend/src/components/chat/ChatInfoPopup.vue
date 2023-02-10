@@ -21,7 +21,7 @@
 				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">change password</button>
 				<div v-if="option === 3">
 					<input type="password" placeholder="Enter new chatpassword"  v-model="newChatpassword">
-					<button @click="changeChatDetails(chat.typename, chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
+					<button @click="changeChatDetails('protected', chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
 				</div>
 
 
@@ -249,6 +249,10 @@ export default defineComponent({
 				SocketioService.refreshChats();
 				this.checkPermission();
 				this.chat.chat_name = chatname;
+				if (type === 'protected')
+					this.chat.typename = 'protected';
+				if (type === 'public')
+					this.chat.typename = 'public';
 			})
 			.catch((e: Error) => {
 				// console.log(e);
