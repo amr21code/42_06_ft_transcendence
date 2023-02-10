@@ -12,7 +12,7 @@
 					<a class="menuOption" id="leaderboard" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friends" @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
-						<img :src="store.user.picurl" alt="user-photo" width="40" height="40"> 
+						<img id="profilepic" :src="store.user.picurl" alt="user-photo" width="40" height="40"> 
 					</div>
 				</div>
 			</header>
@@ -105,11 +105,36 @@ export default defineComponent({
 			loggedIn.value = 'authenticated';
 		}
 
+		const userdataUpdate = async () => {
+			await DataService.getUser()
+			.then((response: ResponseData) => {
+				store.user = response.data[0];
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getFriends()
+			.then((response: ResponseData) => {
+				store.friends = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getAll()
+			.then((response: ResponseData) => {
+				store.allUsers = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		}
+
 // ################## 2FA ###########################################################
 
 		// const twoFaActivated = ref(false);
 		const untoggleTwoFaPopup = () => {
 			document.getElementById("TwoFaPopup")!.style.display = "none";
+			userdataUpdate();
 		}
 
 		const toggleTwoFaPopup = () => {
@@ -149,9 +174,10 @@ export default defineComponent({
 			// only run API calls if successfully logged in
 			if (loggedIn.value === 'authenticated')
 			{
-				await store.getUser();
-				await store.getFriends();
-				await store.getAllUsers();
+				// await store.getUser();
+				// await store.getFriends();
+				// await store.getAllUsers();
+				userdataUpdate();
 				
 				if (store.selected === 'game')
 					document.getElementById("game")!.style.backgroundColor = "#b04716";
@@ -255,27 +281,7 @@ export default defineComponent({
 		});
 
 		socket.on('userdata-refresh', async () => {
-			await DataService.getUser()
-			.then((response: ResponseData) => {
-				store.user = response.data[0];
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			await DataService.getFriends()
-			.then((response: ResponseData) => {
-				store.friends = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			await DataService.getAll()
-			.then((response: ResponseData) => {
-				store.allUsers = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+			userdataUpdate();
 		});
 
 // ################################### EXPORT ####################################

@@ -30,8 +30,9 @@ export class TwoFactorAuthenticationService {
 			token: twoFactorAuthenticationCode,
 			secret: twofasecret[0].twofasecret
 			});
-		if (loginstatus) 
+		if (loginstatus) {
 			this.userService.changeUserData(userid, 'twofalogin', 1);
+		}
 		return loginstatus;
 	}
 
@@ -49,7 +50,6 @@ export class TwoFactorAuthenticationService {
 				client.emit('2fa');
 				return false;
 			} else {
-				client.emit('userdata-refresh');
 				return true;
 			}
 		}
