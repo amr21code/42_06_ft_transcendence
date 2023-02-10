@@ -136,7 +136,7 @@ export class MatchGateway {
 			const cur_room = this.server.sockets.adapter.rooms.get(roomNumber);
 			// console.log("#CUR ROOM is: ", this.server.sockets.adapter.rooms.get(roomNumber));
 
-			let numClients = 0;
+			var numClients = 0;
 			if (cur_room) {
 				numClients = cur_room.size;
 				// console.log("num clients is: ", numClients);

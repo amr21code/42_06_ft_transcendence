@@ -8,8 +8,8 @@ import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto';
 
 describe('App e2e', () => {
-  	let app: INestApplication;
-	let db: DbService;
+  	var app: INestApplication;
+	var db: DbService;
   	beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],

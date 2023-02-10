@@ -28,17 +28,17 @@ export default defineComponent({
 
 		// #################  VARIABLES ######################
 		const store = useUserDataStore();
-		let canvas: any;
-		let ctx: any;
-		let matchSelectionDiv: any;
-		let joinMatchQueueBtn: any;
-		let leaveMatchButton: any;
-		let watchMatchBtn: any;
-		let playerNumber: number;
-		let matchWaitPopup: any;
-		let gameOver: boolean;
+		var canvas: any;
+		var ctx: any;
+		var matchSelectionDiv: any;
+		var joinMatchQueueBtn: any;
+		var leaveMatchButton: any;
+		var watchMatchBtn: any;
+		var playerNumber: number;
+		var matchWaitPopup: any;
+		var gameOver: boolean;
 		const opponentArrived = ref(false);
-		let spectatorLeftMatch = false;
+		var spectatorLeftMatch = false;
 		
 		// #################  HANDLERS #######################
         const handlePlayerNumber = (nbr: number) => {

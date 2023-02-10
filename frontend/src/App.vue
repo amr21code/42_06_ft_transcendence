@@ -145,7 +145,7 @@ export default defineComponent({
 			}
 
 			// overwrite default behavior of back/forward button in browser
-			let menuOptions = Array.from(document.getElementsByClassName("menuOption"));
+			var menuOptions = Array.from(document.getElementsByClassName("menuOption"));
 			const selectMenuOption = (id: SelectedSideWindow) => {
 				store.selected = id;
 				menuOptions.forEach(option => {
@@ -162,7 +162,7 @@ export default defineComponent({
 			}
 
 			menuOptions.forEach(option => {
-				let id = option.id as SelectedSideWindow;
+				var id = option.id as SelectedSideWindow;
 				option.addEventListener('click', e => {
 					history.pushState({id}, '', './' + id);
 					selectMenuOption(id);
