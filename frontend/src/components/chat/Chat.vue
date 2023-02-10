@@ -40,7 +40,7 @@
 									<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
 								</div>
 							</a>
-							<a @click="togglePwdPopup()" v-if="chat.typename === 'protected'">
+							<a @click="togglePwdPopup(chat)" v-if="chat.typename === 'protected'">
 								<div class="" >
 									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
@@ -54,7 +54,7 @@
 		</div>
 	</div>
 	
-	<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => togglePwdPopup()" :curr_chatid="chat.chatid" />
+	<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => untogglePwdPopup()" :curr_chatid="sel_chat.chatid" />
 	<gotBannedPopup id="gotBannedPopup" v-if="gotBannedtrigger === true" :togglegotBanned="() => togglegotBanned()" :bantime="bantime" />
 	<gotMutedPopup id="gotMutedPopup" v-if="gotMutedtrigger === true" :togglegotMuted="() => togglegotMuted()" :mutetime="mutetime" />
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
@@ -228,8 +228,13 @@ export default defineComponent({
         }
 
 		const pwdPopup = ref(false);
-		const togglePwdPopup = () => {
+		const togglePwdPopup = (selected_chat: any) => {
 			pwdPopup.value = !pwdPopup.value;
+			sel_chat.value = selected_chat;
+		}
+
+		const untogglePwdPopup = () => {
+			pwdPopup.value = false;
 		}
 
 		const gotBannedtrigger = ref(false);
@@ -256,7 +261,7 @@ export default defineComponent({
 		}
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger,
-				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger, togglegotMuted, gotMutedtrigger }
+				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger, togglegotMuted, gotMutedtrigger, untogglePwdPopup }
 	}
 })
 </script>
