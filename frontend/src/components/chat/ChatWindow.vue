@@ -135,9 +135,9 @@ export default defineComponent({
 			}
 
 			this.messages.push(data);
-			// this.$nextTick(() => {
-        	// 	this.scrollToBottom();
-     		// });
+			this.$nextTick(() => {
+        		this.scrollToBottom();
+     		});
 		});
 	},
 
