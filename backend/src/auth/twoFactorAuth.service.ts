@@ -42,12 +42,14 @@ export class TwoFactorAuthenticationService {
 
   	async socketIO2fa(client: any) {
 		// if (client.request.user.userid)
-		console.log(client.request.user.userid, "twofa", client.request.user.twofa, "twofalogin", client.request.user.twofalogin);
-		if (client.request.user.twofa === 1) {
-			if (client.request.user.twofalogin === 0) {
+		const user = await this.userService.getAuthCreds(client.request.user.userid);
+		console.log(user.userid, "twofa", user.twofa, "twofalogin", user.twofalogin);
+		if (user.twofa === 1) {
+			if (user.twofalogin === 0) {
 				client.emit('2fa');
 				return false;
 			} else {
+				client.emit('userdata-refresh');
 				return true;
 			}
 		}

@@ -37,6 +37,7 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-refresh')
 	async refreshChat(client: Socket) {
+		console.log("send chat refresh", client);
 		if (!this.twoFAService.socketIO2fa(client))
 			throw new WsException('no 2fa authenticated');
 		client.broadcast.emit('refresh-chat');

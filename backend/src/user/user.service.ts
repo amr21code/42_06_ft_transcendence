@@ -203,6 +203,14 @@ export class UserService {
 		}
 	}
 
+	async getAuthCreds(userid: string) {
+		const user = await this.db.$queryRaw(
+			Prisma.sql`SELECT userid, twofa, twofalogin, twofasecret, access_token, socket_token from public.users
+			WHERE userid=${userid};`
+			);
+		return (user[0]);
+	}
+
 	async showUserRelationshipStatus(userid1: string, userid2: string) {
 		const user = await this.db.$queryRaw(
 			Prisma.sql`(SELECT fl.statuscode
