@@ -49,9 +49,9 @@
 							</a>
 						</div>
 					</a>
+					<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => togglePwdPopup()" :curr_chatid="chat.chatid" />
 				</div>
 			</div>
-			<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => togglePwdPopup()" :curr_chatid="chat.chatid" />
 		</div>
 	</div>
 	
