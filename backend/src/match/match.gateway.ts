@@ -233,7 +233,7 @@ export class MatchGateway {
 		try {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');	
-			const intervalId = setInterval(() => {
+			const intervalId = setInterval(async () => {
 				if (MatchGateway[roomNumber].prematureEnd)
 					return clearInterval(intervalId);
 				const winner = gameLoop(MatchGateway[roomNumber]);
@@ -241,17 +241,18 @@ export class MatchGateway {
 					// sends new state to all room members
 					this.server.to(roomNumber).emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
 					if (MatchGateway[roomNumber].scorePlayer1 == 0 && MatchGateway[roomNumber].scorePlayer2 == 1)
-						this.achieve.addAchieve(MatchGateway[roomNumber].player2.userid, 0);
+						await this.achieve.addAchieve(MatchGateway[roomNumber].player2.userid, 0);
 					else if (MatchGateway[roomNumber].scorePlayer2 == 0 && MatchGateway[roomNumber].scorePlayer1 == 1)
-						this.achieve.addAchieve(MatchGateway[roomNumber].player1.userid, 0);
+						await this.achieve.addAchieve(MatchGateway[roomNumber].player1.userid, 0);
 				} else {
 					// sends game over to all room members
 					this.server.to(roomNumber).emit('gameOver', JSON.stringify(MatchGateway[roomNumber]));
-					this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
-					this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
-					this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
+					await this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
+					await this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
+					await this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
 					// MatchGateway[roomNumber] = null;
 					clearInterval(intervalId); // was macht das?
+					client.emit('userdata-refresh');
 				}
 			}, 1000 / 30); // argument determines frames per ssecond
 		} catch (error) {
