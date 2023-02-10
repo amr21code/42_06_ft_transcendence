@@ -20,7 +20,7 @@
 
 				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">change password</button>
 				<div v-if="option === 3">
-					<input type="text" placeholder="Enter new chatpassword"  v-model="newChatpassword">
+					<input type="password" placeholder="Enter new chatpassword"  v-model="newChatpassword">
 					<button @click="changeChatDetails(chat.typename, chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
 				</div>
 
