@@ -146,7 +146,7 @@ export default defineComponent({
 					document.getElementById("block-user-button")!.innerHTML = "error";
 				}
 				document.getElementById("block-user-button")!.innerHTML = "blocked";
-				document.getElementById("block-user-button")!.style.background = "#000000";
+				document.getElementById("block-user-button")!.style.background = "#131313";
 				document.getElementById("block-user-button")!.style.color = "#ffffff";
 				document.getElementById("add-friend-button")!.style.display = "none";
 			}
@@ -160,7 +160,7 @@ export default defineComponent({
 				}
 				document.getElementById("block-user-button")!.innerHTML = "block user";
 				document.getElementById("block-user-button")!.style.background = "#ffffff";
-				document.getElementById("block-user-button")!.style.color = "#000000";
+				document.getElementById("block-user-button")!.style.color = "#131313";
 				document.getElementById("add-friend-button")!.style.display = "block";
 			}
 		}
@@ -232,13 +232,13 @@ export default defineComponent({
 						if (friend.requesterid === store.user.userid) {
 							document.getElementById("add-friend-button")!.style.display = "none";
 							document.getElementById("block-user-button")!.innerHTML = "blocked";
-							document.getElementById("block-user-button")!.style.background = "#000000";
+							document.getElementById("block-user-button")!.style.background = "#131313";
 							document.getElementById("block-user-button")!.style.color = "#ffffff";
 						}
 						else {
 							document.getElementById("add-friend-button")!.style.display = "none";
 							document.getElementById("block-user-button")!.innerHTML = "you're blocked";
-							document.getElementById("block-user-button")!.style.background = "#000000";
+							document.getElementById("block-user-button")!.style.background = "#131313";
 							document.getElementById("block-user-button")!.style.color = "#ffffff";
 							(document.getElementById("block-user-button") as HTMLButtonElement).disabled = true;
 						}
@@ -301,6 +301,7 @@ export default defineComponent({
 	/* color: white; */
 	/* background: rgb(121, 145, 254); */
 	background: var(--third-highlight-color);
+	transition: .4s;
 }
 
 #add-friend-button:hover {
@@ -311,6 +312,7 @@ export default defineComponent({
 #block-user-button {
 	color: black;
 	background: white;
+	transition: .4s;
 }
 
 #block-user-button:hover {
@@ -382,7 +384,7 @@ export default defineComponent({
 #history-table th {
 	position: sticky;
 	top: 0;
-	background-color: black;
+	background-color: var(--main-bg-color);;
 	color: white;
 }
 

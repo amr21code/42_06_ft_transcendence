@@ -320,6 +320,7 @@ export default defineComponent({
 	width: auto;
 	height: auto;
 	text-align: center;
+	transition: .4s;
 	/* height: 30px; */
 }
 
@@ -352,10 +353,10 @@ export default defineComponent({
 	height: calc(15px + 1.5625vw);
 	width: calc(15px + 1.5625vw);
 	cursor: pointer;
+	transition: .4s;
 }
 
 .chat-menu-icon:hover {
-	transition: all .4s;
 	filter: invert(0%);
 	-webkit-filter: invert(0%);
 }

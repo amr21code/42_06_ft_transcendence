@@ -149,7 +149,7 @@ export default defineComponent({
 			const selectMenuOption = (id: SelectedSideWindow) => {
 				store.selected = id;
 				menuOptions.forEach(option => {
-					(option as HTMLElement).style.backgroundColor = "#444040";
+					(option as HTMLElement).style.backgroundColor = "#484444";
 				});
 				if (store.selected === 'game')
 					document.getElementById("game")!.style.backgroundColor = "#b04716";
@@ -198,7 +198,7 @@ export default defineComponent({
 			store.selected = term;
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
 			menuElements.forEach((element) => {
-				element.style.backgroundColor = "#444040";
+				element.style.backgroundColor = "#484444";
 			});
 			// selected menu highlighting below
 			if (store.selected === 'game')
@@ -253,6 +253,7 @@ export default defineComponent({
 		text-decoration: none;
 		font-size: 18px;
 		cursor: pointer;
+		transition: .4s;
 	}
 
 	.top-nav a:hover {
@@ -275,10 +276,11 @@ export default defineComponent({
 		background: white;
 		border-radius: 50%;
 		object-fit: cover;
+		transition: .4s;
 	}
 	
 	.logged-photo img:hover {
-		opacity: 50%;
+		opacity: 40%;
 	}
 
 	.game-part-screen {

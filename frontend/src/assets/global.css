@@ -1,6 +1,6 @@
 :root {
-	--main-bg-color: black;
-	--second-bg-color: #444040;
+	--main-bg-color: #131313;
+	--second-bg-color: #484444;
 	--main-font-color: white;
 	--first-highlight-color: #b04716;
 	--second-highlight-color: #00cc00;
@@ -12,7 +12,7 @@
 
 body {
     font-family: monospace;
-	background: black;
+	background: var(--main-bg-color);
 	color: white;
 	/* font-size: 12px; */
 }

@@ -88,6 +88,7 @@ export default defineComponent({
 
 	#friendlist-table tr {
 		border: var(--second-bg-color) 3px solid;
+		transition: .4s;
 	}
 
 	#friendlist-table th {

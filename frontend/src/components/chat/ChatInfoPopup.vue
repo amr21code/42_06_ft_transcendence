@@ -325,52 +325,56 @@ export default defineComponent({
 }
 
 #info-table {
-		border-collapse: collapse;
-		overflow: auto;
-		max-height: 500px;
-		display: block;
-		position: relative;
-		scrollbar-gutter: stable both-edges;
-		/* table-layout: fixed; */
-		/* width: 100%; */
-	}
-	
-	th {
-		table-layout: fixed;
-		width: 0%;
-		position: sticky;
-		top: 0;
-		background-color: var(--second-bg-color);
-		color: white;
+	border-collapse: collapse;
+	overflow: auto;
+	max-height: 500px;
+	display: block;
+	position: relative;
+	scrollbar-gutter: stable both-edges;
+	/* table-layout: fixed; */
+	/* width: 100%; */
 	}
 
-	td {
-		width: 14%;
-	}
+th {
+	table-layout: fixed;
+	width: 0%;
+	position: sticky;
+	top: 0;
+	background-color: var(--second-bg-color);
+	color: white;
+}
 
-	#info-table th, td {
-		padding: 20px 40px;
-		text-align: center;
-	}
+td {
+	width: 14%;
+}
 
-	/* .admin td {
-		width: 100%;
-		position:sticky;
-	}
-	.member td {
-		position:sticky;
-	} */
+#info-table th, td {
+	padding: 20px 40px;
+	text-align: center;
+}
 
-	/* hover effect on all but the first line */
-	#info-table tr:hover {
-		background-color: var(--first-highlight-color);
-		color: white;
-		cursor: pointer;
-	}
+/* .admin td {
+	width: 100%;
+	position:sticky;
+}
+.member td {
+	position:sticky;
+} */
 
-	.info-item img {
-		max-height: 30px;
-	}
+#info-table {
+	transition: .4s;
+}
+
+/* hover effect on all but the first line */
+#info-table tr:hover {
+	background-color: var(--first-highlight-color);
+	color: white;
+	cursor: pointer;
+}
+
+.info-item img {
+	max-height: 30px;
+}
 
 .popup {
 	text-align: left;

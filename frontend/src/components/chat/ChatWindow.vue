@@ -319,10 +319,10 @@ export default defineComponent({
 		height: calc(5px + 1.5625vw);
 		width: calc(5px + 1.5625vw);
 		cursor: pointer;
+		transition: .4s;
 	}
 
 	#info-icon:hover {
-		transition: all .4s;
 		filter: invert(0%);
 		-webkit-filter: invert(0%);
 	}
@@ -399,10 +399,10 @@ export default defineComponent({
 		height: calc(5px + 1.5625vw);
 		width: calc(5px + 1.5625vw);
 		margin: 1%;
+		transition: .4s;
 	}
 
 	.send-message-icon:hover {
-		transition: all .4s;
 		filter: invert(0%);
 		-webkit-filter: invert(0%);
 	}

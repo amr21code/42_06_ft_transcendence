@@ -182,7 +182,7 @@ export default defineComponent({
 			canvas = document.getElementById("matchScreen");
             ctx = canvas.getContext("2d");
 
-            ctx.fillStyle = "#444040";
+            ctx.fillStyle = "#484444";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
 			joinMatchQueueBtn.addEventListener("click", joinMatchQueue);
@@ -238,7 +238,7 @@ export default defineComponent({
 		const paintGame = (state: any) => {
 			removeBlurriness(canvas); // comment IN again!
 			scaleUpGameStateForPlayer(state);
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = "#131313";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 			ctx.strokeStyle = "#fff";
@@ -248,7 +248,7 @@ export default defineComponent({
 			ctx.strokeRect(0, 0, canvas.width, canvas.height);
 			//draw center lines
 			for (var i = (canvas.height / 5 / 5); i < canvas.height; i += canvas.height / 5) {
-				ctx.fillStyle = "#444040";
+				ctx.fillStyle = "#484444";
 				// ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
 				ctx.fillRect(canvas.width / 2 - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight - ctx.lineWidth);
 			}
@@ -264,7 +264,7 @@ export default defineComponent({
         };
 
 		const paintScoresAndNames = (state: any) => {
-            ctx.fillStyle = "#444040";
+            ctx.fillStyle = "#484444";
 			ctx.textalign = "center";
 			var fontSize = canvas.height / 2.5;
 			ctx.font = (fontSize|0) + 'px monospace';

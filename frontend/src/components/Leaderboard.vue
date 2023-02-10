@@ -99,6 +99,7 @@ export default defineComponent({
 
 	#leaderboard-table tr {
 		border: var(--second-bg-color) 3px solid;
+		transition: .4s;
 	}
 
 	#leaderboard-table th {
