@@ -132,6 +132,10 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET paddlecolor=${newdata} WHERE userid=${userid};`
 				);
+		}else if (field == 'twofalogin') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET twofalogin=${newdata} WHERE userid=${userid};`
+				);
 		}
 	}
 
@@ -173,6 +177,10 @@ export class UserService {
 		}else if (field == 'paddlecolor') {
 			status = await this.db.$queryRaw(
 				Prisma.sql`SELECT paddlecolor FROM public.users WHERE userid=${userid};`
+				);
+		}else if (field == 'twofalogin') {
+			status = await this.db.$queryRaw(
+				Prisma.sql`SELECT twofalogin FROM public.users WHERE userid=${userid};`
 				);
 		}
 		return status;

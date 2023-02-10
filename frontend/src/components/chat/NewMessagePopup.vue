@@ -1,27 +1,27 @@
 <template>
     <div class="popup" @keyup.esc="togglePopup" tabindex="0">
         <div class="popup-inner">
-            <h2>Create or join a chat</h2>
+            <h2>create or join a chat</h2>
             <!-- <label>
                 Privat<input class="radio" type="checkbox">
             </label>
             <label>
                 Group<input class="radio" type="checkbox">
             </label> -->
-            <a class="info-text">Enter the chatid that you want to join, create a new chat either private, with (public) or without
+            <a class="info-text">enter the chatid that you want to join, create a new chat either private, with (public) or without
                 (protected) a password or enter a userid in order to create a direct chat.</a>
             <div class="button-box">
-                <button class="select-button" @click="(changeShowInput('group'))">Groupchat</button>
-                <button class="select-button" @click="(changeShowInput('dm'))">Directchat</button>
-                <button class="select-button" @click="(changeShowInput('join'))">Join</button>
+                <button class="select-button" @click="(changeShowInput('group'))">group chat</button>
+                <button class="select-button" @click="(changeShowInput('dm'))">direct chat</button>
+                <button class="select-button" @click="(changeShowInput('join'))">join chat</button>
             </div>
             <!-- <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe> -->
             <div class="checkbox-label" v-if="showinput === 'group'">
-                <input class="checkbox-input" type="checkbox" id="privatechat" value="private"><label class="" for="privatechat">Privatechat</label><br>
+                <input class="checkbox-input" type="checkbox" id="privatechat" value="private"><label class="" for="privatechat">private chat</label><br>
             </div>
 
             <!-- <form action="" id="myForm" name="myForm" > -->
-            <input class="" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'">(optional)</a>
+            <input class="" type="text" placeholder="Name of the chat" v-model="chatname" v-if="showinput === 'group'"><a v-if="showinput === 'group'"></a>
             <input class="" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'" required>
             <input class="" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'" required>
             
@@ -29,8 +29,8 @@
                 
             <div class="button-box">
                 <button class="submit-button" name="submit" v-if="showinput" @click="createNewChat(chatname, password, showinput)">submit</button>
-                <button class="popup-close" @click="togglePopup">Close</button>
-                <br><a v-if="invalid === true">Error: Could not perfom action</a>
+                <button class="popup-close" @click="togglePopup">close</button>
+                <br><a v-if="invalid === true">error: could not perfom action</a>
             </div>
 
             <!-- </form> -->
@@ -78,7 +78,6 @@ export default defineComponent({
 		},
 
         async createNewChat(chatname_id : string, password : string, type : string) {
-            // console.log(this.user[0].userid);
             if (chatname_id === '' && type == 'join')
                 return ;
             if (chatname_id === '' && type == 'dm')
@@ -87,7 +86,7 @@ export default defineComponent({
                 chatname_id = 'public chat by ' + this.user[0].userid;
             var inputElements = document.getElementsByClassName('checkbox-input');
             for(var i=0; inputElements[i]; ++i){
-                if(inputElements[i].checked){ //this exist and works!!!
+                if((inputElements[i] as HTMLInputElement).checked) {
                     type = 'private';
                     break;
                 }

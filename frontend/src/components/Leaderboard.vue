@@ -19,7 +19,7 @@
 					{{ user.username }}
 				</td>
 				<td>
-					{{ user.wins }}
+					{{ user.wins }} wins
 				</td>
 			</tr>
 			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
@@ -82,6 +82,8 @@ export default defineComponent({
 		width: 100%;
 		padding: 0;
 		padding-bottom: calc(1px + 1.5625vw);
+		background: var(--second-bg-color);
+		color: white;
 	}
 
 	#leaderboard-table {
@@ -99,6 +101,10 @@ export default defineComponent({
 
 	#leaderboard-table tr {
 		border: var(--second-bg-color) 3px solid;
+		transition: .4s;
+		background: white;
+		border-bottom: 2px solid var(--second-bg-color);
+		color: var(--second-bg-color);
 	}
 
 	#leaderboard-table th {
@@ -106,12 +112,19 @@ export default defineComponent({
 		top: 0;
 		background-color: var(--second-bg-color);
 		color: white;
+		
+
+	}
+
+	#top-row {
+		border: 2px solid white !important;
 	}
 
 	#leaderboard-table th, td {
 		padding: calc(-10px + 1.5625vw) calc(-5px + 1.5625vw);
 		text-align: center;
 		width: 100%; /*makes table central, but destroys equal width of columns (33% would be equal width)*/
+		
 	}
 
 	/* hover effect on all but the first line */
@@ -120,10 +133,6 @@ export default defineComponent({
 		color: white;
 		cursor: pointer;
 	}
-
-	/* #top-row tr:hover {
-		cursor: default;
-	} */
 
 	.leaderboard-item img {
 		height: calc(20px + 1.5625vw);

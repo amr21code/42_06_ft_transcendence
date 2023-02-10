@@ -6,14 +6,21 @@
 
 		<h2>Chat</h2>
 		<div class="chat-top-bar">
-			<strong class="chat-chatid" >{{ curr_chat.chatid }}</strong>
-			<a class="chat-chatname">{{ curr_chat.chat_name }}</a>
-			<!-- <input v-if="showinput === true" placeholder="enter new name" v-model="newName"> -->
-			<button class="ok-button" @click="showChangeNameField(), changeChatDetails(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
-			<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
-			<a class="info-icon" @click="(ChatInfotogglePopup)">
-				<img src="../../assets/info-icon.png" alt="user-photo" width="20" height="20">
-			</a>
+			<div class="channel-info-wrapper">
+
+				<h3 class="chat-chatid" >{{ curr_chat.chatid }}</h3>
+				<h3 class="chat-chatname">{{ curr_chat.chat_name }}</h3>
+				<!-- <input v-if="showinput === true" placeholder="enter new name" v-model="newName"> -->
+				
+				<a class="info-icon-wrapper" @click="(ChatInfotogglePopup)">
+					<img id="info-icon" src="../../assets/info-icon-new.png" alt="user-photo" width="20" height="20">
+				</a>
+			</div>
+			
+			<!-- <div class="name-approve-button-wrapper">
+				<button class="ok-button" @click="showChangeNameField(), changeChatDetails(curr_chat.typename, curr_chat.chatid, newName, curr_chat.password)" v-if="showinput === true">ok</button>
+				<button class="cancel-button" @click="showChangeNameField()" v-if="showinput === true">cancel</button>
+			</div> -->
 		</div>
 
 		<ChatInfoPopup id="ChatInfoPopup" v-if="ChatInfoTrigger === true" :ChatInfotogglePopup="() => ChatInfotogglePopup()" :chat="curr_chat" />
@@ -31,7 +38,7 @@
 						<strong >{{ message.username }}</strong>
 					</div>
 					<div class="message-text">
-						<a >{{ message.message }}</a>
+						{{ message.message }}
 					</div>
 				</div>
 				<!--message recv-->
@@ -74,10 +81,9 @@
 <!--------------FOOTER------------------------------------------------------------------------------------>
 			
 		<form class="chat-write-and-send-wrapper" @submit.prevent="sendMessage(curr_chat.chatid, message), submit()" >
-			<input class="input-message" placeholder="Write message here" v-model="message">
-			<img class="send-message-icon" @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="send-icon">
+			<input id="input-message" type="text" autofocus="true" placeholder="press enter to send" v-model="message" @keyup.enter="sendMessage(curr_chat.chatid, message), submit()">
+			<!-- <img class="send-message-icon" @click="sendMessage(curr_chat.chatid, message), submit()" src="../../assets/send_icon.png" alt="send-icon"> -->
 		</form>
-
 	</div>
 
 </template>
@@ -94,9 +100,9 @@ import type { IMessages } from '../../types/IMessages'
 import type { IChats } from '../../types/Chats'
 import SocketioService from '../../services/SocketioService'
 
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import type { PropType } from 'vue'
-import type { IFriend } from '@/types/Friend'
+import type { IFriend } from '../../types/Friend'
 
 
 export default defineComponent({
@@ -241,8 +247,9 @@ export default defineComponent({
 			ChatInfoTrigger.value = !ChatInfoTrigger.value;
 			return ChatInfoTrigger.value;
 		}
-
-
+		onMounted(() => {
+			document.getElementById('input-message')!.focus;
+		});
 		return { message, submit, showChangeNameField, showinput, newName, ChatInfoTrigger, ChatInfotogglePopup }
 	}
 
@@ -254,91 +261,142 @@ export default defineComponent({
 <style scoped>
 
 
-	.input-message {
-		width: 80%;
-		float: left;
-		clear: both;
-	}
+/* ######## GLOBAL ####################################### */
+
 	.wrapper {
-		max-width: 100%;
-		min-height: 100%;
+		width: 90%;
+		margin-left: 5%;
+		margin-right: 5%;
+		height: 100%;
+		/* border: 10px solid var(--second-bg-color); */
 	}
 
-	.info-icon{
-		padding-left: 15%;
-	}
-	.ok-button {
-		width: 20px;
-		height: 20px;
+	.wrapper h2 {
+		margin: 0.5rem;
 	}
 
-	.cancel-button {
-		width: 45px;
-		height: 20px;
-		color: black;
+/* ######## TOP BAR ####################################### */
+	.chat-top-bar {
+		background-color: var(--second-bg-color);
+		background-color: var(--costum-grey);
+		color: white;
+		/* border: 2px solid var(--costum-grey); */
+		margin-bottom: 0.5rem;
+		height:100%;
+	}
+
+	.chat-top-bar h3 {
+		padding: 0;
+		margin: 0;
+	}
+
+	.channel-info-wrapper {
+		text-align: center;
+		display: grid;
+		align-items: center;
+		justify-content: center; 
+		grid-template-columns: 1fr 1fr 1fr;
+		height: 100%;
 	}
 
 	.chat-chatid {
-		float: left;
 		color: white;
-		padding-left: 5%;
 	}
 
 	.chat-chatname {
 		color: white;
-		/* padding-left: 20%; */
-		float: middle;
 	}
 
-	.chat-typename {
-		color: lightgreen;
-		padding-right: 5%;
-		float: right;
+	.name-approve-button-wrapper {
+		margin: 0.25rem;
+	}
+	
+	.ok-button {
+		margin-right: 0.5rem; /*so that the buttons don't touch*/
+		width: 25%;
+	}
+	
+	.cancel-button {
+		width: 25%;
 	}
 
+	.info-icon-wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+	}
+	
+	#info-icon {
+		filter: invert(100%);
+		-webkit-filter: invert(100%);
+		height: calc(2px + 1.5625vw);
+		width: calc(2px + 1.5625vw);
+		padding: calc(-20px + 1.5625vw);
+		cursor: pointer;
+		transition: .4s;
+	}
+
+	#info-icon:hover {
+		filter: invert(0%);
+		-webkit-filter: invert(0%);
+	}
+	
+	
+	/* ######## MESSAGES VIEW ####################################### */
+	.chat-message-view {
+		background: white;
+		background: var(--second-bg-color);
+		height: 300px;
+		overflow-y: scroll;
+		border: 2px solid  var(--costum-grey);
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.chat-message-view::-webkit-scrollbar {
+		display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+	}
+	
 	.messages-wrapper {
-		max-width: 340px;
-		min-width: 340px;
+		/* max-width: 340px;
+		min-width: 340px; */
+		max-width: 100%;
 	}
 
 	.message-text {
 		padding-left: 1%;
-		font-weight: normal;
+		word-break: break-all;
 	}
+
 	.message-username {
-		color: black;
+		color: white;
 		padding-left: 1%;
 	}
-	.chat-top-bar {
-		background-color: var(--second-bg-color);
-		color: white;
-		padding-top: 2%;
-		padding-bottom: 2%;
-	}
-	
-	.chat-message-view {
-		border: black solid 3px;
-		height: 300px;
-		overflow-y: scroll;
-		scrollbar-color: black solid;
-		scrollbar-width: thin;
-	}
+
+
 	.message-recv {
-		background-color: rgb(155, 155, 160);
-		color: black;
-		border-radius: 15px;
-		padding: 3px;
-		margin-right: 35px;
 		text-align: left;
+		color: white;
+		max-width: 60%;
+		background-color: var(--costum-grey);
+		border-radius: 4px;
+		margin: 6px;
+		margin-right: 40%;
+		padding: 1%;
 	}
 	
 	.message-sent {
 		text-align: right;
-		background-color: rgb(106, 106, 109);
-		color: black;
-		border-radius: 15px;
-		padding: 3px;
-		margin-left: 35px;
+		color: white;
+		max-width: 60%;
+		background-color: rgb(97, 97, 237);
+		border-radius: 4px;
+		margin: 6px;
+		margin-left: 40%;
+		padding: 2%;
 	}
 	
 	.chat-write-and-send-wrapper {
@@ -348,27 +406,39 @@ export default defineComponent({
 		justify-content: center;
 		overflow-y: hidden; 
 		background-color: var(--second-bg-color); 
-		padding-top: 0.5rem;
+		/* padding-top: 0.5rem; */
 		padding-bottom: 0.5rem;
-		
 	}
 	
-	.input-message {
+	#input-message {
 		width: 75%;
-		margin: 1%;
+	}
+
+	input[type="text"] {
+		background-color : var(--second-bg-color); 
+		border: 2px solid  var(--costum-grey);
+		border-radius: 2px;
+		color: white;
+		margin-bottom: 1rem;
+	}
+
+	input[type="text"]:focus {
+		outline: 2px solid  var(--costum-grey);
 	}
 
 	.send-message-icon {
+		filter: invert(100%);
+		-webkit-filter: invert(100%);
 		cursor: pointer;
 		height: calc(5px + 1.5625vw);
 		width: calc(5px + 1.5625vw);
 		margin: 1%;
+		transition: .4s;
 	}
 
 	.send-message-icon:hover {
-		transition: all .4s;
-		filter: invert(100%);
-		-webkit-filter: invert(100%);
+		filter: invert(0%);
+		-webkit-filter: invert(0%);
 	}
 
 </style>

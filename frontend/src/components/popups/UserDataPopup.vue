@@ -437,6 +437,7 @@ export default defineComponent({
 	margin-bottom: 0;
 	background: white;
 	border-radius: 50%;
+	transition: .4s;
 }
 
 input[type="file"] {

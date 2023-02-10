@@ -8,7 +8,6 @@
 				</div>
 				<div class="top-nav">
 					<a class="menuOption" id="game" @click="handleClick('game')">game</a>
-					<!-- <a class="menuOption" id="watchSelected" @click="handleClick('watch')">watch</a> -->
 					<a class="menuOption" id="chat" @click="handleClick('chat')">chat</a>
 					<a class="menuOption" id="leaderboard" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friends" @click="handleClick('friends')">friends</a>
@@ -18,8 +17,9 @@
 				</div>
 			</header>
 			<!-- enforce this properly!-->
-			<LoginPopup id="LoginPopup" v-if="loggedIn === false" :toggleLoginPopup="() => toggleLoginPopup()" />
-			<TwoFaPopup id="TwoFaPopup" v-if="store.user.twofa === 1" :toggleTwoFaPopup="() => toggleTwoFaPopup()" />
+			<LoginPopup id="LoginPopup" v-if="loggedIn === 'not authenticated'" :toggleLoginPopup="() => toggleLoginPopup()" />
+			<!-- <TwoFaPopup id="TwoFaPopup" v-if="store.user.twofa === 1" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" /> -->
+			<TwoFaPopup id="TwoFaPopup" v-if="loggedIn === '2fa'" :untoggleTwoFaPopup="() => untoggleTwoFaPopup()" :twoFaSuccess="() => twoFaSuccess()"/>
 			<UserDataPopup id="UserDataPopup" v-if="userDataPopupTrigger === true" :toggleUserDataPopup="() => toggleUserDataPopup()" />
 			<gotChallengedPopup id="gotChallengedPopup" v-if="gotChallengedPopupTrigger === true" :toggleGotChallengedPopup="() => toggleGotChallengedPopup()" :challenger="challenger"/>
 			<div class="game-part-screen">
@@ -99,25 +99,28 @@ export default defineComponent({
 	setup() {
 		const store = useUserDataStore();
 
-		const loggedIn = ref(false);
+		const loggedIn = ref('not authenticated');
 		const toggleLoginPopup = () => {
-			loggedIn.value = !loggedIn.value;
+			loggedIn.value = 'authenticated';
 		}
 
 		// const twoFaActivated = ref(false);
-		const toggleTwoFaPopup = () => {
+		const untoggleTwoFaPopup = () => {
 			document.getElementById("TwoFaPopup")!.style.display = "none";
+		}
+
+		const toggleTwoFaPopup = () => {
+			document.getElementById("TwoFaPopup")!.style.display = "block";
+		}
+
+		const twoFaSuccess = () => {
+			loggedIn.value = 'authenticated';
 		}
 
 		onMounted(async () => {
 			await DataService.getAuthStatus()
 			.then((authStatus: any) => {
-				if (authStatus.data.msg !== 'authenticated') {
-					loggedIn.value = false;
-				}
-				else {
-					loggedIn.value = true;
-				}
+				loggedIn.value = authStatus.data.msg;
 				console.log('Your authentication status is: ', authStatus.data.msg);
 			})
 			.catch((e: Error) => {
@@ -125,7 +128,7 @@ export default defineComponent({
 			})
 
 			// only run API calls if successfully logged in
-			if (loggedIn.value === true)
+			if (loggedIn.value === 'authenticated')
 			{
 				await store.getUser();
 				await store.getFriends();
@@ -142,11 +145,11 @@ export default defineComponent({
 			}
 
 			// overwrite default behavior of back/forward button in browser
-			let menuOptions = Array.from(document.getElementsByClassName("menuOption"));
+			var menuOptions = Array.from(document.getElementsByClassName("menuOption"));
 			const selectMenuOption = (id: SelectedSideWindow) => {
 				store.selected = id;
 				menuOptions.forEach(option => {
-					(option as HTMLElement).style.backgroundColor = "#444040";
+					(option as HTMLElement).style.backgroundColor = "#484444";
 				});
 				if (store.selected === 'game')
 					document.getElementById("game")!.style.backgroundColor = "#b04716";
@@ -159,7 +162,7 @@ export default defineComponent({
 			}
 
 			menuOptions.forEach(option => {
-				let id = option.id as SelectedSideWindow;
+				var id = option.id as SelectedSideWindow;
 				option.addEventListener('click', e => {
 					history.pushState({id}, '', './' + id);
 					selectMenuOption(id);
@@ -195,7 +198,7 @@ export default defineComponent({
 			store.selected = term;
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
 			menuElements.forEach((element) => {
-				element.style.backgroundColor = "#444040";
+				element.style.backgroundColor = "#484444";
 			});
 			// selected menu highlighting below
 			if (store.selected === 'game')
@@ -220,17 +223,10 @@ export default defineComponent({
 				document.documentElement.style.setProperty("--sidewindow_fr", "1fr");
 			}
 		};
-
-		
-		return { store, toggleTwoFaPopup, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
+		return { store, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
 </script>
-
-<!-- if session cookie-> /auth/status -> 'authenticated' -> popup weg-->
-<!-- 'not authenticated' ->cookie löschen-->
-<!-- if not cookie-> popup -->
-<!-- NEXT: Andi gibt mir statt 'authenticated' die SESSIONID und ich sende die weiter -->
 
 
 <style scoped>
@@ -257,6 +253,7 @@ export default defineComponent({
 		text-decoration: none;
 		font-size: 18px;
 		cursor: pointer;
+		transition: .4s;
 	}
 
 	.top-nav a:hover {
@@ -279,10 +276,11 @@ export default defineComponent({
 		background: white;
 		border-radius: 50%;
 		object-fit: cover;
+		transition: .4s;
 	}
 	
 	.logged-photo img:hover {
-		opacity: 50%;
+		opacity: 40%;
 	}
 
 	.game-part-screen {
@@ -294,7 +292,6 @@ export default defineComponent({
 		max-height: 70vh;
 		margin: 50px;
 		margin-top: 50px;
-		/* background: red; */
 		align-items:center;
 	}
 	
@@ -305,15 +302,10 @@ export default defineComponent({
 
 	footer {
 		text-align: center;
-		/* background-color: var(--second-bg-color); */
-		/* padding: 10px; */
 		padding-top: 4px;
 		padding-bottom: 4px;
-
 		position: fixed;
 		bottom: 0;
 		width: 100%;
-		/* background: blue; */
-		/* height: 1rem; */
 	}
 </style>

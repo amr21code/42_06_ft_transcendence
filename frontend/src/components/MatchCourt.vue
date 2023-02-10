@@ -28,17 +28,17 @@ export default defineComponent({
 
 		// #################  VARIABLES ######################
 		const store = useUserDataStore();
-		let canvas: any;
-		let ctx: any;
-		let matchSelectionDiv: any;
-		let joinMatchQueueBtn: any;
-		let leaveMatchButton: any;
-		let watchMatchBtn: any;
-		let playerNumber: number;
-		let matchWaitPopup: any;
-		let gameOver: boolean;
+		var canvas: any;
+		var ctx: any;
+		var matchSelectionDiv: any;
+		var joinMatchQueueBtn: any;
+		var leaveMatchButton: any;
+		var watchMatchBtn: any;
+		var playerNumber: number;
+		var matchWaitPopup: any;
+		var gameOver: boolean;
 		const opponentArrived = ref(false);
-		let spectatorLeftMatch = false;
+		var spectatorLeftMatch = false;
 		
 		// #################  HANDLERS #######################
         const handlePlayerNumber = (nbr: number) => {
@@ -182,7 +182,7 @@ export default defineComponent({
 			canvas = document.getElementById("matchScreen");
             ctx = canvas.getContext("2d");
 
-            ctx.fillStyle = "#444040";
+            ctx.fillStyle = "#484444";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.addEventListener("keydown", keydown);
 			joinMatchQueueBtn.addEventListener("click", joinMatchQueue);
@@ -238,7 +238,7 @@ export default defineComponent({
 		const paintGame = (state: any) => {
 			removeBlurriness(canvas); // comment IN again!
 			scaleUpGameStateForPlayer(state);
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = "#131313";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 			ctx.strokeStyle = "#fff";
@@ -248,7 +248,7 @@ export default defineComponent({
 			ctx.strokeRect(0, 0, canvas.width, canvas.height);
 			//draw center lines
 			for (var i = (canvas.height / 5 / 5); i < canvas.height; i += canvas.height / 5) {
-				ctx.fillStyle = "#444040";
+				ctx.fillStyle = "#484444";
 				// ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
 				ctx.fillRect(canvas.width / 2 - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight - ctx.lineWidth);
 			}
@@ -264,16 +264,16 @@ export default defineComponent({
         };
 
 		const paintScoresAndNames = (state: any) => {
-            ctx.fillStyle = "#444040";
+            ctx.fillStyle = "#484444";
 			ctx.textalign = "center";
 			var fontSize = canvas.height / 2.5;
-			ctx.font = (fontSize|0) + 'px monspace';
+			ctx.font = (fontSize|0) + 'px monospace';
 
 			ctx.fillText(state.scorePlayer1, (canvas.width / 5), canvas.height / 2 + ((ctx.measureText(state.scorePlayer1).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer1).actualBoundingBoxDescent) / 2));
 			ctx.fillText(state.scorePlayer2,  canvas.width - (canvas.width / 5) - ctx.measureText(state.scorePlayer2).width , canvas.height / 2 + ((ctx.measureText(state.scorePlayer2).actualBoundingBoxAscent + ctx.measureText(state.scorePlayer2).actualBoundingBoxDescent) / 2));
        
 			fontSize = canvas.height / 8;
-			ctx.font = (fontSize|0) + 'px monspace';
+			ctx.font = (fontSize|0) + 'px monospace';
 			const biggerMeasureAscent = ctx.measureText(state.player1.userid).actualBoundingBoxAscent > ctx.measureText(state.player2.userid).actualBoundingBoxAscent ? ctx.measureText(state.player1.userid).actualBoundingBoxAscent : ctx.measureText(state.player2.userid).actualBoundingBoxAscent;
 			const biggerMeasureDescent = ctx.measureText(state.player1.userid).actualBoundingBoxDescent > ctx.measureText(state.player2.userid).actualBoundingBoxDescent ? ctx.measureText(state.player1.userid).actualBoundingBoxDescent : ctx.measureText(state.player2.userid).actualBoundingBoxDescent;
 			ctx.fillText(state.player1.userid, (canvas.width / 4 - (ctx.measureText(state.player1.userid).width / 2)), (canvas.height - canvas.height / 6) + ((biggerMeasureAscent + biggerMeasureDescent) / 2));

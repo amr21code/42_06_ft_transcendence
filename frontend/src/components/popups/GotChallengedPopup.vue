@@ -102,6 +102,7 @@ export default defineComponent({
 	margin: 3%;
 	background: white;
 	border-radius: 50%;
+	transition: .4s;
 }
 
 #user-photo:hover {

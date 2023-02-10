@@ -2,7 +2,8 @@ import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGa
 import { Server } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
 import { UserService } from './user.service';
-import { ForbiddenException } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
+import { AuthenticatedGuard } from 'src/auth/guards/guards';
 
 @WebSocketGateway(3002, {cors: {
 	origin: `${process.env.FRONTEND_URL}`,
@@ -10,6 +11,7 @@ import { ForbiddenException } from '@nestjs/common';
 	credentials: true,
 }
 })
+// @UseGuards(AuthenticatedGuard)
 export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	constructor (private readonly userService: UserService, private readonly matchService: MatchService) {}
 
@@ -27,7 +29,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		try {
 			if (client.request.user) {
 				const user = client.request.user;
-				if (user) {
+				if (user && ((user.twofa === 1 && user.twofalogin === 1) || user.twofa === 0)) {
 					await this.userService.changeUserData(user.userid, "user_status", 1);
 					await this.userService.changeUserData(user.userid, "socket_token", client.id);
 				}
@@ -56,6 +58,8 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 					}
 					await this.userService.changeUserData(user.userid, "user_status", 0);
 					await this.userService.changeUserData(user.userid, "socket_token", "");
+					await this.userService.changeUserData(user.userid, "twofalogin", 0);
+					await this.userService.changeUserData(user.userid, "access_token", "");
 				}
 				console.log("handle offline", await this.userService.getUserData(user.userid, "socket_token"), user.userid);
 			}

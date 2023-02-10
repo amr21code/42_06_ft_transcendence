@@ -23,12 +23,15 @@ export class TwoFactorAuthenticationService {
     }
   }
 
-	public isTwoFactorAuthenticationCodeValid(twoFactorAuthenticationCode: string, twofasecret: any) {
+	public isTwoFactorAuthenticationCodeValid(userid: string, twoFactorAuthenticationCode: string, twofasecret: any) {
     console.log(twofasecret);
-		return authenticator.verify({
+		const loginstatus = authenticator.verify({
 			token: twoFactorAuthenticationCode,
 			secret: twofasecret[0].twofasecret
-	})
+			});
+		if (loginstatus) 
+			this.userService.changeUserData(userid, 'twofalogin', 1);
+		return loginstatus;
 	}
 
    public async pipeQrCodeStream(stream: any, otpauthUrl: string) {
