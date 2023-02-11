@@ -40,8 +40,6 @@
 
 
 
-
-
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
@@ -50,7 +48,6 @@ import DataService from '../../services/DataService'
 import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
 import SocketioService from '../../services/SocketioService'
-
 
 export default defineComponent({
 	name: "NewMessagePopup",
@@ -109,7 +106,6 @@ export default defineComponent({
     },
 
     setup () {
-
         const showinput = ref();
 		const changeShowInput = (type : String) => {
 			showinput.value = type;
@@ -117,11 +113,9 @@ export default defineComponent({
 
 		return { showinput, changeShowInput }
     }  
-
 })
 
 </script>
-
 
 
 

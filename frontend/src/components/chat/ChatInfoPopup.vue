@@ -23,8 +23,6 @@
 					<input type="password" placeholder="Enter new chatpassword"  v-model="newChatpassword">
 					<button @click="changeChatDetails('protected', chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
 				</div>
-
-
 			</div>
 			<table id="info-table">
 			<thead id="top-row">
@@ -417,4 +415,5 @@ td {
 	float: right;
 	border-right: 5%;
 }
+
 </style>
