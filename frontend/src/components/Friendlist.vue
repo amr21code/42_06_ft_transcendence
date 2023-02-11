@@ -28,12 +28,12 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import { useUserDataStore } from '../stores/myUserDataStore'
-import type { ResponseData } from '../types/ResponseData'
 import MatchHistoryPopup from './popups/MatchHistoryPopup.vue'
-import SocketioService from '@/services/SocketioService'
+import SocketioService from '../services/SocketioService'
 
 export default defineComponent({
 	
@@ -65,6 +65,7 @@ export default defineComponent({
 	},
 })
 </script>
+
 
 
 <style scoped>	

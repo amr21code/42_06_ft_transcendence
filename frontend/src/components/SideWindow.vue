@@ -7,13 +7,14 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 import ChatWindow from './chat/Chat.vue'
 import Leaderboard from '../components/Leaderboard.vue'
 import Friendlist from '../components/Friendlist.vue'
 import { useUserDataStore } from '../stores/myUserDataStore'
-import type { SelectedSideWindow } from '@/types/SelectedSideWindow'
+import type { SelectedSideWindow } from '../types/SelectedSideWindow'
 
 export default defineComponent({
 	name: 'side-window',
@@ -25,6 +26,7 @@ export default defineComponent({
 	}
 })
 </script>
+
 
 
 <style scoped>
@@ -48,4 +50,5 @@ export default defineComponent({
 		/* center items vertically */
 		justify-content: center;
 	}
+
 </style>

@@ -9,6 +9,7 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 
@@ -26,6 +27,8 @@ export default defineComponent({
 	}
 })
 </script>
+
+
 
 <style scoped>
 .popup {
@@ -45,11 +48,7 @@ export default defineComponent({
 .popup-inner {
 	background-color: var(--second-bg-color);
 	padding: 1rem 2rem;
-	/* border-radius: 10%; */
 	border-radius: 2px;
-	/* width: 50%;
-	height: 50%; */
-
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -60,13 +59,9 @@ export default defineComponent({
 	text-align: center;
 }
 
-.user-data-wrapper {
-	margin-bottom: 10px;
-	margin-left: 0%;
-}
-
-button {
+.popup-inner button {
 	margin: 0 auto;
 	display: block;
 }
+
 </style>

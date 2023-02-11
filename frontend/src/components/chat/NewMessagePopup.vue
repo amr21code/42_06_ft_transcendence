@@ -32,8 +32,6 @@
                 <button class="popup-close" @click="togglePopup">close</button>
                 <br><a v-if="invalid === true">error: could not perfom action</a>
             </div>
-
-            <!-- </form> -->
         </div>
     </div>
 </template>
@@ -171,4 +169,5 @@ export default defineComponent({
 .select-button {
 	margin: 5px;
 }
+
 </style>

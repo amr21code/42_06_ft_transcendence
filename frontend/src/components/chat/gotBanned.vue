@@ -16,6 +16,7 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 import DataService from '../../services/DataService'
@@ -61,8 +62,8 @@ export default defineComponent({
 	mounted () {
 		this.retrieveCurrentUser();
 	},
-
 })
+
 </script>
 
 

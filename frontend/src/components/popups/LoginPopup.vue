@@ -12,6 +12,7 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 
@@ -27,6 +28,7 @@ export default defineComponent({
 	}
 })
 </script>
+
 
 
 <style scoped>
@@ -74,11 +76,6 @@ a:link {
 a:visited {
 	color: var(--first-highlight-color);
 }
-
-/* mouse over link */
-/* a:hover {
-  color: hotpink;
-} */
 
 /* selected link */
 a:active {

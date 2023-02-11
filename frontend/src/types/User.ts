@@ -12,8 +12,6 @@ interface IUser {
 	paddlecolor: string,
 	user_status : number,
 	twofa: number,
-	// title: string,
-	// completed: boolean
 }
 
 export type { IUser }

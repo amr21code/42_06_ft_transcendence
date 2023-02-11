@@ -25,8 +25,7 @@ import { useUserDataStore } from '../stores/myUserDataStore';
 export default defineComponent({
 
 	setup() {
-
-		// #################  VARIABLES ######################
+// #################  VARIABLES ######################
 		const store = useUserDataStore();
 		var canvas: any;
 		var ctx: any;
@@ -40,11 +39,10 @@ export default defineComponent({
 		const opponentArrived = ref(false);
 		var spectatorLeftMatch = false;
 		
-		// #################  HANDLERS #######################
+// #################  HANDLERS #######################
         const handlePlayerNumber = (nbr: number) => {
 			if(!playerNumber)
 				playerNumber = nbr;
-			// console.log("your player number is: ", playerNumber);
 		}
 
 		const handleWatchError = (msg: string) => {
@@ -100,7 +98,6 @@ export default defineComponent({
 			reset();
         };
 
-
 		const handleOpponentArrived = (data: any) => {
 			opponentArrived.value = data.data; 
 			if (!opponentArrived.value){
@@ -123,11 +120,6 @@ export default defineComponent({
 			alert("You joined an empty room. WTF, how did you do that?");
 		}
 
-		// const handleTooManyPlayers = () => {
-		// 	reset();
-		// 	alert("This game is full and in progress");
-		// }
-
 		const handleOpponentLeft = (matchid:number, userid: string) => {
 			socket.emit('opponentLeft', matchid);
 			// console.log("opponent left");
@@ -144,8 +136,7 @@ export default defineComponent({
 			leaveMatchButton.style.display = "none";
 		}
 
-
-		// #################  KEY SIGNALING #######################
+// #################  KEY SIGNALING #######################
 		const keydown = (e: any) => {
 			socket.emit('keydown', e.keyCode);
 		};
@@ -172,7 +163,7 @@ export default defineComponent({
 		}
 
 
-		// ################# INIT CANVAS #######################
+// ################# INIT CANVAS #######################
         const initCanvas = () => {
 			matchSelectionDiv = document.getElementById("matchSelectionDiv");
 			joinMatchQueueBtn = document.getElementById("joinMatchQueueBtn");
@@ -197,7 +188,7 @@ export default defineComponent({
         };
 
 
-		// ########### PAINTING ###################################################################################################
+// ########### PAINTING ###################################################################################################
         const removeBlurriness = (canvas: any) => {
 			// Lookup the size the browser is displaying the canvas in CSS pixels.
 			const displayWidth  = canvas.clientWidth;
@@ -249,7 +240,6 @@ export default defineComponent({
 			//draw center lines
 			for (var i = (canvas.height / 5 / 5); i < canvas.height; i += canvas.height / 5) {
 				ctx.fillStyle = "#484444";
-				// ctx.fillRect(canvas.width / 2 + ctx.lineWidth - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight);
 				ctx.fillRect(canvas.width / 2 - (ctx.centerLineWidth / 2), i + ctx.lineWidth, ctx.centerLineWidth, ctx.centerLineHeight - ctx.lineWidth);
 			}
 			paintScoresAndNames(state);
@@ -280,14 +270,14 @@ export default defineComponent({
 			ctx.fillText(state.player2.userid,  canvas.width - (canvas.width / 4) - ctx.measureText(state.player2.userid).width / 2 , (canvas.height - canvas.height / 6) + ((biggerMeasureAscent+ biggerMeasureDescent) / 2));
 		};
 
-		// ########### PAINTING ###################################################################################################
+// ########### HELPER ###################################################################################################
 		const removeMatchWaitPopup = async () => {
 			matchWaitPopup.style.display = 'none';
 			matchSelectionDiv.style.display = 'inline-flex';
 			await DataService.denyChallenge();
 		}
 
-		//############# SOCKETIO ##################################################################################################
+//############# SOCKETIO ##################################################################################################
 		const socket = SocketioService.socket;
 		socket.on('init', handlePlayerNumber);
 		socket.on("opponent-status", handleOpponentArrived);
@@ -295,11 +285,9 @@ export default defineComponent({
 		socket.on('gameState', handleGameState);
 		socket.on('gameOver', handleGameOver);
 		socket.on('joinedEmptyGame', handleJoinedEmptyGame);
-		// socket.on('tooManyPlayers', handleTooManyPlayers); //two players in room already
 		socket.on('joinGame', handleJoinGame);
 		socket.on('opponentLeft', handleOpponentLeft);
 		socket.on('reset', reset);
-		////############# SOCKETIO #############
 
         return { canvas, opponentArrived, initCanvas, paintGame, removeMatchWaitPopup };
     },
@@ -313,7 +301,10 @@ export default defineComponent({
 
 </script>
 
+
+
 <style scoped>
+
 	#matchScreen {
 		width: 80%;
 		margin-left: 10%;
@@ -352,7 +343,6 @@ export default defineComponent({
 	#matchSelectionDiv h2 {
 		margin-bottom: 1.5rem;
 	}
-
 
 button {
     margin: 0 0.5rem;
