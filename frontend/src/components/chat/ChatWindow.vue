@@ -29,8 +29,8 @@
 
 		<div ref="chatContainer" class="chat-message-view">
 
+<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 
-	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 			<div class="messages-wrapper" v-for="message in db_messages" :key="message.message">
 				<!-- message sent -->
 				<div class="message-sent" v-if="user[0].userid === message.userid">
@@ -52,7 +52,7 @@
 				</div>
 			</div>
 
-	<!-----------NEW MESSAGES FROM SOCKET----------------------------------------------------->
+<!-----------NEW MESSAGES FROM SOCKET----------------------------------------------------->
 
 			<div class="messages-wrapper" v-for="message in messages" :key="message.message">
 				<!-- message sent -->
@@ -88,8 +88,9 @@
 
 </template>
 
-<script lang="ts">
 
+
+<script lang="ts">
 import ChatInfoPopup from './ChatInfoPopup.vue'
 
 //for getting data from the backend
@@ -263,8 +264,8 @@ export default defineComponent({
 </script>
 
 
-<style scoped>
 
+<style scoped>
 
 /* ######## GLOBAL ####################################### */
 
@@ -348,7 +349,8 @@ export default defineComponent({
 	}
 	
 	
-	/* ######## MESSAGES VIEW ####################################### */
+/* ######## MESSAGES VIEW ####################################### */
+
 	.chat-message-view {
 		background: white;
 		background: var(--second-bg-color);
