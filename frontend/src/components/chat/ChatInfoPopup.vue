@@ -17,7 +17,6 @@
 					<button class="option-button" @click="toggleOption(0)">no</button>
 				</div>
 
-
 				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">change password</button>
 				<div v-if="option === 3">
 					<input type="password" placeholder="Enter new chatpassword"  v-model="newChatpassword">
@@ -111,8 +110,10 @@
 						<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
 					</tbody>
 				<!-- </div> -->
-		</table>
-			<button class="popup-close" @click="(ChatInfotogglePopup)">close</button>
+			</table>
+			<div class="close-button-wrapper">
+				<button class="popup-close" @click="(ChatInfotogglePopup)">close</button>
+			</div>
         </div>
     </div>
 </template>
@@ -303,17 +304,46 @@ export default defineComponent({
 
 		return { toggleMute, Mute, toggleBan, Ban, challengeUser, toggleOption, option,
 				toggleUserHistory, untoggleUserHistory, selectedUser, showUserHistoryTrigger, selectedUserPhoto }
-			
-    }  
-
+    }
 })
 
 </script>
 
 
 
-
 <style scoped>
+
+.popup {
+	text-align: left;
+	background-color: rgba(0,0,0,0.8);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 98; /*brings to highest front-layer*/
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+}
+
+.popup-inner {
+	background-color: var(--second-bg-color);
+	padding: 1rem 2rem;
+	border-radius: 2px;
+	max-width: 80vw;
+
+}
+
+.popup-inner h2 {
+	text-align: center;
+}
+
+.popup-inner a {
+	text-align: center;
+	color: white;
+}
 
 .user_status-img {
 	width: 15px;
@@ -380,40 +410,12 @@ td {
 	max-height: 30px;
 }
 
-.popup {
-	text-align: left;
-	background-color: rgba(0,0,0,0.8);
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 98; /*brings to highest front-layer*/
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: white;
-}
-.popup-inner {
-	background-color: var(--second-bg-color);
-	padding: 1rem 2rem;
-	/* border-radius: 10%; */
-	border-radius: 2px;
-}
-
-.popup-inner h2 {
+.close-button-wrapper {
 	text-align: center;
 }
-
-.popup-inner a {
-	text-align: center;
-	color: white;
-}
-
 .popup-close {
     color: black;
-	float: right;
-	border-right: 5%;
+	margin: 1rem;
 }
 
 </style>

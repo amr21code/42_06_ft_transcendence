@@ -17,6 +17,7 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import DataService from '../../services/DataService'
@@ -49,7 +50,6 @@ export default defineComponent({
 
 		const sendAcceptSignal = () => {
 			console.log("accepting challenge", store.user);
-			// await DataService.acceptChallenge();
 			socket.emit('create-new-game', store.user.userid);
 		};
 
@@ -62,6 +62,7 @@ export default defineComponent({
 	},
 })
 </script>
+
 
 
 <style scoped>
@@ -82,7 +83,6 @@ export default defineComponent({
 .popup-inner {
 	background-color: var(--second-bg-color);
 	padding: 1rem 2rem;
-	/* border-radius: 10%; */
 	border-radius: 2px;
 }
 
