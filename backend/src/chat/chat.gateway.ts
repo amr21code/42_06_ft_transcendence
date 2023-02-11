@@ -12,9 +12,8 @@ import { TwoFactorAuthenticationService } from 'src/auth/twoFactorAuth.service';
 	credentials: true,
 }
 })
-// @UseGuards(AuthenticatedGuard)
 export class ChatGateway {
-	constructor(private readonly userService: UserService, private readonly chatService: ChatService, private readonly twoFAService: TwoFactorAuthenticationService) {
+	constructor(private readonly chatService: ChatService, private readonly twoFAService: TwoFactorAuthenticationService) {
 	}
 
 	@SubscribeMessage('send-chat-message')
@@ -22,7 +21,6 @@ export class ChatGateway {
 		try {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');
-			// console.log("send-chat-message: ", message);
 			if (message.message != '') {
 				if (await this.chatService.addMessage(message))
 				{
@@ -37,7 +35,6 @@ export class ChatGateway {
 
 	@SubscribeMessage('send-chat-refresh')
 	async refreshChat(client: Socket) {
-		// console.log("send chat refresh", client);
 		if (!this.twoFAService.socketIO2fa(client))
 			throw new WsException('no 2fa authenticated');
 		client.broadcast.emit('refresh-chat');

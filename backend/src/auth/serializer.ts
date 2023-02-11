@@ -10,7 +10,7 @@ export class SessionSerializer extends PassportSerializer {
 		super();
 	}
 
-	serializeUser(user: any, done: Function) { //change any to User class/Object
+	serializeUser(user: any, done: Function) { 
 		done(null, user);
 	}
 	

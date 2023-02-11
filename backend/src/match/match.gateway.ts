@@ -5,8 +5,6 @@ import { createGameState, gameLoop, getUpdatedVelocity } from './match.engine';
 import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { UserService } from 'src/user/user.service';
 import { AchievementsService } from 'src/achievements/achievements.service';
-import { AuthenticatedGuard } from 'src/auth/guards/guards';
-import { UseGuards } from '@nestjs/common';
 import { TwoFactorAuthenticationService } from 'src/auth/twoFactorAuth.service';
 
 @WebSocketGateway(3002, {
@@ -16,20 +14,11 @@ import { TwoFactorAuthenticationService } from 'src/auth/twoFactorAuth.service';
 		credentials: true,
 	}
 })
-// @UseGuards(AuthenticatedGuard)
 export class MatchGateway {
 
 	@WebSocketServer()
 	public server: Server;
 	public static states: MatchGameStateDto[] = [];
-
-	// handleConnection(client: Socket, room: string): any {
-	// 	if (!this.twoFAService.socketIO2fa(client))
-	// 		throw new WsException('no 2fa authenticated');
-	// 	client.on('room', function (room) {
-	// 		client.join(room);
-	// 	});
-	// }
 
 
 	constructor(private readonly matchService: MatchService, private readonly userService: UserService,  private readonly achieve: AchievementsService, private readonly twoFAService: TwoFactorAuthenticationService) { }
@@ -68,10 +57,8 @@ export class MatchGateway {
 			else if (opponent === userid) {
 				matchid = await this.matchService.listMatch(userid);
 				await this.matchService.acceptMatch(userid);
-				// matchid = await this.matchService.join(userid, matchid[0].matchid);
 			} else
 				matchid = await this.matchService.openMatch(userid, 1, opponent);
-			// const matchid = await this.matchService.listMatch(userid);
 			console.log("matchid ",matchid);
 			const roomNumber = matchid[0].matchid;
 
@@ -79,7 +66,6 @@ export class MatchGateway {
 				client.join(roomNumber);
 				MatchGateway[roomNumber] = await createGameState();
 				MatchGateway[roomNumber].player1.userid = userid;
-				// client.number = 1;
 				(client as any).number = 1;
 				client.emit('init', 1);
 				await this.userService.changeUserData(userid, "user_status", 3);
@@ -89,14 +75,11 @@ export class MatchGateway {
 				await this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 2);
 			}
 
-			// console.log("room number for opponent status: ", roomNumber);
 			const status = await this.matchService.getOpponentStatus(roomNumber, userid);
 
 			console.log("CHECK_OPPONENT: opponent status is: ", status, " room number is: ", roomNumber);
 
 			client.emit('opponent-status', { data: status, matchid: roomNumber });
-			//client.emit('opponent-status', { data: true });
-			// if clause for opponent-status === true hinzufügen!
 		} catch (error) {
 			throw new WsException('create game failed');
 		}
@@ -115,8 +98,6 @@ export class MatchGateway {
 			console.log("Users");
 			console.log(MatchGateway[roomNumber].player1.userid);
 			console.log(MatchGateway[roomNumber].player2.userid);
-			// MatchGateway[roomNumber].canvasHeight = canvasData[0];
-			// MatchGateway[roomNumber].canvasWidth = canvasData[1];
 			MatchGateway[roomNumber].canvasHeight = 120;
 			MatchGateway[roomNumber].canvasWidth = 200;
 			MatchGateway[roomNumber].paddleWidth = MatchGateway[roomNumber].canvasWidth / 50;
@@ -131,7 +112,6 @@ export class MatchGateway {
 			MatchGateway[roomNumber].ball.pos.y = MatchGateway[roomNumber].canvasHeight / 2 - MatchGateway[roomNumber].ballSize / 2;
 			MatchGateway[roomNumber].paddleSpeed = MatchGateway[roomNumber].canvasHeight / 50;
 			MatchGateway[roomNumber].ballSpeed = MatchGateway[roomNumber].canvasHeight / 75;
-			// console.log("canvas height: ", canvasData[0], " ballSpeed: " ,MatchGateway[roomNumber].ballSpeed)
 			var randomDirection = Math.floor(Math.random() * 2) + 1;
 			if (randomDirection % 2) {
 				MatchGateway[roomNumber].ball.vel.x = 1;
@@ -143,28 +123,19 @@ export class MatchGateway {
 
 
 			const cur_room = this.server.sockets.adapter.rooms.get(roomNumber);
-			// console.log("#CUR ROOM is: ", this.server.sockets.adapter.rooms.get(roomNumber));
 
 			var numClients = 0;
 			if (cur_room) {
 				numClients = cur_room.size;
-				// console.log("num clients is: ", numClients);
 			}
 
 			if (numClients === 0) {
 				client.emit('joinedEmptyGame');
 				return;
 			}
-			// else if (numClients > 1) {
-			// 	client.emit('tooManyPlayers');
-			// 	return;
-			// }
-			//if (client.number != 1)
-			//{
 				client.join(roomNumber);
 				(client as any).number = 2;
 				client.emit('init', 2);
-			//}
 			this.server.to(roomNumber).emit('joinGame', MatchGateway[roomNumber], roomNumber);
 			this.startGameInterval(roomNumber, client);
 		} catch (error) {
@@ -178,7 +149,6 @@ export class MatchGateway {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');
 			console.log("JOINED GAME");
-			//if (!MatchGateway[roomNumber])
 			const roomNumber = gameState[1];
 			MatchGateway[roomNumber] = gameState[0];
 
@@ -186,7 +156,6 @@ export class MatchGateway {
 			console.log(MatchGateway[roomNumber]);
 			client.emit('gameState', JSON.stringify(MatchGateway[roomNumber]));
 			client.on('keydown', handleKeyDown);
-			// this.startGameInterval(roomNumber, client);
 
 
 			// ############################# FUNCTION DECLARATIONS ####################################################
@@ -195,7 +164,6 @@ export class MatchGateway {
 
 				const keyInt = parseInt(keyCode); // maybe put in try/catch?
 				const vel = getUpdatedVelocity(keyInt);
-				// console.log("key down:" ,client.number);
 				if (client.number === 1) {
 					if (vel === 1) {
 						if (MatchGateway[roomNumber].player1.y_vel >= 1) {
@@ -250,8 +218,7 @@ export class MatchGateway {
 					await this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
 					await this.userService.changeUserData(MatchGateway[roomNumber].player1.userid, "user_status", 1);
 					await this.userService.changeUserData(MatchGateway[roomNumber].player2.userid, "user_status", 1);
-					// MatchGateway[roomNumber] = null;
-					clearInterval(intervalId); // was macht das?
+					clearInterval(intervalId); 
 					client.emit('userdata-refresh');
 				}
 			}, 1000 / 30); // argument determines frames per ssecond
@@ -266,7 +233,6 @@ export class MatchGateway {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');	
 			const opponentid = await this.userService.getUserData(data, 'socket_token');
-			// console.log("OPPONENTID IS: ", opponentid[0].socket_token);
 			if (opponentid[0])
 				this.server.to(opponentid[0].socket_token).emit('challengeRequest', client.request.session.passport.user.userid);
 		} catch (error) {
@@ -276,10 +242,6 @@ export class MatchGateway {
 
 	@SubscribeMessage('opponentLeft') 
 	async opponentLeft(client: any, roomNumber: any) {	
-		// console.log('Opponent left room', client.request.session.passport.user.userid);
-		// console.log(roomNumber);
-		// console.log(client);
-		//this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
 		try {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');
@@ -300,9 +262,9 @@ export class MatchGateway {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');
 			const matchidLeft = await this.matchService.listWatching(client.request.session.passport.user.userid);
-			// this.server.socketsLeave(matchidLeft[0].matchid);
 			client.leave(matchidLeft[0].matchid);
 			console.log("matchid", matchidLeft[0].matchid);
+			client.emit('reset');
 		}
 		catch (error) {
 			throw new WsException('spectatorLeftMatch failed');

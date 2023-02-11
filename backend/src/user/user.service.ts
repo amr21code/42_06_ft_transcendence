@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { Profile } from 'passport-42';
 import { DbService } from '../db/db.service';
@@ -88,11 +88,9 @@ export class UserService {
 
 	async changeUserData(userid: string, field: string, newdata: any)
 	{
-		// console.log("data", newdata);
 		if (field == 'username') {
 			const find = await this.db.$queryRaw(
 				Prisma.sql`SELECT COUNT(*) FROM public.users WHERE username=${newdata};`);
-			//console.log(find);
 			if (find[0].count == 0){
 				console.log("changing username")
 				const status = await this.db.$queryRaw(
@@ -247,7 +245,6 @@ export class UserService {
 				LEFT JOIN public.online_status as os ON os.statuscode=ur.user_status
 				WHERE fl2.addresseeid=${userid1} AND fl2.requesterid=${userid2});`
 				);
-				// console.log(user[0].statuscode);
 		return (user);
 	}
 

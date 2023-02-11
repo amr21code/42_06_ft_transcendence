@@ -19,7 +19,6 @@ export class TwoFactorAuthenticationController {
     const { otpauthUrl } = await this.twoFactorAuthService.generateTwoFactorAuthenticationSecret(request);
     console.log("generate 2fa secret");
     return this.twoFactorAuthService.pipeQrCodeStream(response, otpauthUrl);
-	// return (otpauthUrl);
   }
 
   @Get('turn-on/:secret')

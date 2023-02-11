@@ -5,7 +5,6 @@ import { ChatMessageDto } from './dto';
 import { ChatDto } from './dto/chat.dto';
 import { ChatUserStatusDto } from './dto/chatuserstatus.dto';
 import * as bcrypt from 'bcrypt';
-import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class ChatService {
@@ -26,11 +25,6 @@ export class ChatService {
 			FROM public.chat AS c
 			LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
 			WHERE c.type<2 AND  c.chatid NOT IN (SELECT chatid FROM public.user_chat WHERE userid=${userid});`
-			//`SELECT c.chatid, chat_name, ct.typename, uc.status, uc.userid
-			//FROM public.chat AS c
-			//LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-			//LEFT JOIN public.user_chat as uc ON uc.chatid=c.chatid
-			//WHERE c.type<2 AND c.chatid NOT IN (SELECT chatid FROM public.user_chat WHERE userid=${userid})`
 		);
 		return list;
 	}
@@ -70,17 +64,6 @@ export class ChatService {
 				WHERE uc.chatid=CAST(${chatid} AS INTEGER) AND (status < 4 OR bantime < CURRENT_TIMESTAMP)
 				ORDER BY userid ASC;`
 			);
-		// } else {
-			// list = await this.db.$queryRaw(
-			// 	Prisma.sql`SELECT uc.userid, u.username, usc.statusname, c.chatid, c.chat_name, ct.typename, password
-			// 	FROM public.user_chat AS uc
-			// 	LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
-			// 	LEFT JOIN public.chat as c ON uc.chatid=c.chatid
-			// 	LEFT JOIN public.chat_type as ct ON ct.typeid=c.type
-			// 	LEFT JOIN public.users as u ON u.userid=uc.userid
-			// 	WHERE c.type<2
-			// 	ORDER BY userid ASC`
-			// );
 		}
 		return list;
 	}
@@ -91,16 +74,10 @@ export class ChatService {
 		}
 		var chatid = parseInt(chatid_string, 10);
 		console.log("chat join", userid, chatid, pw);
-		// if (Number.isNaN(chatid))
-		// 	throw new ForbiddenException();
 		const result = await this.db.$queryRaw(
 			Prisma.sql`SELECT chatid, password FROM public.chat
 			WHERE chatid=CAST(${chatid} AS INTEGER);`
 		);
-		// const result = await this.db.$queryRaw(
-		// 	Prisma.sql`SELECT chatid, password FROM public.chat
-		// 	WHERE chatid=CAST(${chatid} AS INTEGER)`
-		// );
 		console.log("chatid, pw", result);
 		const banned = await this.db.$queryRaw(
 			Prisma.sql`SELECT * FROM public.user_chat
