@@ -3,15 +3,16 @@
 		<div class="popup-inner">
 			<slot />
 			<div class="user-data-wrapper">
-				<div>You just got challenged by {{ challenger }}: </div>
+				<h2>You just got challenged by {{ challenger }}: </h2>
 			</div>
-			<button class="challengeAccept" @click="( sendAcceptSignal(), toggleGotChallengedPopup() )">
-				Accept
-			</button>
-		
-			<button class="popup-close" @click="( sendDenySignal(), toggleGotChallengedPopup() )"> 
-				Deny
-			</button>
+			<div class="button-wrapper">
+				<button class="challengeAccept" @click="( sendAcceptSignal(), toggleGotChallengedPopup() )">
+					Accept
+				</button>
+				<button class="popup-close" @click="( sendDenySignal(), toggleGotChallengedPopup() )"> 
+					Deny
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -84,6 +85,7 @@ export default defineComponent({
 	background-color: var(--second-bg-color);
 	padding: 1rem 2rem;
 	border-radius: 2px;
+	max-width: 80vw;
 }
 
 .popup-inner h2 {
@@ -95,18 +97,12 @@ export default defineComponent({
 	margin-left: 0%;
 }
 
-#user-photo {
-	cursor: pointer;
-	width: 30%;
-	height: 30%;
-	margin: 3%;
-	background: white;
-	border-radius: 50%;
-	transition: .4s;
+.button-wrapper {
+	text-align: center;
 }
 
-#user-photo:hover {
-	opacity: 50%;
+.button-wrapper button {
+	margin: 0.5rem;
 }
 
 </style>
