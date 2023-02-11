@@ -17,6 +17,7 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import DataService from '../../services/DataService'
@@ -25,7 +26,6 @@ import type { IUser } from '../../types/User'
 import SocketioService from '../../services/SocketioService'
 
 export default defineComponent({
-	name: "pwdPopup",
 	
 	data () {
 		return {
@@ -45,6 +45,7 @@ export default defineComponent({
 			type: Number
 		},
 	},
+
 	methods: {
 		async retrieveCurrentUser() {
 			await DataService.getUser()
@@ -86,6 +87,7 @@ export default defineComponent({
 </script>
 
 
+
 <style scoped>
 .popup {
 	text-align: left;
@@ -116,6 +118,5 @@ export default defineComponent({
 	margin-bottom: 10px;
 	margin-left: 0%;
 }
-
 
 </style>

@@ -4,13 +4,10 @@
             <h2>Leave chat</h2>
             <a>Are you sure that you want to leave the chat?</a><br>
             <button class="submit-button" @click="leaveChat(curr_chat.chatid), setSelectedWindow('overview'), LeaveChattogglePopup()">leave</button>
-
             <button class="close-button" @click="(LeaveChattogglePopup)">Close</button>
         </div>
     </div>
 </template>
-
-
 
 
 
@@ -22,7 +19,6 @@ import DataService from '../../services/DataService'
 import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
 import SocketioService from '../../services/SocketioService'
-
 
 export default defineComponent({
 	name: "LeaveChatPopup",
@@ -69,28 +65,19 @@ export default defineComponent({
         }
         
 	},
-    setup () {
-
-    }  
-
 })
 
 </script>
 
 
 
-
 <style scoped>
 
 .close-button {
-	/* width: 45px;
-	height: 20px; */
 	color: black;
 }
 
 .submit-button {
-	/* width: 45px;
-	height: 20px; */
 	color: black;
 }
 .popup {
