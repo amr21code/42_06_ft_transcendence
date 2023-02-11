@@ -81,7 +81,7 @@ export class ChatService {
 		console.log("chatid, pw", result);
 		const banned = await this.db.$queryRaw(
 			Prisma.sql`SELECT * FROM public.user_chat
-			WHERE userid=${userid} AND chatid=CAST(${chatid} AS INTEGER) AND (status < 3 OR bantime < CURRENT_TIMESTAMP);`
+			WHERE userid=${userid} AND chatid=CAST(${chatid} AS INTEGER) AND (status = 3 AND bantime > CURRENT_TIMESTAMP);`
 		);
 		if (Object.keys(banned).length > 0) {
 			if (banned[0].bantime < (Date.now() / 1000)) {
