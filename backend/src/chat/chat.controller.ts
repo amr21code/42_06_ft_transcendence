@@ -2,7 +2,7 @@ import { Body, Controller, ForbiddenException, Get, Param, Post, Req, Session, U
 import { ChatService } from './chat.service';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
 import { UserService } from '../user/user.service';
-import { Request, request } from 'express';
+import { Request } from 'express';
 import { ChatMessageDto } from './dto';
 import { ChatDto } from './dto/chat.dto';
 import { ChatUserStatusDto } from './dto/chatuserstatus.dto';
@@ -148,7 +148,6 @@ export class ChatController {
 			const user1 = request.session.passport.user.userid;
 			const user2 = await this.userService.getOne(userid);
 			const statuscode = await this.userService.showUserRelationshipStatus(user1, user2[0].userid);
-			// console.log("open pm", statuscode);
 			if (Object.keys(statuscode).length == 0 || (Object.keys(statuscode).length == 1 && statuscode[0].statuscode != 2)) {
 				await this.chatService.checkPMChat(user1, user2[0].userid);
 				const joinresult = await this.chatService.joinChat(user1);

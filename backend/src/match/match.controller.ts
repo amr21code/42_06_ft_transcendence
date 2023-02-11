@@ -1,7 +1,5 @@
-import { Body, Controller, ForbiddenException, Get, Param, Post, Req, Session, UseGuards } from '@nestjs/common';
-import { Validator } from 'class-validator';
+import { Controller, ForbiddenException, Get, Param, Post, Req, Session, UseGuards } from '@nestjs/common';
 import { AuthenticatedGuard } from 'src/auth/guards/guards';
-import { MatchGameStateDto } from './dto/matchgamestate.dto';
 import { MatchService } from './match.service';
 
 @Controller('match')
@@ -21,7 +19,6 @@ export class MatchController {
 	@Get('open/:opponent?')
 	async openMatch(@Param('opponent') opponent, @Session() session: Record<string, any>) {
 		try {
-			// console.log("open match", opponent);
 			const open = await this.matchService.openMatch(session.passport.user.userid, 1, opponent);
 		} catch (error) {
 			throw new ForbiddenException('open match');
@@ -54,7 +51,6 @@ export class MatchController {
 		try {
 			const accept = await this.matchService.acceptMatch(session.passport.user.userid);
 		} catch (error) {
-			// console.log("error!!!!");
 			throw new ForbiddenException('accept match');
 		}
 	}
@@ -78,36 +74,4 @@ export class MatchController {
 		}
 	}
 
-	//@Get('makingUnsafe')
-	//async matchmakingUnsafe(@Session() session: Record<string, any>) {
-	//	try {
-	//		const match = await this.matchService.matchmakingUnsafe(session.passport.user.userid);
-	//		return {"msg" : "ok" };
-	//	} catch (error) {
-	//		throw error;
-	//	}
-	//}
-
-	// @Post('gameover/:playerNumber')
-	// async gameOver(@Body() state: MatchGameStateDto,@Param() playerNumber:any,  @Session() session: Record<string, any>){
-	// 	//console.log("gameover");
-	// 	const userid = session.passport.user.userid;
-	// 	try {
-	// 		const matchid = await this.matchService.listActiveMatch(userid);
-	// 		//get Player from database (1 or 2)
-	// 		var update;
-	// 		console.log("Playernumber in gameover", playerNumber.playerNumber)
-	// 		//console.log("gamestate", state)
-	// 		if (matchid[0].matchid) {
-	// 			if (playerNumber.playerNumber == 1)
-	// 				update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer1);
-	// 			else
-	// 				update = await this.matchService.updateMatch(matchid[0].matchid, userid, state.scorePlayer2);
-	// 			return(update);
-	// 		}
-	// 	} catch (error) {
-	// 		throw new ForbiddenException;
-	// 	}
-	// 	return;
-	// }
 }

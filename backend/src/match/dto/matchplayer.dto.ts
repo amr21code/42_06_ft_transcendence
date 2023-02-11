@@ -3,7 +3,6 @@ import { MatchPosDto } from "./matchpos.dto";
 
 export class MatchPlayerDto {
 	@IsString()
-	// @IsNotEmpty()
 	userid: string;
 
 	@IsNotEmpty()

@@ -1,11 +1,10 @@
-import { Body, Controller, ForbiddenException, Get, Param,  Post,  Put,  Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Param,  Post,  Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthenticatedGuard} from '../auth/guards/guards';
 import { Request } from 'express';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { createBrotliCompress } from 'zlib';
 
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
@@ -77,7 +76,6 @@ export class UserController {
 	@Post(':userid/:field')
 	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Body() payload: any) {
 		const user = request.session.passport.user.userid;
-		// console.log(payload);
 		const newdata = payload.data;
 		try {
 				if (userid != user)

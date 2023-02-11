@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "@nestjs/common";
 import { MatchGameStateDto } from "./dto/matchgamestate.dto";
 
 export function createGameState() {

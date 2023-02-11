@@ -28,7 +28,6 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			if (client.request.user) {
 				const user = client.request.user;
 				if (user) {
-				// if (user && ((user.twofa === 1 && user.twofalogin === 1) || user.twofa === 0)) {
 					await this.userService.changeUserData(user.userid, "user_status", 1);
 					await this.userService.changeUserData(user.userid, "socket_token", client.id);
 				}
@@ -60,7 +59,6 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 					await this.userService.changeUserData(user.userid, "user_status", 0);
 					await this.userService.changeUserData(user.userid, "socket_token", "");
 					await this.userService.changeUserData(user.userid, "twofalogin", 0);
-					// await this.userService.changeUserData(user.userid, "access_token", "");
 				}
 				console.log("handle offline", await this.userService.getUserData(user.userid, "socket_token"), user.userid);
 			}

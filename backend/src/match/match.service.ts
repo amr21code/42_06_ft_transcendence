@@ -46,7 +46,6 @@ export class MatchService {
 		return match;
 	}
 
-	// matchStatus = 2 -> queue
 	async listMatch(userid: string) {
 		const match = await this.db.$queryRaw(
 			Prisma.sql`SELECT um.userid, um.matchid FROM public.user_match AS um
@@ -91,14 +90,11 @@ export class MatchService {
 				VALUES (1)
 				RETURNING matchid;`
 			);
-			// console.log("new matchid", open[0].matchid);
-			// var timeout = (Date.now() / 1000) + 60;
-			// console.log("settimeout", timeout);
 			if (open[0].matchid) {
 				const join = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
 					VALUES (${userid}, ${open[0].matchid}, ${status})
-					RETURNING matchid;` //, to_timestamp(${timeout}));`
+					RETURNING matchid;` 
 				);
 			} 
 			console.log(open[0].matchid);
@@ -118,12 +114,9 @@ export class MatchService {
 				if (Object.keys(opp).length != 1 || Object.keys(opp_open).length != 0)
 					throw new ForbiddenException();
 			}
-			// console.log("opponent", opponent);
-			// console.log("opp", opp);
 			const already_open = await this.listMatch(userid);
 			if (Object.keys(already_open).length == 0)
 			{
-				// console.log("no open session - creating");
 				const open = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.match_history (match_status)
 					VALUES (2)
@@ -134,7 +127,7 @@ export class MatchService {
 					const join = await this.db.$queryRaw(
 						Prisma.sql`INSERT INTO public.user_match (userid, matchid, challenge)
 						VALUES (${userid}, ${open[0].matchid}, ${status})
-						RETURNING matchid;` //, to_timestamp(${timeout}));`do
+						RETURNING matchid;` 
 						);
 					console.log("after join", opponent);
 					if (opponent) {	
@@ -142,7 +135,7 @@ export class MatchService {
 						if (join[0].matchid) {
 							const join_opp = await this.db.$queryRaw(
 								Prisma.sql`INSERT INTO public.user_match (userid, matchid)
-								VALUES (${opponent}, ${open[0].matchid});` //, to_timestamp(${timeout}));`
+								VALUES (${opponent}, ${open[0].matchid});` 
 								);
 						} else {
 							this.deleteMatchID(open[0].matchid);
@@ -181,19 +174,6 @@ export class MatchService {
 		}
 	}
 
-	//async matchmakingUnsafe(userid: string) {
-	//	try {
-	//			const open_matches = await this.listMatchesStatus(2);
-	//			if (Object.keys(open_matches).length == 0) {
-	//				return this.openMatch(userid, 2);
-	//			} else {
-	//				return this.join(userid, open_matches[0].matchid);
-	//			}
-	//		}
-	//	catch (error) {
-	//		throw new ForbiddenException('possible db error');
-	//	}
-	//}
 
 	async join(userid: string, matchid: number) {
 		const join = await this.db.$queryRaw(
@@ -326,8 +306,6 @@ export class MatchService {
 
 	async endMatch(matchid: any, state: MatchGameStateDto, winner: string) { //update userscore, match_status, wins/losses
 		try{
-			// console.log("end match");
-			// console.log(matchid, state);
 			var loser, loserScore;
 			if (winner==state.player1.userid) {
 				loser = state.player2.userid;
@@ -342,7 +320,6 @@ export class MatchService {
 			await this.db.$queryRaw(
 			Prisma.sql`UPDATE public.user_match SET user_score=CAST(${loserScore} AS INTEGER)
 			WHERE matchid=${matchid} AND userid=${loser};`);
-			// console.log("Challenge", challenge);
 			if (challenge[0].challenge == 2){ //only count random games in wins/losses
 				// begin winner update
 				console.log("win", winner);

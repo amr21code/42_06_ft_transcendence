@@ -13,15 +13,4 @@ export class DbService extends PrismaClient {
 			},
 		});
 	}
-
-	// cleanDb() {
-	// 	this.chat.deleteMany();
-	// 	this.chat_messages.deleteMany();
-	// 	this.friends.deleteMany();
-	// 	this.match_history.deleteMany();
-	// 	this.user_chat.deleteMany();
-	// 	this.user_match.deleteMany();
-	// 	this.users.deleteMany();
-	// 	this.users_achievements.deleteMany();
-	// }
 }

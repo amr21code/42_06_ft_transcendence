@@ -11,7 +11,6 @@ export class AuthController {
 	@Get('return')
 	@UseGuards(FtAuthGuard)
 	ftAuthCallback(@Res() res, @Req() request: Request, @Session() session: Record<string, any>) {
-		// console.log('auth/return');
 		try {
 			res.redirect(`${this.config.get('FRONTEND_URL')}`);
 			return request.user;
@@ -23,7 +22,6 @@ export class AuthController {
 	@Get('login')
 	@UseGuards(FtAuthGuard)
 	login() {
-		// console.log("auth/login");
 		return { msg: 'logged in!'};
 	}
 	
