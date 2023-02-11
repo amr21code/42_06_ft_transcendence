@@ -266,7 +266,6 @@ export class MatchGateway {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');	
 			const opponentid = await this.userService.getUserData(data, 'socket_token');
-			// console.log("OPPONENTID IS: ", opponentid[0].socket_token);
 			if (opponentid[0])
 				this.server.to(opponentid[0].socket_token).emit('challengeRequest', client.request.session.passport.user.userid);
 		} catch (error) {
@@ -276,10 +275,6 @@ export class MatchGateway {
 
 	@SubscribeMessage('opponentLeft') 
 	async opponentLeft(client: any, roomNumber: any) {	
-		// console.log('Opponent left room', client.request.session.passport.user.userid);
-		// console.log(roomNumber);
-		// console.log(client);
-		//this.matchService.updateMatch(roomNumber, MatchGateway[roomNumber]);
 		try {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');
@@ -300,7 +295,6 @@ export class MatchGateway {
 			if (!this.twoFAService.socketIO2fa(client))
 				throw new WsException('no 2fa authenticated');
 			const matchidLeft = await this.matchService.listWatching(client.request.session.passport.user.userid);
-			// this.server.socketsLeave(matchidLeft[0].matchid);
 			client.leave(matchidLeft[0].matchid);
 			console.log("matchid", matchidLeft[0].matchid);
 		}

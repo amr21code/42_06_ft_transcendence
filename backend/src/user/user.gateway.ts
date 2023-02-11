@@ -27,7 +27,6 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		try {
 			if (client.request.user) {
 				const user = client.request.user;
-				console.log("before connect 2fa", user.twofa, "login", user.twofalogin);
 				if (user) {
 				// if (user && ((user.twofa === 1 && user.twofalogin === 1) || user.twofa === 0)) {
 					await this.userService.changeUserData(user.userid, "user_status", 1);
@@ -36,7 +35,6 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 				if (!this.twoFAService.socketIO2fa(client))
 					throw new WsException('no 2fa authenticated');
 				console.log("handle online", await this.userService.getUserData(user.userid, "socket_token"), user.userid);
-				console.log("after connect 2fa", user.twofa, "login", user.twofalogin);
 			}
 		} catch (error) {
 			throw new WsException('disconnect');
@@ -65,7 +63,6 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 					// await this.userService.changeUserData(user.userid, "access_token", "");
 				}
 				console.log("handle offline", await this.userService.getUserData(user.userid, "socket_token"), user.userid);
-				console.log("disco 2fa", user.twofa, "login", user.twofalogin);
 			}
 		} catch (error) {
 			throw new WsException('disconnect');
