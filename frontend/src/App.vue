@@ -12,7 +12,7 @@
 					<a class="menuOption" id="leaderboard" @click="handleClick('leaderboard')">leaderboard</a>
 					<a class="menuOption" id="friends" @click="handleClick('friends')">friends</a>
 					<div class="logged-photo" @click="toggleUserDataPopup()">
-						<img :src="store.user.picurl" alt="user-photo" width="40" height="40"> 
+						<img id="profilepic" :src="store.user.picurl" alt="user-photo" width="40" height="40"> 
 					</div>
 				</div>
 			</header>
@@ -37,7 +37,7 @@
 
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useUserDataStore } from './stores/myUserDataStore'
 import type { SelectedSideWindow } from './types/SelectedSideWindow'
 import type { ResponseData } from './types/ResponseData'
@@ -54,59 +54,87 @@ import DataService from './services/DataService'
 
 export default defineComponent({
 
-	name: 'App',
 	el: "#app",
 	components: { LoginPopup, TwoFaPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
-	data () {
-		return {
-			socket: SocketioService.setupSocketConnection(),
-			challenger : '',
-		}
-	},
-	created () {
-		this.socket.on('challengeRequest', (userid : string) => {
-			this.challenger = userid;
-			this.toggleGotChallengedPopup();
-		});
-		this.socket.on('userdata-refresh', () => {
-			DataService.getUser()
-			.then((response: ResponseData) => {
-				this.store.user = response.data[0];
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			DataService.getFriends()
-			.then((response: ResponseData) => {
-				this.store.friends = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			DataService.getAll()
-			.then((response: ResponseData) => {
-				this.store.allUsers = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-		})
-	},
+	// data () {
+	// 	return {
+	// 		socket: SocketioService.setupSocketConnection(),
+	// 		challenger : '',
+	// 	}
+	// },
+	// created () {
+		// this.socket.on('challengeRequest', (userid : string) => {
+		// 	this.challenger = userid;
+		// 	this.toggleGotChallengedPopup();
+		// });
+		// this.socket.on('userdata-refresh', () => {
+		// 	DataService.getUser()
+		// 	.then((response: ResponseData) => {
+		// 		this.store.user = response.data[0];
+		// 	})
+		// 	.catch((e: Error) => {
+		// 		console.log(e);
+		// 	});
+		// 	DataService.getFriends()
+		// 	.then((response: ResponseData) => {
+		// 		this.store.friends = response.data;
+		// 	})
+		// 	.catch((e: Error) => {
+		// 		console.log(e);
+		// 	});
+		// 	DataService.getAll()
+		// 	.then((response: ResponseData) => {
+		// 		this.store.allUsers = response.data;
+		// 	})
+		// 	.catch((e: Error) => {
+		// 		console.log(e);
+		// 	});
+		// })
+	// },
 	beforeUnmount() {
 		SocketioService.disconnect();
 	},
-	
+
 	setup() {
 		const store = useUserDataStore();
+		const socket = SocketioService.setupSocketConnection();
+		const challenger = ref('');
 
 		const loggedIn = ref('not authenticated');
 		const toggleLoginPopup = () => {
 			loggedIn.value = 'authenticated';
 		}
 
+		const userdataUpdate = async () => {
+			await DataService.getUser()
+			.then((response: ResponseData) => {
+				store.user = response.data[0];
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getFriends()
+			.then((response: ResponseData) => {
+				store.friends = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+			await DataService.getAll()
+			.then((response: ResponseData) => {
+				store.allUsers = response.data;
+			})
+			.catch((e: Error) => {
+				console.log(e);
+			});
+		}
+
+// ################## 2FA ###########################################################
+
 		// const twoFaActivated = ref(false);
 		const untoggleTwoFaPopup = () => {
 			document.getElementById("TwoFaPopup")!.style.display = "none";
+			userdataUpdate();
 		}
 
 		const toggleTwoFaPopup = () => {
@@ -116,6 +144,9 @@ export default defineComponent({
 		const twoFaSuccess = () => {
 			loggedIn.value = 'authenticated';
 		}
+
+
+// ################## AUTHENTICATION & API CALLS ####################################
 
 		onMounted(async () => {
 			await DataService.getAuthStatus()
@@ -127,12 +158,26 @@ export default defineComponent({
 				console.log("Error occured in getAuthStatus", e);
 			})
 
+
+
+
+
+			socket.on('2fa', () => {
+				loggedIn.value = '2fa';
+				// toggleTwoFaPopup();
+			});
+
+
+
+
+
 			// only run API calls if successfully logged in
 			if (loggedIn.value === 'authenticated')
 			{
-				await store.getUser();
-				await store.getFriends();
-				await store.getAllUsers();
+				// await store.getUser();
+				// await store.getFriends();
+				// await store.getAllUsers();
+				userdataUpdate();
 				
 				if (store.selected === 'game')
 					document.getElementById("game")!.style.backgroundColor = "#b04716";
@@ -161,6 +206,8 @@ export default defineComponent({
 					document.getElementById("friends")!.style.backgroundColor = "#b04716";
 			}
 
+// ################## FORWARD/BACK BUTTONS & FANCY URLS ####################################
+
 			menuOptions.forEach(option => {
 				var id = option.id as SelectedSideWindow;
 				option.addEventListener('click', e => {
@@ -180,20 +227,23 @@ export default defineComponent({
 			history.pushState("game", '', './game');
 			document.getElementById("game")!.style.backgroundColor = "#b04716";
 		});
-
+		
+// ######################################## POPUPS ##############################################
+		
 		// for user data popup (user data)
 		const userDataPopupTrigger = ref(false);
 		const toggleUserDataPopup = () => {
 			userDataPopupTrigger.value = !userDataPopupTrigger.value;
 		}
-
+		
 		// for user data popup (user data)
 		const gotChallengedPopupTrigger = ref(false);
 		const toggleGotChallengedPopup = () => {
 			gotChallengedPopupTrigger.value = !gotChallengedPopupTrigger.value;
 		}
 
-		// for side window selection
+// ################################## WINDOW SELECTION ###########################################
+
 		const handleClick = (term: SelectedSideWindow) => {
 			store.selected = term;
 			var menuElements = Array.from(document.getElementsByClassName('menuOption') as HTMLCollectionOf<HTMLElement>);
@@ -211,7 +261,6 @@ export default defineComponent({
 				document.getElementById("friends")!.style.backgroundColor = "#b04716";
 
 
-			// if (store.selected === 'play' || store.selected === 'watch') {
 			if (store.selected === 'game') {
 				document.documentElement.style.setProperty("--leftofgame_fr", "0.2fr");
 				document.documentElement.style.setProperty("--game_fr", "1fr");
@@ -223,7 +272,21 @@ export default defineComponent({
 				document.documentElement.style.setProperty("--sidewindow_fr", "1fr");
 			}
 		};
-		return { store, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
+
+// ######################################## SOCKETIO ####################################
+		
+		socket.on('challengeRequest', (userid : string) => {
+			challenger.value = userid;
+			toggleGotChallengedPopup();
+		});
+
+		socket.on('userdata-refresh', async () => {
+			userdataUpdate();
+		});
+
+// ################################### EXPORT ####################################
+
+		return { store, challenger, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
 </script>

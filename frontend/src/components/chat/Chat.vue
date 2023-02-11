@@ -5,17 +5,16 @@
 
 <template>
 	<div class="chat-wrapper">
-
-		
 		<div v-if="selected === 'overview'">
 			<!-- <h2>chat overview</h2> -->
 			<h2 v-if="type === 'joined'">Click chat to show messages</h2>
 			<h2 v-if="type === 'open'">Select a room to join</h2>
 			<div class="chat-overview">
 
-			<!------------CHATS WHERE USER IS JOINED----------------------------------->
-			<div v-if="type === 'joined'">
-				<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
+<!------------------------CHATS WHERE USER IS JOINED----------------------------------->
+
+				<div v-if="type === 'joined'">
+					<div class="chat-message-view" v-for="chat in chats" :key="chat.chatid">
 						<a @click="handleClick('chatwindow', chat)">
 							<div class="" >
 								<a class="chat-chatid" >Room {{ chat.chatid }}</a>
@@ -26,9 +25,11 @@
 								<!-- <a class="chat-stausname-red" v-if="chat.statusname === 'ban'" >BANNED</a> -->
 							</div>
 						</a>
+					</div>
 				</div>
-			</div>
-			<!------------CHATS WHERE USER IS NOT JOINED----------------------------------->
+
+<!--------------------CHATS WHERE USER IS NOT JOINED----------------------------------->
+			
 			<div v-if="type === 'open'">
 				<div class="chat-message-view" v-for="chat in openchats" :key="chat.chatid">
 					<a>
@@ -40,8 +41,7 @@
 									<a class="chat-typename-green" v-if="chat.typename === 'public'" >{{ chat.typename }}</a>
 								</div>
 							</a>
-							<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => togglePwdPopup()" :curr_chatid="chat.chatid" />
-							<a @click="togglePwdPopup()" v-if="chat.typename === 'protected'">
+							<a @click="togglePwdPopup(chat)" v-if="chat.typename === 'protected'">
 								<div class="" >
 									<strong class="chat-chatid" >{{ chat.chatid }}</strong>
 									<a class="chat-chatname">{{ chat.chat_name }}</a><br>
@@ -54,37 +54,45 @@
 			</div>
 		</div>
 	</div>
-	
+
+<!--------------------POPUPS----------------------------------->
+
+	<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => untogglePwdPopup()" :curr_chatid="sel_chat.chatid" />
 	<gotBannedPopup id="gotBannedPopup" v-if="gotBannedtrigger === true" :togglegotBanned="() => togglegotBanned()" :bantime="bantime" />
 	<gotMutedPopup id="gotMutedPopup" v-if="gotMutedtrigger === true" :togglegotMuted="() => togglegotMuted()" :mutetime="mutetime" />
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
-			<div class="chat-menu">
-				<a @click="handleClick('overview', 0), changeType('open')" title="all open chat rooms">
-					<img class="chat-menu-icon" src="../../assets/search-chat-icon.png" alt="open-chats-icon">
-				</a>
-				<a @click="handleClick('overview', 0), changeType('joined')" title="all chat rooms you joined">
-					<img class="chat-menu-icon" src="../../assets/all-chats-icon.png" alt="joined-chats-icon">
-				</a>
-				<a @click="togglePopup()" title="create a new chat">
-					<img class="chat-menu-icon" src="../../assets/create-chat-icon.png" alt="new-chat-icon">
-				</a>
-				<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'" title="leave chat">
-					<img class="chat-menu-icon" src="../../assets/leave-chat-icon.png" alt="leave-chat-icon">
-				</a>
-			</div>
-			<div style="clear: left"></div>
+<!--------------------CHAT MENU BAR----------------------------------->
 
-			<NewMessagePopup id="NewMessagePopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
-			<LeaveChatPopup id="LeaveChatPopup" v-if="LeaveChatTrigger === true" :LeaveChattogglePopup="() => LeaveChattogglePopup()" :curr_chat="sel_chat" :selectedWindow="selected"/>
+	<div class="chat-menu">
+		<a @click="handleClick('overview', 0), changeType('open')" title="all open chat rooms">
+			<img class="chat-menu-icon" src="../../assets/search-chat-icon.png" alt="open-chats-icon">
+		</a>
+		<a @click="handleClick('overview', 0), changeType('joined')" title="all chat rooms you joined">
+			<img class="chat-menu-icon" src="../../assets/all-chats-icon.png" alt="joined-chats-icon">
+		</a>
+		<a @click="togglePopup()" title="create a new chat">
+			<img class="chat-menu-icon" src="../../assets/create-chat-icon.png" alt="new-chat-icon">
+		</a>
+		<a @click="LeaveChattogglePopup()" v-if="selected === 'chatwindow'" title="leave chat">
+			<img class="chat-menu-icon" src="../../assets/leave-chat-icon.png" alt="leave-chat-icon">
+		</a>
+	</div>
+	<div style="clear: left"></div>
+
+<!-------------------- MORE POPUPS----------------------------------->
+
+	<NewMessagePopup id="NewMessagePopup" v-if="popupTrigger === true" :togglePopup="() => togglePopup()" />
+	<LeaveChatPopup id="LeaveChatPopup" v-if="LeaveChatTrigger === true" :LeaveChattogglePopup="() => LeaveChattogglePopup()" :curr_chat="sel_chat" :selectedWindow="selected"/>
 
 
-		</div>
+	</div>
 </template>
 
 
 
 <script lang="ts">
+
 //includes
 import ChatWindow from './ChatWindow.vue'
 import NewMessagePopup from './NewMessagePopup.vue'
@@ -158,7 +166,7 @@ export default defineComponent({
 				this.user = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -168,7 +176,7 @@ export default defineComponent({
 				this.chats = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			})
 		},
 
@@ -178,19 +186,19 @@ export default defineComponent({
 				this.openchats = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			})
 		},
 
 	},
 
-	mounted () {
+	mounted() {
 		this.retrieveCurrentUser();
 		this.retrieveCurrentChats();
 		this.retrieveOpenChats();
 	},
 
-	setup(){
+	setup() {
 		const message = ref('');
 
 		const popupTrigger = ref(false);
@@ -228,8 +236,13 @@ export default defineComponent({
         }
 
 		const pwdPopup = ref(false);
-		const togglePwdPopup = () => {
+		const togglePwdPopup = (selected_chat: any) => {
 			pwdPopup.value = !pwdPopup.value;
+			sel_chat.value = selected_chat;
+		}
+
+		const untogglePwdPopup = () => {
+			pwdPopup.value = false;
 		}
 
 		const gotBannedtrigger = ref(false);
@@ -251,19 +264,19 @@ export default defineComponent({
 				untogglePopup();
             })
             .catch((e: Error) => {
-                console.log(e);
+                // console.log(e);
             });
 		}
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger,
-				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger, togglegotMuted, gotMutedtrigger }
+				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger, togglegotMuted, gotMutedtrigger, untogglePwdPopup }
 	}
 })
 </script>
 
 
-<style scoped>
 
+<style scoped>
 .chat-wrapper {
 	max-height: 100%;
 	width: 100%;
@@ -279,9 +292,7 @@ export default defineComponent({
 }
 
 .chat-chatname {
-	/* float: left; */
 	color: black;
-	/* padding-left: 10%; */
 }
 
 .chat-typename-green {
@@ -291,13 +302,11 @@ export default defineComponent({
 }
 
 .chat-typename-red {
-	/* float: left; */
 	color: red;
 	font-weight: 900;
 }
 
 .chat-typename-orange {
-	/* float: left; */
 	color: orangered;
 	font-weight: 900;
 }
@@ -319,8 +328,6 @@ export default defineComponent({
 	margin-right: 5%;
 	margin-top: 1rem;
 	margin-bottom: 1rem;
-	/* display: flex;
-	flex-direction: column-reverse; */
 }
 
 .chat-overview::-webkit-scrollbar {
@@ -331,9 +338,7 @@ export default defineComponent({
 
 .chat-message-view {
 	background-color: var(--costum-grey);
-	/* border: black solid 1px; */
 	color: black;
-	/* padding: 10px; */
 	width: 90%;
 	margin: 2%;
 	margin-left: 5%;
@@ -341,7 +346,6 @@ export default defineComponent({
 	height: auto;
 	text-align: center;
 	transition: .4s;
-	/* height: 30px; */
 }
 
 .chat-message-view:hover {
@@ -352,7 +356,6 @@ export default defineComponent({
 	background-color: var(--second-bg-color);
 	color: white;
 	text-align: center;
-	/* max-height: 50px; */
 	width: 100%;
 }
 

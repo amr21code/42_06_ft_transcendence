@@ -2,8 +2,7 @@ import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGa
 import { Server } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
 import { UserService } from './user.service';
-import { UseGuards } from '@nestjs/common';
-import { AuthenticatedGuard } from 'src/auth/guards/guards';
+import { TwoFactorAuthenticationService } from 'src/auth/twoFactorAuth.service';
 
 @WebSocketGateway(3002, {cors: {
 	origin: `${process.env.FRONTEND_URL}`,
@@ -11,9 +10,8 @@ import { AuthenticatedGuard } from 'src/auth/guards/guards';
 	credentials: true,
 }
 })
-// @UseGuards(AuthenticatedGuard)
 export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
-	constructor (private readonly userService: UserService, private readonly matchService: MatchService) {}
+	constructor (private readonly userService: UserService, private readonly matchService: MatchService, private readonly twoFAService: TwoFactorAuthenticationService) {}
 
 	@WebSocketServer()
 	public server: Server;
@@ -29,10 +27,13 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		try {
 			if (client.request.user) {
 				const user = client.request.user;
-				if (user && ((user.twofa === 1 && user.twofalogin === 1) || user.twofa === 0)) {
+				if (user) {
+				// if (user && ((user.twofa === 1 && user.twofalogin === 1) || user.twofa === 0)) {
 					await this.userService.changeUserData(user.userid, "user_status", 1);
 					await this.userService.changeUserData(user.userid, "socket_token", client.id);
 				}
+				if (!this.twoFAService.socketIO2fa(client))
+					throw new WsException('no 2fa authenticated');
 				console.log("handle online", await this.userService.getUserData(user.userid, "socket_token"), user.userid);
 			}
 		} catch (error) {
@@ -59,7 +60,7 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
 					await this.userService.changeUserData(user.userid, "user_status", 0);
 					await this.userService.changeUserData(user.userid, "socket_token", "");
 					await this.userService.changeUserData(user.userid, "twofalogin", 0);
-					await this.userService.changeUserData(user.userid, "access_token", "");
+					// await this.userService.changeUserData(user.userid, "access_token", "");
 				}
 				console.log("handle offline", await this.userService.getUserData(user.userid, "socket_token"), user.userid);
 			}

@@ -29,8 +29,8 @@
 
 		<div ref="chatContainer" class="chat-message-view">
 
+<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 
-	<!-----------OLD MESSAGES FROM DB----------------------------------------------------->
 			<div class="messages-wrapper" v-for="message in db_messages" :key="message.message">
 				<!-- message sent -->
 				<div class="message-sent" v-if="user[0].userid === message.userid">
@@ -52,7 +52,7 @@
 				</div>
 			</div>
 
-	<!-----------NEW MESSAGES FROM SOCKET----------------------------------------------------->
+<!-----------NEW MESSAGES FROM SOCKET----------------------------------------------------->
 
 			<div class="messages-wrapper" v-for="message in messages" :key="message.message">
 				<!-- message sent -->
@@ -74,7 +74,7 @@
 					</div>
 				</div>
 			</div>
-
+			
 			<div ref="chatEnd"></div>
 		</div>
 
@@ -88,8 +88,9 @@
 
 </template>
 
-<script lang="ts">
 
+
+<script lang="ts">
 import ChatInfoPopup from './ChatInfoPopup.vue'
 
 //for getting data from the backend
@@ -158,7 +159,7 @@ export default defineComponent({
 				this.user = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -172,7 +173,7 @@ export default defineComponent({
      			});
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -182,7 +183,7 @@ export default defineComponent({
 				this.friends = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -197,8 +198,10 @@ export default defineComponent({
 				statuscode: "0"
 			}
 			// this.messages.push(data);
-			this.scrollToBottom();
 			SocketioService.sendMessage(this.user[0].username, this.user[0].userid, chatid, message);
+			// this.$nextTick(() => {
+        	// 		this.scrollToBottom();
+     		// 	});
 		},
 
 		//changes the name of the chat by sending it to the API and then refreshs the chatoverview
@@ -209,14 +212,17 @@ export default defineComponent({
 				SocketioService.refreshChats();
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 		
 		scrollToBottom() {
 			this.$nextTick(() => {
+				// console.log("sio_length: ", this.messages.length);
+				// console.log("db_length: ", this.db_messages.length);
+				// if (this.db_messages.length + this.message.length > 10)
 				const chat = this.$refs.chatEnd as any;
-				if (chat !== undefined && chat.scrollHeight !== undefined)
+				if (chat !== null && chat.scrollHeight !== undefined && this.$refs.chatEnd)
 				{
 					chat.scrollTop = chat.scrollHeight;
 					chat.scrollIntoView({ behavior: 'smooth' });
@@ -258,8 +264,8 @@ export default defineComponent({
 </script>
 
 
-<style scoped>
 
+<style scoped>
 
 /* ######## GLOBAL ####################################### */
 
@@ -343,7 +349,8 @@ export default defineComponent({
 	}
 	
 	
-	/* ######## MESSAGES VIEW ####################################### */
+/* ######## MESSAGES VIEW ####################################### */
+
 	.chat-message-view {
 		background: white;
 		background: var(--second-bg-color);

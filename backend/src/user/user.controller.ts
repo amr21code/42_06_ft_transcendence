@@ -1,4 +1,4 @@
-import { Controller, ForbiddenException, Get, Param,  Post,  Put,  Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Param,  Post,  Put,  Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthenticatedGuard} from '../auth/guards/guards';
 import { Request } from 'express';
 import { UserService } from './user.service';
@@ -74,9 +74,11 @@ export class UserController {
 		}
 	}
 
-	@Get(':userid/:field/:new')
-	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Param('new') newdata) {
+	@Post(':userid/:field')
+	async changeUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field, @Body() payload: any) {
 		const user = request.session.passport.user.userid;
+		// console.log(payload);
+		const newdata = payload.data;
 		try {
 				if (userid != user)
 					throw new ForbiddenException();
@@ -86,7 +88,7 @@ export class UserController {
 				throw new ForbiddenException('changeUserData failed');
 			}
 		}
-		
+
 		@Get(':userid/:field')
 		async getUserData(@Req() request: Request, @Param('userid') userid, @Param('field') field) {
 		const user = request.session.passport.user.userid;

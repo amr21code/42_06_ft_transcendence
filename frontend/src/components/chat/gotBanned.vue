@@ -44,6 +44,7 @@ export default defineComponent({
 			type: Number
 		}
 	},
+
 	methods: {
 		async retrieveCurrentUser() {
 			await DataService.getUser()
@@ -52,24 +53,18 @@ export default defineComponent({
 				console.log(response.data[0]);
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
-
 	},
 
 	mounted () {
 		this.retrieveCurrentUser();
-
 	},
 
-	setup () {
-
-
-		return {  }
-	}
 })
 </script>
+
 
 
 <style scoped>
@@ -103,6 +98,5 @@ export default defineComponent({
 	margin-left: 0%;
     color: white;
 }
-
 
 </style>

@@ -6,7 +6,8 @@
 				<div>
 					<h2>join protected chat[{{ curr_chatid }}]</h2>
 					<a>enter a password</a><br>
-					<input type=password placeholder="password" v-model="password">
+					<input type=password placeholder="password" v-model="password"><br>
+					<a v-if="error === true">Error: wrong password</a><br><br>
 					<button @click="joinchat(curr_chatid, password)" type="submit">submit</button>
 					<button @click="(togglePwdPopup)">close</button>
 				</div>
@@ -16,21 +17,21 @@
 </template>
 
 
+
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import DataService from '../../services/DataService'
 import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
 import SocketioService from '../../services/SocketioService'
 
 export default defineComponent({
-	name: "pwdPopup",
 	
 	data () {
 		return {
 			user: {} as IUser,
 			socket: SocketioService.socket,
-			password: '' as string
+			password: '' as string,
 		}
 	},
 
@@ -44,6 +45,7 @@ export default defineComponent({
 			type: Number
 		},
 	},
+
 	methods: {
 		async retrieveCurrentUser() {
 			await DataService.getUser()
@@ -51,7 +53,7 @@ export default defineComponent({
 				this.user = response.data[0];
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 	},
@@ -62,6 +64,7 @@ export default defineComponent({
 	},
 
 	setup (props) {
+		const error = ref(false);
 		const joinchat = async (id : number, password ?: string) =>{
 			if (password === undefined)
 				password = '';
@@ -69,16 +72,20 @@ export default defineComponent({
             .then((response: ResponseData) => {
                 SocketioService.refreshChats();
 				props.togglePwdPopup();
+				error.value = false;
+				
             })
             .catch((e: Error) => {
-                console.log(e);
+				error.value = true;
+                // console.log(e);
             });
 		}
 
-		return { joinchat }
+		return { joinchat, error }
 	}
 })
 </script>
+
 
 
 <style scoped>
@@ -111,6 +118,5 @@ export default defineComponent({
 	margin-bottom: 10px;
 	margin-left: 0%;
 }
-
 
 </style>

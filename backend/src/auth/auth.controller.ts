@@ -28,11 +28,12 @@ export class AuthController {
 	}
 	
 	@Get('status')
-	user(@Req() request: Request, @Session() session: Record<string, any>) {
+	async user(@Req() request: Request, @Session() session: Record<string, any>) {
 		try {
-			if (request.user)
-				if (session.passport.user.twofa == 1) {
-					if (session.passport.user.twofalogin == 1) {
+			if (request.user) {
+				const user = await this.userService.getAuthCreds(session.passport.user.userid);
+				if (user.twofa == 1) {
+					if (user.twofalogin == 1) {
 						return { msg: "authenticated" };
 					} else {
 						return { msg: "2fa" };
@@ -40,8 +41,9 @@ export class AuthController {
 				} else {
 					return { msg: "authenticated" };
 				}
-			else
+			} else {
 				return { msg: "not authenticated" };
+			}
 		} catch (error) {
 			throw new ForbiddenException('auth status');
 		}

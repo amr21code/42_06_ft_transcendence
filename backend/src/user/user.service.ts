@@ -136,6 +136,10 @@ export class UserService {
 			const status = await this.db.$queryRaw(
 				Prisma.sql`UPDATE public.users SET twofalogin=${newdata} WHERE userid=${userid};`
 				);
+		}else if (field == 'access_token') {
+			const status = await this.db.$queryRaw(
+				Prisma.sql`UPDATE public.users SET access_token=${newdata} WHERE userid=${userid};`
+				);
 		}
 	}
 
@@ -197,6 +201,14 @@ export class UserService {
 				Prisma.sql`UPDATE public.users SET losses=${WinOrLossNumber} WHERE userid=${userid};`
 			);
 		}
+	}
+
+	async getAuthCreds(userid: string) {
+		const user = await this.db.$queryRaw(
+			Prisma.sql`SELECT userid, twofa, twofalogin, twofasecret, access_token, socket_token from public.users
+			WHERE userid=${userid};`
+			);
+		return (user[0]);
 	}
 
 	async showUserRelationshipStatus(userid1: string, userid2: string) {

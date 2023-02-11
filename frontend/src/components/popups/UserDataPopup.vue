@@ -150,7 +150,7 @@ export default defineComponent({
 				memberSince.value = moment(String(user.value.created)).format('DD/MM/YYYY');
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 			await DataService.getAchievements(user.value.userid)
 			.then((response: ResponseData) => {
@@ -170,7 +170,7 @@ export default defineComponent({
 				}
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 			await DataService.getLeaderboardPosition(user.value.userid)
 			.then((response: ResponseData) => {
@@ -186,7 +186,7 @@ export default defineComponent({
 				}
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 			if (store.user.twofa) {
 				document.getElementById("2fa-button")!.innerHTML = "2FA activated";
@@ -202,7 +202,7 @@ export default defineComponent({
 				store.getUser();
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
         }
 
@@ -240,7 +240,7 @@ export default defineComponent({
 				}
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},		
 
@@ -258,7 +258,7 @@ export default defineComponent({
 				this.socket.emit('send-userdata-refresh');
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -269,7 +269,7 @@ export default defineComponent({
 				this.socket.emit('send-userdata-refresh');
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		}
 	},

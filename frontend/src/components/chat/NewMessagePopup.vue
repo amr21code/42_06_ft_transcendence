@@ -25,7 +25,7 @@
             <input class="" type="text" placeholder="userid of the user" v-model="chatname" v-if="showinput === 'dm'" required>
             <input class="" type="text" placeholder="ID of the chat" v-model="chatname" v-if="showinput === 'join'" required>
             
-            <input class="" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join'"><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
+            <input class="" type="password" placeholder="password" v-model="password" v-if="showinput === 'group' || showinput === 'join' "><a v-if="showinput === 'group' || showinput === 'join'">(optional)</a>
                 
             <div class="button-box">
                 <button class="submit-button" name="submit" v-if="showinput" @click="createNewChat(chatname, password, showinput)">submit</button>
@@ -40,8 +40,6 @@
 
 
 
-
-
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 
@@ -50,7 +48,6 @@ import DataService from '../../services/DataService'
 import type { ResponseData } from '../../types/ResponseData'
 import type { IUser } from '../../types/User'
 import SocketioService from '../../services/SocketioService'
-
 
 export default defineComponent({
 	name: "NewMessagePopup",
@@ -73,7 +70,7 @@ export default defineComponent({
 				// console.log(response.data);
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -98,7 +95,7 @@ export default defineComponent({
             })
             .catch((e: Error) => {
                 this.invalid = true;
-                console.log(e);
+                // console.log(e);
             });
         }
         
@@ -109,7 +106,6 @@ export default defineComponent({
     },
 
     setup () {
-
         const showinput = ref();
 		const changeShowInput = (type : String) => {
 			showinput.value = type;
@@ -117,11 +113,9 @@ export default defineComponent({
 
 		return { showinput, changeShowInput }
     }  
-
 })
 
 </script>
-
 
 
 

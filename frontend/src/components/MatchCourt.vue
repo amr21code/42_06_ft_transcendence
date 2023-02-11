@@ -44,7 +44,7 @@ export default defineComponent({
         const handlePlayerNumber = (nbr: number) => {
 			if(!playerNumber)
 				playerNumber = nbr;
-			console.log("your player number is: ", playerNumber);
+			// console.log("your player number is: ", playerNumber);
 		}
 
 		const handleWatchError = (msg: string) => {
@@ -130,7 +130,7 @@ export default defineComponent({
 
 		const handleOpponentLeft = (matchid:number, userid: string) => {
 			socket.emit('opponentLeft', matchid);
-			console.log("opponent left");
+			// console.log("opponent left");
 			gameOver = true;
 			reset();
 			alert(userid +" left the game, opponent wins!");

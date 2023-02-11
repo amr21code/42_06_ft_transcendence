@@ -20,11 +20,9 @@
 
 				<button @click="toggleOption(3)" class="option-button" v-if="option === 0">change password</button>
 				<div v-if="option === 3">
-					<input type="text" placeholder="Enter new chatpassword"  v-model="newChatpassword">
-					<button @click="changeChatDetails(chat.typename, chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
+					<input type="password" placeholder="Enter new chatpassword"  v-model="newChatpassword">
+					<button @click="changeChatDetails('protected', chat.chatid, chat.chat_name, newChatpassword), toggleOption(0)">submit</button>
 				</div>
-
-
 			</div>
 			<table id="info-table">
 			<thead id="top-row">
@@ -182,7 +180,7 @@ export default defineComponent({
 				this.user_me = response.data;
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -193,7 +191,7 @@ export default defineComponent({
 				this.checkPermission();
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -238,7 +236,7 @@ export default defineComponent({
 				SocketioService.refreshChats();
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
 		},
 
@@ -247,11 +245,17 @@ export default defineComponent({
 			await DataService.changeChatDetails(type, chatid, chatname, password)
 			.then((response: ResponseData) => {
 				SocketioService.refreshChats();
+				this.checkPermission();
+				this.chat.chat_name = chatname;
+				if (type === 'protected')
+					this.chat.typename = 'protected';
+				if (type === 'public')
+					this.chat.typename = 'public';
 			})
 			.catch((e: Error) => {
-				console.log(e);
+				// console.log(e);
 			});
-			this.chat.chat_name = chatname;
+			
 		},
         
 	},
@@ -411,4 +415,5 @@ td {
 	float: right;
 	border-right: 5%;
 }
+
 </style>

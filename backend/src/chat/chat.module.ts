@@ -6,10 +6,11 @@ import { AuthService } from 'src/auth/auth.service';
 import { ChatGateway } from './chat.gateway';
 import { sessionMiddleware } from 'src/middleware';
 import { AchievementsService } from 'src/achievements/achievements.service';
+import { TwoFactorAuthenticationService } from 'src/auth/twoFactorAuth.service';
 
 @Module({
   controllers: [ChatController],
-  providers: [ChatService, UserService, AuthService, ChatGateway, AchievementsService]
+  providers: [ChatService, UserService, AuthService, ChatGateway, AchievementsService, TwoFactorAuthenticationService]
 })
 export class ChatModule {
   configure(consumer: MiddlewareConsumer){

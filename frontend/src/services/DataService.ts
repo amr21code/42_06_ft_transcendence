@@ -17,10 +17,14 @@ class DataService {
 		return apiInstance.get("/users/all");
 	}
 	changeUsername(userid : string, newUsername : string) {
-		return apiInstance.get('/users/' + userid + '/username/' + newUsername);
+		return apiInstance.post('/users/' + userid + '/username/', JSON.stringify({
+			data: newUsername,
+		}));
 	}
 	changeAvatar(userid : string, id : number) {
-		return apiInstance.get('/users/' + userid + '/avatar/' + id);
+		return apiInstance.post('/users/' + userid + '/avatar/', JSON.stringify({
+			data: id,
+		}));
 	}
 	uploadAvatar(file : File) {
 		var formData = new FormData();
@@ -34,7 +38,9 @@ class DataService {
 		});
 	}
 	changePaddleColor(userid : string, color : string) {
-		return apiInstance.get('/users/' + userid + '/paddlecolor/' + color);
+		return apiInstance.post('/users/' + userid + '/paddlecolor/', JSON.stringify({
+			data: color,
+		}));
 	}
 	getAchievements(userid : string) {
 		return apiInstance.get('/achieve/show/' + userid);

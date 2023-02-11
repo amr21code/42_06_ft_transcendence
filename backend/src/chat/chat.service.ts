@@ -91,6 +91,8 @@ export class ChatService {
 		}
 		var chatid = parseInt(chatid_string, 10);
 		console.log("chat join", userid, chatid, pw);
+		// if (Number.isNaN(chatid))
+		// 	throw new ForbiddenException();
 		const result = await this.db.$queryRaw(
 			Prisma.sql`SELECT chatid, password FROM public.chat
 			WHERE chatid=CAST(${chatid} AS INTEGER);`
@@ -99,11 +101,12 @@ export class ChatService {
 		// 	Prisma.sql`SELECT chatid, password FROM public.chat
 		// 	WHERE chatid=CAST(${chatid} AS INTEGER)`
 		// );
+		console.log("chatid, pw", result);
 		const banned = await this.db.$queryRaw(
 			Prisma.sql`SELECT * FROM public.user_chat
-			WHERE userid=${userid} AND chatid=CAST(${chatid} AS INTEGER);`
+			WHERE userid=${userid} AND chatid=CAST(${chatid} AS INTEGER) AND (status < 3 OR bantime < CURRENT_TIMESTAMP);`
 		);
-		if (Object.keys(banned).length == 1) {
+		if (Object.keys(banned).length > 0) {
 			if (banned[0].bantime < (Date.now() / 1000)) {
 				this.leaveChat(userid, chatid);
 			} else {
@@ -112,9 +115,10 @@ export class ChatService {
 		}
 		try {
 			var pwmatch = true;
-			if (result[0].passport)
+			if (result[0].password)
 				pwmatch = await bcrypt.compare(pw, result[0].password);
-			if (result[0].chatid == chatid && pwmatch) {
+			console.log("pwmatch", pwmatch);
+			if (pwmatch && result[0].chatid === chatid) {
 				const join = await this.db.$queryRaw(
 					Prisma.sql`INSERT INTO public.user_chat(
 						userid, chatid, status)
@@ -125,6 +129,8 @@ export class ChatService {
 				throw new ForbiddenException();
 			}
 		} catch (error) {
+			if (!pwmatch)
+				throw new ForbiddenException();
 			try {
 				var chatname = 'public chat by ' + userid;
 				const create = await this.db.$queryRaw(
