@@ -573,28 +573,28 @@ COPY public.users_achievements (userid, achievementid, count, id) FROM stdin;
 -- Name: chat_chatid_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.chat_chatid_seq', 0, true);
+SELECT pg_catalog.setval('public.chat_chatid_seq', 1, true);
 
 
 --
 -- Name: chat_messages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.chat_messages_id_seq', 0, true);
+SELECT pg_catalog.setval('public.chat_messages_id_seq', 1, true);
 
 
 --
 -- Name: match_history_matchid_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.match_history_matchid_seq', 0, true);
+SELECT pg_catalog.setval('public.match_history_matchid_seq', 1, true);
 
 
 --
 -- Name: users_achievements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: pong
 --
 
-SELECT pg_catalog.setval('public.users_achievements_id_seq', 0, true);
+SELECT pg_catalog.setval('public.users_achievements_id_seq', 1, true);
 
 
 --
