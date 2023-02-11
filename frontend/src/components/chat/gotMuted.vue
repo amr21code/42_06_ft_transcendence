@@ -16,6 +16,7 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 import DataService from '../../services/DataService'
@@ -63,13 +64,9 @@ export default defineComponent({
 
 	},
 
-	setup () {
-
-
-		return {  }
-	}
 })
 </script>
+
 
 
 <style scoped>
@@ -103,6 +100,5 @@ export default defineComponent({
 	margin-left: 0%;
     color: white;
 }
-
 
 </style>

@@ -2,7 +2,7 @@ import apiInstance from "../http.common";
 
 class DataService {
 
-	//################ GENERAL ###########################################
+//################ GENERAL ###########################################
 	
 	getAuthStatus() : Promise<any> {
 		return apiInstance.get("/auth/status");
@@ -49,7 +49,7 @@ class DataService {
 		return apiInstance.get('/users/pos/' + userid);
 	}
 
-	//################ 2FA ###########################################
+//################ 2FA ###########################################
 	
 	getTwoFaQrCode() : Promise<string> {
 		return apiInstance.get('/2fa/generate',  {
@@ -83,7 +83,7 @@ class DataService {
 		}
 	}
 
-	//################ FRIENDS ###########################################
+//################ FRIENDS ###########################################
 
 	getFriends() : Promise<any> {
 		return apiInstance.get("/fl/show");
@@ -107,7 +107,7 @@ class DataService {
 	//  (actions: request, confirm, block, unblock, remove)
 
 
-	//################ CHAT ###########################################
+//################ CHAT ###########################################
 
 	getUsersInChat(chatid: number) : Promise<any> {
 		return apiInstance.get("/chat/list/users/" + chatid);
@@ -221,7 +221,7 @@ class DataService {
 		})
 	}
 	
-	//################ MATCH ###########################################
+//################ MATCH ###########################################
 	
 	getMatchHistory(userid : string) : Promise<any> {
 		return apiInstance.get('/match/history/' + userid);

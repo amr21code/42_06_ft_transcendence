@@ -93,6 +93,7 @@ export default defineComponent({
 	align-items: center;
 	justify-content: center;
 }
+
 .popup-inner {
 	background-color: var(--second-bg-color);
 	padding: 1rem 2rem;
@@ -113,4 +114,5 @@ export default defineComponent({
 .popup-close {
     color: black;
 }
+
 </style>

@@ -54,14 +54,14 @@
 </template>
 
 
+
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
 import DataService from '../../services/DataService'
 import type { ResponseData } from '../../types/ResponseData'
 import type { ISingleMatchHistory } from '../../types/SingleMatchHistory'
-import type { IUser } from '../../types/User'
 import { useUserDataStore } from '../../stores/myUserDataStore'
-import SocketioService from '@/services/SocketioService'
+import SocketioService from '../../services/SocketioService'
 
 export default defineComponent({
 
@@ -81,7 +81,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const matchHistory = ref([] as ISingleMatchHistory[]);
-		// const myUser = ref({} as IUser);
 		const store = useUserDataStore();
 		const socket = SocketioService.socket;
 
@@ -252,6 +251,7 @@ export default defineComponent({
 </script>
 
 
+
 <style scoped>
 .popup {
 	text-align: left;
@@ -320,14 +320,6 @@ export default defineComponent({
 	/* color: white; */
 }
 
-
-/* .friend-block-buttons {
-	outline: 2px red solid;
-	display: block;
-} */
-
-
-
 .achievement-wrapper {
 	text-align: left;
 }
@@ -389,6 +381,3 @@ export default defineComponent({
 }
 
 </style>
-
-<!-- member since, avatar auswahl, wins, losses, user status, achievements-->
-

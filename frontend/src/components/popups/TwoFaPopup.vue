@@ -10,10 +10,10 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import DataService from '../../services/DataService';
-import { useUserDataStore } from '../../stores/myUserDataStore';
 
 export default defineComponent({
 
@@ -35,6 +35,7 @@ export default defineComponent({
 	}
 })
 </script>
+
 
 <style scoped>
 .popup {
@@ -69,17 +70,13 @@ export default defineComponent({
 	text-align: center;
 }
 
-.user-data-wrapper {
-	margin-bottom: 10px;
-	margin-left: 0%;
+.popup-inner button {
+	margin: 0 auto;
+	display: block;
 }
 
 #submit-button {
 	margin-top: 0.5rem;
 }
 
-button {
-	margin: 0 auto;
-	display: block;
-}
 </style>

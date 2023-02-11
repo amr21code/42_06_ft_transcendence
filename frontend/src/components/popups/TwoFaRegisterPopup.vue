@@ -18,6 +18,7 @@
 </template>
 
 
+
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import DataService from '../../services/DataService';
@@ -49,6 +50,8 @@ export default defineComponent({
 	}
 })
 </script>
+
+
 
 <style scoped>
 .popup {
@@ -83,9 +86,9 @@ export default defineComponent({
 	text-align: center;
 }
 
-.user-data-wrapper {
-	margin-bottom: 10px;
-	margin-left: 0%;
+.popup-inner button {
+	margin: 0 auto;
+	display: block;
 }
 
 #qr-code {
@@ -104,8 +107,4 @@ export default defineComponent({
 	margin-top: 2rem;
 }
 
-button {
-	margin: 0 auto;
-	display: block;
-}
 </style>

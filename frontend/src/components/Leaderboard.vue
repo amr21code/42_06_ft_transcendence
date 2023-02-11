@@ -29,11 +29,8 @@
 
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
-import DataService from '../services/DataService'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useUserDataStore } from '../stores/myUserDataStore'
-import type { ResponseData } from '../types/ResponseData'
-import type { IUser } from '../types/User'
 import MatchHistoryPopup from './popups/MatchHistoryPopup.vue'
 
 export default defineComponent({
@@ -42,12 +39,6 @@ export default defineComponent({
 	setup() {
 
 		const store = useUserDataStore();
-
-		// const usersByWins = computed(() => {
-		// 	return [...store.allUsers].sort((a: IUser, b: IUser) => {
-		// 		return a.wins > b.wins ? -1: 1;
-		// 	})
-		// });
 		const usersByWins = store.allUsers;
 			
 		// for user info popup (wins/match history)
@@ -74,6 +65,7 @@ export default defineComponent({
 	},
 })
 </script>
+
 
 
 <style scoped>	
@@ -112,8 +104,6 @@ export default defineComponent({
 		top: 0;
 		background-color: var(--second-bg-color);
 		color: white;
-		
-
 	}
 
 	#top-row {

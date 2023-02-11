@@ -37,7 +37,7 @@
 
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useUserDataStore } from './stores/myUserDataStore'
 import type { SelectedSideWindow } from './types/SelectedSideWindow'
 import type { ResponseData } from './types/ResponseData'
@@ -47,7 +47,6 @@ import LoginPopup from './components/popups/LoginPopup.vue'
 import UserDataPopup from './components/popups/UserDataPopup.vue'
 import gotChallengedPopup from './components/popups/GotChallengedPopup.vue'
 import TwoFaPopup from './components/popups/TwoFaPopup.vue'
-import LoggingService from './services/LoggingService'
 
 import SocketioService from './services/SocketioService.js'
 import DataService from './services/DataService'
@@ -56,41 +55,7 @@ export default defineComponent({
 
 	el: "#app",
 	components: { LoginPopup, TwoFaPopup, UserDataPopup, gotChallengedPopup, MatchCourt, SideWindow },
-	// data () {
-	// 	return {
-	// 		socket: SocketioService.setupSocketConnection(),
-	// 		challenger : '',
-	// 	}
-	// },
-	// created () {
-		// this.socket.on('challengeRequest', (userid : string) => {
-		// 	this.challenger = userid;
-		// 	this.toggleGotChallengedPopup();
-		// });
-		// this.socket.on('userdata-refresh', () => {
-		// 	DataService.getUser()
-		// 	.then((response: ResponseData) => {
-		// 		this.store.user = response.data[0];
-		// 	})
-		// 	.catch((e: Error) => {
-		// 		console.log(e);
-		// 	});
-		// 	DataService.getFriends()
-		// 	.then((response: ResponseData) => {
-		// 		this.store.friends = response.data;
-		// 	})
-		// 	.catch((e: Error) => {
-		// 		console.log(e);
-		// 	});
-		// 	DataService.getAll()
-		// 	.then((response: ResponseData) => {
-		// 		this.store.allUsers = response.data;
-		// 	})
-		// 	.catch((e: Error) => {
-		// 		console.log(e);
-		// 	});
-		// })
-	// },
+	
 	beforeUnmount() {
 		SocketioService.disconnect();
 	},
@@ -105,28 +70,10 @@ export default defineComponent({
 			loggedIn.value = 'authenticated';
 		}
 
-		const userdataUpdate = async () => {
-			await DataService.getUser()
-			.then((response: ResponseData) => {
-				store.user = response.data[0];
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			await DataService.getFriends()
-			.then((response: ResponseData) => {
-				store.friends = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
-			await DataService.getAll()
-			.then((response: ResponseData) => {
-				store.allUsers = response.data;
-			})
-			.catch((e: Error) => {
-				console.log(e);
-			});
+		const userDataUpdate = async () => {
+			await store.getUser();
+			await store.getFriends();
+			await store.getAllUsers();
 		}
 
 // ################## 2FA ###########################################################
@@ -134,7 +81,7 @@ export default defineComponent({
 		// const twoFaActivated = ref(false);
 		const untoggleTwoFaPopup = () => {
 			document.getElementById("TwoFaPopup")!.style.display = "none";
-			userdataUpdate();
+			userDataUpdate();
 		}
 
 		const toggleTwoFaPopup = () => {
@@ -158,26 +105,14 @@ export default defineComponent({
 				console.log("Error occured in getAuthStatus", e);
 			})
 
-
-
-
-
 			socket.on('2fa', () => {
 				loggedIn.value = '2fa';
-				// toggleTwoFaPopup();
 			});
-
-
-
-
 
 			// only run API calls if successfully logged in
 			if (loggedIn.value === 'authenticated')
 			{
-				// await store.getUser();
-				// await store.getFriends();
-				// await store.getAllUsers();
-				userdataUpdate();
+				userDataUpdate();
 				
 				if (store.selected === 'game')
 					document.getElementById("game")!.style.backgroundColor = "#b04716";
@@ -281,7 +216,7 @@ export default defineComponent({
 		});
 
 		socket.on('userdata-refresh', async () => {
-			userdataUpdate();
+			userDataUpdate();
 		});
 
 // ################################### EXPORT ####################################
@@ -289,7 +224,9 @@ export default defineComponent({
 		return { store, challenger, untoggleTwoFaPopup, toggleTwoFaPopup, twoFaSuccess, loggedIn, userDataPopupTrigger, gotChallengedPopupTrigger, toggleLoginPopup, toggleUserDataPopup, toggleGotChallengedPopup, handleClick }
 	},
 });
+
 </script>
+
 
 
 <style scoped>
@@ -371,4 +308,5 @@ export default defineComponent({
 		bottom: 0;
 		width: 100%;
 	}
+
 </style>

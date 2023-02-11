@@ -3,6 +3,9 @@
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ user.username }}'s user data</h2>
+
+<!-- #################### STATS OVERVIEW ############################ -->
+
 			<div class="user-data-wrapper">
 				<div class="center-user-summary">
 					<div id="leaderboard-position-wrapper">
@@ -21,6 +24,9 @@
 					</div>
 				</div>
 			</div>
+
+<!-- ############## ACHIEVEMENTS ############################ -->
+			
 			<div class="user-data-wrapper">
 				<div class="achievements">
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
@@ -34,6 +40,9 @@
 					</div>
 				</div>
 			</div>
+
+<!-- ############## NAMING ############################ -->
+			
 			<div class="user-data-wrapper">
 				<div class="naming-wrapper">
 					<div>intra name: </div>
@@ -44,6 +53,9 @@
 					<input type="text" @keyup.enter="changeUsername(newUsername)" :placeholder="user.username" v-model="newUsername"/>
 				</div>
 			</div>
+
+<!-- ############## COSTUMISATION ############################ -->
+
 			<div class="user-data-wrapper">
 				<div>select new avatar:</div>
 				<img @click="changeAvatar(42)" class="select-photo" :src="user.profilepic42" alt="avatar-default">
@@ -60,6 +72,9 @@
 				<div @click="changePaddleColor('b04716')" class="select-color" id="select-color2"></div>
 				<div @click="changePaddleColor('00cc00')" class="select-color" id="select-color3"></div>
 			</div>
+
+<!-- #################### 2FA ############################ -->
+
 			<div class="user-data-wrapper">
 				<div>2-factor-authentication:
 					<button id="2fa-button" @click="toggleTwoFaPopup()">Activate Google 2FA</button>
@@ -77,6 +92,7 @@
 </template>
 
 
+
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue'
 import DataService from '../../services/DataService'
@@ -86,7 +102,6 @@ import type { IUser } from '../../types/User'
 import moment from 'moment'
 import SocketioService from '../../services/SocketioService.js';
 import TwoFaRegisterPopup from './TwoFaRegisterPopup.vue'
-
 
 export default defineComponent({
 
@@ -102,7 +117,8 @@ export default defineComponent({
 		const file = ref(null);
 		const socket = SocketioService.socket;
 
-		// 2FA START
+// ######################## 2FA ########################################
+
 		const showTwoFaTrigger = ref(false);
 		const toggleTwoFaPopup = () => {
 			showTwoFaTrigger.value = true;
@@ -117,7 +133,8 @@ export default defineComponent({
 			document.getElementById("2fa-button")!.innerHTML = "2FA activated";
 			(document.getElementById("2fa-button") as HTMLButtonElement).disabled = true;
 		}
-		// 2FA END
+
+// ######################## INITIAL API CALLS ########################################
 
 		onMounted(async () => {
 			await DataService.getUser()
@@ -193,6 +210,8 @@ export default defineComponent({
 				(document.getElementById("2fa-button") as HTMLButtonElement).disabled = true;
 			}
 		});
+
+// ######################## AVATAR UPLOAD ########################################
 
 		const uploadAvatar = async() => {
             await DataService.uploadAvatar(file.value.files[0]);
@@ -273,9 +292,9 @@ export default defineComponent({
 			});
 		}
 	},
-	
 })
 </script>
+
 
 
 <style scoped>
@@ -350,10 +369,6 @@ export default defineComponent({
 	/* outline: 3px solid red; */
 }
 
-/* #wins-vs-losses {
-	outline: 3px solid red;
-} */
-
 .game-statistic a {
 	width: 7rem;
 	margin: 0.5rem;
@@ -408,9 +423,6 @@ export default defineComponent({
 	opacity: 20%;
 }
 
-
-
-
 .naming-wrapper {
 	display: flex;
 	align-items: center;
@@ -424,9 +436,9 @@ export default defineComponent({
 	margin: 0.5rem;
 }
 
-::placeholder{ opacity: 0.4 }
-
-
+::placeholder { 
+	opacity: 0.4
+}
 
 .select-photo {
 	height: 70px;
@@ -447,6 +459,7 @@ input[type="file"] {
 #select-photo:hover {
 	opacity: 50%;
 }
+
 .select-color {
 	height: 70px;
 	width: 70px;
@@ -485,7 +498,3 @@ input[type="file"] {
 }
 
 </style>
-
-function moment(arg0: string) {
-  throw new Error('Function not implemented.')
-}
