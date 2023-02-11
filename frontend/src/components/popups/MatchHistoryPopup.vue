@@ -3,7 +3,39 @@
 		<div class="popup-inner">
 			<slot />
 			<h2>{{ userid }}'s match history</h2>
-			<div class="user-photo-div">
+
+<!-- ############## FRIEND BUTTONS ############################ -->
+
+			<div class="button-wrapper">
+				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
+				<button id="block-user-button" @click="blockButtonAction(userid)">block user</button>
+			</div>
+
+<!-- ############## OVERVIEW DATA ############################ -->
+
+			<div class="user-data-wrapper">
+				<div class="center-user-summary">
+					<div id="leaderboard-position-wrapper">
+						<div id="leaderboard-position" title="leaderboard rank">#{{ leaderboardRank }}</div>
+					</div>
+					<div>
+						<img id="user-photo" :src="userPhoto" alt="user-photo">
+					</div>
+					<div id="wins-vs-losses">
+						<div class="game-statistic">
+							<a title="matches won"> won: {{ userWins }} </a>
+						</div>
+						<div class="game-statistic">
+							<a title="matches lost"> lost: {{ userLosses }} </a>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+<!-- ############## ACHIEVEMENTS ############################ -->
+			
+			<div class="user-data-wrapper">
 				<div class="achievements">
 					<div class="achievement-wrapper" title="Successfully changed name to one french staff member's name">
 						<a id="achievement-gui">the gui</a>
@@ -15,10 +47,9 @@
 						<a id="achievement-firstGoal">first blood</a>	
 					</div>
 				</div>
-				<img :src="userPhoto">
-				<button id="add-friend-button" @click="friendButtonAction(userid)">add friend</button>
-				<button id="block-user-button" @click="blockButtonAction(userid)">block user</button>
 			</div>
+
+<!-- ############## HISTORY TABLE ############################ -->
 
 			<table id="history-table">
 				<tr id="top-row">
@@ -62,11 +93,12 @@ import type { ResponseData } from '../../types/ResponseData'
 import type { ISingleMatchHistory } from '../../types/SingleMatchHistory'
 import { useUserDataStore } from '../../stores/myUserDataStore'
 import SocketioService from '../../services/SocketioService'
+import type { IUser } from '../../types/User'
 
 export default defineComponent({
 
 	props: {
-		['untoggleUserHistory'] : {
+		untoggleUserHistory : {
 			required: true,
 			type: Function,
 		},
@@ -77,11 +109,21 @@ export default defineComponent({
 		userPhoto : {
 			required: true,
 			type: String,
-		}
+		},
+		userWins : {
+			required: true,
+			type: String,
+		},
+		userLosses : {
+			required: true,
+			type: String,
+		},
 	},
 	setup(props) {
 		const matchHistory = ref([] as ISingleMatchHistory[]);
 		const store = useUserDataStore();
+		const leaderboardRank = ref({} as number);
+		const user = ref({} as IUser);
 		const socket = SocketioService.socket;
 
 		const friendButtonAction = async (userid: string) => {
@@ -119,7 +161,7 @@ export default defineComponent({
 				}
 				document.getElementById("add-friend-button")!.style.background = "#a8b8fd";
 				document.getElementById("add-friend-button")!.innerHTML = "add friend";
-				document.getElementById("block-user-button")!.style.display = "block";
+				document.getElementById("block-user-button")!.style.display = "inline-block";
 			}
 			else if (document.getElementById("add-friend-button")!.innerHTML === "friends") {
 				try {
@@ -244,8 +286,24 @@ export default defineComponent({
 					}
 				}
 			}
+			await DataService.getLeaderboardPosition(props.userid)
+			.then((response: ResponseData) => {
+				leaderboardRank.value = response.data
+				if (leaderboardRank.value === 1) {
+					document.getElementById("leaderboard-position")!.style.background = "gold";
+				}
+				else if (leaderboardRank.value === 2) {
+					document.getElementById("leaderboard-position")!.style.background = "silver";
+				}
+				else if (leaderboardRank.value === 3) {
+					document.getElementById("leaderboard-position")!.style.background = "bronce";
+				}
+			})
+			.catch((e: Error) => {
+				// console.log(e);
+			});
 		});
-		return { matchHistory, friendButtonAction, blockButtonAction };
+		return { leaderboardRank, matchHistory, friendButtonAction, blockButtonAction };
 	}
 })
 </script>
@@ -279,20 +337,115 @@ export default defineComponent({
 	text-align: center;
 }
 
-.user-photo-div {
+
+.user-data-wrapper {
+	margin-bottom: 0.5rem;
+	margin-left: 0%;
+}
+.center-user-summary {
 	text-align: center;
-	display: flex;
+	display: grid;
 	align-items: center;
+	justify-content: center; 
 	justify-content: center;
-	margin: 2rem;
+	grid-template-columns: 1fr 1fr 1fr;
 }
 
-.user-photo-div img {
+#user-photo {
 	width : 7rem;
 	height: 7rem;
 	object-fit: cover;
 	border-radius: 50%;
-	margin: 2rem;
+	background: white;
+	margin: 3%;
+}
+
+#leaderboard-position-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center; 
+	justify-content: center;
+}
+
+#leaderboard-position {
+	width : 5rem;
+	height: 5rem;
+	object-fit: cover;
+	border-radius: 50%;
+	background: white;
+	margin: 3%;
+	color: var(--second-bg-color);
+	font-size: 2rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	font-family: monospace;
+	font-weight: 600;
+	/* outline: 3px solid red; */
+}
+
+.game-statistic a {
+	width: 7rem;
+	margin: 0.5rem;
+	align-items: center;
+	background-color: white;
+	border: 2px solid #000;
+	box-sizing: border-box;
+	color: #000;
+	font-family: monospace;
+	cursor: pointer;
+	display: inline-flex;
+	height: 36px;
+	justify-content: center;
+	padding: 0 17px;
+	text-decoration: none;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.achievements {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: left;
+}
+
+.achievement-wrapper {
+	display: inline-block;
+	justify-content: center;
+	margin-bottom: 1rem;
+}
+
+.achievement-wrapper a {
+	width: 7rem;
+	margin: 0.5rem;
+	align-items: center;
+	background-color: var(--first-highlight-color);
+	border: 2px solid #000;
+	box-sizing: border-box;
+	color: #000;
+	font-family: monospace;
+	cursor: pointer;
+	display: inline-flex;
+	height: 36px;
+	justify-content: center;
+	padding: 0 17px;
+	text-align: center;
+	text-decoration: none;
+	transition: all .4s;
+	font-weight: 500;
+	white-space: nowrap;
+	opacity: 20%;
+}
+
+.button-wrapper {
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.button-wrapper button {
+	margin: 0.5rem;	
 }
 
 #add-friend-button {

@@ -22,7 +22,7 @@
 					{{ friend.friendstatus }}
 				</td>
 			</tr>
-			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
+			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUserId" :userPhoto="selectedUserPhoto" :userWins="selectedUserWins" :userLosses="selectedUserLosses"/>
 		</table>
 	</div>
 </template>
@@ -45,23 +45,27 @@ export default defineComponent({
 
 		// for user info popup (wins/match history)
 		const showUserHistoryTrigger = ref(false);
-		const selectedUser = ref("");
+		const selectedUserId = ref("");
 		const selectedUserPhoto = ref("");
+		const selectedUserWins = ref("");
+		const selectedUserLosses = ref("");
 		const toggleUserHistory = (user: any) => {
 			socket.emit('send-userdata-refresh');
 			showUserHistoryTrigger.value = true;
-			selectedUser.value = user.userid;
+			selectedUserId.value = user.userid;
 			selectedUserPhoto.value = user.picurl;
+			selectedUserWins.value = user.wins;
+			selectedUserLosses.value = user.losses;
 		}
 		const untoggleUserHistory = () => {
 			showUserHistoryTrigger.value = false;
-			selectedUser.value = "";
+			selectedUserId.value = "";
 		}
 		onMounted(async () => {
 			await store.getUser();
 			await store.getFriends();
 		});
-		return { store, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser, selectedUserPhoto };
+		return { store, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUserId, selectedUserPhoto, selectedUserWins, selectedUserLosses };
 	},
 })
 </script>
