@@ -50,12 +50,12 @@ export default defineComponent({
 		const socket = SocketioService.socket;
 
 		const sendAcceptSignal = () => {
-			console.log("accepting challenge", store.user);
+			// console.log("accepting challenge", store.user);
 			socket.emit('create-new-game', store.user.userid);
 		};
 
 		const sendDenySignal = async () => {
-			console.log("denying challenge");
+			// console.log("denying challenge");
 			await DataService.denyChallenge();
 		}
 
