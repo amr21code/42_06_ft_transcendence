@@ -8,7 +8,7 @@ export class FriendlistService {
 
 	async showFL(userid: string) {
 		const user = await this.db.$queryRaw(
-			Prisma.sql`(SELECT fl.addresseeid as userid, fl.addresseeid, ua.username as username, os.statusname, fc.statusname as friendstatus, ua.picurl, fl.requesterid
+			Prisma.sql`(SELECT fl.addresseeid as userid, fl.addresseeid, ua.username as username, os.statusname, fc.statusname as friendstatus, ua.picurl, fl.requesterid, ua.wins, ua.losses
 				FROM public.friends as fl
 				LEFT JOIN public.friendship_codes as fc ON fc.statuscode = fl.statuscode
 				LEFT JOIN (SELECT userid, username, user_status,  
@@ -19,13 +19,13 @@ export class FriendlistService {
 						THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
 						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 						END as picurl, 
-						created, statusname,wins, losses from public.users
+						created, statusname, wins, losses from public.users
 						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ua ON fl.addresseeid = ua.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ua.user_status
 				WHERE fl.requesterid=${userid})
 				UNION
-(SELECT fl.requesterid as friendid, fl.addresseeid, ur.username as friendname, os.statusname, fc.statusname as friendstatus, ur.picurl, fl.requesterid
+(SELECT fl.requesterid as friendid, fl.addresseeid, ur.username as friendname, os.statusname, fc.statusname as friendstatus, ur.picurl, fl.requesterid, ur.wins, ur.losses
 				FROM public.friends as fl
 				LEFT JOIN public.friendship_codes as fc ON fc.statuscode = fl.statuscode
 				LEFT JOIN (SELECT userid, username, user_status,  
@@ -36,7 +36,7 @@ export class FriendlistService {
 						THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
 						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 						END as picurl, 
-						created, statusname,wins, losses from public.users
+						created, statusname, wins, losses from public.users
 						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ur ON fl.requesterid = ur.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ur.user_status
