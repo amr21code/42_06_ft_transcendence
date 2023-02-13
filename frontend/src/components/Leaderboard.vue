@@ -22,7 +22,7 @@
 					{{ user.wins }} wins
 				</td>
 			</tr>
-			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser" :userPhoto="selectedUserPhoto"/>
+			<MatchHistoryPopup id="MatchHistoryPopup" v-if="showUserHistoryTrigger === true" :untoggleUserHistory="() => untoggleUserHistory()" :userid="selectedUser" :userPhoto="selectedUserPhoto" :userWins="selectedUserWins" :userLosses="selectedUserLosses"/>
 		</table>
 	</div>
 </template>
@@ -44,11 +44,15 @@ export default defineComponent({
 		// for user info popup (wins/match history)
 		const showUserHistoryTrigger = ref(false);
 		const selectedUser = ref("");
+		const selectedUserWins = ref("");
+		const selectedUserLosses = ref("");
 		const selectedUserPhoto = ref("");
 		const toggleUserHistory = (user: any) => {
 			showUserHistoryTrigger.value = true;
 			selectedUser.value = user.userid;
 			selectedUserPhoto.value = user.picurl;
+			selectedUserWins.value = user.wins;
+			selectedUserLosses.value = user.losses;
 		}
 
 		const untoggleUserHistory = () => {
@@ -61,7 +65,7 @@ export default defineComponent({
 			await store.getAllUsers();
 		});
 
-		return { store, usersByWins, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser, selectedUserPhoto };
+		return { store, usersByWins, toggleUserHistory, untoggleUserHistory, showUserHistoryTrigger, selectedUser, selectedUserPhoto, selectedUserWins, selectedUserLosses };
 	},
 })
 </script>
