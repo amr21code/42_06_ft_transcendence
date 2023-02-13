@@ -36,6 +36,11 @@ class SocketioService {
     this.socket.emit('send-got-banned', { userid, time });
   }
 
+  //sends a signal to the kicked user gets kicked out of the chat
+  gotKicked(userid : string) {
+    this.socket.emit('send-got-kicked', { userid });
+  }
+
   gotMuted(userid : string, time : number) {
     this.socket.emit('send-got-muted', { userid, time });
   }

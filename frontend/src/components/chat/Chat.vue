@@ -59,6 +59,7 @@
 
 	<PwdPopup id="PwdPopup" v-if="pwdPopup === true" :togglePwdPopup="() => untogglePwdPopup()" :curr_chatid="sel_chat.chatid" />
 	<gotBannedPopup id="gotBannedPopup" v-if="gotBannedtrigger === true" :togglegotBanned="() => togglegotBanned()" :bantime="bantime" />
+	<gotKickedPopup id="gotKickedPopup" v-if="gotKickedtrigger === true" :togglegotKicked="() => togglegotKicked()" />
 	<gotMutedPopup id="gotMutedPopup" v-if="gotMutedtrigger === true" :togglegotMuted="() => togglegotMuted()" :mutetime="mutetime" />
 	<ChatWindow v-if="selected === 'chatwindow'" :curr_chat="sel_chat" />
 
@@ -99,6 +100,7 @@ import NewMessagePopup from './NewMessagePopup.vue'
 import LeaveChatPopup from './LeaveChat.vue'
 import PwdPopup from './pwdPopup.vue'
 import gotBannedPopup from './gotBanned.vue'
+import gotKickedPopup from './gotKicked.vue'
 import gotMutedPopup from './gotMuted.vue'
 import { defineComponent, ref } from 'vue'
 
@@ -138,6 +140,14 @@ export default defineComponent({
 		this.socket.on('chat-leave', () => {
 			this.handleClick('overview', 0);
 		});
+
+		this.socket.on('got-kicked', (data : any) => {
+			if (this.user[0].userid === data.userid)
+			{
+				this.handleClick('overview', 0);
+				this.togglegotKicked();
+			}
+		})
 
 		this.socket.on('got-banned', (data : any) => {
 			if (this.user[0].userid === data.userid)
@@ -245,6 +255,11 @@ export default defineComponent({
 			pwdPopup.value = false;
 		}
 
+		const gotKickedtrigger = ref(false);
+		const togglegotKicked = () => {
+			gotKickedtrigger.value = !gotKickedtrigger.value;
+		}
+
 		const gotBannedtrigger = ref(false);
 		const togglegotBanned = () => {
 			gotBannedtrigger.value = !gotBannedtrigger.value;
@@ -269,7 +284,7 @@ export default defineComponent({
 		}
 
 		return {message, selected, handleClick, togglePopup, popupTrigger, sel_chat, LeaveChattogglePopup, LeaveChatTrigger,
-				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger, togglegotMuted, gotMutedtrigger, untogglePwdPopup }
+				changeType, type, joinchat, togglePwdPopup, pwdPopup, togglegotBanned, gotBannedtrigger,togglegotKicked, gotKickedtrigger, togglegotMuted, gotMutedtrigger, untogglePwdPopup }
 	}
 })
 </script>

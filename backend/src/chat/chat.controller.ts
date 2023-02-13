@@ -64,6 +64,23 @@ export class ChatController {
 		}
 	}
 	
+	@Get('kick/:chatid/:userid')
+	async kickUser(@Req() request: Request, @Param('chatid') chatid, @Param('userid') userid) {
+		try {
+			const user = request.session.passport.user.userid;
+			const userstatus = await this.chatService.getUserStatus(user, chatid);
+			if (userstatus[0].status > 1)
+				throw new ForbiddenException();
+			const kickuser = await this.chatService.getUserStatus(userid, chatid);
+			if (kickuser[0].status === 0)
+				throw new ForbiddenException();
+			const leave = await this.chatService.leaveChat(userid, chatid);
+			return (leave);
+		} catch (error) {
+			throw new ForbiddenException('leave chat');
+		}
+	}
+
 	@Get('leave/:chatid')
 	async leaveChat(@Req() request: Request, @Param('chatid') chatid) {
 		try {
@@ -134,6 +151,9 @@ export class ChatController {
 			const user = request.session.passport.user.userid;
 			const userstatus = await this.chatService.getUserStatus(user, details.chatid);
 			if (userstatus[0].status > 1)
+				throw new ForbiddenException();
+			const changeuser = await this.chatService.getUserStatus(details.userid, details.chatid);
+			if (changeuser[0].status === 0)
 				throw new ForbiddenException();
 			const result = await this.chatService.changeUserStatus(details);
 			return {msg:"ok"};
