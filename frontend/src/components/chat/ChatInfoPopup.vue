@@ -31,6 +31,7 @@
 					<th>statusname</th>
 					<!-- <th>onlinestatus</th>  {{ user.user_status }}-->
 					<th v-if="permission < 2">mute</th>
+					<th v-if="permission < 2">kick</th>
 					<th v-if="permission < 2">ban</th>
 					<th>challenge</th>
 					<th v-if="permission === 0">make admin</th>
