@@ -63,7 +63,6 @@ class SocketioService {
     {
       console.log("you can't challenge someone until you finish your current game");
     }
-
   }
   //----------GAME STUFF END----------------------
 

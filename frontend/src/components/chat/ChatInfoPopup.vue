@@ -291,8 +291,8 @@ export default defineComponent({
 		const showUserHistoryTrigger = ref(false);
 		const selectedUser = ref("");
 		const selectedUserPhoto = ref("");
-		const selectedUserWins = ref({} as String);
-		const selectedUserLosses = ref({} as String);
+		const selectedUserWins = ref(0);
+		const selectedUserLosses = ref(0);
 		const toggleUserHistory = (user: any) => {
 			if (user === 0)
 			{
