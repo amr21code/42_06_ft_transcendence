@@ -117,7 +117,7 @@ type SelectedChat = 'overview' | 'chatwindow' | 'newchat'
 
 export default defineComponent({
 	name: 'chat-module',
-	components: { ChatWindow, LeaveChatPopup, NewMessagePopup, PwdPopup, gotBannedPopup, gotMutedPopup },
+	components: { ChatWindow, LeaveChatPopup, NewMessagePopup, PwdPopup, gotBannedPopup, gotMutedPopup, gotKickedPopup },
 
 	data () {
 		return {
