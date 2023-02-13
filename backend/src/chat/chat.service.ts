@@ -46,7 +46,7 @@ export class ChatService {
 		var list;
 		if (chatid) {
 			list = await this.db.$queryRaw(
-				Prisma.sql`SELECT uc.userid, u.username, u.user_status, uc.status, uc.bantime, usc.statusname, c.chatid, c.chat_name, ct.typename, u.picurl
+				Prisma.sql`SELECT uc.userid, u.username, u.user_status, uc.status, uc.bantime, usc.statusname, c.chatid, c.chat_name, ct.typename, u.picurl, u.wins, u.losses
 				FROM public.user_chat AS uc
 				LEFT JOIN public.user_status_chat as usc ON uc.status=usc.statusid
 				LEFT JOIN public.chat as c ON uc.chatid=c.chatid
