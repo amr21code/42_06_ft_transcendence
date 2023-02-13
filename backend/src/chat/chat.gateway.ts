@@ -55,6 +55,15 @@ export class ChatGateway {
 		}
 	}
 
+	@SubscribeMessage('send-got-kicked')
+	async gotKicked(client: Socket, data: Record<string, string>) {
+		if (!this.twoFAService.socketIO2fa(client))
+			throw new WsException('no 2fa authenticated');
+		console.log(data);
+		client.broadcast.emit('got-kicked', data);
+		client.emit('got-kicked', data);
+	}
+
 	@SubscribeMessage('send-got-banned')
 	async gotBanned(client: Socket, data: Record<string, string>) {
 		if (!this.twoFAService.socketIO2fa(client))

@@ -67,6 +67,23 @@
 									<button v-if="user.status === 3">-MUTED-</button>
 								</div>
 							</td>
+<!---------------------- kick ---------------------------------->
+							<td v-if="permission < 2">
+								<div v-if="user.userid != user_me[0].userid && user.status !== 0">
+									<img src="../../assets/kickicon.png" @click="kickUser(user.userid)">
+									<!-- <button @click="(toggleBan(index + 1))" v-if="Ban == 0 && user.status !== 3">ban</button> -->
+									<!--<div v-if="Kick === index + 1">
+										<select v-model="bantime" required>
+											<option value="10">10 minutes</option>
+											 <option value="20">20 minutes</option>
+											<option value="30">30 minutes</option>
+											<option value="60">60 minutes</option> 
+										</select 
+										<button @click="kickUser(user.userid, 0)">kick</button>
+									</div>-->
+									<!-- <button v-if="user.status === 3">-BANNED-</button> -->
+								</div>
+							</td>
 <!---------------------- ban ---------------------------------->
 							<td v-if="permission < 2">
 								<div v-if="user.userid != user_me[0].userid && user.status !== 0">
@@ -210,6 +227,13 @@ export default defineComponent({
 			SocketioService.refreshChats();
 			SocketioService.gotBanned(userid, time);
 			this.toggleBan(0);
+		},
+
+		async kickUser(userid: string) {
+			await DataService.kickUser(this.chat.chatid, userid);
+			await this.retrieveCurrentUsersInChat(this.chat.chatid);
+			SocketioService.refreshChats();
+			SocketioService.gotKicked(userid);
 		},
 
 		async checkPermission() {

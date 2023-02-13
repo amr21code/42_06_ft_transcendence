@@ -184,6 +184,10 @@ class DataService {
 		})
 	}
 
+	kickUser(chatid: number, userid: string) {
+		return apiInstance.get('/chat/kick/'+ chatid + '/' + userid);
+	}
+
 	banUser(chatid : number, userid : string, time : number) : Promise<any> {
 		return apiInstance.post('/chat/user/status', JSON.stringify({
 			userid: userid,
