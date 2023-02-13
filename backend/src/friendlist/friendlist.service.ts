@@ -19,7 +19,7 @@ export class FriendlistService {
 						THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
 						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 						END as picurl, 
-						created, statusname from public.users
+						created, statusname,wins, losses from public.users
 						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ua ON fl.addresseeid = ua.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ua.user_status
@@ -36,7 +36,7 @@ export class FriendlistService {
 						THEN (SELECT concat(avatarurl, userid, '.png') as picurl FROM public.avatars as av WHERE avatar=av.avatarid)
 						ELSE (select avatarurl from public.avatars where avatarid = avatar) 
 						END as picurl, 
-						created, statusname from public.users
+						created, statusname,wins, losses from public.users
 						LEFT JOIN public.online_status ON users.user_status = online_status.statuscode
 						LEFT JOIN public.avatars as A ON users.avatar = A.avatarid) as ur ON fl.requesterid = ur.userid
 				LEFT JOIN public.online_status as os ON os.statuscode=ur.user_status
