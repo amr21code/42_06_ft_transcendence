@@ -442,6 +442,7 @@ COPY public.challenge_status (statuscode, status_name) FROM stdin;
 0	not accepted
 1	accepted
 2	queue
+3	watching
 \.
 
 
