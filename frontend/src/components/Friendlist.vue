@@ -47,8 +47,8 @@ export default defineComponent({
 		const showUserHistoryTrigger = ref(false);
 		const selectedUserId = ref("");
 		const selectedUserPhoto = ref("");
-		const selectedUserWins = ref("");
-		const selectedUserLosses = ref("");
+		const selectedUserWins = ref(0);
+		const selectedUserLosses = ref(0);
 		const toggleUserHistory = (user: any) => {
 			socket.emit('send-userdata-refresh');
 			showUserHistoryTrigger.value = true;

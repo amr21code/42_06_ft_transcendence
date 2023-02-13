@@ -6,6 +6,8 @@ interface IFriend {
 	statusname: string,
 	friendstatus: string,
 	picurl: string,
+	wins: number,
+	losses: number,
 }
 
 export type { IFriend }

@@ -112,11 +112,11 @@ export default defineComponent({
 		},
 		userWins : {
 			required: true,
-			type: String,
+			type: Number,
 		},
 		userLosses : {
 			required: true,
-			type: String,
+			type: Number,
 		},
 	},
 	setup(props) {

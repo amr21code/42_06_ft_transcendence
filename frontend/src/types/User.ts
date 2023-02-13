@@ -5,8 +5,8 @@ interface IUser {
 	profilepic42: string,
 	created: Date,
 	statusname: string,
-	wins: string,
-	losses: string,
+	wins: number,
+	losses: number,
 	status: number, //0: admin, 1: member, 2: mute, 3: ban
 	bantime: Date,
 	paddlecolor: string,
